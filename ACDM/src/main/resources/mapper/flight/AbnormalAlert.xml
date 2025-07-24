@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.acdm.dao.flight.AbnormalAlertMapper">
+    <resultMap id="BaseResultMap" type="com.hq.acdm.model.flight.AbnormalAlert">
+        <result column="FLIGHT_NO_IATA" property="flightNoIata" jdbcType="VARCHAR" />
+
+        <result column="GATE_1_OPENDATETIME" property="gate1OpenDateTime" jdbcType="VARCHAR" />
+        <result column="GATE_2_OPENDATETIME" property="gate2OpenDateTime" jdbcType="VARCHAR" />
+        <result column="GATE_3_OPENDATETIME" property="gate3OpenDateTime" jdbcType="VARCHAR" />
+
+        <result column="OPENDATETIME" property="openDateTime" jdbcType="VARCHAR" />
+
+        <result column="BELT_1" property="belt1" jdbcType="VARCHAR" />
+        <result column="BELT_2" property="belt2" jdbcType="VARCHAR" />
+        <result column="BELT_3" property="belt3" jdbcType="VARCHAR" />
+        <result column="BELT" property="belt" jdbcType="VARCHAR" />
+
+        <result column="GATE_1_CLOSEDATETIME" property="gate1CloseDateTime" jdbcType="VARCHAR" />
+        <result column="GATE_2_CLOSEDATETIME" property="gate2CloseDateTime" jdbcType="VARCHAR" />
+        <result column="GATE_3_CLOSEDATETIME" property="gate3CloseDateTime" jdbcType="VARCHAR" />
+        <result column="GATECLOSEDATETIME" property="gateCloseDateTime" jdbcType="VARCHAR" />
+
+        <result column="AOBT" property="aobt" jdbcType="VARCHAR" />
+        <result column="ATOT" property="atot" jdbcType="VARCHAR" />
+        <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+        <result column="OPERATIONAL_DATE" property="operationalDate" jdbcType="VARCHAR" />
+        <result column="A_OR_D" property="aOrD" jdbcType="VARCHAR" />
+        <result column="FLIGHT_REPEAT_COUNT" property="flightRepeatCount" jdbcType="VARCHAR" />
+
+        <result column="chkcnt" property="chkcnt" jdbcType="VARCHAR" />
+        <result column="boarcnt" property="boarcnt" jdbcType="VARCHAR" />
+        <result column="secucnt" property="secucnt" jdbcType="VARCHAR" />
+
+        <result column="REASON" property="reason" jdbcType="VARCHAR" />
+        <result column="LINK_CODE" property="linkCode" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        flightNoIata, gate1OpenDateTime, gate2OpenDateTime, gate3OpenDateTime,openDateTime, belt1, belt2, belt3,belt
+        gate1CloseDateTime, gate2CloseDateTime, gate3CloseDateTime, aobt, atot, sobt,
+        operationalDate, aOrD, flightRepeatCount, chkcnt, boarcnt, secucnt,reason
+    </sql>
+
+    <select id="selecAbnormalAlert" parameterType="java.util.Map"  resultMap="BaseResultMap"  >
+            select * from (select FLIGHT_NO_IATA,
+                   GATE_1_OPENDATETIME,GATE_2_OPENDATETIME,GATE_3_OPENDATETIME,
+                   TO_CHAR(COALESCE(GATE_1_OPENDATETIME,GATE_2_OPENDATETIME,GATE_3_OPENDATETIME),'HH24:MI:SS') as OPENDATETIME,
+                   BELT_1,
+                   BELT_2,
+                   BELT_3,
+                   COALESCE(BELT_1,BELT_2,BELT_3) as BELT,
+                   GATE_1_CLOSEDATETIME,
+                   GATE_2_CLOSEDATETIME,
+                   GATE_3_CLOSEDATETIME,
+                   TO_CHAR(COALESCE(GATE_1_CLOSEDATETIME,GATE_2_CLOSEDATETIME,GATE_2_CLOSEDATETIME),'HH24:MI:SS') as GATECLOSEDATETIME,
+                   AOBT,
+                   ATOT,
+                   SOBT,
+                   OPERATIONAL_DATE,
+                   A_OR_D,
+                   FLIGHT_REPEAT_COUNT,
+                   count(case when Pax_CheckinTime is not null then pax_boardingno else null end)  chkcnt,
+                   count(case when Pax_BoardingTime is not null then pax_boardingno else null end) boarcnt,
+                   count(case
+                           when Pax_SecurityCheckTime is not null then pax_boardingno
+                           else null end)                                                          secucnt,
+                    case
+                    when GATE_1_OPENDATETIME is not null and GATE_1_CLOSEDATETIME is null and AOBT is null and ATOT is null
+                    then case
+                    when GATE_1_OPENDATETIME + 1 * 24 * 0.5 &lt; sysdate
+                                                              then '登机开始时间超过30分钟警报'
+                    end
+                    when GATE_2_OPENDATETIME is not null and GATE_2_CLOSEDATETIME is null and AOBT is null and ATOT is null
+                    then case
+                    when GATE_2_OPENDATETIME + 1 * 24 * 0.5 &lt; sysdate
+                                                              then '登机开始时间超过30分钟警报'
+                    end
+                    when GATE_3_OPENDATETIME is not null and GATE_3_CLOSEDATETIME is null and AOBT is null and ATOT is null
+                    then case
+                    when GATE_3_OPENDATETIME + 1 * 24 * 0.5 &lt; sysdate
+                                                              then '登机开始时间超过30分钟警报'
+                    end
+                    when GATE_1_OPENDATETIME is not null and GATE_1_CLOSEDATETIME is not null and ATOT is not null
+                    then case
+                    when GATE_1_OPENDATETIME + 1 * 24 * 0.5 &lt; GATE_1_CLOSEDATETIME
+                                                              then '登机开始时间超过30分钟警报'
+                    else '实际起飞时间告警'
+                    end
+                    when GATE_2_OPENDATETIME is not null and GATE_2_CLOSEDATETIME is not null and ATOT is not null
+                    then case
+                    when GATE_2_OPENDATETIME + 1 * 24 * 0.5 &lt; GATE_2_CLOSEDATETIME
+                                                              then '登机开始时间超过30分钟警报'
+                    else '实际起飞时间告警'
+                    end
+                    when GATE_3_OPENDATETIME is not null and GATE_3_CLOSEDATETIME is not null and ATOT is not null
+                    then case
+                    when GATE_3_OPENDATETIME + 1 * 24 * 0.5 &lt; GATE_3_CLOSEDATETIME
+                                                              then '登机开始时间超过30分钟警报'
+                    else '实际起飞时间告警'
+                    end
+                    when (GATE_1_CLOSEDATETIME is not null or GATE_2_CLOSEDATETIME is not null or
+                    GATE_3_CLOSEDATETIME is not null) and AOBT is null and ATOT is null
+                    then '实际登机结束时间警报'
+                    when AOBT is not null and ATOT is null
+                    then '实际下轮挡时间告警'
+                    when ATOT is not null
+                    then '实际起飞时间告警'
+                    end as                                                                      REASON
+            from (select ta.FLIGHT_NO_IATA,
+                         GATE_1_OPENDATETIME,
+                         GATE_2_OPENDATETIME,
+                         GATE_3_OPENDATETIME,
+                         BELT_1,
+                         BELT_2,
+                         BELT_3,
+                         AIRCRAFT_TERMINAL_CODE,
+                         GATE_1_CLOSEDATETIME,
+                         GATE_2_CLOSEDATETIME,
+                         GATE_3_CLOSEDATETIME,
+                         AOBT,
+                         ATOT,
+                         SOBT,
+                         ta.OPERATIONAL_DATE,
+                         ta.A_OR_D,
+                         ta.FLIGHT_REPEAT_COUNT
+                  from DAILY_FLIGHT_MASTER ta,
+                       DAILY_FLIGHT_ADD_DETAILS tm
+                  where 1 = 1
+                    and (((tm.GATE_1_OPENDATETIME + 1 * 24 * 0.5 &lt; sysdate or tm.GATE_2_OPENDATETIME + 1 * 24 * 0.5 &lt;
+                                                                              sysdate or
+                           tm.GATE_3_OPENDATETIME + 1 * 24 * 0.5 &lt; sysdate)
+                            and
+                          (tm.GATE_1_BOARDSTATUS = 'C' or tm.GATE_2_BOARDSTATUS = 'C' or tm.GATE_3_BOARDSTATUS = 'C')) or
+                         ((tm.GATE_1_CLOSEDATETIME is not null or tm.GATE_2_CLOSEDATETIME is not null or
+                           tm.GATE_3_CLOSEDATETIME is not null) and
+                          (tm.GATE_1_BOARDSTATUS = 'C' or tm.GATE_2_BOARDSTATUS = 'C' or tm.GATE_3_BOARDSTATUS = 'C') and
+                          AOBT is null and ATOT is null) or (AOBT is not null and ATOT is null) or (ATOT is not null))
+                    and tm.FLIGHT_NO_IATA = ta.FLIGHT_NO_IATA
+                    AND tm.A_OR_D = ta.A_OR_D
+                    AND tm.FLIGHT_REPEAT_COUNT = ta.FLIGHT_REPEAT_COUNT
+                    AND tm.OPERATIONAL_DATE = ta.OPERATIONAL_DATE
+                    and tm.A_OR_D = 'D'
+                    and nvl(tm.FLIGHT_CANCEL_CODE, '-1') != 'C'
+                    AND nvl(tm.CODE_SHARE_STATUS, '-1') != 'SF'
+                    AND tm.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B')
+                    and ta.SOBT BETWEEN to_date(#{queryDate}||' 06:00:00', 'YYYY-MM-DD HH24:MI:SS')
+                            AND to_date(#{queryDate} ||' 06:00:00', 'YYYY-MM-DD HH24:MI:SS') + 1) tea
+                   left join DAILY_PASSENGER_MASTER teb
+                     on teb.DPERATION_DATE = tea.OPERATIONAL_DATE and tea.FLIGHT_NO_IATA = teb.pax_flightno
+            where tea.AIRCRAFT_TERMINAL_CODE  != 1
+              and not exists(select 1
+                             from DAILY_PASSENGER_MASTER
+                             where PAX_TANSFERYN = 1
+                               and PAX_FLIGHTNOBEFORETSF = teb.PAX_FLIGHTNO
+                               and PAX_DATEBEFORETSF = teb.DPERATION_DATE
+                               and PAX_NAME_ENGLISH = teb.PAX_NAME_ENGLISH)
+            group by FLIGHT_NO_IATA, GATE_1_OPENDATETIME, GATE_2_OPENDATETIME, GATE_3_OPENDATETIME, BELT_1, BELT_2, BELT_3,
+                     GATE_1_CLOSEDATETIME, GATE_2_CLOSEDATETIME, GATE_3_CLOSEDATETIME, AOBT, ATOT, SOBT, OPERATIONAL_DATE, A_OR_D,
+                     FLIGHT_REPEAT_COUNT)
+        where boarcnt/chkcnt*100 &lt; (select to_number(PARAMVALUE) from AOSSSYSDIC where PARAMTYPECODE = 'EW'
+        and chkcnt!=0
+        and  PARAMCODE= 'HBLLDJ'
+        and STATUS = 1)
+        and chkcnt != 0
+        and boarcnt &gt; 0
+        <![CDATA[]]>
+    </select>
+</mapper>
