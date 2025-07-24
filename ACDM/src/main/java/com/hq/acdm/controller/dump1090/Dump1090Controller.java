@@ -31,7 +31,6 @@ public class Dump1090Controller {
         // 示例：遍历并打印关键字段
         log.info("aircraftDataList: {}", JSON.toJSONString(aircraftDataList));
         log.info("------------Dump1090Controller dataReception.json End---------------");
-        log.info("------------Dump1090Controller dataReception.json End---------------");
     }
 
 
