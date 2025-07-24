@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TOndutyInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TOndutyInfo" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+    <result column="ORG_NAME" property="orgName" jdbcType="VARCHAR" />
+    <result column="ONDUTY_EMP_ID" property="ondutyEmpId" jdbcType="VARCHAR" />
+    <result column="ONDUTY_EMP" property="ondutyEmp" jdbcType="VARCHAR" />
+    <result column="TEL" property="tel" jdbcType="VARCHAR" />
+    <result column="MOBILE_PHONE" property="mobilePhone" jdbcType="VARCHAR" />
+    <result column="ONDUTY_TIME" property="ondutyTime" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, ORG_ID, ORG_NAME, ONDUTY_EMP_ID, ONDUTY_EMP, TEL, MOBILE_PHONE, ONDUTY_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TOndutyInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_ONDUTY_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_ONDUTY_INFO
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_ONDUTY_INFO
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TOndutyInfoExample" >
+    delete from T_ONDUTY_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TOndutyInfo" >
+    insert into T_ONDUTY_INFO (ID, ORG_ID, ORG_NAME, 
+      ONDUTY_EMP_ID, ONDUTY_EMP, TEL, 
+      MOBILE_PHONE, ONDUTY_TIME)
+    values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
+      #{ondutyEmpId,jdbcType=VARCHAR}, #{ondutyEmp,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
+      #{mobilePhone,jdbcType=VARCHAR}, #{ondutyTime,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TOndutyInfo" >
+    insert into T_ONDUTY_INFO
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="orgId != null" >
+        ORG_ID,
+      </if>
+      <if test="orgName != null" >
+        ORG_NAME,
+      </if>
+      <if test="ondutyEmpId != null" >
+        ONDUTY_EMP_ID,
+      </if>
+      <if test="ondutyEmp != null" >
+        ONDUTY_EMP,
+      </if>
+      <if test="tel != null" >
+        TEL,
+      </if>
+      <if test="mobilePhone != null" >
+        MOBILE_PHONE,
+      </if>
+      <if test="ondutyTime != null" >
+        ONDUTY_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null" >
+        #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="ondutyEmpId != null" >
+        #{ondutyEmpId,jdbcType=VARCHAR},
+      </if>
+      <if test="ondutyEmp != null" >
+        #{ondutyEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="mobilePhone != null" >
+        #{mobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="ondutyTime != null" >
+        #{ondutyTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TOndutyInfoExample" resultType="java.lang.Integer" >
+    select count(*) from T_ONDUTY_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_ONDUTY_INFO
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgId != null" >
+        ORG_ID = #{record.orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgName != null" >
+        ORG_NAME = #{record.orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ondutyEmpId != null" >
+        ONDUTY_EMP_ID = #{record.ondutyEmpId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ondutyEmp != null" >
+        ONDUTY_EMP = #{record.ondutyEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tel != null" >
+        TEL = #{record.tel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobilePhone != null" >
+        MOBILE_PHONE = #{record.mobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ondutyTime != null" >
+        ONDUTY_TIME = #{record.ondutyTime,jdbcType=DATE},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_ONDUTY_INFO
+    set ID = #{record.id,jdbcType=VARCHAR},
+      ORG_ID = #{record.orgId,jdbcType=VARCHAR},
+      ORG_NAME = #{record.orgName,jdbcType=VARCHAR},
+      ONDUTY_EMP_ID = #{record.ondutyEmpId,jdbcType=VARCHAR},
+      ONDUTY_EMP = #{record.ondutyEmp,jdbcType=VARCHAR},
+      TEL = #{record.tel,jdbcType=VARCHAR},
+      MOBILE_PHONE = #{record.mobilePhone,jdbcType=VARCHAR},
+      ONDUTY_TIME = #{record.ondutyTime,jdbcType=DATE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TOndutyInfo" >
+    update T_ONDUTY_INFO
+    <set >
+      <if test="orgId != null" >
+        ORG_ID = #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null" >
+        ORG_NAME = #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="ondutyEmpId != null" >
+        ONDUTY_EMP_ID = #{ondutyEmpId,jdbcType=VARCHAR},
+      </if>
+      <if test="ondutyEmp != null" >
+        ONDUTY_EMP = #{ondutyEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        TEL = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="mobilePhone != null" >
+        MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="ondutyTime != null" >
+        ONDUTY_TIME = #{ondutyTime,jdbcType=DATE},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TOndutyInfo" >
+    update T_ONDUTY_INFO
+    set ORG_ID = #{orgId,jdbcType=VARCHAR},
+      ORG_NAME = #{orgName,jdbcType=VARCHAR},
+      ONDUTY_EMP_ID = #{ondutyEmpId,jdbcType=VARCHAR},
+      ONDUTY_EMP = #{ondutyEmp,jdbcType=VARCHAR},
+      TEL = #{tel,jdbcType=VARCHAR},
+      MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR},
+      ONDUTY_TIME = #{ondutyTime,jdbcType=DATE}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="findTOndutyInfo" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from T_ONDUTY_INFO
+    where ORG_ID = #{params.orgId,jdbcType=VARCHAR}
+    AND ONDUTY_TIME = #{params.ondutyDate,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updateByOrgIdAndOndutyDate" parameterType="map" >
+    update T_ONDUTY_INFO
+    set ONDUTY_EMP = #{params.emp,jdbcType=VARCHAR},
+      TEL = #{params.tel,jdbcType=VARCHAR},
+      MOBILE_PHONE = #{params.phone,jdbcType=VARCHAR}
+    where ORG_ID = #{params.orgId,jdbcType=VARCHAR}
+    AND ONDUTY_TIME = #{params.ondutyDate,jdbcType=DATE}
+  </update>
+
+
+</mapper>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.GateAreaMaintenanceMapper" >
+  <select id="queryGateAreaMaintenance" parameterType="map" resultType="com.hq.acdm.model.statistics.gateAreaMaintenance.GateAreaMaintenance"  >
+select  g.GATE,g.TERMINAL,g.AREAID,g.STAND_LAYOUT,g.STATUS,g.BOARDING_BRIDGE_1,g.BOARDING_BRIDGE_1,g.BLOCK_ASSOCIATED_GATE,a.PAX_THRESHOLD,a.NAME
+from GATE g,TERMINAL t,AREA a  where 1=1 and a.AREAID=g.AREAID and a.TERMINAL=t.TERMINAL
+      <if test="params.terminal != null and params.terminal != ''">
+              and a.TERMINAL = #{params.terminal}
+      </if>
+    <if test="params.gate != null and params.gate != ''">
+      and g.GATE = #{params.gate}
+    </if>
+    <if test="params.description !=null and params.description !=''">
+      and a.NAME=#{params.description}
+    </if>
+      order by g.GATE
+  </select>
+
+    <select id="queryGate" resultType="com.hq.acdm.model.statistics.gateAreaMaintenance.GateAreaMaintenance"  >
+        select  g.GATE
+        from GATE g
+        where 1=1
+        <if test="terminal !=null and terminal !=''">
+            and g.TERMINAL = #{terminal}
+        </if>
+    </select>
+
+    <select id="queryArea" resultType="com.hq.acdm.model.statistics.gateAreaMaintenance.GateAreaMaintenance"  >
+        select  a.AREAID,a.TERMINAL,a.PAX_THRESHOLD,a.NAME,a.STATUS
+        from AREA a
+    </select>
+
+    <insert id="insertGate" parameterType="java.util.List" useGeneratedKeys="false" >
+        BEGIN
+        <foreach item="item" index="index" collection="list" separator="">
+      insert into GATE (GATE,TERMINAL,AREAID,DESCRIPTION,PAX_THRESHOLD,STAND_LAYOUT) VALUES
+                     (
+            #{item.GATE},
+            #{item.TERMINAL},
+            #{item.AREAID},
+            #{item.NAME},
+            #{item.PAX_THRESHOLD},
+            #{item.STAND_LAYOUT}
+                    );
+                     </foreach>
+        COMMIT;
+        END;
+    </insert>
+
+    <insert id="insertArea" parameterType="map">
+        insert into AREA (AREAID,TERMINAL,PAX_THRESHOLD,NAME,STATUS) VALUES (
+        #{params.AREAID},
+        #{params.TERMINAL},
+        #{params.PAX_THRESHOLD},
+        #{params.NAME},
+        #{params.STATUS}
+        )
+    </insert>
+
+    <update id="modifyGate" parameterType="java.util.List" useGeneratedKeys="false" >
+        BEGIN
+        <foreach collection="list" item="item" index="index" separator="">
+        UPDATE GATE g
+        <set>
+            <if test="item.AREAID != null">
+                g.AREAID = #{item.AREAID}
+            </if>
+
+        </set>
+        where g.GATE = #{item.GATE};
+        </foreach>
+        COMMIT;
+        END;
+    </update>
+
+    <delete id="deleteArea">
+       delete from AREA where 1=1
+       <if test="AREAID !=null and AREAID !=''">
+           and AREAID = #{AREAID}
+       </if>
+    </delete>
+
+    <update id="updateArea" parameterType="map">
+        update AREA a
+        <set>
+            <if test="params.terminal !=null and params.terminal !=''">
+                a.TERMINAL = #{params.terminal},
+            </if>
+            <if test="params.description !=null and params.description !=''">
+                a.NAME = #{params.description},
+            </if>
+            <if test="params.passengerMax !=null and params.passengerMax !=''">
+                a.PAX_THRESHOLD = #{params.passengerMax}
+            </if>
+        </set>
+        WHERE a.AREAID = #{params.gateArea}
+
+    </update>
+    <select id="queryGateFromTerminal" resultType="com.hq.acdm.model.statistics.gateAreaMaintenance.GateAreaMaintenance">
+        select g.TERMINAL from GATE g WHERE 1=1
+        <if test="gate !=null and gate !=''">
+            and g.GATE = #{gate}
+        </if>
+    </select>
+</mapper>

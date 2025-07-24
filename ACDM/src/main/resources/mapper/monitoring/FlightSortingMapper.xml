@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.monitioring.FlightSortingMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.monitoring.flightSorting.FlightSorting" >
+    <result column="queryDate" property="queryDate" jdbcType="TIMESTAMP" />
+    <result column="AIRLINE_CODE_IATA" property="airline_code_iata" jdbcType="VARCHAR" />
+    <result column="AIRPORTTYPE" property="airport_type" jdbcType="VARCHAR" />
+    <result column="AVGTime" property="averageTime" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="queryArrival" parameterType="map" resultType="com.hq.acdm.model.monitoring.flightSorting.FlightSorting"  >
+      SELECT FLIGHT_NO_IATA,ATOT,SIBT,ALDT,flight_no_iata_d,STAND,ELDT,ETA,A_TMO,to_char(OPERATIONAL_DATE,'yyyy-MM-dd') OPERATIONAL_DATE FROM(
+      SELECT
+      AA.FLIGHT_NO_IATA,AA.ATOT, AA.ELDT, AA.ELDT ETA,AA.SIBT,AA.ALDT, AA.ATMO A_TMO,AA.OPERATIONAL_DATE,lnk_carrier_code||lnk_flight_no flight_no_iata_d,aa.stand
+      FROM
+      DAILY_FLIGHT_MASTER AA
+      LEFT JOIN
+      DAILY_FLIGHT_ADD_DETAILS BB
+      ON
+      AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE
+      AND AA.A_OR_D = BB.A_OR_D AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+      WHERE
+       (AA.ALDT IS NULL AND AA.ELDT IS NOT NULL AND
+      <if test="params.airCompany !=null and params.airCompany != ''">
+          aa.airline_code_iata = #{params.airCompany,jdbcType=VARCHAR} and
+      </if>
+      <if test="params.startDate !=null and params.startDate != ''">
+           (AA.OPERATIONAL_DATE >= to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS') and AA.OPERATIONAL_DATE  &lt;  to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')) AND
+      </if>
+      (to_char(AA.ELDT,'YYYY-MM-DD HH24:MI:SS') BETWEEN to_char(CURRENT_TIMESTAMP,'YYYY-MM-DD HH24:MI:SS') AND
+      to_char((CURRENT_TIMESTAMP + 1/24),'YYYY-MM-DD HH24:MI:SS')) AND AA.A_OR_D ='A')
+      AND nvl(BB.FLIGHT_CANCEL_CODE,' ') &lt;> 'C'
+      AND nvl(BB.CODE_SHARE_STATUS,' ') &lt;> 'SF'
+      AND BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B')
+      ORDER BY AA.ELDT ASC)
+
+  </select>
+    <select id="queryDeparture" parameterType="map" resultType="com.hq.acdm.model.monitoring.flightSorting.FlightSorting"  >
+        SELECT FLIGHT_NO_IATA,flight_no_iata_a,STAND,COBT,SOBT,CTOT,ETOT,to_char(OPERATIONAL_DATE,'yyyy-MM-dd') OPERATIONAL_DATE FROM(
+        SELECT
+        AA.FLIGHT_NO_IATA,aa.stand, BB.COBT,AA.SOBT, BB.CTOT, AA.ETOT ,AA.OPERATIONAL_DATE,lnk_carrier_code||lnk_flight_no flight_no_iata_a
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN
+        DAILY_FLIGHT_ADD_DETAILS BB
+        ON
+        AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE
+        AND AA.A_OR_D = BB.A_OR_D AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        WHERE 1=1 and
+        <if test="params.airCompany !=null and params.airCompany != ''">
+            aa.airline_code_iata = #{params.airCompany,jdbcType=VARCHAR} and
+        </if>
+        <if test="params.startDate !=null and params.startDate != ''">
+            (AA.OPERATIONAL_DATE >= to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS') and AA.OPERATIONAL_DATE  &lt;  to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')) AND
+        </if>
+        (AA.ATOT IS NULL AND BB.COBT IS NOT NULL AND (BB.COBT BETWEEN (CURRENT_TIMESTAMP) AND (CURRENT_TIMESTAMP + 1/24)) AND AA.A_OR_D ='D')
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') &lt;> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') &lt;> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B')
+        ORDER BY BB.COBT ASC)
+    </select>
+ <select id="queryFlightNode" parameterType="map" resultType="com.hq.acdm.model.monitoring.flightSorting.FlightSorting"  >
+        SELECT * FROM
+        (SELECT TA.FLIGHT_NO_IATA,TA.OPERATIONAL_DATE,TA.A_OR_D,TA.FLIGHT_REPEAT_COUNT,
+        TB.LNK_CARRIER_CODE,TB.LNK_FLIGHT_NO,TB.LNK_FLIGHT_SUFFIX,TB.LNK_FLIGHT_REPEAT_COUNT,TB.LNK_SCHEDULE_DATE,
+        TA.ATOT PRE_ATOT,
+        TA.ALDT,
+        '' A_GROUND_TRANSFER,
+        COALESCE(TA.AIBT,TB.AIBT_1,TB.AIBT_2,TB.AIBT_3,TC.ALDT) AIBT,
+        NVL(TA.ARSL,TD.ARSL) ARSL,
+        NVL(TA.ATDO,TD.ATDO) ATDO,
+        NVL(TA.ATFO,TD.ATFO) ATFO
+        FROM DAILY_FLIGHT_MASTER TA LEFT JOIN DAILY_FLIGHT_ADD_DETAILS TB
+        ON TA.FLIGHT_NO_IATA=TB.FLIGHT_NO_IATA AND TA.OPERATIONAL_DATE=TB.OPERATIONAL_DATE AND TA.A_OR_D=TB.A_OR_D
+        LEFT JOIN DAILY_FLIGHT_AIRLINES TC
+        ON TA.FLIGHT_NO_IATA=TC.FLIGHT_NO_IATA AND TA.OPERATIONAL_DATE=TC.OPERATIONAL_DATE AND TA.A_OR_D=TC.A_OR_D
+        LEFT JOIN DAILY_FLIGHT_AIRLINES_MORE TD
+        ON TA.FLIGHT_NO_IATA=TD.FLIGHT_NO_IATA AND TA.OPERATIONAL_DATE=TD.OPERATIONAL_DATE AND TA.A_OR_D=TD.A_OR_D
+        WHERE TB.CODE_SHARE_STATUS &lt;>'SF' AND TB.FLIGHT_CANCEL_CODE &lt;>'C' AND TB.FLIGHT_CLASS_CODE IN ('L/W','W/Z','C/B') AND TA.A_OR_D='A') AA
+        LEFT JOIN (SELECT T1.FLIGHT_NO_IATA,T1.OPERATIONAL_DATE,T1.A_OR_D,T1.FLIGHT_REPEAT_COUNT,
+        NVL(T1.ASCT,T4.ASCT) ASCT,
+        NVL(T1.AFCT,T4.AFCT) AFCT,
+        NVL(T1.ASR,T4.ASR) ASR,
+        NVL(T1.AER,T4.AER) AER,
+        COALESCE(T1.TASC,T4."ASC") TASC,
+        NVL(T1.AEC,T4.AEC) AEC,
+        NVL(T1.ASBT,T4.ASBT) ASBT,
+        NVL(T1.AEBT,T4.AEBT) AEBT,
+        NVL(T1.ATDC,T4.ATDC) ATDC,
+        NVL(T1.ATFC,T4.ATFC) ATFC,
+        NVL(T1.AACT,T4.AACT) AACT,
+        NVL(T1.LSW,T4.LSW) LSW,
+        COALESCE(T1.AOBT,T2.AOBT_1,T2.AOBT_2,T2.AOBT_3,T3.ATOT) AOBT,
+        '' D_GROUND_TRANSFER,
+        T1.ATOT
+        FROM DAILY_FLIGHT_MASTER T1 LEFT JOIN DAILY_FLIGHT_ADD_DETAILS T2
+        ON T1.FLIGHT_NO_IATA=T2.FLIGHT_NO_IATA AND T1.OPERATIONAL_DATE=T2.OPERATIONAL_DATE AND T1.A_OR_D=T2.A_OR_D
+        LEFT JOIN DAILY_FLIGHT_AIRLINES T3
+        ON T1.FLIGHT_NO_IATA=T3.FLIGHT_NO_IATA AND T1.OPERATIONAL_DATE=T3.OPERATIONAL_DATE AND T1.A_OR_D=T3.A_OR_D
+        LEFT JOIN DAILY_FLIGHT_AIRLINES_MORE T4
+        ON T1.FLIGHT_NO_IATA=T4.FLIGHT_NO_IATA AND T1.OPERATIONAL_DATE=T4.OPERATIONAL_DATE AND T1.A_OR_D=T4.A_OR_D
+        WHERE T2.CODE_SHARE_STATUS &lt;>'SF' AND T2.FLIGHT_CANCEL_CODE &lt;>'C' AND T2.FLIGHT_CLASS_CODE IN ('L/W','W/Z','C/B') AND T1.A_OR_D='D') BB
+        ON (AA.LNK_CARRIER_CODE || AA.LNK_FLIGHT_NO || COALESCE(AA.LNK_FLIGHT_SUFFIX,''))=BB.FLIGHT_NO_IATA AND
+        AA.LNK_FLIGHT_REPEAT_COUNT=BB.FLIGHT_REPEAT_COUNT AND AA.LNK_SCHEDULE_DATE = BB.OPERATIONAL_DATE
+    </select>
+</mapper>

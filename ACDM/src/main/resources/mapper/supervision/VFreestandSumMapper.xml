@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.supervision.VFreestandSumMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.supervision.managermonitor.VFreestandSum" >
+    <result column="TERMINAL" property="terminal" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="STANDS" property="stands" jdbcType="DECIMAL" />
+  </resultMap>
+  <insert id="insert" parameterType="com.hq.acdm.model.supervision.managermonitor.VFreestandSum" >
+    insert into V_FREESTAND_SUM (TERMINAL, DESCRIPTION, STANDS
+      )
+    values (#{terminal,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{stands,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.supervision.managermonitor.VFreestandSum" >
+    insert into V_FREESTAND_SUM
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="terminal != null" >
+        TERMINAL,
+      </if>
+      <if test="description != null" >
+        DESCRIPTION,
+      </if>
+      <if test="stands != null" >
+        STANDS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="terminal != null" >
+        #{terminal,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="stands != null" >
+        #{stands,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getAll" resultMap="BaseResultMap">
+    select * from V_FREESTAND_SUM order by terminal,description
+  </select>
+
+  <select id="getFreeTotal" resultType="java.lang.Integer">
+    select SUM(STANDS) total from V_FREESTAND_GROUP
+  </select>
+</mapper>

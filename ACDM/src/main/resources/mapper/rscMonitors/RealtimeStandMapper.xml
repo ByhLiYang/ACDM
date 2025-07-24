@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.rscMonitors.RealtimeStandMapper" >
+  <select id="getStandInfo" resultType="com.hq.acdm.vo.rscMonitors.StandVo">
+    <![CDATA[
+    SELECT FLIGHT_ID flightId,FLNO flno,D_OR_A dOrA,STAND stand,EST_TIME estTime,ACT_TIME actTime FROM V_UTIL_STAND;
+    ]]>
+  </select>
+  <select id="getStandInfo2" resultType="com.hq.acdm.vo.rscMonitors.StandVo2">
+    <![CDATA[
+    SELECT * FROM V_UTIL_STAND2;
+    ]]>
+  </select>
+  <select id="getJWZS" resultType="int">
+    <![CDATA[
+    SELECT count(1) jwzs FROM T_CRAFT_SITE WHERE IS_DELETE='0';
+    ]]>
+  </select>
+  <select id="getBKYS" resultType="int">
+    <![CDATA[
+    SELECT count(1) jwzs FROM T_CRAFT_SITE WHERE IS_DELETE='0' and `STATUS` <> 'O';
+    ]]>
+  </select>
+  <select id="getJRTC" resultType="int">
+    <![CDATA[
+    SELECT count(1) FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='A' AND ABNORMAL_FLIGHT_STAT_CD NOT IN ('CAN','RTN','ALT','BAK') AND ATOT IS NOT NULL;
+    ]]>
+  </select>
+  <select id="getGYHB" resultType="int">
+    <![CDATA[
+    SELECT count(1) FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='A' AND ABNORMAL_FLIGHT_STAT_CD NOT IN ('CAN','RTN','ALT','BAK') AND ATOT IS NOT NULL AND ASSOCIATED_FLIGHT_ID IS NULL;
+    ]]>
+  </select>
+  <select id="getBaseStand" resultType="com.hq.acdm.vo.rscMonitors.BaseStand">
+    <![CDATA[
+    SELECT CODE stand,IS_REMOTE isremote,CLASSIFICATION type FROM T_CRAFT_SITE WHERE IS_DELETE='0' AND `STATUS`='O'
+    ]]>
+  </select>
+  <select id="getJJWZS" resultType="int">
+    <![CDATA[
+    SELECT count(1) JJWZS FROM T_CRAFT_SITE WHERE IS_DELETE='0' AND STATUS='O' AND IS_REMOTE='N';
+    ]]>
+  </select>
+  <select id="getYJWZS" resultType="int">
+    <![CDATA[
+    SELECT count(1) YJWZS FROM T_CRAFT_SITE WHERE IS_DELETE='0' AND STATUS='O' AND IS_REMOTE='Y';
+    ]]>
+  </select>
+</mapper>

@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TAirCraftMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TAirCraft" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="CRAFT_TYPE_ICAO_CD" property="craftTypeIcaoCd" jdbcType="VARCHAR" />
+    <result column="AIRLINE_TWO_CHAR_CD" property="airlineTwoCharCd" jdbcType="VARCHAR" />
+    <result column="SEAT_MAX_NUMBER" property="seatMaxNumber" jdbcType="INTEGER" />
+    <result column="SUPPORT_SEAT_NUMBER" property="supportSeatNumber" jdbcType="INTEGER" />
+    <result column="AIRLINE_BRANCH" property="airlineBranch" jdbcType="VARCHAR" />
+    <result column="MAX_TAKEOFF_WEIGHT" property="maxTakeoffWeight" jdbcType="VARCHAR" />
+    <result column="MAX_LOAD_WEIGHT" property="maxLoadWeight" jdbcType="VARCHAR" />
+    <result column="SUPPORT_LOAD_WEIGHT" property="supportLoadWeight" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="IS_DELETE" property="isDelete" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, CODE, CRAFT_TYPE_ICAO_CD, AIRLINE_TWO_CHAR_CD, SEAT_MAX_NUMBER, SUPPORT_SEAT_NUMBER, 
+    AIRLINE_BRANCH, MAX_TAKEOFF_WEIGHT, MAX_LOAD_WEIGHT, SUPPORT_LOAD_WEIGHT, CREATE_TIME, 
+    UPDATE_TIME, IS_DELETE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TAirCraftExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_AIR_CRAFT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_AIR_CRAFT
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_AIR_CRAFT
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TAirCraftExample" >
+    delete from T_AIR_CRAFT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TAirCraft" >
+    insert into T_AIR_CRAFT (ID, CODE, CRAFT_TYPE_ICAO_CD, 
+      AIRLINE_TWO_CHAR_CD, SEAT_MAX_NUMBER, SUPPORT_SEAT_NUMBER, 
+      AIRLINE_BRANCH, MAX_TAKEOFF_WEIGHT, MAX_LOAD_WEIGHT, 
+      SUPPORT_LOAD_WEIGHT, CREATE_TIME, UPDATE_TIME, 
+      IS_DELETE)
+    values (#{id,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{craftTypeIcaoCd,jdbcType=VARCHAR}, 
+      #{airlineTwoCharCd,jdbcType=VARCHAR}, #{seatMaxNumber,jdbcType=INTEGER}, #{supportSeatNumber,jdbcType=INTEGER}, 
+      #{airlineBranch,jdbcType=VARCHAR}, #{maxTakeoffWeight,jdbcType=VARCHAR}, #{maxLoadWeight,jdbcType=VARCHAR}, 
+      #{supportLoadWeight,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TAirCraft" >
+    insert into T_AIR_CRAFT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="craftTypeIcaoCd != null" >
+        CRAFT_TYPE_ICAO_CD,
+      </if>
+      <if test="airlineTwoCharCd != null" >
+        AIRLINE_TWO_CHAR_CD,
+      </if>
+      <if test="seatMaxNumber != null" >
+        SEAT_MAX_NUMBER,
+      </if>
+      <if test="supportSeatNumber != null" >
+        SUPPORT_SEAT_NUMBER,
+      </if>
+      <if test="airlineBranch != null" >
+        AIRLINE_BRANCH,
+      </if>
+      <if test="maxTakeoffWeight != null" >
+        MAX_TAKEOFF_WEIGHT,
+      </if>
+      <if test="maxLoadWeight != null" >
+        MAX_LOAD_WEIGHT,
+      </if>
+      <if test="supportLoadWeight != null" >
+        SUPPORT_LOAD_WEIGHT,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="isDelete != null" >
+        IS_DELETE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="craftTypeIcaoCd != null" >
+        #{craftTypeIcaoCd,jdbcType=VARCHAR},
+      </if>
+      <if test="airlineTwoCharCd != null" >
+        #{airlineTwoCharCd,jdbcType=VARCHAR},
+      </if>
+      <if test="seatMaxNumber != null" >
+        #{seatMaxNumber,jdbcType=INTEGER},
+      </if>
+      <if test="supportSeatNumber != null" >
+        #{supportSeatNumber,jdbcType=INTEGER},
+      </if>
+      <if test="airlineBranch != null" >
+        #{airlineBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="maxTakeoffWeight != null" >
+        #{maxTakeoffWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="maxLoadWeight != null" >
+        #{maxLoadWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="supportLoadWeight != null" >
+        #{supportLoadWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TAirCraftExample" resultType="java.lang.Integer" >
+    select count(*) from T_AIR_CRAFT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_AIR_CRAFT
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.code != null" >
+        CODE = #{record.code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.craftTypeIcaoCd != null" >
+        CRAFT_TYPE_ICAO_CD = #{record.craftTypeIcaoCd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.airlineTwoCharCd != null" >
+        AIRLINE_TWO_CHAR_CD = #{record.airlineTwoCharCd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.seatMaxNumber != null" >
+        SEAT_MAX_NUMBER = #{record.seatMaxNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.supportSeatNumber != null" >
+        SUPPORT_SEAT_NUMBER = #{record.supportSeatNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.airlineBranch != null" >
+        AIRLINE_BRANCH = #{record.airlineBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maxTakeoffWeight != null" >
+        MAX_TAKEOFF_WEIGHT = #{record.maxTakeoffWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maxLoadWeight != null" >
+        MAX_LOAD_WEIGHT = #{record.maxLoadWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supportLoadWeight != null" >
+        SUPPORT_LOAD_WEIGHT = #{record.supportLoadWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null" >
+        IS_DELETE = #{record.isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_AIR_CRAFT
+    set ID = #{record.id,jdbcType=VARCHAR},
+      CODE = #{record.code,jdbcType=VARCHAR},
+      CRAFT_TYPE_ICAO_CD = #{record.craftTypeIcaoCd,jdbcType=VARCHAR},
+      AIRLINE_TWO_CHAR_CD = #{record.airlineTwoCharCd,jdbcType=VARCHAR},
+      SEAT_MAX_NUMBER = #{record.seatMaxNumber,jdbcType=INTEGER},
+      SUPPORT_SEAT_NUMBER = #{record.supportSeatNumber,jdbcType=INTEGER},
+      AIRLINE_BRANCH = #{record.airlineBranch,jdbcType=VARCHAR},
+      MAX_TAKEOFF_WEIGHT = #{record.maxTakeoffWeight,jdbcType=VARCHAR},
+      MAX_LOAD_WEIGHT = #{record.maxLoadWeight,jdbcType=VARCHAR},
+      SUPPORT_LOAD_WEIGHT = #{record.supportLoadWeight,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      IS_DELETE = #{record.isDelete,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TAirCraft" >
+    update T_AIR_CRAFT
+    <set >
+      <if test="code != null" >
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="craftTypeIcaoCd != null" >
+        CRAFT_TYPE_ICAO_CD = #{craftTypeIcaoCd,jdbcType=VARCHAR},
+      </if>
+      <if test="airlineTwoCharCd != null" >
+        AIRLINE_TWO_CHAR_CD = #{airlineTwoCharCd,jdbcType=VARCHAR},
+      </if>
+      <if test="seatMaxNumber != null" >
+        SEAT_MAX_NUMBER = #{seatMaxNumber,jdbcType=INTEGER},
+      </if>
+      <if test="supportSeatNumber != null" >
+        SUPPORT_SEAT_NUMBER = #{supportSeatNumber,jdbcType=INTEGER},
+      </if>
+      <if test="airlineBranch != null" >
+        AIRLINE_BRANCH = #{airlineBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="maxTakeoffWeight != null" >
+        MAX_TAKEOFF_WEIGHT = #{maxTakeoffWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="maxLoadWeight != null" >
+        MAX_LOAD_WEIGHT = #{maxLoadWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="supportLoadWeight != null" >
+        SUPPORT_LOAD_WEIGHT = #{supportLoadWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        IS_DELETE = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TAirCraft" >
+    update T_AIR_CRAFT
+    set CODE = #{code,jdbcType=VARCHAR},
+      CRAFT_TYPE_ICAO_CD = #{craftTypeIcaoCd,jdbcType=VARCHAR},
+      AIRLINE_TWO_CHAR_CD = #{airlineTwoCharCd,jdbcType=VARCHAR},
+      SEAT_MAX_NUMBER = #{seatMaxNumber,jdbcType=INTEGER},
+      SUPPORT_SEAT_NUMBER = #{supportSeatNumber,jdbcType=INTEGER},
+      AIRLINE_BRANCH = #{airlineBranch,jdbcType=VARCHAR},
+      MAX_TAKEOFF_WEIGHT = #{maxTakeoffWeight,jdbcType=VARCHAR},
+      MAX_LOAD_WEIGHT = #{maxLoadWeight,jdbcType=VARCHAR},
+      SUPPORT_LOAD_WEIGHT = #{supportLoadWeight,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      IS_DELETE = #{isDelete,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

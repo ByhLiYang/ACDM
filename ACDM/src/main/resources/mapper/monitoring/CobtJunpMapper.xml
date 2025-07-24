@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.monitioring.CobtJumpMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.monitoring.cobtJump.CobtJump" >
+    <result column="queryDate" property="queryDate" jdbcType="TIMESTAMP" />
+    <result column="AIRLINE_CODE_IATA" property="airline_code_iata" jdbcType="VARCHAR" />
+    <result column="AIRPORTTYPE" property="airport_type" jdbcType="VARCHAR" />
+    <result column="AVGTime" property="averageTime" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="queryList" parameterType="map" resultType="com.hq.acdm.model.monitoring.cobtJump.CobtJump"  >
+       select to_char(operational_date,'yyyy-MM-dd') operational_date,flight_no_iata,a_or_d,flight_repeat_count,cobt,ctrlcontent,to_char(updatedatetime,'yyyy-MM-dd HH24:MM:SS') updatedatetime,ctot  from LOG_ATC_UPDATE where 1=1
+    <if test="params.startDate !=null and params.startDate != ''">
+      and operational_date >=to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd')
+    </if>
+    <if test="params.endDate !=null and params.endDate != ''">
+      and operational_date &lt;=to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd')
+    </if>
+    <if test="params.flight_no_iata !=null and params.flight_no_iata != ''">
+      and flight_no_iata=#{params.flight_no_iata}
+    </if>
+    <if test="params.a_or_d !=null and params.a_or_d != ''">
+      and a_or_d=#{params.a_or_d}
+    </if>
+  </select>
+
+</mapper>

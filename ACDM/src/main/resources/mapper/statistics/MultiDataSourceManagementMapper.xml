@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--扫描DAO下的接口-->
+<mapper namespace="com.hq.acdm.dao.statistics.MultiDataSourceManagementMapper" >
+
+    <!--查询有效的数据源-->
+  <select id="getDSMDataSourceList" resultType="map"  >
+      <![CDATA[
+                SELECT DS_ID, DS_DESC FROM DATASOURCE_MASTER WHERE STATUS=1 ORDER BY DS_ID
+            ]]>
+  </select>
+
+    <!--查询有效的里程碑-->
+    <select id="getDSMMileStoneList" resultType="map"  >
+      <![CDATA[
+                SELECT MILESTONE_ID, MILESTONE_DESC FROM MILESTONES_MASTER WHERE STATUS=1 ORDER BY MILESTONE_ID
+            ]]>
+  </select>
+
+
+
+    <!--查询所有的数据源-->
+    <select id="getDSMAllDataSource" resultType="map"  >
+      <![CDATA[
+                SELECT
+                        MILESTONE_ID,
+                        MILESTONE_DESC,
+                        DS_ID,
+                        DS_DESC,
+                        PRIORITY
+                    FROM
+                        MILESTONE_DS_XREF
+                    WHERE
+                        STATUS = 1
+                    UNION
+                        SELECT
+                            MILESTONE_ID,
+                            MILESTONE_DESC,
+                            NULL,
+                            NULL,
+                            NULL
+                        FROM
+                            MILESTONES_MASTER
+                        WHERE
+                            MILESTONE_ID NOT IN (
+                                SELECT
+                                    MILESTONE_ID
+                                FROM
+                                    MILESTONE_DS_XREF
+                                WHERE
+                                    STATUS = 1
+                            )
+                        ORDER BY
+                            MILESTONE_ID,
+                            PRIORITY
+            ]]>
+  </select>
+
+
+    <!--取得数据库中的指定记录的优先级-->
+    <select id="getDefinedPriority" parameterType="map" resultType="java.lang.String" >
+      <![CDATA[
+               SELECT PRIORITY FROM MILESTONE_DS_XREF WHERE STATUS=1 AND MILESTONE_ID=#{msid} AND DS_ID=#{dsid}
+            ]]>
+  </select>
+
+    <!--指定记录优先级下移，相邻记录上移 -->
+    <update id="updateLowerPriority" parameterType="map" >
+        <![CDATA[
+             UPDATE MILESTONE_DS_XREF SET PRIORITY=PRIORITY-1 WHERE STATUS=1 AND MILESTONE_ID=#{msid} AND nvl(DS_ID,' ') <> #{dsid} AND PRIORITY=#{pri}
+              ]]>
+    </update>
+
+    <!--指定记录优先级上移，相邻记录下移-->
+    <update id="updateHigherPriority" parameterType="map" >
+        <![CDATA[
+            UPDATE MILESTONE_DS_XREF SET PRIORITY=PRIORITY+1 WHERE STATUS=1 AND MILESTONE_ID=#{msid} AND nvl(DS_ID,' ') <> #{dsid} AND PRIORITY=#{pri}
+              ]]>
+    </update>
+
+    <!--指定记录的优先级变更-->
+    <update id="updateDefinedPriority" parameterType="map" >
+        <![CDATA[
+            UPDATE MILESTONE_DS_XREF SET PRIORITY=#{pri} WHERE STATUS=1 AND MILESTONE_ID=#{msid} AND DS_ID=#{dsid}
+              ]]>
+    </update>
+
+    <!--删除前先将优先级小于待删除记录的优先级全部提升一级-->
+    <update id="updatePriorityBeforedel" parameterType="map" >
+        <![CDATA[
+            UPDATE MILESTONE_DS_XREF SET PRIORITY=PRIORITY-1 WHERE STATUS=1 AND MILESTONE_ID=#{msid} AND nvl(DS_ID,' ') <> #{dsid} AND PRIORITY > #{pri}
+              ]]>
+    </update>
+    <!--删除该记录(逻辑删除)-->
+    <update id="deleteRecordLogic" parameterType="map" >
+        <![CDATA[
+            UPDATE MILESTONE_DS_XREF SET STATUS=0 WHERE STATUS=1 AND MILESTONE_ID=#{msid} AND DS_ID=#{dsid}
+              ]]>
+    </update>
+
+    <!--新增数据源记录 逻辑插入-->
+    <update id="insertRecordLogic" parameterType="map" >
+        <![CDATA[
+           UPDATE MILESTONE_DS_XREF SET PRIORITY=#{pri}, STATUS=1 WHERE MILESTONE_ID=#{msid} AND DS_ID=#{dsid}
+              ]]>
+    </update>
+
+    <!--新增数据源记录 物理插入-->
+    <insert id="insertRecordPhysical"  useGeneratedKeys="false" keyProperty="serialNumber">
+    <![CDATA[
+               INSERT INTO MILESTONE_DS_XREF(MILESTONE_ID,MILESTONE_DESC,DS_ID,DS_DESC,STATUS,PRIORITY) VALUES(#{msid}, '', #{dsid}, '', 1, #{pri})
+      ]]>
+    </insert>
+
+    <!--更新插入记录的里程碑名和数据源名-->
+    <update id="updateInsertRecord" parameterType="map" >
+        <![CDATA[
+            UPDATE MILESTONE_DS_XREF SET MILESTONE_DESC=(SELECT MILESTONE_DESC FROM MILESTONES_MASTER WHERE MILESTONE_ID=MILESTONE_DS_XREF.MILESTONE_ID), DS_DESC=(SELECT DS_DESC FROM DATASOURCE_MASTER WHERE DS_ID=MILESTONE_DS_XREF.DS_ID) WHERE STATUS=1 AND MILESTONE_ID=#{msid} AND DS_ID=#{dsid}
+              ]]>
+    </update>
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

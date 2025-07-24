@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.coordinatedOprt.FlowControlInformationMapper" >
+
+  <select id="findFlowControlInfoTMdrs" resultType="com.hq.acdm.vo.coordinatedOprt.FlowControlInfoTMdrsVo" parameterType="map">
+    SELECT
+    ID id,
+    DATE_FORMAT(PUBLISHTIME, '%Y-%m-%d %H:%i:%s') publishtime,
+    `LEVEL` `level`,
+    AREA area,
+    REASON reason,
+    EXPECTINFLUENCE expectinfluence,
+    DATE_FORMAT(TIMESCOPE_START, '%Y-%m-%d %H:%i:%s') timescopeStart,
+    DATE_FORMAT(TIMESCOPE_END, '%Y-%m-%d %H:%i:%s') timescopeEnd,
+    STATUSS statuss
+    FROM T_MDRS
+    WHERE ISDEL <![CDATA[<>]]> '1'
+    <if test="params.startDate != null and params.startDate != '' and params.endDate != null and params.endDate != '' ">
+      -- AND PUBLISHTIME BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR}
+      <![CDATA[
+      AND ((TIMESCOPE_START >= #{params.startDate,jdbcType=VARCHAR})
+      OR (TIMESCOPE_START >= #{params.startDate,jdbcType=VARCHAR} AND TIMESCOPE_END <= #{params.endDate,jdbcType=VARCHAR})
+      OR (TIMESCOPE_START <= #{params.startDate,jdbcType=VARCHAR} AND TIMESCOPE_START >= #{params.startDate,jdbcType=VARCHAR} AND TIMESCOPE_END <= #{params.endDate,jdbcType=VARCHAR})
+      OR (TIMESCOPE_START >= #{params.startDate,jdbcType=VARCHAR} AND TIMESCOPE_START <= #{params.startDate,jdbcType=VARCHAR} AND TIMESCOPE_END >= #{params.endDate,jdbcType=VARCHAR})
+      OR (TIMESCOPE_START <= #{params.startDate,jdbcType=VARCHAR} AND TIMESCOPE_END >= #{params.endDate,jdbcType=VARCHAR}))
+      ]]>
+    </if>
+    ORDER BY TIMESCOPE_START ASC
+  </select>
+
+
+  <select id="findFlowControlInfoTControlInfo" resultType="com.hq.acdm.vo.coordinatedOprt.FlowControlInfoTControlInfoVo" parameterType="map">
+    SELECT
+    ID id,
+    CONTROL_ID controlId,
+    PUBLISHER publisher,
+    DATE_FORMAT(PUBTIME, '%Y-%m-%d %H:%i:%s') pubtime,
+    CONTROL_CONTENT controlContent,
+    DATE_FORMAT(CONTROL_REAL_STARTTM, '%Y-%m-%d %H:%i:%s') controlRealStarttm,
+    DATE_FORMAT(CONTROL_ALTERAT_ENDTM, '%Y-%m-%d %H:%i:%s') controlAlteratEndtm,
+    ORIGINALSOURCE originalsource,
+    ISAVAILABLE isavailable
+    FROM T_CONTROL_INFO
+    WHERE 1=1
+    <if test="params.startDate != null and params.startDate != '' and params.endDate != null and params.endDate != '' ">
+      AND PUBTIME BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR}
+    </if>
+    <if test="params.isava != null ">
+      AND ISAVAILABLE = #{params.isava,jdbcType=VARCHAR}
+    </if>
+    ORDER BY PUBTIME ASC
+  </select>
+
+
+
+</mapper>

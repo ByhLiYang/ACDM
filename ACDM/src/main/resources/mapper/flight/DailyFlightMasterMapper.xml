@@ -1,0 +1,1021 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.flight.DailyFlightMasterMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.flight.DailyFlightMaster" >
+    <id column="FLIGHT_NO_IATA" property="flightNoIata" jdbcType="VARCHAR" />
+    <id column="OPERATIONAL_DATE" property="operationalDate" jdbcType="TIMESTAMP" />
+    <id column="A_OR_D" property="aOrD" jdbcType="VARCHAR" />
+    <id column="FLIGHT_REPEAT_COUNT" property="flightRepeatCount" jdbcType="VARCHAR" />
+    <result column="ARN" property="arn" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="FLIGHT_NO_ICAO" property="flightNoIcao" jdbcType="VARCHAR" />
+    <result column="AIRLINE_CODE_IATA" property="airlineCodeIata" jdbcType="VARCHAR" />
+    <result column="AIRLINE_CODE_ICAO" property="airlineCodeIcao" jdbcType="VARCHAR" />
+    <result column="ORIGIN_AIRPORT_IATA" property="originAirportIata" jdbcType="VARCHAR" />
+    <result column="ORIGIN_AIRPORT_ICAO" property="originAirportIcao" jdbcType="VARCHAR" />
+    <result column="DEST_AIRPORT_IATA" property="destAirportIata" jdbcType="VARCHAR" />
+    <result column="DEST_AIRPORT_ICAO" property="destAirportIcao" jdbcType="VARCHAR" />
+    <result column="PREV_FLIGHT_NO_IATA" property="prevFlightNoIata" jdbcType="VARCHAR" />
+    <result column="PREV_FLIGHT_NO_ICAO" property="prevFlightNoIcao" jdbcType="VARCHAR" />
+    <result column="NXT_FLIGHT_NO_IATA" property="nxtFlightNoIata" jdbcType="VARCHAR" />
+    <result column="NXT_FLIGHT_NO_ICAO" property="nxtFlightNoIcao" jdbcType="VARCHAR" />
+    <result column="STAND" property="stand" jdbcType="VARCHAR" />
+    <result column="GATE_1" property="gate1" jdbcType="VARCHAR" />
+    <result column="GATE_2" property="gate2" jdbcType="VARCHAR" />
+    <result column="GATE_3" property="gate3" jdbcType="VARCHAR" />
+    <result column="RWY" property="rwy" jdbcType="VARCHAR" />
+    <result column="BELT_1" property="belt1" jdbcType="VARCHAR" />
+    <result column="BELT_2" property="belt2" jdbcType="VARCHAR" />
+    <result column="BELT_3" property="belt3" jdbcType="VARCHAR" />
+    <result column="COUNTERS" property="counters" jdbcType="VARCHAR" />
+    <result column="TAXIWAY" property="taxiway" jdbcType="VARCHAR" />
+    <result column="DEICING_GATE" property="deicingGate" jdbcType="VARCHAR" />
+    <result column="D_OR_I" property="dOrI" jdbcType="VARCHAR" />
+    <result column="MILESTONE_STATUS" property="milestoneStatus" jdbcType="VARCHAR" />
+    <result column="DELAY_STATUS" property="delayStatus" jdbcType="VARCHAR" />
+    <result column="CURRENT_DELAY_CODE" property="currentDelayCode" jdbcType="VARCHAR" />
+    <result column="ATMO" property="atmo" jdbcType="TIMESTAMP" />
+    <result column="FADT" property="fadt" jdbcType="TIMESTAMP" />
+    <result column="ATOT" property="atot" jdbcType="TIMESTAMP" />
+    <result column="SLDT" property="sldt" jdbcType="TIMESTAMP" />
+    <result column="ELDT" property="eldt" jdbcType="TIMESTAMP" />
+    <result column="ALDT" property="aldt" jdbcType="TIMESTAMP" />
+    <result column="SIBT" property="sibt" jdbcType="TIMESTAMP" />
+    <result column="EIBT" property="eibt" jdbcType="TIMESTAMP" />
+    <result column="AIBT" property="aibt" jdbcType="TIMESTAMP" />
+    <result column="EXIT" property="exit" jdbcType="DECIMAL" />
+    <result column="AXIT" property="axit" jdbcType="DECIMAL" />
+    <result column="SCGT" property="scgt" jdbcType="TIMESTAMP" />
+    <result column="ECGT" property="ecgt" jdbcType="TIMESTAMP" />
+    <result column="ACGT" property="acgt" jdbcType="TIMESTAMP" />
+    <result column="AEGT" property="aegt" jdbcType="TIMESTAMP" />
+    <result column="MTTT" property="mttt" jdbcType="DECIMAL" />
+    <result column="ETTT" property="ettt" jdbcType="DECIMAL" />
+    <result column="STTT" property="sttt" jdbcType="DECIMAL" />
+    <result column="AGHT" property="aght" jdbcType="DECIMAL" />
+    <result column="SSBT" property="ssbt" jdbcType="TIMESTAMP" />
+    <result column="ESBT" property="esbt" jdbcType="TIMESTAMP" />
+    <result column="ASBT" property="asbt" jdbcType="TIMESTAMP" />
+    <result column="SRDT" property="srdt" jdbcType="TIMESTAMP" />
+    <result column="ERDT" property="erdt" jdbcType="TIMESTAMP" />
+    <result column="ARDT" property="ardt" jdbcType="TIMESTAMP" />
+    <result column="ESRT" property="esrt" jdbcType="TIMESTAMP" />
+    <result column="ASRT" property="asrt" jdbcType="TIMESTAMP" />
+    <result column="SSAT" property="ssat" jdbcType="TIMESTAMP" />
+    <result column="ESAT" property="esat" jdbcType="TIMESTAMP" />
+    <result column="TSAT" property="tsat" jdbcType="TIMESTAMP" />
+    <result column="ASAT" property="asat" jdbcType="TIMESTAMP" />
+    <result column="SOBT" property="sobt" jdbcType="TIMESTAMP" />
+    <result column="EOBT" property="eobt" jdbcType="TIMESTAMP" />
+    <result column="TOBT" property="tobt" jdbcType="TIMESTAMP" />
+    <result column="AOBT" property="aobt" jdbcType="TIMESTAMP" />
+    <result column="EXOT" property="exot" jdbcType="DECIMAL" />
+    <result column="AXOT" property="axot" jdbcType="DECIMAL" />
+    <result column="ERZT" property="erzt" jdbcType="TIMESTAMP" />
+    <result column="SCZT" property="sczt" jdbcType="TIMESTAMP" />
+    <result column="ECZT" property="eczt" jdbcType="TIMESTAMP" />
+    <result column="ACZT" property="aczt" jdbcType="TIMESTAMP" />
+    <result column="SEZT" property="sezt" jdbcType="TIMESTAMP" />
+    <result column="EEZT" property="eezt" jdbcType="TIMESTAMP" />
+    <result column="AEZT" property="aezt" jdbcType="TIMESTAMP" />
+    <result column="ADIT" property="adit" jdbcType="DECIMAL" />
+    <result column="STOT" property="stot" jdbcType="TIMESTAMP" />
+    <result column="ETOT" property="etot" jdbcType="TIMESTAMP" />
+    <result column="TTOT" property="ttot" jdbcType="TIMESTAMP" />
+    <result column="EET" property="eet" jdbcType="VARCHAR" />
+    <result column="DIVERSIONSTATUS" property="diversionstatus" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    FLIGHT_NO_IATA, OPERATIONAL_DATE, A_OR_D, FLIGHT_REPEAT_COUNT, ARN, TYPE, FLIGHT_NO_ICAO, 
+    AIRLINE_CODE_IATA, AIRLINE_CODE_ICAO, ORIGIN_AIRPORT_IATA, ORIGIN_AIRPORT_ICAO, DEST_AIRPORT_IATA, 
+    DEST_AIRPORT_ICAO, PREV_FLIGHT_NO_IATA, PREV_FLIGHT_NO_ICAO, NXT_FLIGHT_NO_IATA, 
+    NXT_FLIGHT_NO_ICAO, STAND, GATE_1, GATE_2, GATE_3, RWY, BELT_1, BELT_2, BELT_3, COUNTERS, 
+    TAXIWAY, DEICING_GATE, D_OR_I, MILESTONE_STATUS, DELAY_STATUS, CURRENT_DELAY_CODE, 
+    ATMO, FADT, ATOT, SLDT, ELDT, ALDT, SIBT, EIBT, AIBT, EXIT, AXIT, SCGT, ECGT, ACGT, 
+    AEGT, MTTT, ETTT, STTT, AGHT, SSBT, ESBT, ASBT, SRDT, ERDT, ARDT, ESRT, ASRT, SSAT, 
+    ESAT, TSAT, ASAT, SOBT, EOBT, TOBT, AOBT, EXOT, AXOT, ERZT, SCZT, ECZT, ACZT, SEZT, 
+    EEZT, AEZT, ADIT, STOT, ETOT, TTOT, EET, DIVERSIONSTATUS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.flight.DailyFlightMasterKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from DAILY_FLIGHT_MASTER
+    where FLIGHT_NO_IATA = #{flightNoIata,jdbcType=VARCHAR}
+      and OPERATIONAL_DATE = #{operationalDate,jdbcType=TIMESTAMP}
+      and A_OR_D = #{aOrD,jdbcType=VARCHAR}
+      and FLIGHT_REPEAT_COUNT = #{flightRepeatCount,jdbcType=VARCHAR}
+  </select>
+  <select id="queryList" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from DAILY_FLIGHT_MASTER where 1=1
+    <if test="params.operationalDate !=null and params.operationalDate != ''">
+    and to_char(OPERATIONAL_DATE,'yyyy-MM-dd') = #{params.operationalDate,jdbcType=VARCHAR}
+    </if>
+    <if test="params.flightNoIata !=null and params.flightNoIata != ''">
+    FLIGHT_NO_IATA = #{params.flightNoIata,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <select id="queryFlightList" resultMap="BaseResultMap" parameterType="map" >
+    SELECT DISTINCT FLIGHT_NO_IATA,A_OR_D FROM daily_flight_add_details D where 1=1
+     <if test="params.flightNoIata !=null and params.flightNoIata != ''">
+      FLIGHT_NO_IATA like #{params.flightNoIata,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.hq.acdm.model.flight.DailyFlightMasterKey" >
+    delete from DAILY_FLIGHT_MASTER
+    where FLIGHT_NO_IATA = #{flightNoIata,jdbcType=VARCHAR}
+      and OPERATIONAL_DATE = #{operationalDate,jdbcType=TIMESTAMP}
+      and A_OR_D = #{aOrD,jdbcType=VARCHAR}
+      and FLIGHT_REPEAT_COUNT = #{flightRepeatCount,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.flight.DailyFlightMaster" >
+    insert into DAILY_FLIGHT_MASTER (FLIGHT_NO_IATA, OPERATIONAL_DATE, 
+      A_OR_D, FLIGHT_REPEAT_COUNT, ARN, 
+      TYPE, FLIGHT_NO_ICAO, AIRLINE_CODE_IATA, 
+      AIRLINE_CODE_ICAO, ORIGIN_AIRPORT_IATA, ORIGIN_AIRPORT_ICAO, 
+      DEST_AIRPORT_IATA, DEST_AIRPORT_ICAO, PREV_FLIGHT_NO_IATA, 
+      PREV_FLIGHT_NO_ICAO, NXT_FLIGHT_NO_IATA, NXT_FLIGHT_NO_ICAO, 
+      STAND, GATE_1, GATE_2, 
+      GATE_3, RWY, BELT_1, 
+      BELT_2, BELT_3, COUNTERS, 
+      TAXIWAY, DEICING_GATE, D_OR_I, 
+      MILESTONE_STATUS, DELAY_STATUS, CURRENT_DELAY_CODE, 
+      ATMO, FADT, ATOT, 
+      SLDT, ELDT, ALDT, 
+      SIBT, EIBT, AIBT, 
+      EXIT, AXIT, SCGT, 
+      ECGT, ACGT, AEGT, 
+      MTTT, ETTT, STTT, AGHT, 
+      SSBT, ESBT, ASBT, 
+      SRDT, ERDT, ARDT, 
+      ESRT, ASRT, SSAT, 
+      ESAT, TSAT, ASAT, 
+      SOBT, EOBT, TOBT, 
+      AOBT, EXOT, AXOT, 
+      ERZT, SCZT, ECZT, 
+      ACZT, SEZT, EEZT, 
+      AEZT, ADIT, STOT, 
+      ETOT, TTOT, EET, 
+      DIVERSIONSTATUS)
+    values (#{flightNoIata,jdbcType=VARCHAR}, #{operationalDate,jdbcType=TIMESTAMP}, 
+      #{aOrD,jdbcType=VARCHAR}, #{flightRepeatCount,jdbcType=VARCHAR}, #{arn,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{flightNoIcao,jdbcType=VARCHAR}, #{airlineCodeIata,jdbcType=VARCHAR}, 
+      #{airlineCodeIcao,jdbcType=VARCHAR}, #{originAirportIata,jdbcType=VARCHAR}, #{originAirportIcao,jdbcType=VARCHAR}, 
+      #{destAirportIata,jdbcType=VARCHAR}, #{destAirportIcao,jdbcType=VARCHAR}, #{prevFlightNoIata,jdbcType=VARCHAR}, 
+      #{prevFlightNoIcao,jdbcType=VARCHAR}, #{nxtFlightNoIata,jdbcType=VARCHAR}, #{nxtFlightNoIcao,jdbcType=VARCHAR}, 
+      #{stand,jdbcType=VARCHAR}, #{gate1,jdbcType=VARCHAR}, #{gate2,jdbcType=VARCHAR}, 
+      #{gate3,jdbcType=VARCHAR}, #{rwy,jdbcType=VARCHAR}, #{belt1,jdbcType=VARCHAR}, 
+      #{belt2,jdbcType=VARCHAR}, #{belt3,jdbcType=VARCHAR}, #{counters,jdbcType=VARCHAR}, 
+      #{taxiway,jdbcType=VARCHAR}, #{deicingGate,jdbcType=VARCHAR}, #{dOrI,jdbcType=VARCHAR}, 
+      #{milestoneStatus,jdbcType=VARCHAR}, #{delayStatus,jdbcType=VARCHAR}, #{currentDelayCode,jdbcType=VARCHAR}, 
+      #{atmo,jdbcType=TIMESTAMP}, #{fadt,jdbcType=TIMESTAMP}, #{atot,jdbcType=TIMESTAMP}, 
+      #{sldt,jdbcType=TIMESTAMP}, #{eldt,jdbcType=TIMESTAMP}, #{aldt,jdbcType=TIMESTAMP}, 
+      #{sibt,jdbcType=TIMESTAMP}, #{eibt,jdbcType=TIMESTAMP}, #{aibt,jdbcType=TIMESTAMP}, 
+      #{exit,jdbcType=DECIMAL}, #{axit,jdbcType=DECIMAL}, #{scgt,jdbcType=TIMESTAMP}, 
+      #{ecgt,jdbcType=TIMESTAMP}, #{acgt,jdbcType=TIMESTAMP}, #{aegt,jdbcType=TIMESTAMP}, 
+      #{mttt,jdbcType=DECIMAL}, #{ettt,jdbcType=DECIMAL}, #{sttt,jdbcType=DECIMAL}, #{aght,jdbcType=DECIMAL}, 
+      #{ssbt,jdbcType=TIMESTAMP}, #{esbt,jdbcType=TIMESTAMP}, #{asbt,jdbcType=TIMESTAMP}, 
+      #{srdt,jdbcType=TIMESTAMP}, #{erdt,jdbcType=TIMESTAMP}, #{ardt,jdbcType=TIMESTAMP}, 
+      #{esrt,jdbcType=TIMESTAMP}, #{asrt,jdbcType=TIMESTAMP}, #{ssat,jdbcType=TIMESTAMP}, 
+      #{esat,jdbcType=TIMESTAMP}, #{tsat,jdbcType=TIMESTAMP}, #{asat,jdbcType=TIMESTAMP}, 
+      #{sobt,jdbcType=TIMESTAMP}, #{eobt,jdbcType=TIMESTAMP}, #{tobt,jdbcType=TIMESTAMP}, 
+      #{aobt,jdbcType=TIMESTAMP}, #{exot,jdbcType=DECIMAL}, #{axot,jdbcType=DECIMAL}, 
+      #{erzt,jdbcType=TIMESTAMP}, #{sczt,jdbcType=TIMESTAMP}, #{eczt,jdbcType=TIMESTAMP}, 
+      #{aczt,jdbcType=TIMESTAMP}, #{sezt,jdbcType=TIMESTAMP}, #{eezt,jdbcType=TIMESTAMP}, 
+      #{aezt,jdbcType=TIMESTAMP}, #{adit,jdbcType=DECIMAL}, #{stot,jdbcType=TIMESTAMP}, 
+      #{etot,jdbcType=TIMESTAMP}, #{ttot,jdbcType=TIMESTAMP}, #{eet,jdbcType=VARCHAR}, 
+      #{diversionstatus,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.flight.DailyFlightMaster" >
+    insert into DAILY_FLIGHT_MASTER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="flightNoIata != null" >
+        FLIGHT_NO_IATA,
+      </if>
+      <if test="operationalDate != null" >
+        OPERATIONAL_DATE,
+      </if>
+      <if test="aOrD != null" >
+        A_OR_D,
+      </if>
+      <if test="flightRepeatCount != null" >
+        FLIGHT_REPEAT_COUNT,
+      </if>
+      <if test="arn != null" >
+        ARN,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="flightNoIcao != null" >
+        FLIGHT_NO_ICAO,
+      </if>
+      <if test="airlineCodeIata != null" >
+        AIRLINE_CODE_IATA,
+      </if>
+      <if test="airlineCodeIcao != null" >
+        AIRLINE_CODE_ICAO,
+      </if>
+      <if test="originAirportIata != null" >
+        ORIGIN_AIRPORT_IATA,
+      </if>
+      <if test="originAirportIcao != null" >
+        ORIGIN_AIRPORT_ICAO,
+      </if>
+      <if test="destAirportIata != null" >
+        DEST_AIRPORT_IATA,
+      </if>
+      <if test="destAirportIcao != null" >
+        DEST_AIRPORT_ICAO,
+      </if>
+      <if test="prevFlightNoIata != null" >
+        PREV_FLIGHT_NO_IATA,
+      </if>
+      <if test="prevFlightNoIcao != null" >
+        PREV_FLIGHT_NO_ICAO,
+      </if>
+      <if test="nxtFlightNoIata != null" >
+        NXT_FLIGHT_NO_IATA,
+      </if>
+      <if test="nxtFlightNoIcao != null" >
+        NXT_FLIGHT_NO_ICAO,
+      </if>
+      <if test="stand != null" >
+        STAND,
+      </if>
+      <if test="gate1 != null" >
+        GATE_1,
+      </if>
+      <if test="gate2 != null" >
+        GATE_2,
+      </if>
+      <if test="gate3 != null" >
+        GATE_3,
+      </if>
+      <if test="rwy != null" >
+        RWY,
+      </if>
+      <if test="belt1 != null" >
+        BELT_1,
+      </if>
+      <if test="belt2 != null" >
+        BELT_2,
+      </if>
+      <if test="belt3 != null" >
+        BELT_3,
+      </if>
+      <if test="counters != null" >
+        COUNTERS,
+      </if>
+      <if test="taxiway != null" >
+        TAXIWAY,
+      </if>
+      <if test="deicingGate != null" >
+        DEICING_GATE,
+      </if>
+      <if test="dOrI != null" >
+        D_OR_I,
+      </if>
+      <if test="milestoneStatus != null" >
+        MILESTONE_STATUS,
+      </if>
+      <if test="delayStatus != null" >
+        DELAY_STATUS,
+      </if>
+      <if test="currentDelayCode != null" >
+        CURRENT_DELAY_CODE,
+      </if>
+      <if test="atmo != null" >
+        ATMO,
+      </if>
+      <if test="fadt != null" >
+        FADT,
+      </if>
+      <if test="atot != null" >
+        ATOT,
+      </if>
+      <if test="sldt != null" >
+        SLDT,
+      </if>
+      <if test="eldt != null" >
+        ELDT,
+      </if>
+      <if test="aldt != null" >
+        ALDT,
+      </if>
+      <if test="sibt != null" >
+        SIBT,
+      </if>
+      <if test="eibt != null" >
+        EIBT,
+      </if>
+      <if test="aibt != null" >
+        AIBT,
+      </if>
+      <if test="exit != null" >
+        EXIT,
+      </if>
+      <if test="axit != null" >
+        AXIT,
+      </if>
+      <if test="scgt != null" >
+        SCGT,
+      </if>
+      <if test="ecgt != null" >
+        ECGT,
+      </if>
+      <if test="acgt != null" >
+        ACGT,
+      </if>
+      <if test="aegt != null" >
+        AEGT,
+      </if>
+      <if test="mttt != null" >
+        MTTT,
+      </if>
+      <if test="ettt != null" >
+        ETTT,
+      </if>
+      <if test="sttt != null" >
+        STTT,
+      </if>
+      <if test="aght != null" >
+        AGHT,
+      </if>
+      <if test="ssbt != null" >
+        SSBT,
+      </if>
+      <if test="esbt != null" >
+        ESBT,
+      </if>
+      <if test="asbt != null" >
+        ASBT,
+      </if>
+      <if test="srdt != null" >
+        SRDT,
+      </if>
+      <if test="erdt != null" >
+        ERDT,
+      </if>
+      <if test="ardt != null" >
+        ARDT,
+      </if>
+      <if test="esrt != null" >
+        ESRT,
+      </if>
+      <if test="asrt != null" >
+        ASRT,
+      </if>
+      <if test="ssat != null" >
+        SSAT,
+      </if>
+      <if test="esat != null" >
+        ESAT,
+      </if>
+      <if test="tsat != null" >
+        TSAT,
+      </if>
+      <if test="asat != null" >
+        ASAT,
+      </if>
+      <if test="sobt != null" >
+        SOBT,
+      </if>
+      <if test="eobt != null" >
+        EOBT,
+      </if>
+      <if test="tobt != null" >
+        TOBT,
+      </if>
+      <if test="aobt != null" >
+        AOBT,
+      </if>
+      <if test="exot != null" >
+        EXOT,
+      </if>
+      <if test="axot != null" >
+        AXOT,
+      </if>
+      <if test="erzt != null" >
+        ERZT,
+      </if>
+      <if test="sczt != null" >
+        SCZT,
+      </if>
+      <if test="eczt != null" >
+        ECZT,
+      </if>
+      <if test="aczt != null" >
+        ACZT,
+      </if>
+      <if test="sezt != null" >
+        SEZT,
+      </if>
+      <if test="eezt != null" >
+        EEZT,
+      </if>
+      <if test="aezt != null" >
+        AEZT,
+      </if>
+      <if test="adit != null" >
+        ADIT,
+      </if>
+      <if test="stot != null" >
+        STOT,
+      </if>
+      <if test="etot != null" >
+        ETOT,
+      </if>
+      <if test="ttot != null" >
+        TTOT,
+      </if>
+      <if test="eet != null" >
+        EET,
+      </if>
+      <if test="diversionstatus != null" >
+        DIVERSIONSTATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="flightNoIata != null" >
+        #{flightNoIata,jdbcType=VARCHAR},
+      </if>
+      <if test="operationalDate != null" >
+        #{operationalDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aOrD != null" >
+        #{aOrD,jdbcType=VARCHAR},
+      </if>
+      <if test="flightRepeatCount != null" >
+        #{flightRepeatCount,jdbcType=VARCHAR},
+      </if>
+      <if test="arn != null" >
+        #{arn,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="flightNoIcao != null" >
+        #{flightNoIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="airlineCodeIata != null" >
+        #{airlineCodeIata,jdbcType=VARCHAR},
+      </if>
+      <if test="airlineCodeIcao != null" >
+        #{airlineCodeIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="originAirportIata != null" >
+        #{originAirportIata,jdbcType=VARCHAR},
+      </if>
+      <if test="originAirportIcao != null" >
+        #{originAirportIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="destAirportIata != null" >
+        #{destAirportIata,jdbcType=VARCHAR},
+      </if>
+      <if test="destAirportIcao != null" >
+        #{destAirportIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="prevFlightNoIata != null" >
+        #{prevFlightNoIata,jdbcType=VARCHAR},
+      </if>
+      <if test="prevFlightNoIcao != null" >
+        #{prevFlightNoIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="nxtFlightNoIata != null" >
+        #{nxtFlightNoIata,jdbcType=VARCHAR},
+      </if>
+      <if test="nxtFlightNoIcao != null" >
+        #{nxtFlightNoIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="stand != null" >
+        #{stand,jdbcType=VARCHAR},
+      </if>
+      <if test="gate1 != null" >
+        #{gate1,jdbcType=VARCHAR},
+      </if>
+      <if test="gate2 != null" >
+        #{gate2,jdbcType=VARCHAR},
+      </if>
+      <if test="gate3 != null" >
+        #{gate3,jdbcType=VARCHAR},
+      </if>
+      <if test="rwy != null" >
+        #{rwy,jdbcType=VARCHAR},
+      </if>
+      <if test="belt1 != null" >
+        #{belt1,jdbcType=VARCHAR},
+      </if>
+      <if test="belt2 != null" >
+        #{belt2,jdbcType=VARCHAR},
+      </if>
+      <if test="belt3 != null" >
+        #{belt3,jdbcType=VARCHAR},
+      </if>
+      <if test="counters != null" >
+        #{counters,jdbcType=VARCHAR},
+      </if>
+      <if test="taxiway != null" >
+        #{taxiway,jdbcType=VARCHAR},
+      </if>
+      <if test="deicingGate != null" >
+        #{deicingGate,jdbcType=VARCHAR},
+      </if>
+      <if test="dOrI != null" >
+        #{dOrI,jdbcType=VARCHAR},
+      </if>
+      <if test="milestoneStatus != null" >
+        #{milestoneStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="delayStatus != null" >
+        #{delayStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="currentDelayCode != null" >
+        #{currentDelayCode,jdbcType=VARCHAR},
+      </if>
+      <if test="atmo != null" >
+        #{atmo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fadt != null" >
+        #{fadt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atot != null" >
+        #{atot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sldt != null" >
+        #{sldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eldt != null" >
+        #{eldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aldt != null" >
+        #{aldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sibt != null" >
+        #{sibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eibt != null" >
+        #{eibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aibt != null" >
+        #{aibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exit != null" >
+        #{exit,jdbcType=DECIMAL},
+      </if>
+      <if test="axit != null" >
+        #{axit,jdbcType=DECIMAL},
+      </if>
+      <if test="scgt != null" >
+        #{scgt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ecgt != null" >
+        #{ecgt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="acgt != null" >
+        #{acgt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aegt != null" >
+        #{aegt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mttt != null" >
+        #{mttt,jdbcType=DECIMAL},
+      </if>
+      <if test="ettt != null" >
+        #{ettt,jdbcType=DECIMAL},
+      </if>
+      <if test="sttt != null" >
+        #{sttt,jdbcType=DECIMAL},
+      </if>
+      <if test="aght != null" >
+        #{aght,jdbcType=DECIMAL},
+      </if>
+      <if test="ssbt != null" >
+        #{ssbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="esbt != null" >
+        #{esbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asbt != null" >
+        #{asbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="srdt != null" >
+        #{srdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="erdt != null" >
+        #{erdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ardt != null" >
+        #{ardt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="esrt != null" >
+        #{esrt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asrt != null" >
+        #{asrt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ssat != null" >
+        #{ssat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="esat != null" >
+        #{esat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tsat != null" >
+        #{tsat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asat != null" >
+        #{asat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sobt != null" >
+        #{sobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eobt != null" >
+        #{eobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tobt != null" >
+        #{tobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aobt != null" >
+        #{aobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exot != null" >
+        #{exot,jdbcType=DECIMAL},
+      </if>
+      <if test="axot != null" >
+        #{axot,jdbcType=DECIMAL},
+      </if>
+      <if test="erzt != null" >
+        #{erzt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sczt != null" >
+        #{sczt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eczt != null" >
+        #{eczt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aczt != null" >
+        #{aczt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sezt != null" >
+        #{sezt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eezt != null" >
+        #{eezt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aezt != null" >
+        #{aezt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adit != null" >
+        #{adit,jdbcType=DECIMAL},
+      </if>
+      <if test="stot != null" >
+        #{stot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etot != null" >
+        #{etot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ttot != null" >
+        #{ttot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eet != null" >
+        #{eet,jdbcType=VARCHAR},
+      </if>
+      <if test="diversionstatus != null" >
+        #{diversionstatus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.flight.DailyFlightMaster" >
+    update DAILY_FLIGHT_MASTER
+    <set >
+      <if test="arn != null" >
+        ARN = #{arn,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="flightNoIcao != null" >
+        FLIGHT_NO_ICAO = #{flightNoIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="airlineCodeIata != null" >
+        AIRLINE_CODE_IATA = #{airlineCodeIata,jdbcType=VARCHAR},
+      </if>
+      <if test="airlineCodeIcao != null" >
+        AIRLINE_CODE_ICAO = #{airlineCodeIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="originAirportIata != null" >
+        ORIGIN_AIRPORT_IATA = #{originAirportIata,jdbcType=VARCHAR},
+      </if>
+      <if test="originAirportIcao != null" >
+        ORIGIN_AIRPORT_ICAO = #{originAirportIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="destAirportIata != null" >
+        DEST_AIRPORT_IATA = #{destAirportIata,jdbcType=VARCHAR},
+      </if>
+      <if test="destAirportIcao != null" >
+        DEST_AIRPORT_ICAO = #{destAirportIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="prevFlightNoIata != null" >
+        PREV_FLIGHT_NO_IATA = #{prevFlightNoIata,jdbcType=VARCHAR},
+      </if>
+      <if test="prevFlightNoIcao != null" >
+        PREV_FLIGHT_NO_ICAO = #{prevFlightNoIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="nxtFlightNoIata != null" >
+        NXT_FLIGHT_NO_IATA = #{nxtFlightNoIata,jdbcType=VARCHAR},
+      </if>
+      <if test="nxtFlightNoIcao != null" >
+        NXT_FLIGHT_NO_ICAO = #{nxtFlightNoIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="stand != null" >
+        STAND = #{stand,jdbcType=VARCHAR},
+      </if>
+      <if test="gate1 != null" >
+        GATE_1 = #{gate1,jdbcType=VARCHAR},
+      </if>
+      <if test="gate2 != null" >
+        GATE_2 = #{gate2,jdbcType=VARCHAR},
+      </if>
+      <if test="gate3 != null" >
+        GATE_3 = #{gate3,jdbcType=VARCHAR},
+      </if>
+      <if test="rwy != null" >
+        RWY = #{rwy,jdbcType=VARCHAR},
+      </if>
+      <if test="belt1 != null" >
+        BELT_1 = #{belt1,jdbcType=VARCHAR},
+      </if>
+      <if test="belt2 != null" >
+        BELT_2 = #{belt2,jdbcType=VARCHAR},
+      </if>
+      <if test="belt3 != null" >
+        BELT_3 = #{belt3,jdbcType=VARCHAR},
+      </if>
+      <if test="counters != null" >
+        COUNTERS = #{counters,jdbcType=VARCHAR},
+      </if>
+      <if test="taxiway != null" >
+        TAXIWAY = #{taxiway,jdbcType=VARCHAR},
+      </if>
+      <if test="deicingGate != null" >
+        DEICING_GATE = #{deicingGate,jdbcType=VARCHAR},
+      </if>
+      <if test="dOrI != null" >
+        D_OR_I = #{dOrI,jdbcType=VARCHAR},
+      </if>
+      <if test="milestoneStatus != null" >
+        MILESTONE_STATUS = #{milestoneStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="delayStatus != null" >
+        DELAY_STATUS = #{delayStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="currentDelayCode != null" >
+        CURRENT_DELAY_CODE = #{currentDelayCode,jdbcType=VARCHAR},
+      </if>
+      <if test="atmo != null" >
+        ATMO = #{atmo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fadt != null" >
+        FADT = #{fadt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atot != null" >
+        ATOT = #{atot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sldt != null" >
+        SLDT = #{sldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eldt != null" >
+        ELDT = #{eldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aldt != null" >
+        ALDT = #{aldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sibt != null" >
+        SIBT = #{sibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eibt != null" >
+        EIBT = #{eibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aibt != null" >
+        AIBT = #{aibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exit != null" >
+        EXIT = #{exit,jdbcType=DECIMAL},
+      </if>
+      <if test="axit != null" >
+        AXIT = #{axit,jdbcType=DECIMAL},
+      </if>
+      <if test="scgt != null" >
+        SCGT = #{scgt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ecgt != null" >
+        ECGT = #{ecgt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="acgt != null" >
+        ACGT = #{acgt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aegt != null" >
+        AEGT = #{aegt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mttt != null" >
+        MTTT = #{mttt,jdbcType=DECIMAL},
+      </if>
+      <if test="ettt != null" >
+        ETTT = #{ettt,jdbcType=DECIMAL},
+      </if>
+      <if test="sttt != null" >
+        STTT = #{sttt,jdbcType=DECIMAL},
+      </if>
+      <if test="aght != null" >
+        AGHT = #{aght,jdbcType=DECIMAL},
+      </if>
+      <if test="ssbt != null" >
+        SSBT = #{ssbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="esbt != null" >
+        ESBT = #{esbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asbt != null" >
+        ASBT = #{asbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="srdt != null" >
+        SRDT = #{srdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="erdt != null" >
+        ERDT = #{erdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ardt != null" >
+        ARDT = #{ardt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="esrt != null" >
+        ESRT = #{esrt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asrt != null" >
+        ASRT = #{asrt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ssat != null" >
+        SSAT = #{ssat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="esat != null" >
+        ESAT = #{esat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tsat != null" >
+        TSAT = #{tsat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asat != null" >
+        ASAT = #{asat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sobt != null" >
+        SOBT = #{sobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eobt != null" >
+        EOBT = #{eobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tobt != null" >
+        TOBT = #{tobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aobt != null" >
+        AOBT = #{aobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exot != null" >
+        EXOT = #{exot,jdbcType=DECIMAL},
+      </if>
+      <if test="axot != null" >
+        AXOT = #{axot,jdbcType=DECIMAL},
+      </if>
+      <if test="erzt != null" >
+        ERZT = #{erzt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sczt != null" >
+        SCZT = #{sczt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eczt != null" >
+        ECZT = #{eczt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aczt != null" >
+        ACZT = #{aczt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sezt != null" >
+        SEZT = #{sezt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eezt != null" >
+        EEZT = #{eezt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aezt != null" >
+        AEZT = #{aezt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adit != null" >
+        ADIT = #{adit,jdbcType=DECIMAL},
+      </if>
+      <if test="stot != null" >
+        STOT = #{stot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etot != null" >
+        ETOT = #{etot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ttot != null" >
+        TTOT = #{ttot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eet != null" >
+        EET = #{eet,jdbcType=VARCHAR},
+      </if>
+      <if test="diversionstatus != null" >
+        DIVERSIONSTATUS = #{diversionstatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where FLIGHT_NO_IATA = #{flightNoIata,jdbcType=VARCHAR}
+      and OPERATIONAL_DATE = #{operationalDate,jdbcType=TIMESTAMP}
+      and A_OR_D = #{aOrD,jdbcType=VARCHAR}
+      and FLIGHT_REPEAT_COUNT = #{flightRepeatCount,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.flight.DailyFlightMaster" >
+    update DAILY_FLIGHT_MASTER
+    set ARN = #{arn,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR},
+      FLIGHT_NO_ICAO = #{flightNoIcao,jdbcType=VARCHAR},
+      AIRLINE_CODE_IATA = #{airlineCodeIata,jdbcType=VARCHAR},
+      AIRLINE_CODE_ICAO = #{airlineCodeIcao,jdbcType=VARCHAR},
+      ORIGIN_AIRPORT_IATA = #{originAirportIata,jdbcType=VARCHAR},
+      ORIGIN_AIRPORT_ICAO = #{originAirportIcao,jdbcType=VARCHAR},
+      DEST_AIRPORT_IATA = #{destAirportIata,jdbcType=VARCHAR},
+      DEST_AIRPORT_ICAO = #{destAirportIcao,jdbcType=VARCHAR},
+      PREV_FLIGHT_NO_IATA = #{prevFlightNoIata,jdbcType=VARCHAR},
+      PREV_FLIGHT_NO_ICAO = #{prevFlightNoIcao,jdbcType=VARCHAR},
+      NXT_FLIGHT_NO_IATA = #{nxtFlightNoIata,jdbcType=VARCHAR},
+      NXT_FLIGHT_NO_ICAO = #{nxtFlightNoIcao,jdbcType=VARCHAR},
+      STAND = #{stand,jdbcType=VARCHAR},
+      GATE_1 = #{gate1,jdbcType=VARCHAR},
+      GATE_2 = #{gate2,jdbcType=VARCHAR},
+      GATE_3 = #{gate3,jdbcType=VARCHAR},
+      RWY = #{rwy,jdbcType=VARCHAR},
+      BELT_1 = #{belt1,jdbcType=VARCHAR},
+      BELT_2 = #{belt2,jdbcType=VARCHAR},
+      BELT_3 = #{belt3,jdbcType=VARCHAR},
+      COUNTERS = #{counters,jdbcType=VARCHAR},
+      TAXIWAY = #{taxiway,jdbcType=VARCHAR},
+      DEICING_GATE = #{deicingGate,jdbcType=VARCHAR},
+      D_OR_I = #{dOrI,jdbcType=VARCHAR},
+      MILESTONE_STATUS = #{milestoneStatus,jdbcType=VARCHAR},
+      DELAY_STATUS = #{delayStatus,jdbcType=VARCHAR},
+      CURRENT_DELAY_CODE = #{currentDelayCode,jdbcType=VARCHAR},
+      ATMO = #{atmo,jdbcType=TIMESTAMP},
+      FADT = #{fadt,jdbcType=TIMESTAMP},
+      ATOT = #{atot,jdbcType=TIMESTAMP},
+      SLDT = #{sldt,jdbcType=TIMESTAMP},
+      ELDT = #{eldt,jdbcType=TIMESTAMP},
+      ALDT = #{aldt,jdbcType=TIMESTAMP},
+      SIBT = #{sibt,jdbcType=TIMESTAMP},
+      EIBT = #{eibt,jdbcType=TIMESTAMP},
+      AIBT = #{aibt,jdbcType=TIMESTAMP},
+      EXIT = #{exit,jdbcType=DECIMAL},
+      AXIT = #{axit,jdbcType=DECIMAL},
+      SCGT = #{scgt,jdbcType=TIMESTAMP},
+      ECGT = #{ecgt,jdbcType=TIMESTAMP},
+      ACGT = #{acgt,jdbcType=TIMESTAMP},
+      AEGT = #{aegt,jdbcType=TIMESTAMP},
+      MTTT = #{mttt,jdbcType=DECIMAL},
+      ETTT = #{ettt,jdbcType=DECIMAL},
+      STTT = #{sttt,jdbcType=DECIMAL},
+      AGHT = #{aght,jdbcType=DECIMAL},
+      SSBT = #{ssbt,jdbcType=TIMESTAMP},
+      ESBT = #{esbt,jdbcType=TIMESTAMP},
+      ASBT = #{asbt,jdbcType=TIMESTAMP},
+      SRDT = #{srdt,jdbcType=TIMESTAMP},
+      ERDT = #{erdt,jdbcType=TIMESTAMP},
+      ARDT = #{ardt,jdbcType=TIMESTAMP},
+      ESRT = #{esrt,jdbcType=TIMESTAMP},
+      ASRT = #{asrt,jdbcType=TIMESTAMP},
+      SSAT = #{ssat,jdbcType=TIMESTAMP},
+      ESAT = #{esat,jdbcType=TIMESTAMP},
+      TSAT = #{tsat,jdbcType=TIMESTAMP},
+      ASAT = #{asat,jdbcType=TIMESTAMP},
+      SOBT = #{sobt,jdbcType=TIMESTAMP},
+      EOBT = #{eobt,jdbcType=TIMESTAMP},
+      TOBT = #{tobt,jdbcType=TIMESTAMP},
+      AOBT = #{aobt,jdbcType=TIMESTAMP},
+      EXOT = #{exot,jdbcType=DECIMAL},
+      AXOT = #{axot,jdbcType=DECIMAL},
+      ERZT = #{erzt,jdbcType=TIMESTAMP},
+      SCZT = #{sczt,jdbcType=TIMESTAMP},
+      ECZT = #{eczt,jdbcType=TIMESTAMP},
+      ACZT = #{aczt,jdbcType=TIMESTAMP},
+      SEZT = #{sezt,jdbcType=TIMESTAMP},
+      EEZT = #{eezt,jdbcType=TIMESTAMP},
+      AEZT = #{aezt,jdbcType=TIMESTAMP},
+      ADIT = #{adit,jdbcType=DECIMAL},
+      STOT = #{stot,jdbcType=TIMESTAMP},
+      ETOT = #{etot,jdbcType=TIMESTAMP},
+      TTOT = #{ttot,jdbcType=TIMESTAMP},
+      EET = #{eet,jdbcType=VARCHAR},
+      DIVERSIONSTATUS = #{diversionstatus,jdbcType=VARCHAR}
+    where FLIGHT_NO_IATA = #{flightNoIata,jdbcType=VARCHAR}
+      and OPERATIONAL_DATE = #{operationalDate,jdbcType=TIMESTAMP}
+      and A_OR_D = #{aOrD,jdbcType=VARCHAR}
+      and FLIGHT_REPEAT_COUNT = #{flightRepeatCount,jdbcType=VARCHAR}
+  </update>
+  <select id="findAllCompany" resultType="string"  >
+    SELECT DISTINCT (AIRLINE_CODE_IATA) FROM DAILY_FLIGHT_MASTER order by AIRLINE_CODE_IATA desc
+  </select>
+</mapper>

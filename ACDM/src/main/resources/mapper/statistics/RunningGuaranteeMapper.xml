@@ -1,0 +1,694 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.RunningGuaranteeMapper" >
+    <select id="getFXLBYHOUR" resultType="com.hq.acdm.model.statistics.runningGuarantee.RunningGuaranteeModel" parameterType="map">
+        SELECT
+        T2.*,
+        YWS,
+        COALESCE(
+        round((( ZS - CASE WHEN YWS IS NULL THEN 0 ELSE YWS END ) * 1.0 / ZS ) * 100, 2 )|| '%',
+        '0%'
+        ) FXL
+        FROM
+        (
+        SELECT
+        CASE
+
+        WHEN
+        D1.ATOT IS NULL THEN
+        D2.ATOT ELSE D1.ATOT
+        END ATOT,
+        (
+        CASE
+
+        WHEN D1.GZS IS NULL THEN
+        0 ELSE D1.GZS
+        END +
+        CASE
+
+        WHEN D2.SFS IS NULL THEN
+        0 ELSE D2.SFS
+        END
+        ) YWS
+        FROM
+        (--过站总数
+        SELECT
+        trunc(to_number(to_char( AA.SOBT,'hh24') )) ATOT,
+        COUNT( * ) GZS
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+        AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE
+        AND AA.A_OR_D = BB.A_OR_D
+        AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        LEFT JOIN ( SELECT SIBT, AIBT, ALDT, FLIGHT_NO_IATA, OPERATIONAL_DATE, A_OR_D, FLIGHT_REPEAT_COUNT FROM DAILY_FLIGHT_MASTER ) CC ON (
+        BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE( BB.LNK_FLIGHT_SUFFIX, '' )) = CC.FLIGHT_NO_IATA
+        AND BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+        AND BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT
+        WHERE
+        AA.A_OR_D = 'D'
+        AND ( AA.AOBT &lt; SYSDATE OR AA.SOBT &lt; SYSDATE OR AA.ATOT &lt; SYSDATE )
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') <![CDATA[<>]]> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        <if test="params.operational_date !=null and params.operational_date !=''">
+            AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.operational_date}
+        </if>
+        AND ((
+        BB.LNK_FLIGHT_NO IS NOT NULL
+        OR LENGTH( BB.LNK_FLIGHT_NO ) <![CDATA[<>]]> 0
+        )
+        AND to_char ( CC.SIBT,'YYYY-MM-DD' ) = to_char( AA.SOBT,'YYYY-MM-DD' ))
+        AND CC.ALDT IS NOT NULL
+        AND (
+        (
+        CEIL((TO_DATE(to_char(CC.AIBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(CC.SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60)
+        &lt;= 0
+        AND ((
+        AA.ATOT IS NOT NULL
+        AND AA.SOBT &lt; AA.ATOT - 30/(24*60)
+        )
+        OR ( AA.ATOT IS NULL AND AA.SOBT &lt; SYSDATE - 30/(24*60) ))
+        )
+        OR (
+
+        CEIL((TO_DATE(to_char(CC.AIBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(CC.SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60)
+
+        > 0
+        AND ((
+        AA.ATOT IS NOT NULL
+        AND CC.ALDT + ( AA.SOBT - CC.SIBT ) &lt; AA.ATOT - 40/(24*60)) OR ( AA.ATOT IS NULL AND SYSDATE > ( CC.ALDT + 10/(24*60) ) + ( AA.SOBT - CC.SIBT )))
+        )
+        )
+        GROUP BY
+        trunc(to_number(to_char( AA.SOBT,'hh24') ))
+        ) D1
+        FULL JOIN (--始发总数
+        SELECT
+        trunc(to_number(to_char( AA.SOBT,'hh24') )) ATOT,
+        COUNT( * ) SFS
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+        AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE
+        AND AA.A_OR_D = BB.A_OR_D
+        AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        LEFT JOIN ( SELECT SIBT, AIBT, ALDT, FLIGHT_NO_IATA, OPERATIONAL_DATE, A_OR_D, FLIGHT_REPEAT_COUNT FROM DAILY_FLIGHT_MASTER ) CC ON (
+        BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE( BB.LNK_FLIGHT_SUFFIX, '' )) = CC.FLIGHT_NO_IATA
+        AND BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+        AND BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT
+        WHERE
+        AA.A_OR_D = 'D'
+        AND ( AA.AOBT &lt; SYSDATE OR AA.SOBT &lt; SYSDATE OR AA.ATOT &lt; SYSDATE )
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') <![CDATA[<>]]> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        <if test="params.operational_date !=null and params.operational_date !=''">
+            AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.operational_date}
+        </if>
+        AND (
+        BB.LNK_FLIGHT_NO IS NULL
+        OR LENGTH( BB.LNK_FLIGHT_NO ) = 0
+        OR to_char( CC.SIBT,'YYYY-MM-DD' ) <![CDATA[<>]]> to_char( AA.SOBT,'YYYY-MM-DD' )
+        AND trunc(to_number(to_char( AA.SOBT,'hh24') )) &lt; 11
+        )
+        AND (
+        ( AA.ATOT IS NOT NULL AND AA.SOBT &lt; AA.ATOT - 30 /(24*60))
+        OR ( AA.ATOT IS NULL AND AA.SOBT &lt; SYSDATE - 30/(25*60)))
+        GROUP BY
+        trunc(to_number(to_char( AA.SOBT,'hh24') ))
+        ) D2 ON D1.ATOT = D2.ATOT
+        ) T1
+        FULL JOIN (
+        SELECT
+        CASE
+
+        WHEN
+        D1.ATOT IS NULL THEN
+        D2.ATOT ELSE D1.ATOT
+        END ATOT,
+        (
+        CASE
+
+        WHEN D1.GZS IS NULL THEN
+        0 ELSE D1.GZS
+        END +
+        CASE
+
+        WHEN D2.SFS IS NULL THEN
+        0 ELSE D2.SFS
+        END
+        ) ZS
+        FROM
+        (--过站总数
+        SELECT
+        trunc(to_number(to_char( AA.SOBT,'hh24') )) ATOT,
+        COUNT( * ) GZS
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+        AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE
+        AND AA.A_OR_D = BB.A_OR_D
+        AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        LEFT JOIN ( SELECT SIBT, AIBT, ALDT, FLIGHT_NO_IATA, OPERATIONAL_DATE, A_OR_D, FLIGHT_REPEAT_COUNT FROM DAILY_FLIGHT_MASTER ) CC ON (
+        BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE( BB.LNK_FLIGHT_SUFFIX, '' )) = CC.FLIGHT_NO_IATA
+        AND BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+        AND BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT
+        WHERE
+        AA.A_OR_D = 'D'
+        AND ( AA.AOBT &lt; SYSDATE OR AA.SOBT &lt; SYSDATE OR AA.ATOT &lt; SYSDATE )
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') <![CDATA[<>]]> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        <if test="params.operational_date !=null and params.operational_date !=''">
+            AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.operational_date}
+        </if>
+        AND ((
+        BB.LNK_FLIGHT_NO IS NOT NULL
+        OR LENGTH( BB.LNK_FLIGHT_NO ) <![CDATA[<>]]> 0
+        )
+        AND
+        to_char( CC.SIBT,'YYYY-MM-DD' ) = to_char( AA.SOBT,'YYYY-MM-DD' )
+        )
+        AND CC.ALDT IS NOT NULL
+        GROUP BY
+        trunc(to_number(to_char( AA.SOBT,'hh24') ))
+        ) D1
+        FULL JOIN (--始发总数
+        SELECT
+        trunc(to_number(to_char( AA.SOBT,'hh24') ))  ATOT,
+        COUNT( * ) SFS
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+        AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE
+        AND AA.A_OR_D = BB.A_OR_D
+        AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        LEFT JOIN ( SELECT SIBT, AIBT, ALDT, FLIGHT_NO_IATA, OPERATIONAL_DATE, A_OR_D, FLIGHT_REPEAT_COUNT FROM DAILY_FLIGHT_MASTER ) CC ON (
+        BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE( BB.LNK_FLIGHT_SUFFIX, '' )) = CC.FLIGHT_NO_IATA
+        AND BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+        AND BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT
+        WHERE
+        AA.A_OR_D = 'D'
+        AND ( AA.AOBT &lt; SYSDATE OR AA.SOBT &lt; SYSDATE OR AA.ATOT &lt; SYSDATE )
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') <![CDATA[<>]]> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        <if test="params.operational_date !=null and params.operational_date !=''">
+            AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.operational_date}
+        </if>
+        AND (
+        BB.LNK_FLIGHT_NO IS NULL
+        OR LENGTH( BB.LNK_FLIGHT_NO ) = 0
+        OR to_char( CC.SIBT,'YYYY-MM-DD' ) <![CDATA[<>]]> to_char( AA.SOBT,'YYYY-MM-DD' )
+        AND trunc(to_number(to_char( AA.SOBT,'hh24') ))  &lt; 11
+        )
+        GROUP BY
+        trunc(to_number(to_char( AA.SOBT,'hh24') ))
+        ) D2 ON D1.ATOT = D2.ATOT
+        ) T2 ON T1.ATOT = T2.ATOT
+        ORDER BY
+        T2.ATOT
+    </select>
+    <select id="getFXLBYTime" parameterType="map" resultType="com.hq.acdm.model.statistics.runningGuarantee.RunningGuaranteeModel">
+        SELECT
+        T2.*,
+        YWS,
+        COALESCE(
+        round((( ZS - CASE WHEN YWS IS NULL THEN 0 ELSE YWS END ) * 1.0 / ZS ) * 100, 2 )|| '%',
+        '0%'
+        ) FXL
+        FROM
+        (
+        SELECT
+        D1.GZS + d2.SFS YWS
+        FROM
+        (--过站总数
+        SELECT
+        COUNT( * ) GZS
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+        AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE
+        AND AA.A_OR_D = BB.A_OR_D
+        AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        LEFT JOIN ( SELECT SIBT, AIBT, ALDT, FLIGHT_NO_IATA, OPERATIONAL_DATE, A_OR_D, FLIGHT_REPEAT_COUNT FROM DAILY_FLIGHT_MASTER ) CC ON (
+        BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE( BB.LNK_FLIGHT_SUFFIX, '' )) = CC.FLIGHT_NO_IATA
+        AND BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+        AND BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT
+        WHERE
+        AA.A_OR_D = 'D'
+        AND ( AA.AOBT &lt; SYSDATE OR AA.SOBT &lt; SYSDATE OR AA.ATOT &lt; SYSDATE )
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') <![CDATA[<>]]> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        <if test="params.operational_date !=null and params.operational_date !=''">
+            AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.operational_date}
+        </if>
+        AND ((
+        BB.LNK_FLIGHT_NO IS NOT NULL
+        OR LENGTH( BB.LNK_FLIGHT_NO ) <![CDATA[<>]]> 0
+        )
+        AND to_char ( CC.SIBT,'YYYY-MM-DD' ) = to_char ( AA.SOBT,'YYYY-MM-DD' ))
+        AND CC.ALDT IS NOT NULL
+        <if test="params.start !=null and params.start !=''">
+            AND to_char ( AA.SOBT,'hh24:mi:ss') &gt;= #{params.start}
+        </if>
+        <if test="params.end !=null and params.end !=''">
+            AND to_char ( AA.SOBT,'hh24:mi:ss' ) &lt; #{params.end}
+        </if>
+        AND (
+        (
+        CEIL((TO_DATE(to_char(CC.AIBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(CC.SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60)
+
+        &lt;= 0
+        AND ((
+        AA.ATOT IS NOT NULL
+        AND AA.SOBT &lt; AA.ATOT - 30/(24*60)
+        )
+        OR ( AA.ATOT IS NULL AND AA.SOBT &lt; SYSDATE - 30/(24*60) ))
+        )
+        OR (
+        CEIL((TO_DATE(to_char(CC.AIBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(CC.SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60)
+        > 0
+        AND ((
+        AA.ATOT IS NOT NULL
+        AND CC.ALDT + ( AA.SOBT - CC.SIBT ) &lt; AA.ATOT - 40/(24*60) ) OR ( AA.ATOT IS NULL AND SYSDATE > ( CC.ALDT + 10/(24*60) ) + ( AA.SOBT - CC.SIBT )))
+        )
+        )
+        ) D1,
+        (--始发总数
+        SELECT
+        COUNT( * ) SFS
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+        AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE
+        AND AA.A_OR_D = BB.A_OR_D
+        AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        LEFT JOIN ( SELECT SIBT, AIBT, ALDT, FLIGHT_NO_IATA, OPERATIONAL_DATE, A_OR_D, FLIGHT_REPEAT_COUNT FROM DAILY_FLIGHT_MASTER ) CC ON (
+        BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE( BB.LNK_FLIGHT_SUFFIX, '' )) = CC.FLIGHT_NO_IATA
+        AND BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+        AND BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT
+        WHERE
+        AA.A_OR_D = 'D'
+        AND ( AA.AOBT &lt; SYSDATE OR AA.SOBT &lt; SYSDATE OR AA.ATOT &lt; SYSDATE )
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') <![CDATA[<>]]> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        <if test="params.operational_date !=null and params.operational_date !=''">
+            AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') <![CDATA[<>]]> #{params.operational_date}
+        </if>
+        AND (
+        BB.LNK_FLIGHT_NO IS NULL
+        OR LENGTH( BB.LNK_FLIGHT_NO ) = 0
+        OR
+        to_char ( CC.SIBT,'YYYY-MM-DD' ) = to_char( AA.SOBT,'YYYY-MM-DD' )
+        AND trunc(to_number(to_char( AA.SOBT,'hh24') )) &lt; 11
+        )
+        AND (
+        ( AA.ATOT IS NOT NULL AND AA.SOBT &lt; AA.ATOT - 30/(24*60) )
+        OR ( AA.ATOT IS NULL AND AA.SOBT &lt; SYSDATE - 30/(24*60) ))
+
+        <if test="params.start !=null and params.start !=''">
+            AND to_char ( AA.SOBT,'hh24:mi:ss') &gt;= #{params.start}
+        </if>
+        <if test="params.end !=null and params.end !=''">
+            AND to_char ( AA.SOBT,'hh24:mi:ss' ) &lt; #{params.end}
+        </if>
+        ) D2
+        ) T1,
+        (
+        SELECT
+        D1.GZS + D2.SFS ZS
+        FROM
+        (--过站总数
+        SELECT
+        COUNT( * ) GZS
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+        AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE
+        AND AA.A_OR_D = BB.A_OR_D
+        AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        LEFT JOIN ( SELECT SIBT, AIBT, ALDT, FLIGHT_NO_IATA, OPERATIONAL_DATE, A_OR_D, FLIGHT_REPEAT_COUNT FROM DAILY_FLIGHT_MASTER ) CC ON (
+        BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE( BB.LNK_FLIGHT_SUFFIX, '' )) = CC.FLIGHT_NO_IATA
+        AND BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+        AND BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT
+        WHERE
+        AA.A_OR_D = 'D'
+        AND ( AA.AOBT &lt; SYSDATE OR AA.SOBT &lt; SYSDATE OR AA.ATOT &lt; SYSDATE )
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') <![CDATA[<>]]> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        <if test="params.operational_date !=null and params.operational_date !=''">
+            AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.operational_date}
+        </if>
+        AND ((
+        BB.LNK_FLIGHT_NO IS NOT NULL
+        OR LENGTH( BB.LNK_FLIGHT_NO ) <![CDATA[<>]]> 0
+        )
+        AND to_char ( CC.SIBT,'YYYY-MM-DD' ) = to_char( AA.SOBT,'YYYY-MM-DD' ))
+        AND CC.ALDT IS NOT NULL
+        <if test="params.start !=null and params.start !=''">
+            AND to_char ( AA.SOBT,'hh24:mi:ss') &gt;= #{params.start}
+        </if>
+        <if test="params.end !=null and params.end !=''">
+            AND to_char ( AA.SOBT,'hh24:mi:ss' ) &lt; #{params.end}
+        </if>
+        ) D1,
+        (--始发总数
+        SELECT
+        COUNT( * ) SFS
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+        AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE
+        AND AA.A_OR_D = BB.A_OR_D
+        AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        LEFT JOIN ( SELECT SIBT, AIBT, ALDT, FLIGHT_NO_IATA, OPERATIONAL_DATE, A_OR_D, FLIGHT_REPEAT_COUNT FROM DAILY_FLIGHT_MASTER ) CC ON (
+        BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE( BB.LNK_FLIGHT_SUFFIX, '' )) = CC.FLIGHT_NO_IATA
+        AND BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+        AND BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT
+        WHERE
+        AA.A_OR_D = 'D'
+        AND ( AA.AOBT  &lt; SYSDATE OR AA.SOBT  &lt; SYSDATE OR AA.ATOT  &lt; SYSDATE )
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') <![CDATA[<>]]> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        <if test="params.operational_date !=null and params.operational_date !=''">
+            AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.operational_date}
+        </if>
+        AND (
+        BB.LNK_FLIGHT_NO IS NULL
+        OR LENGTH( BB.LNK_FLIGHT_NO ) = 0
+        OR to_char ( CC.SIBT,'YYYY-MM-DD' ) <![CDATA[<>]]> to_char( AA.SOBT,'YYYY-MM-DD' )
+        AND trunc(to_number(to_char( AA.SOBT,'hh24') )) &lt; 11 )
+        <if test="params.start !=null and params.start !=''">
+            AND to_char ( AA.SOBT,'hh24:mi:ss') &gt;= #{params.start}
+        </if>
+        <if test="params.end !=null and params.end !=''">
+            AND to_char ( AA.SOBT,'hh24:mi:ss' ) &lt; #{params.end}
+        </if>
+
+        ) D2
+        ) T2
+    </select>
+    <select id="getZCLByAIRLINE" parameterType="map" resultType="com.hq.acdm.model.statistics.runningGuarantee.RunningGuaranteeModel">
+        SELECT
+        AIRLINE_CODE_IATA,
+        ZS,
+        YWS,
+        COALESCE(
+        round((( ZS - CASE WHEN YWS IS NULL THEN 0 ELSE YWS END ) * 1.0 / ZS ) * 100, 2 )|| '%',
+        '0%'
+        ) ZCS
+        FROM
+        (
+        SELECT
+        D1.AIRLINE_CODE_IATA,
+        ZS,
+        YWS
+        FROM
+        (
+        SELECT
+        AA.AIRLINE_CODE_IATA,
+        COUNT( * ) ZS
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+        AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') =  to_char(BB.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND AA.A_OR_D = BB.A_OR_D
+        AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        WHERE
+        AA.A_OR_D = 'D'
+        AND ( to_char(AA.AOBT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') OR  to_char(AA.SOBT,'yyyy-mm-dd hh24:mi:ss')
+        &lt; to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') OR to_char(AA.ATOT,'yyyy-mm-dd hh24:mi:ss')
+        &lt; to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') )
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') <![CDATA[<>]]> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        <if test="params.operational_date !=null and params.operational_date !=''">
+            AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.operational_date}
+        </if>
+        AND (
+        AA.AIRLINE_CODE_IATA = 'HO'
+        OR AA.AIRLINE_CODE_IATA = '9C'
+        OR AA.AIRLINE_CODE_IATA = 'MU'
+        OR AA.AIRLINE_CODE_IATA = 'FM'
+        OR AA.AIRLINE_CODE_IATA = 'KN'
+        OR AA.AIRLINE_CODE_IATA = 'CA'
+        OR AA.AIRLINE_CODE_IATA = 'ZH'
+        OR AA.AIRLINE_CODE_IATA = 'CZ'
+        OR AA.AIRLINE_CODE_IATA = 'MF'
+        OR AA.AIRLINE_CODE_IATA = 'HU'
+        OR AA.AIRLINE_CODE_IATA = 'GS'
+        OR AA.AIRLINE_CODE_IATA = '8L'
+        OR AA.AIRLINE_CODE_IATA = 'TV'
+        OR AA.AIRLINE_CODE_IATA = 'NS'
+        OR AA.AIRLINE_CODE_IATA = 'SC'
+        OR AA.AIRLINE_CODE_IATA = 'EU'
+        )
+        GROUP BY
+        AA.AIRLINE_CODE_IATA
+        ) D1
+        FULL JOIN (
+        SELECT
+        AA.AIRLINE_CODE_IATA,
+        count( * ) YWS
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+        AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') =  to_char(BB.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND AA.A_OR_D = BB.A_OR_D
+        AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        WHERE
+        AA.A_OR_D = 'D'
+        AND ( to_char(AA.AOBT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') OR to_char(AA.SOBT,'yyyy-mm-dd hh24:mi:ss')
+        &lt; to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') OR to_char(AA.ATOT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') )
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') <![CDATA[<>]]> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        <if test="params.operational_date !=null and params.operational_date !=''">
+            AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.operational_date}
+        </if>
+        AND (
+        AA.AIRLINE_CODE_IATA = 'HO'
+        OR AA.AIRLINE_CODE_IATA = '9C'
+        OR AA.AIRLINE_CODE_IATA = 'MU'
+        OR AA.AIRLINE_CODE_IATA = 'FM'
+        OR AA.AIRLINE_CODE_IATA = 'KN'
+        OR AA.AIRLINE_CODE_IATA = 'CA'
+        OR AA.AIRLINE_CODE_IATA = 'ZH'
+        OR AA.AIRLINE_CODE_IATA = 'CZ'
+        OR AA.AIRLINE_CODE_IATA = 'MF'
+        OR AA.AIRLINE_CODE_IATA = 'HU'
+        OR AA.AIRLINE_CODE_IATA = 'GS'
+        OR AA.AIRLINE_CODE_IATA = '8L'
+        OR AA.AIRLINE_CODE_IATA = 'TV'
+        OR AA.AIRLINE_CODE_IATA = 'NS'
+        OR AA.AIRLINE_CODE_IATA = 'SC'
+        OR AA.AIRLINE_CODE_IATA = 'EU'
+        )
+        AND (
+        ( AA.ATOT IS NOT NULL AND to_char(AA.SOBT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(AA.ATOT-30/24/60,'yyyy-mm-dd hh24:mi:ss') )
+        OR ( AA.ATOT IS NULL AND to_char(AA.SOBT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(sysdate-30/24/60,'yyyy-mm-dd hh24:mi:ss') ))
+        GROUP BY
+        AA.AIRLINE_CODE_IATA
+        ) D2 ON D1.AIRLINE_CODE_IATA = D2.AIRLINE_CODE_IATA
+        )
+    </select>
+    <select id="getZCLByHour" parameterType="map" resultType="com.hq.acdm.model.statistics.runningGuarantee.RunningGuaranteeModel">
+        SELECT
+        D1.*,
+        D2.LGYWS,
+        COALESCE(
+        round((( LGS - CASE WHEN LGYWS IS NULL THEN 0 ELSE LGYWS END ) * 1.0 / LGS ) * 100, 2 )|| '%',
+        '0%'
+        ) ZCS
+        FROM
+        (
+        SELECT
+        trunc(to_number(to_char(SOBT,'HH24'))) ATOT,
+        count( * ) LGS
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+        AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd hh24:mi:ss') =  to_char(BB.OPERATIONAL_DATE,'yyyy-mm-dd hh24:mi:ss')
+        AND AA.A_OR_D = BB.A_OR_D
+        AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        WHERE
+        AA.A_OR_D = 'D'
+        AND ( AA.AOBT &lt; sysdate OR AA.SOBT &lt; sysdate OR AA.ATOT &lt; sysdate )
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') <![CDATA[<>]]> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        <if test="params.operational_date !=null and params.operational_date !=''">
+            AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.operational_date}
+        </if>
+        GROUP BY
+        trunc(to_number(to_char(SOBT,'HH24')))
+        ) D1
+        FULL JOIN (
+        SELECT
+        trunc(to_number(to_char(SOBT,'HH24')))  ATOT,
+        COUNT( * ) LGYWS
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+        AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(BB.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND AA.A_OR_D = BB.A_OR_D
+        AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        WHERE
+        AA.A_OR_D = 'D'
+        AND ( AA.AOBT &lt; sysdate OR AA.SOBT &lt; sysdate OR AA.ATOT &lt; sysdate )
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') <![CDATA[<>]]> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+        AND (
+        ( AA.ATOT IS NOT NULL AND to_char(AA.SOBT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(AA.ATOT-30/24/60,'yyyy-mm-dd hh24:mi:ss') )
+        OR ( AA.ATOT IS NULL AND to_char(AA.SOBT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(sysdate-30/24/60,'yyyy-mm-dd hh24:mi:ss') ))
+        GROUP BY
+        trunc(to_number(to_char(SOBT,'HH24')))
+        ) D2 ON D1.ATOT = D2.ATOT
+        ORDER BY
+        D1.ATOT
+    </select>
+    <select id="getZCLByAIRLINE1" parameterType="map" resultType="com.hq.acdm.model.statistics.runningGuarantee.RunningGuaranteeModel">
+        SELECT
+        AIRLINE_CODE_IATA,
+        ZS,
+        YWS,
+        COALESCE(
+        round((( ZS - CASE WHEN YWS IS NULL THEN 0 ELSE YWS END ) * 1.0 / ZS ) * 100, 2 )|| '%',
+        '0%'
+        ) ZCS
+        FROM
+        (
+        SELECT
+        AIRLINE_CODE_IATA,
+        sum( ZS ) ZS,
+        sum( YWS ) YWS
+        FROM
+        (
+        SELECT
+        CASE
+
+        WHEN
+        D1.AIRLINE_CODE_IATA = 'HO' THEN
+        D1.AIRLINE_CODE_IATA
+        WHEN D1.AIRLINE_CODE_IATA = 'CZ' THEN
+        D1.AIRLINE_CODE_IATA
+        WHEN D1.AIRLINE_CODE_IATA = 'MF' THEN
+        D1.AIRLINE_CODE_IATA
+        WHEN D1.AIRLINE_CODE_IATA = 'HO' THEN
+        D1.AIRLINE_CODE_IATA
+        WHEN D1.AIRLINE_CODE_IATA = '9C' THEN
+        D1.AIRLINE_CODE_IATA
+        WHEN D1.AIRLINE_CODE_IATA = 'SC' THEN
+        D1.AIRLINE_CODE_IATA
+        WHEN D1.AIRLINE_CODE_IATA = 'CA'
+        OR D1.AIRLINE_CODE_IATA = 'ZH' THEN
+        'CA/ZH'
+        WHEN D1.AIRLINE_CODE_IATA = 'MU'
+        OR D1.AIRLINE_CODE_IATA = 'FM'
+        OR D1.AIRLINE_CODE_IATA = 'KN' THEN
+        'MU/FM/KN'
+        WHEN D1.AIRLINE_CODE_IATA = 'HU'
+        OR D1.AIRLINE_CODE_IATA = '8L'
+        OR D1.AIRLINE_CODE_IATA = 'GS' THEN
+        'HU/8L/GS' ELSE 'DF'
+        END AIRLINE_CODE_IATA,
+        ZS,
+        YWS
+        FROM
+        (
+        SELECT
+        AA.AIRLINE_CODE_IATA,
+        COUNT( * ) ZS
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+        AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(BB.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND AA.A_OR_D = BB.A_OR_D
+        AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        WHERE
+        AA.A_OR_D = 'D'
+        AND ( to_char(AA.AOBT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') OR  to_char(AA.SOBT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') OR  to_char(AA.ATOT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') )
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') <![CDATA[<>]]> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        <if test="params.operational_date !=null and params.operational_date !=''">
+            AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.operational_date}
+        </if>
+        AND (
+        AA.AIRLINE_CODE_IATA = 'HO'
+        OR AA.AIRLINE_CODE_IATA = '9C'
+        OR AA.AIRLINE_CODE_IATA = 'MU'
+        OR AA.AIRLINE_CODE_IATA = 'FM'
+        OR AA.AIRLINE_CODE_IATA = 'KN'
+        OR AA.AIRLINE_CODE_IATA = 'CA'
+        OR AA.AIRLINE_CODE_IATA = 'ZH'
+        OR AA.AIRLINE_CODE_IATA = 'CZ'
+        OR AA.AIRLINE_CODE_IATA = 'MF'
+        OR AA.AIRLINE_CODE_IATA = 'HU'
+        OR AA.AIRLINE_CODE_IATA = 'GS'
+        OR AA.AIRLINE_CODE_IATA = '8L'
+        OR AA.AIRLINE_CODE_IATA = 'TV'
+        OR AA.AIRLINE_CODE_IATA = 'NS'
+        OR AA.AIRLINE_CODE_IATA = 'SC'
+        OR AA.AIRLINE_CODE_IATA = 'EU'
+        )
+        GROUP BY
+        AA.AIRLINE_CODE_IATA
+        ) D1
+        FULL JOIN (
+        SELECT
+        AA.AIRLINE_CODE_IATA,
+        count( * ) YWS
+        FROM
+        DAILY_FLIGHT_MASTER AA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+        AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(BB.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND AA.A_OR_D = BB.A_OR_D
+        AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        WHERE
+        AA.A_OR_D = 'D'
+        AND ( to_char(AA.AOBT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') OR  to_char(AA.SOBT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') OR  to_char(AA.ATOT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') )
+        AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND nvl(BB.CODE_SHARE_STATUS,' ') <![CDATA[<>]]> 'SF'
+        AND BB.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        <if test="params.operational_date !=null and params.operational_date !=''">
+            AND to_char(AA.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.operational_date}
+        </if>
+        AND (
+        AA.AIRLINE_CODE_IATA = 'HO'
+        OR AA.AIRLINE_CODE_IATA = '9C'
+        OR AA.AIRLINE_CODE_IATA = 'MU'
+        OR AA.AIRLINE_CODE_IATA = 'FM'
+        OR AA.AIRLINE_CODE_IATA = 'KN'
+        OR AA.AIRLINE_CODE_IATA = 'CA'
+        OR AA.AIRLINE_CODE_IATA = 'ZH'
+        OR AA.AIRLINE_CODE_IATA = 'CZ'
+        OR AA.AIRLINE_CODE_IATA = 'MF'
+        OR AA.AIRLINE_CODE_IATA = 'HU'
+        OR AA.AIRLINE_CODE_IATA = 'GS'
+        OR AA.AIRLINE_CODE_IATA = '8L'
+        OR AA.AIRLINE_CODE_IATA = 'TV'
+        OR AA.AIRLINE_CODE_IATA = 'NS'
+        OR AA.AIRLINE_CODE_IATA = 'SC'
+        OR AA.AIRLINE_CODE_IATA = 'EU'
+        )
+        AND (
+        ( AA.ATOT IS NOT NULL AND to_char(AA.SOBT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(AA.ATOT-30/24/60,'yyyy-mm-dd hh24:mi:ss') )
+        OR ( AA.ATOT IS NULL AND  to_char(AA.SOBT,'yyyy-mm-dd hh24:mi:ss') &lt; to_char(sysdate-30/24/60,'yyyy-mm-dd hh24:mi:ss') ))
+        GROUP BY
+        AA.AIRLINE_CODE_IATA
+        ) D2 ON D1.AIRLINE_CODE_IATA = D2.AIRLINE_CODE_IATA
+        )
+        GROUP BY
+        AIRLINE_CODE_IATA
+        )
+    </select>
+</mapper>

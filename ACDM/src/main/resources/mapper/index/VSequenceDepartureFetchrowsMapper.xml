@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.index.VSequenceDepartureFetchrowsMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.index.VSequenceDepartureFetchrows" >
+    <result column="FLIGHT_ID" property="flightId" jdbcType="VARCHAR" />
+    <result column="FLIGHT_NO_IATA" property="flightNoIata" jdbcType="VARCHAR" />
+    <result column="COBT" property="cobt" jdbcType="TIMESTAMP" />
+    <result column="CTOT" property="ctot" jdbcType="TIMESTAMP" />
+    <result column="ETOT" property="etot" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <!--
+  <select id="getRecord" resultMap="BaseResultMap">
+    select FLIGHT_NO_IATA,TO_CHAR(COBT,'HH24:MI') COBT,TO_CHAR(CTOT,'HH24:MI') CTOT,TO_CHAR(ETOT,'HH24:MI') ETOT from V_SEQUENCE_DEPARTURE_MORE
+  </select>
+  -->
+  <select id="getRecord" resultMap="BaseResultMap">
+    SELECT FLIGHT_ID,FLNO AS FLIGHT_NO_IATA,DATE_FORMAT(ETOT,'%H:%i') AS ETOT,DATE_FORMAT(COBT,'%H:%i') AS COBT,DATE_FORMAT(CTOT,'%H:%i') AS CTOT
+    FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A = 'D' AND ATOT IS NULL AND ETOT IS NOT NULL ORDER BY ETOT ASC
+  </select>
+
+  <insert id="insert" parameterType="com.hq.acdm.model.index.VSequenceDepartureFetchrows" >
+    insert into V_SEQUENCE_DEPARTURE_FETCHROWS (FLIGHT_NO_IATA, COBT, CTOT, 
+      ETOT)
+    values (#{flightNoIata,jdbcType=VARCHAR}, #{cobt,jdbcType=TIMESTAMP}, #{ctot,jdbcType=TIMESTAMP}, 
+      #{etot,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.index.VSequenceDepartureFetchrows" >
+    insert into V_SEQUENCE_DEPARTURE_FETCHROWS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="flightNoIata != null" >
+        FLIGHT_NO_IATA,
+      </if>
+      <if test="cobt != null" >
+        COBT,
+      </if>
+      <if test="ctot != null" >
+        CTOT,
+      </if>
+      <if test="etot != null" >
+        ETOT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="flightNoIata != null" >
+        #{flightNoIata,jdbcType=VARCHAR},
+      </if>
+      <if test="cobt != null" >
+        #{cobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctot != null" >
+        #{ctot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etot != null" >
+        #{etot,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

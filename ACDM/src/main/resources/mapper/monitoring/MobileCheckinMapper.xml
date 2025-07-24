@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.monitioring.MobileCheckinMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.monitoring.mobile.MobileCheckin" >
+     <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="userId" property="userId" jdbcType="VARCHAR" />
+    <result column="deviceToken" property="deviceToken" jdbcType="VARCHAR" />
+    <result column="deviceType" property="deviceType" jdbcType="VARCHAR" />
+    <result column="times" property="times" jdbcType="INTEGER" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="version" property="version" jdbcType="VARCHAR" />
+    <result column="loginTime" property="loginTime" jdbcType="TIMESTAMP" />
+    <result column="logoutTime" property="logoutTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="sort" jdbcType="VARCHAR" />
+
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    flight_run, flight_cancel, delay_2hour, delay_4hour,report_user, report_time,content,schedule_date,
+    operational_date,status
+  </sql>
+  <select id="queryList" resultType="com.hq.acdm.model.monitoring.mobile.MobileCheckin" parameterType="map" >
+    select * from MOBILE_CHECKIN where 1=1
+    <if test="params.userId !=null and params.userId != ''">
+       and userId=#{params.userId,jdbcType=VARCHAR}
+    </if>
+    <if test="params.devicetoken !=null and params.devicetoken != ''">
+      and devicetoken=#{params.devicetoken,jdbcType=VARCHAR}
+    </if>
+    <if test="params.devicetype !=null and params.devicetype != ''">
+      and devicetype=#{params.devicetype,jdbcType=VARCHAR}
+    </if>
+    order by id desc
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select select * from MOBILE_CHECKIN
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from MOBILE_CHECKIN
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.monitoring.reportInfo.ReportRunInfo" >
+    <selectKey keyProperty="id" resultType="int" order="BEFORE">
+      select MOBILE_CHECK_SEQUENCE.nextval from dual
+    </selectKey>
+    insert into MOBILE_CHECKIN ( id,userId,deviceToken,
+    deviceType, times, createTime,version, loginTime,logoutTime,status)
+    values (
+    #{id},#{userId,jdbcType=VARCHAR},#{deviceToken,jdbcType=VARCHAR}, #{deviceType,jdbcType=VARCHAR}, #{times,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{version,jdbcType=VARCHAR},to_date(#{loginTime,jdbcType=TIMESTAMP},'yyyy-MM-dd HH24:MI:ss'),
+      to_date(#{logoutTime,jdbcType=TIMESTAMP},'yyyy-MM-dd HH24:MI:ss'), #{status,jdbcType=INTEGER})
+  </insert>
+ 
+  <update id="updateStatus" parameterType="com.hq.acdm.model.monitoring.reportInfo.ReportRunInfo" >
+    update MOBILE_CHECKIN
+    set   loginTime=#{loginTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="getAll" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM sys_role
+  </select>
+
+  <select id="countByName" parameterType="map" resultType="int">
+    SELECT count(1)
+    FROM sys_role
+    WHERE name = #{name}
+    <if test="parentId != null">
+      AND parent_id = #{parentId}
+    </if>
+    <if test="id != null">
+      AND id != #{id}
+    </if>
+  </select>
+
+
+
+</mapper>

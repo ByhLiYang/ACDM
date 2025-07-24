@@ -1,0 +1,1801 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.effectAnalysis.RunQualityReportMapper" >
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.effectAnalysis.RunQualityReportVo" >
+    <result column="FL_DAY" property="flDay" jdbcType="VARCHAR" />
+    <result column="FLDAYTB" property="flDayTb" jdbcType="VARCHAR" />
+    <result column="FL_MONTH" property="flMonth" jdbcType="VARCHAR" />
+    <result column="FLMONTHTB" property="flMonthTb" jdbcType="VARCHAR" />
+    <result column="FL_YEAR" property="flYear" jdbcType="VARCHAR" />
+    <result column="FLYEARTB" property="flYearTb" jdbcType="VARCHAR" />
+    <result column="PEN_DAY" property="penDay" jdbcType="VARCHAR" />
+    <result column="PENDAYTB" property="penDayTb" jdbcType="VARCHAR" />
+    <result column="PEN_MONTH" property="penMonth" jdbcType="VARCHAR" />
+    <result column="PENMONTHTB" property="penMonthTb" jdbcType="VARCHAR" />
+    <result column="PEN_YEAR" property="penYear" jdbcType="VARCHAR" />
+    <result column="PENYEARTB" property="penYearTb" jdbcType="VARCHAR" />
+    <result column="SFZCL_DAY" property="sfzclDay" jdbcType="VARCHAR" />
+    <result column="SFZCLDAYTB" property="sfzclDayTb" jdbcType="VARCHAR" />
+    <result column="SFZCL_MONTH" property="sfzclMonth" jdbcType="VARCHAR" />
+    <result column="SFZCLMONTHTB" property="sfzclMonthTb" jdbcType="VARCHAR" />
+    <result column="SFZCL_YEAR" property="sfzclYear" jdbcType="VARCHAR" />
+    <result column="SFZCLYEARTB" property="sfzclYearTb" jdbcType="VARCHAR" />
+    <result column="FXL_DAY" property="fxlDay" jdbcType="VARCHAR" />
+    <result column="FXLDAYTB" property="fxlDayTb" jdbcType="VARCHAR" />
+    <result column="FXL_MONTH" property="fxlMonth" jdbcType="VARCHAR" />
+    <result column="FXLMONTHTB" property="fxlMonthTb" jdbcType="VARCHAR" />
+    <result column="FXL_YEAR" property="fxlYear" jdbcType="VARCHAR" />
+    <result column="FXLYEARTB" property="fxlYearTb" jdbcType="VARCHAR" />
+    <result column="ZCL_DAY" property="zclDay" jdbcType="VARCHAR" />
+    <result column="ZCLDAYTB" property="zclDayTb" jdbcType="VARCHAR" />
+    <result column="ZCL_MONTH" property="zclMonth" jdbcType="VARCHAR" />
+    <result column="ZCLMONTHTB" property="zclMonthTb" jdbcType="VARCHAR" />
+    <result column="ZCL_YEAR" property="zclYear" jdbcType="VARCHAR" />
+    <result column="ZCLYEARTB" property="zclYearTb" jdbcType="VARCHAR" />
+    <result column="DELAY_COUNT" property="delayCount" jdbcType="VARCHAR" />
+    <result column="DELAY_TQ" property="delayTq" jdbcType="VARCHAR" />
+    <result column="DELAY_GS" property="delayGs" jdbcType="VARCHAR" />
+    <result column="DELAY_LL" property="delayLl" jdbcType="VARCHAR" />
+    <result column="DELAY_HBSK" property="delayHbsk" jdbcType="VARCHAR" />
+    <result column="DELAY_ZSHD" property="delayZshd" jdbcType="VARCHAR" />
+    <result column="DELAY_KG" property="delayKg" jdbcType="VARCHAR" />
+    <result column="DELAY_JC" property="delayJc" jdbcType="VARCHAR" />
+    <result column="DELAY_LJ" property="delayLj" jdbcType="VARCHAR" />
+    <result column="DELAY_YL" property="delayYl" jdbcType="VARCHAR" />
+    <result column="DELAY_LGXT" property="delayLgxt" jdbcType="VARCHAR" />
+    <result column="DELAY_LK" property="delayLk" jdbcType="VARCHAR" />
+    <result column="DELAY_GGAQ" property="delayGgaq" jdbcType="VARCHAR" />
+    <result column="KQL" property="kql" jdbcType="VARCHAR" />
+    <result column="GMZDL" property="gmzdl" jdbcType="VARCHAR" />
+    <result column="WGMHBS" property="wgmhbs" jdbcType="VARCHAR" />
+    <result column="DELAY_CONTENT" property="delayContent" jdbcType="VARCHAR" />
+    <result column="SJXSQJJC" property="sjxsqjjc" jdbcType="VARCHAR" />
+    <result column="PJJGHXXS" property="pjjghxxs" jdbcType="VARCHAR" />
+    <result column="PJCGHXXS" property="pjcghxxs" jdbcType="VARCHAR" />
+    <result column="FXLGH_DAY" property="fxlGhDay" jdbcType="VARCHAR" />
+    <result column="FXLGH_MONTH" property="fxlGhMonth" jdbcType="VARCHAR" />
+    <result column="FXLNH_DAY" property="fxlNhDay" jdbcType="VARCHAR" />
+    <result column="FXLNH_MONTH" property="fxlNhMonth" jdbcType="VARCHAR" />
+    <result column="FXLDH_DAY" property="fxlDhDay" jdbcType="VARCHAR" />
+    <result column="FXLDH_MONTH" property="fxlDhMonth" jdbcType="VARCHAR" />
+    <result column="FXLDF_DAY" property="fxlDfDay" jdbcType="VARCHAR" />
+    <result column="FXLDF_MONTH" property="fxlDfMonth" jdbcType="VARCHAR" />
+    <result column="FXLHY_DAY" property="fxlHyDay" jdbcType="VARCHAR" />
+    <result column="FXLHY_MONTH" property="fxlHyMonth" jdbcType="VARCHAR" />
+    <result column="FL_TIPS" property="flTips" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="ZCLResultMap" type="com.hq.acdm.vo.effectAnalysis.RunQualityReportZCLVo" >
+    <result column="ZCL" property="zcl" jdbcType="VARCHAR" />
+    <result column="SFZCL" property="sfzcl" jdbcType="VARCHAR" />
+    <result column="FXL" property="fxl" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="AORDResultMap" type="com.hq.acdm.vo.effectAnalysis.RunQualityReportAOrDShuVo" >
+    <result column="TIME_H" property="timeH" jdbcType="VARCHAR" />
+    <result column="HBS" property="hbs" jdbcType="INTEGER" />
+  </resultMap>
+
+  <select id="findYunShuLiang" resultMap="ResultMap" parameterType="map" >
+    SELECT T.FL_DAY,T.FL_DAY_QN,CASE WHEN T.FL_DAY_QN = 0 THEN '-' ELSE T.FL_DAY/T.FL_DAY_QN END AS FLDAYTB,
+    T.FL_MONTH,T.FL_MONTH_QN,CASE WHEN T.FL_MONTH_QN = 0 THEN '-' ELSE T.FL_MONTH/T.FL_MONTH_QN END AS FLMONTHTB,
+    T.FL_YEAR,T.FL_YEAR_QN,CASE WHEN T.FL_YEAR_QN = 0 THEN '-' ELSE T.FL_YEAR/T.FL_YEAR_QN END AS FLYEARTB
+    FROM (SELECT SUM(CASE WHEN DATE_FORMAT(EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d') THEN 1 ELSE 0 END) AS FL_DAY,
+    SUM(CASE WHEN DATE_FORMAT(EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d') THEN 1 ELSE 0 END) AS FL_DAY_QN,
+    SUM(CASE WHEN DATE_FORMAT(EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%m-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d') THEN 1 ELSE 0 END) AS FL_MONTH,
+    SUM(CASE WHEN DATE_FORMAT(EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%01') AND DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d') THEN 1 ELSE 0 END) AS FL_MONTH_QN,
+    SUM(CASE WHEN DATE_FORMAT(EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%01-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d') THEN 1 ELSE 0 END) AS FL_YEAR,
+    SUM(CASE WHEN DATE_FORMAT(EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%01-%01') AND DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d') THEN 1 ELSE 0 END) AS FL_YEAR_QN
+    FROM T_LOCAL_FLIGHT_INFO WHERE 1=1
+    AND ((AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+    OR
+    (AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+    ) T
+  </select>
+
+  <select id="findRenShu" resultMap="ResultMap" parameterType="map" >
+    SELECT T.PEN_DAY,T.PEN_DAY_QN,CASE WHEN T.PEN_DAY_QN=0 THEN '-' ELSE T.PEN_DAY/T.PEN_DAY_QN END AS PENDAYTB,
+    T.PEN_MONTH,T.PEN_MONTH_QN,CASE WHEN T.PEN_MONTH_QN=0 THEN '-' ELSE T.PEN_MONTH/T.PEN_MONTH_QN END AS PENMONTHTB,
+    T.PEN_YEAR,T.PEN_YEAR_QN,CASE WHEN T.PEN_YEAR_QN=0 THEN '-' ELSE T.PEN_YEAR/T.PEN_YEAR_QN END AS PENYEARTB
+    FROM (SELECT SUM(CASE WHEN DATE_FORMAT(dpsrFltDate, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d') THEN 1 ELSE 0 END) / 10000 AS PEN_DAY,
+    SUM(CASE WHEN DATE_FORMAT(dpsrFltDate, '%Y-%m-%d') = DATE_FORMAT(date_add(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d') THEN 1 ELSE 0 END) / 10000 AS PEN_DAY_QN,
+    SUM(CASE WHEN DATE_FORMAT(dpsrFltDate, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%m-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d') THEN 1 ELSE 0 END) / 10000 AS PEN_MONTH,
+    SUM(CASE WHEN DATE_FORMAT(dpsrFltDate, '%Y-%m-%d') BETWEEN DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%01') AND DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d') THEN 1 ELSE 0 END) / 10000 AS PEN_MONTH_QN,
+    SUM(CASE WHEN DATE_FORMAT(dpsrFltDate, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%01-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d') THEN 1 ELSE 0 END) / 10000 AS PEN_YEAR,
+    SUM(CASE WHEN DATE_FORMAT(dpsrFltDate, '%Y-%m-%d') BETWEEN DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%01-%01') AND DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d') THEN 1 ELSE 0 END) / 10000 AS PEN_YEAR_QN
+    FROM T_PASSENGER_INFO A
+    LEFT JOIN T_LOCAL_FLIGHT_INFO T ON A.flightId = T.FLIGHT_ID
+    WHERE 1=1
+    AND ((T.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+    OR
+    (T.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND T.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND T.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND T.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND T.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND T.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND T.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+    ) T
+  </select>
+
+  <select id="findZCLDay" resultMap="ZCLResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT
+    SUM(CASE WHEN (TA.ALDT IS NOT NULL AND TIMESTAMPDIFF( MINUTE, TA.SIBT, TA.ALDT ) <= -10)
+            OR (TA.ATOT IS NOT NULL AND TIMESTAMPDIFF( MINUTE, TA.SOBT, TA.ATOT ) <= 25) THEN 1 ELSE 0 END)
+    / SUM(CASE WHEN TA.ATOT IS NOT NULL OR (TA.ALDT IS NULL AND TIMESTAMPDIFF( MINUTE, TA.SIBT, TA.ALDT ) > -10)
+            OR (TA.ATOT IS NULL AND TIMESTAMPDIFF( MINUTE, TA.SOBT, TA.ATOT ) > 25) THEN 1 ELSE 0 END) ZCL,
+    SUM(CASE WHEN (TA.ASSOCIATED_FLIGHT_ID IS NULL AND DATE_FORMAT(TA.SOBT, '%H:%i') < '11:00') THEN 0 ELSE 1 END)/COUNT(1) SFZCL,
+    SUM(CASE WHEN TA.ATOT IS NOT NULL AND CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)<=0 THEN 1 ELSE 0 END)
+    / SUM(CASE WHEN TA.ATOT IS NOT NULL OR (TA.ATOT IS NULL AND CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0)
+            THEN 1 ELSE 0 END ) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.FLIGHT_ID=TB.ASSOCIATED_FLIGHT_ID
+    WHERE TA.D_OR_A='D'
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="findZCLMonth" resultMap="ZCLResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT SUM(CASE WHEN (TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT)>30)
+    OR (TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW())>30) THEN 0 ELSE 1 END)/COUNT(1) ZCL,
+    SUM(CASE WHEN (TA.ASSOCIATED_FLIGHT_ID IS NULL AND DATE_FORMAT(TA.SOBT, '%H:%i') < '11:00') THEN 0 ELSE 1 END)/COUNT(1) SFZCL,
+    SUM(CASE WHEN ((TB.FLIGHT_ID IS NULL OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)<=0)) AND TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT)>30)
+    OR ((TB.FLIGHT_ID IS NULL OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)<=0)) AND TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW())>30)
+    OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)>0 AND TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT),TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT))>30)
+    OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)>0 AND TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT),TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW()))>30)
+    THEN 0 ELSE 1 END)/COUNT(1) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.FLIGHT_ID=TB.ASSOCIATED_FLIGHT_ID
+    WHERE TA.D_OR_A='D'
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%m-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="findZCLYear" resultMap="ZCLResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT SUM(CASE WHEN (TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT)>30)
+    OR (TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW())>30) THEN 0 ELSE 1 END)/COUNT(1) ZCL,
+    SUM(CASE WHEN (TA.ASSOCIATED_FLIGHT_ID IS NULL AND DATE_FORMAT(TA.SOBT, '%H:%i') < '11:00') THEN 0 ELSE 1 END)/COUNT(1) SFZCL,
+    SUM(CASE WHEN ((TB.FLIGHT_ID IS NULL OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)<=0)) AND TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT)>30)
+    OR ((TB.FLIGHT_ID IS NULL OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)<=0)) AND TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW())>30)
+    OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)>0 AND TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT),TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT))>30)
+    OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)>0 AND TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT),TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW()))>30)
+    THEN 0 ELSE 1 END)/COUNT(1) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.FLIGHT_ID=TB.ASSOCIATED_FLIGHT_ID
+    WHERE TA.D_OR_A='D'
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%01-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+
+  <select id="findZCLDayQn" resultMap="ZCLResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT SUM(CASE WHEN (TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT)>30)
+    OR (TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW())>30) THEN 0 ELSE 1 END)/COUNT(1) ZCL,
+    SUM(CASE WHEN (TA.ASSOCIATED_FLIGHT_ID IS NULL AND DATE_FORMAT(TA.SOBT, '%H:%i') < '11:00') THEN 0 ELSE 1 END)/COUNT(1) SFZCL,
+    SUM(CASE WHEN ((TB.FLIGHT_ID IS NULL OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)<=0)) AND TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT)>30)
+    OR ((TB.FLIGHT_ID IS NULL OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)<=0)) AND TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW())>30)
+    OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)>0 AND TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT),TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT))>30)
+    OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)>0 AND TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT),TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW()))>30)
+    THEN 0 ELSE 1 END)/COUNT(1) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.FLIGHT_ID=TB.ASSOCIATED_FLIGHT_ID
+    WHERE TA.D_OR_A='D'
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="findZCLMonthQn" resultMap="ZCLResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT SUM(CASE WHEN (TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT)>30)
+    OR (TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW())>30) THEN 0 ELSE 1 END)/COUNT(1) ZCL,
+    SUM(CASE WHEN (TA.ASSOCIATED_FLIGHT_ID IS NULL AND DATE_FORMAT(TA.SOBT, '%H:%i') < '11:00') THEN 0 ELSE 1 END)/COUNT(1) SFZCL,
+    SUM(CASE WHEN ((TB.FLIGHT_ID IS NULL OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)<=0)) AND TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT)>30)
+    OR ((TB.FLIGHT_ID IS NULL OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)<=0)) AND TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW())>30)
+    OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)>0 AND TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT),TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT))>30)
+    OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)>0 AND TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT),TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW()))>30)
+    THEN 0 ELSE 1 END)/COUNT(1) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.FLIGHT_ID=TB.ASSOCIATED_FLIGHT_ID
+    WHERE TA.D_OR_A='D'
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%01') AND DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="findZCLYearQn" resultMap="ZCLResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT SUM(CASE WHEN (TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT)>30)
+    OR (TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW())>30) THEN 0 ELSE 1 END)/COUNT(1) ZCL,
+    SUM(CASE WHEN (TA.ASSOCIATED_FLIGHT_ID IS NULL AND DATE_FORMAT(TA.SOBT, '%H:%i') < '11:00') THEN 0 ELSE 1 END)/COUNT(1) SFZCL,
+    SUM(CASE WHEN ((TB.FLIGHT_ID IS NULL OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)<=0)) AND TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT)>30)
+    OR ((TB.FLIGHT_ID IS NULL OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)<=0)) AND TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW())>30)
+    OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)>0 AND TA.ATOT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT),TIMESTAMPDIFF(MINUTE,TA.SOBT,TA.ATOT))>30)
+    OR (TB.FLIGHT_ID IS NOT NULL AND TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT)>0 AND TA.ATOT IS NULL AND TIMESTAMPDIFF(MINUTE,TIMESTAMPDIFF(MINUTE,TB.SIBT,TB.ALDT),TIMESTAMPDIFF(MINUTE,TA.SOBT,NOW()))>30)
+    THEN 0 ELSE 1 END)/COUNT(1) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.FLIGHT_ID=TB.ASSOCIATED_FLIGHT_ID
+    WHERE TA.D_OR_A='D'
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%01-%01') AND DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="findKQL" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN B.IS_REMOTE = 'N' THEN 1 ELSE 0 END)/count(1),0) KQL
+    FROM T_LOCAL_FLIGHT_INFO A
+    INNER JOIN T_CRAFT_SITE B ON A.STAND=B.`CODE`
+    WHERE A.ISDEL <> '1' AND ((A.D_OR_A='A' AND A.ALDT IS NOT NULL) OR (A.D_OR_A='D' AND A.ATOT IS NOT NULL))
+    AND DATE_FORMAT(A.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    AND ((A.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(A.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND A.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND A.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND A.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND A.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND A.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND A.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="findGMZDL" resultMap="ResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT SUM(CASE WHEN V.ATDC IS NOT NULL AND V.ATDC<=V.STDC THEN 1 ELSE 0 END)/
+    SUM(CASE WHEN V.ATDC IS NOT NULL OR (V.ATDC IS NULL AND NOW()>V.STDC) THEN 1 ELSE 0 END) GMZDL,
+    SUM(CASE WHEN (V.STDC IS NOT NULL AND V.STDC < V.ATDC) THEN 1 ELSE 0 END) AS WGMHBS
+    FROM T_LOCAL_FLIGHT_INFO V
+    WHERE V.D_OR_A = 'D'
+    AND ((V.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(V.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND V.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(V.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND V.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND V.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND V.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND V.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND V.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+
+  <select id="findFxlDayGH" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+     AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND TA.AIRLINES IN ('CA','ZH')
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+  </select>
+
+  <select id="findFxlMonthGH" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+     AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND TA.AIRLINES IN ('CA','ZH')
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%m-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+  </select>
+
+  <select id="findFxlDayNH" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+     AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND TA.AIRLINES IN ('CZ','OQ')
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+  </select>
+
+  <select id="findFxlMonthNH" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+     AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND TA.AIRLINES IN ('CZ','OQ')
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%m-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+  </select>
+
+  <select id="findFxlDayDH" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+     AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND TA.AIRLINES IN ('FM','MU')
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+  </select>
+
+  <select id="findFxlMonthDH" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+     AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND TA.AIRLINES IN ('FM','MU')
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%m-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+  </select>
+
+  <select id="findFxlDayDF" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+     AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+  </select>
+
+  <select id="findFxlMonthDF" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+     AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%m-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+  </select>
+
+  <select id="findFxlDayHY" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+     AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+  </select>
+
+  <select id="findFxlMonthHY" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+     AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%m-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+  </select>
+
+  <select id="findAsjs" resultMap="AORDResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT T.TIME_H,HBS FROM (
+    SELECT SUBSTRING(ALDT,-8,2) TIME_H,COUNT(1) HBS
+    FROM T_LOCAL_FLIGHT_INFO
+    WHERE D_OR_A='A' AND ALDT IS NOT NULL
+    AND DATE_FORMAT(EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    AND ((AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+    <![CDATA[
+    GROUP BY TIME_H ) T
+    WHERE T.TIME_H >= '07' AND T.TIME_H <= '23'
+    ]]>
+  </select>
+
+  <select id="findDjhs" resultMap="AORDResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT T.TIME_H,HBS FROM (
+    SELECT SUBSTRING(IF(TA.D_OR_A='D',TA.SOBT,TA.SIBT),-8,2) TIME_H,COUNT(1) HBS
+    FROM (
+	SELECT FLIGHT_ID,FLNO,SOBT,SIBT,D_OR_A,AIRLINES FROM T_LOCAL_FLIGHT_INFO WHERE ISDEL <> '1'
+    AND ABNORMAL_FLIGHT_STAT_CD <>'CAN'
+    AND EXEC_DATE = #{params.execDate,jdbcType=DATE}
+    AND ((AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+    OR
+    (AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    UNION
+    SELECT  FLIGHT_ID,FLNO,SOBT,SIBT,D_OR_A,AIRLINES FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE ISDEL <> '1'
+    AND ABNORMAL_FLIGHT_STAT_CD <>'CAN'
+    AND EXEC_DATE = #{params.execDate,jdbcType=DATE}
+    AND ((AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+    OR
+    (AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+
+	) TA
+    WHERE 1=1
+     ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+    <![CDATA[
+    GROUP BY TIME_H ) T
+    WHERE T.TIME_H >= '07' AND T.TIME_H <= '23'
+    ]]>
+  </select>
+
+  <select id="findDsjs" resultMap="AORDResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT T.TIME_H,HBS FROM (
+    SELECT SUBSTRING(IF(TA.D_OR_A='D',TA.ATOT,TA.ALDT),-8,2) TIME_H,COUNT(1) HBS
+    FROM (
+	SELECT FLIGHT_ID,FLNO,ATOT,ALDT,D_OR_A,AIRLINES FROM T_LOCAL_FLIGHT_INFO WHERE ISDEL <> '1'
+    AND ABNORMAL_FLIGHT_STAT_CD <>'CAN'
+    AND EXEC_DATE = #{params.execDate,jdbcType=DATE}
+    AND ((AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+    OR
+    (AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    UNION
+    SELECT  FLIGHT_ID,FLNO,ATOT,ALDT,D_OR_A,AIRLINES FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE ISDEL <> '1'
+    AND ABNORMAL_FLIGHT_STAT_CD <>'CAN'
+    AND EXEC_DATE = #{params.execDate,jdbcType=DATE}
+    AND ((AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+    OR
+    (AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+
+	) TA
+    WHERE 1=1
+     ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+    <![CDATA[
+    GROUP BY TIME_H ) T
+    WHERE T.TIME_H >= '07' AND T.TIME_H <= '23'
+    ]]>
+  </select>
+
+
+  <select id="findMaxAOrDHbs" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT MAX(A.HBS) HBS FROM (
+    SELECT T.TIME_H,HBS FROM (
+    SELECT SUBSTRING(IF(TA.D_OR_A='D',TA.ATOT,TA.ALDT),-8,2) TIME_H,COUNT(1) HBS
+    FROM (
+	SELECT FLIGHT_ID,FLNO,ATOT,ALDT,D_OR_A,AIRLINES FROM T_LOCAL_FLIGHT_INFO WHERE ISDEL <> '1'
+    AND ABNORMAL_FLIGHT_STAT_CD <>'CAN'
+    AND EXEC_DATE = #{params.execDate2,jdbcType=VARCHAR}
+    AND ((AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+    OR
+    (AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+     ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+    <![CDATA[
+    UNION
+    SELECT  FLIGHT_ID,FLNO,ATOT,ALDT,D_OR_A,AIRLINES FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE ISDEL <> '1'
+    AND ABNORMAL_FLIGHT_STAT_CD <>'CAN'
+    AND EXEC_DATE = #{params.execDate2,jdbcType=VARCHAR}
+    AND ((AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+    OR
+    (AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+     ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+    <![CDATA[
+    ) TA
+    WHERE 1=1
+    GROUP BY TIME_H ) T
+    WHERE T.TIME_H >= '07' AND T.TIME_H <= '23' ) A
+    ]]>
+  </select>
+
+  <select id="findAvgJghxsj" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT SUM(TIMESTAMPDIFF(MINUTE,ALDT,AIBT))/COUNT(1) AVG_TIME FROM T_LOCAL_FLIGHT_INFO
+    WHERE D_OR_A = 'A' AND ALDT IS NOT NULL AND AIBT IS NOT NULL
+    AND DATE_FORMAT(EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+   AND TIMESTAMPDIFF(MINUTE,ALDT,AIBT) > 4 and TIMESTAMPDIFF(MINUTE,ALDT,AIBT) <31
+    AND ((AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+  AND ISDEL <> '1'
+    AND ABNORMAL_FLIGHT_STAT_CD <>'CAN'
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="findAvgCghxsj" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT SUM(TIMESTAMPDIFF(MINUTE,AOBT,ATOT))/COUNT(1) AVG_TIME FROM T_LOCAL_FLIGHT_INFO
+    WHERE D_OR_A = 'D' AND ATOT IS NOT NULL AND AOBT IS NOT NULL
+    AND DATE_FORMAT(EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    AND TIMESTAMPDIFF(MINUTE,AOBT,ATOT) > 4  AND TIMESTAMPDIFF(MINUTE,AOBT,ATOT) <31
+    AND ((AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND ISDEL <> '1'
+    AND ABNORMAL_FLIGHT_STAT_CD <>'CAN'
+     ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+
+  <select id="findYWYYTJInfo" resultMap="ResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.REASON_TYPE = '0100100' THEN 1 ELSE 0 END),0) delayTq,
+    IFNULL(SUM(CASE WHEN TA.REASON_TYPE = '0100200' THEN 1 ELSE 0 END),0) delayGs,
+    IFNULL(SUM(CASE WHEN TA.REASON_TYPE = '0100300' THEN 1 ELSE 0 END),0) delayLl,
+    IFNULL(SUM(CASE WHEN TA.REASON_TYPE = '0100000' THEN 1 ELSE 0 END),0) delayHbsk,
+    IFNULL(SUM(CASE WHEN TA.REASON_TYPE = '0100400' THEN 1 ELSE 0 END),0) delayZshd,
+    IFNULL(SUM(CASE WHEN TA.REASON_TYPE = '0100500' THEN 1 ELSE 0 END),0) delayKg,
+    IFNULL(SUM(CASE WHEN TA.REASON_TYPE = '0100600' THEN 1 ELSE 0 END),0) delayJc,
+    IFNULL(SUM(CASE WHEN TA.REASON_TYPE = '0100700' THEN 1 ELSE 0 END),0) delayLj,
+    IFNULL(SUM(CASE WHEN TA.REASON_TYPE = '0100800' THEN 1 ELSE 0 END),0) delayYl,
+    IFNULL(SUM(CASE WHEN TA.REASON_TYPE = '0100900' THEN 1 ELSE 0 END),0) delayLgxt,
+    IFNULL(SUM(CASE WHEN TA.REASON_TYPE = '0101000' THEN 1 ELSE 0 END),0) delayLk,
+    IFNULL(SUM(CASE WHEN TA.REASON_TYPE = '0101100' THEN 1 ELSE 0 END),0) delayGgaq
+
+    FROM (SELECT FLIGHT_ID,ASSOCIATED_FLIGHT_ID,REASON_TYPE,DELAY_TIME FROM T_LOCAL_FLIGHT_INFO WHERE  ISDEL <> '1'
+    AND ABNORMAL_FLIGHT_STAT_CD <>'CAN' AND D_OR_A='D'
+    AND EXEC_DATE = #{params.execDate,jdbcType=DATE}
+    AND ((AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+    OR
+    (AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    UNION
+    SELECT  FLIGHT_ID,ASSOCIATED_FLIGHT_ID,REASON_TYPE,DELAY_TIME FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE ISDEL <> '1'
+    AND ABNORMAL_FLIGHT_STAT_CD <>'CAN' AND D_OR_A='D'
+    AND EXEC_DATE = #{params.execDate,jdbcType=DATE}
+    AND ((AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+    OR
+    (AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    ) TA
+    LEFT JOIN (SELECT  FLIGHT_ID,ASSOCIATED_FLIGHT_ID,REASON_TYPE,DELAY_TIME FROM T_LOCAL_FLIGHT_INFO WHERE ISDEL <> '1'
+    AND ABNORMAL_FLIGHT_STAT_CD <>'CAN' AND D_OR_A='A'
+    AND EXEC_DATE BETWEEN  DATE_SUB(#{params.execDate,jdbcType=DATE},INTERVAL 1 DAY) AND #{params.execDate,jdbcType=DATE}
+    AND ((AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+    OR
+    (AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    UNION
+    SELECT  FLIGHT_ID,ASSOCIATED_FLIGHT_ID,REASON_TYPE,DELAY_TIME FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE ISDEL <> '1'
+    AND ABNORMAL_FLIGHT_STAT_CD <>'CAN' AND D_OR_A='A'
+    AND EXEC_DATE BETWEEN  DATE_SUB(#{params.execDate,jdbcType=DATE},INTERVAL 1 DAY) AND #{params.execDate,jdbcType=DATE}
+    AND ((AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+    OR
+    (AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    ) TB
+    ON TA.ASSOCIATED_FLIGHT_ID = TB.FLIGHT_ID
+    WHERE CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 AND TA.REASON_TYPE IS NOT NULL
+      ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND R.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND R.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND R.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND R.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND R.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+
+  </select>
+
+
+  <!-- 航班正常性统计（新方法） start -->
+  <!-- 航班正常率统计 -->
+  <select id="selectZCLDay" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN'
+    AND TA.D_OR_A = 'D' AND TA.ATOT IS NOT NULL AND TA.EXEC_DATE=CURRENT_DATE
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="selectZCLMonth" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN'
+    AND TA.D_OR_A = 'D' AND TA.ATOT IS NOT NULL AND TA.EXEC_DATE=CURRENT_DATE
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%m-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="selectZCLYear" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN'
+    AND TA.D_OR_A = 'D' AND TA.ATOT IS NOT NULL AND TA.EXEC_DATE=CURRENT_DATE
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%01-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+
+  <select id="selectZCLDayQn" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+    FROM T_LOCAL_FLIGHT_INFO_HISTORY TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN'
+    AND TA.D_OR_A = 'D' AND TA.ATOT IS NOT NULL
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="selectZCLMonthQn" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+    FROM T_LOCAL_FLIGHT_INFO_HISTORY TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN'
+    AND TA.D_OR_A = 'D' AND TA.ATOT IS NOT NULL
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%01') AND DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="selectZCLYearQn" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+    FROM T_LOCAL_FLIGHT_INFO_HISTORY TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN'
+    AND TA.D_OR_A = 'D' AND TA.ATOT IS NOT NULL
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%01-%01') AND DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+
+
+  <!-- 航班始发正常率统计 -->
+  <select id="selectSFZCLDay" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) OR TA.ALDT<=DATE_ADD(TA.SIBT,INTERVAL 20 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) SFZCL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD
+	WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.ASSOCIATED_FLIGHT_ID IS NULL
+    AND TA.ATOT IS NOT NULL
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND (TB.ATTRIBUTE='2403' OR (TB.ATTRIBUTE IN ('2401','2402','2404') AND TA.D_OR_A='D'))
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="selectSFZCLMonth" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) OR TA.ALDT<=DATE_ADD(TA.SIBT,INTERVAL 20 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.ASSOCIATED_FLIGHT_ID IS NULL
+    AND TA.ATOT IS NOT NULL
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND (TB.ATTRIBUTE='2403' OR (TB.ATTRIBUTE IN ('2401','2402','2404') AND TA.D_OR_A='D'))
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%m-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="selectSFZCLYear" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) OR TA.ALDT<=DATE_ADD(TA.SIBT,INTERVAL 20 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.ASSOCIATED_FLIGHT_ID IS NULL
+    AND TA.ATOT IS NOT NULL
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND (TB.ATTRIBUTE='2403' OR (TB.ATTRIBUTE IN ('2401','2402','2404') AND TA.D_OR_A='D'))
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%01-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+
+  <select id="selectSFZCLDayQn" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) OR TA.ALDT<=DATE_ADD(TA.SIBT,INTERVAL 20 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+    FROM T_LOCAL_FLIGHT_INFO_HISTORY TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.ASSOCIATED_FLIGHT_ID IS NULL
+    AND TA.ATOT IS NOT NULL
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND (TB.ATTRIBUTE='2403' OR (TB.ATTRIBUTE IN ('2401','2402','2404') AND TA.D_OR_A='D'))
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="selectSFZCLMonthQn" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) OR TA.ALDT<=DATE_ADD(TA.SIBT,INTERVAL 20 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+    FROM T_LOCAL_FLIGHT_INFO_HISTORY TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.ASSOCIATED_FLIGHT_ID IS NULL
+    AND TA.ATOT IS NOT NULL AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND (TB.ATTRIBUTE='2403' OR (TB.ATTRIBUTE IN ('2401','2402','2404') AND TA.D_OR_A='D'))
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%01') AND DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="selectSFZCLYearQn" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) OR TA.ALDT<=DATE_ADD(TA.SIBT,INTERVAL 20 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+    FROM T_LOCAL_FLIGHT_INFO_HISTORY TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.ASSOCIATED_FLIGHT_ID IS NULL
+    AND TA.ATOT IS NOT NULL AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND (TB.ATTRIBUTE='2403' OR (TB.ATTRIBUTE IN ('2401','2402','2404') AND TA.D_OR_A='D'))
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%01-%01') AND DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+
+
+  <!-- 航班放行率统计 -->
+  <select id="selectFXLDay" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="selectFXLMonth" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%m-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="selectFXLYear" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%01-%01') AND DATE_FORMAT(#{params.execDate,jdbcType=DATE}, '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+
+  <select id="selectFXLDayQn" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO_HISTORY TA LEFT JOIN T_LOCAL_FLIGHT_INFO_HISTORY TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') = DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="selectFXLMonthQn" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO_HISTORY TA LEFT JOIN T_LOCAL_FLIGHT_INFO_HISTORY TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%01') AND DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+
+  <select id="selectFXLYearQn" resultType="String" parameterType="map" >
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO_HISTORY TA LEFT JOIN T_LOCAL_FLIGHT_INFO_HISTORY TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+    AND ((TA.AIRLINES IN ('UW','O3','CF','OZ','Y8'))
+OR
+(TA.AIRLINES NOT IN ('UW','O3','CF','OZ','Y8') AND TA.FLIGHT_TASK  IN ('W/Z','C/B','L/W')) )
+    AND DATE_FORMAT(TA.EXEC_DATE, '%Y-%m-%d') BETWEEN DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%01-%01') AND DATE_FORMAT(DATE_ADD(#{params.execDate,jdbcType=DATE}, INTERVAL -1 YEAR), '%Y-%m-%d')
+    ]]>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND TA.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND TA.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND TA.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND TA.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND TA.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','XX')
+    </if>
+  </select>
+  <!-- 航班正常性统计（新方法） end -->
+  <resultMap id="pdfBaseResultMap" type="com.hq.acdm.vo.effectAnalysis.RunQualityPDFVo" >
+    <result column="execDate" property="execdate" jdbcType="VARCHAR" />
+    <result column="agent" property="agent" jdbcType="VARCHAR" />
+    <result column="yltj0" property="yltj0" jdbcType="VARCHAR" />
+    <result column="yltj1" property="yltj1" jdbcType="VARCHAR" />
+    <result column="yltj2" property="yltj2" jdbcType="VARCHAR" />
+    <result column="yltj3" property="yltj3" jdbcType="VARCHAR" />
+    <result column="yltj4" property="yltj4" jdbcType="VARCHAR" />
+    <result column="yltj5" property="yltj5" jdbcType="VARCHAR" />
+    <result column="yltj6" property="yltj6" jdbcType="VARCHAR" />
+    <result column="yltj7" property="yltj7" jdbcType="VARCHAR" />
+    <result column="yltj8" property="yltj8" jdbcType="VARCHAR" />
+    <result column="yltj9" property="yltj9" jdbcType="VARCHAR" />
+    <result column="yltj10" property="yltj10" jdbcType="VARCHAR" />
+    <result column="yltj11" property="yltj11" jdbcType="VARCHAR" />
+    <result column="yltj12" property="yltj12" jdbcType="VARCHAR" />
+    <result column="yltj13" property="yltj13" jdbcType="VARCHAR" />
+    <result column="hbzcxtj0" property="hbzcxtj0" jdbcType="VARCHAR" />
+    <result column="hbzcxtj1" property="hbzcxtj1" jdbcType="VARCHAR" />
+    <result column="hbzcxtj2" property="hbzcxtj2" jdbcType="VARCHAR" />
+    <result column="hbzcxtj3" property="hbzcxtj3" jdbcType="VARCHAR" />
+    <result column="hbzcxtj4" property="hbzcxtj4" jdbcType="VARCHAR" />
+    <result column="hbzcxtj5" property="hbzcxtj5" jdbcType="VARCHAR" />
+    <result column="hbzcxtj6" property="hbzcxtj6" jdbcType="VARCHAR" />
+    <result column="hbzcxtj7" property="hbzcxtj7" jdbcType="VARCHAR" />
+    <result column="hbzcxtj8" property="hbzcxtj8" jdbcType="VARCHAR" />
+    <result column="hbzcxtj9" property="hbzcxtj9" jdbcType="VARCHAR" />
+    <result column="hbzcxtj10" property="hbzcxtj10" jdbcType="VARCHAR" />
+    <result column="hbzcxtj11" property="hbzcxtj11" jdbcType="VARCHAR" />
+    <result column="hbzcxtj12" property="hbzcxtj12" jdbcType="VARCHAR" />
+    <result column="hbzcxtj13" property="hbzcxtj13" jdbcType="VARCHAR" />
+    <result column="hbzcxtj14" property="hbzcxtj14" jdbcType="VARCHAR" />
+    <result column="hbzcxtj15" property="hbzcxtj15" jdbcType="VARCHAR" />
+    <result column="hbzcxtj16" property="hbzcxtj16" jdbcType="VARCHAR" />
+    <result column="hbzcxtj17" property="hbzcxtj17" jdbcType="VARCHAR" />
+    <result column="hbzcxtj18" property="hbzcxtj18" jdbcType="VARCHAR" />
+    <result column="ywyy0" property="ywyy0" jdbcType="VARCHAR" />
+    <result column="ywyy1" property="ywyy1" jdbcType="VARCHAR" />
+    <result column="ywyy2" property="ywyy2" jdbcType="VARCHAR" />
+    <result column="ywyy3" property="ywyy3" jdbcType="VARCHAR" />
+    <result column="ywyy4" property="ywyy4" jdbcType="VARCHAR" />
+    <result column="ywyy5" property="ywyy5" jdbcType="VARCHAR" />
+    <result column="ywyy6" property="ywyy6" jdbcType="VARCHAR" />
+    <result column="ywyy7" property="ywyy7" jdbcType="VARCHAR" />
+    <result column="ywyy8" property="ywyy8" jdbcType="VARCHAR" />
+    <result column="ywyy9" property="ywyy9" jdbcType="VARCHAR" />
+    <result column="ywyy10" property="ywyy10" jdbcType="VARCHAR" />
+    <result column="ywyy11" property="ywyy11" jdbcType="VARCHAR" />
+    <result column="ywyy12" property="ywyy12" jdbcType="VARCHAR" />
+    <result column="ywyy13" property="ywyy13" jdbcType="VARCHAR" />
+    <result column="jczljg0" property="jczljg0" jdbcType="VARCHAR" />
+    <result column="jczljg1" property="jczljg1" jdbcType="VARCHAR" />
+    <result column="jczljg2" property="jczljg2" jdbcType="VARCHAR" />
+    <result column="jczljg3" property="jczljg3" jdbcType="VARCHAR" />
+    <result column="jczljg4" property="jczljg4" jdbcType="VARCHAR" />
+    <result column="jczljg5" property="jczljg5" jdbcType="VARCHAR" />
+    <result column="jczljg6" property="jczljg6" jdbcType="VARCHAR" />
+    <result column="jczljg7" property="jczljg7" jdbcType="VARCHAR" />
+    <result column="fxzclpm0" property="fxzclpm0" jdbcType="VARCHAR" />
+    <result column="fxzclpm1" property="fxzclpm1" jdbcType="VARCHAR" />
+    <result column="fxzclpm2" property="fxzclpm2" jdbcType="VARCHAR" />
+    <result column="fxzclpm3" property="fxzclpm3" jdbcType="VARCHAR" />
+    <result column="fxzclpm4" property="fxzclpm4" jdbcType="VARCHAR" />
+    <result column="fxzclpm5" property="fxzclpm5" jdbcType="VARCHAR" />
+    <result column="fxzclpm6" property="fxzclpm6" jdbcType="VARCHAR" />
+    <result column="fxzclpm7" property="fxzclpm7" jdbcType="VARCHAR" />
+    <result column="fxzclpm8" property="fxzclpm8" jdbcType="VARCHAR" />
+    <result column="fxzclpm9" property="fxzclpm9" jdbcType="VARCHAR" />
+    <result column="fxzclpm10" property="fxzclpm10" jdbcType="VARCHAR" />
+    <result column="fxzclpm11" property="fxzclpm11" jdbcType="VARCHAR" />
+    <result column="flTips" property="flTips" jdbcType="VARCHAR" />
+    <result column="echartDjhs0" property="echartDjhs0" jdbcType="VARCHAR" />
+    <result column="echartDjhs1" property="echartDjhs1" jdbcType="VARCHAR" />
+    <result column="echartDjhs2" property="echartDjhs2" jdbcType="VARCHAR" />
+    <result column="echartDjhs3" property="echartDjhs3" jdbcType="VARCHAR" />
+    <result column="echartDjhs4" property="echartDjhs4" jdbcType="VARCHAR" />
+    <result column="echartDjhs5" property="echartDjhs5" jdbcType="VARCHAR" />
+    <result column="echartDjhs6" property="echartDjhs6" jdbcType="VARCHAR" />
+    <result column="echartDjhs7" property="echartDjhs7" jdbcType="VARCHAR" />
+    <result column="echartDjhs8" property="echartDjhs8" jdbcType="VARCHAR" />
+    <result column="echartDjhs9" property="echartDjhs9" jdbcType="VARCHAR" />
+    <result column="echartDjhs10" property="echartDjhs10" jdbcType="VARCHAR" />
+    <result column="echartDjhs11" property="echartDjhs11" jdbcType="VARCHAR" />
+    <result column="echartDjhs12" property="echartDjhs12" jdbcType="VARCHAR" />
+    <result column="echartDjhs13" property="echartDjhs13" jdbcType="VARCHAR" />
+    <result column="echartDjhs14" property="echartDjhs14" jdbcType="VARCHAR" />
+    <result column="echartDjhs15" property="echartDjhs15" jdbcType="VARCHAR" />
+    <result column="echartDjhs16" property="echartDjhs16" jdbcType="VARCHAR" />
+    <result column="echartDsjs0" property="echartDsjs0" jdbcType="VARCHAR" />
+    <result column="echartDsjs1" property="echartDsjs1" jdbcType="VARCHAR" />
+    <result column="echartDsjs2" property="echartDsjs2" jdbcType="VARCHAR" />
+    <result column="echartDsjs3" property="echartDsjs3" jdbcType="VARCHAR" />
+    <result column="echartDsjs4" property="echartDsjs4" jdbcType="VARCHAR" />
+    <result column="echartDsjs5" property="echartDsjs5" jdbcType="VARCHAR" />
+    <result column="echartDsjs6" property="echartDsjs6" jdbcType="VARCHAR" />
+    <result column="echartDsjs7" property="echartDsjs7" jdbcType="VARCHAR" />
+    <result column="echartDsjs8" property="echartDsjs8" jdbcType="VARCHAR" />
+    <result column="echartDsjs9" property="echartDsjs9" jdbcType="VARCHAR" />
+    <result column="echartDsjs10" property="echartDsjs10" jdbcType="VARCHAR" />
+    <result column="echartDsjs11" property="echartDsjs11" jdbcType="VARCHAR" />
+    <result column="echartDsjs12" property="echartDsjs12" jdbcType="VARCHAR" />
+    <result column="echartDsjs13" property="echartDsjs13" jdbcType="VARCHAR" />
+    <result column="echartDsjs14" property="echartDsjs14" jdbcType="VARCHAR" />
+    <result column="echartDsjs15" property="echartDsjs15" jdbcType="VARCHAR" />
+    <result column="echartDsjs16" property="echartDsjs16" jdbcType="VARCHAR" />
+    <result column="rmk" property="rmk" jdbcType="VARCHAR" />
+    <result column="rmk2" property="rmk2" jdbcType="VARCHAR" />
+    <result column="rmk3" property="rmk3" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="TIMESTAMP" />
+    <result column="CREATE_USR" property="createUsr" jdbcType="VARCHAR" />
+    <result column="UPDATE_USR" property="updateUsr" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    execDate, agent, yltj0, yltj1, yltj2, yltj3, yltj4, yltj5, yltj6, yltj7, yltj8, yltj9,
+    yltj10, yltj11, yltj12, yltj13, hbzcxtj0, hbzcxtj1, hbzcxtj2, hbzcxtj3, hbzcxtj4,
+    hbzcxtj5, hbzcxtj6, hbzcxtj7, hbzcxtj8, hbzcxtj9, hbzcxtj10, hbzcxtj11, hbzcxtj12,
+    hbzcxtj13, hbzcxtj14, hbzcxtj15, hbzcxtj16, hbzcxtj17, hbzcxtj18, ywyy0, ywyy1, ywyy2,
+    ywyy3, ywyy4, ywyy5, ywyy6, ywyy7, ywyy8, ywyy9, ywyy10, ywyy11, ywyy12, ywyy13,
+    jczljg0, jczljg1, jczljg2, jczljg3, jczljg4, jczljg5, jczljg6, jczljg7, fxzclpm0,
+    fxzclpm1, fxzclpm2, fxzclpm3, fxzclpm4, fxzclpm5, fxzclpm6, fxzclpm7, fxzclpm8, fxzclpm9,
+    fxzclpm10, fxzclpm11, flTips, echartDjhs0, echartDjhs1, echartDjhs2, echartDjhs3,
+    echartDjhs4, echartDjhs5, echartDjhs6, echartDjhs7, echartDjhs8, echartDjhs9, echartDjhs10,
+    echartDjhs11, echartDjhs12, echartDjhs13, echartDjhs14, echartDjhs15, echartDjhs16,
+    echartDsjs0, echartDsjs1, echartDsjs2, echartDsjs3, echartDsjs4, echartDsjs5, echartDsjs6,
+    echartDsjs7, echartDsjs8, echartDsjs9, echartDsjs10, echartDsjs11, echartDsjs12,
+    echartDsjs13, echartDsjs14, echartDsjs15, echartDsjs16, rmk, rmk2, rmk3, CREATE_TM,
+    UPDATE_TM, CREATE_USR, UPDATE_USR
+  </sql>
+  <select id="selectByPDFPrimaryKey" resultMap="pdfBaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from T_RUNQUALITY_PDF
+    where execDate = #{execdate,jdbcType=VARCHAR}
+    and agent = #{agent,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByPDFLately" resultMap="pdfBaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from T_RUNQUALITY_PDF
+    <![CDATA[
+    WHERE flTips <>'' ORDER BY execDate DESC LIMIT 1
+    ]]>
+  </select>
+
+  <insert id="insertPDF" parameterType="com.hq.acdm.vo.effectAnalysis.RunQualityPDFVo" >
+    insert into T_RUNQUALITY_PDF (execDate, agent, yltj0,
+      yltj1, yltj2, yltj3,
+      yltj4, yltj5, yltj6,
+      yltj7, yltj8, yltj9,
+      yltj10, yltj11, yltj12,
+      yltj13, hbzcxtj0, hbzcxtj1,
+      hbzcxtj2, hbzcxtj3, hbzcxtj4,
+      hbzcxtj5, hbzcxtj6, hbzcxtj7,
+      hbzcxtj8, hbzcxtj9, hbzcxtj10,
+      hbzcxtj11, hbzcxtj12, hbzcxtj13,
+      hbzcxtj14, hbzcxtj15, hbzcxtj16,
+      hbzcxtj17, hbzcxtj18, ywyy0,
+      ywyy1, ywyy2, ywyy3,
+      ywyy4, ywyy5, ywyy6,
+      ywyy7, ywyy8, ywyy9,
+      ywyy10, ywyy11, ywyy12,
+      ywyy13, jczljg0, jczljg1,
+      jczljg2, jczljg3, jczljg4,
+      jczljg5, jczljg6, jczljg7,
+      fxzclpm0, fxzclpm1, fxzclpm2,
+      fxzclpm3, fxzclpm4, fxzclpm5,
+      fxzclpm6, fxzclpm7, fxzclpm8,
+      fxzclpm9, fxzclpm10, fxzclpm11,
+      flTips, echartDjhs0, echartDjhs1,
+      echartDjhs2, echartDjhs3, echartDjhs4,
+      echartDjhs5, echartDjhs6, echartDjhs7,
+      echartDjhs8, echartDjhs9, echartDjhs10,
+      echartDjhs11, echartDjhs12, echartDjhs13,
+      echartDjhs14, echartDjhs15, echartDjhs16,
+      echartDsjs0, echartDsjs1, echartDsjs2,
+      echartDsjs3, echartDsjs4, echartDsjs5,
+      echartDsjs6, echartDsjs7, echartDsjs8,
+      echartDsjs9, echartDsjs10, echartDsjs11,
+      echartDsjs12, echartDsjs13, echartDsjs14,
+      echartDsjs15, echartDsjs16, rmk,
+      rmk2, rmk3, CREATE_TM,
+      UPDATE_TM, CREATE_USR, UPDATE_USR
+      )
+    values (#{execdate,jdbcType=VARCHAR}, #{agent,jdbcType=VARCHAR}, #{yltj0,jdbcType=VARCHAR},
+      #{yltj1,jdbcType=VARCHAR}, #{yltj2,jdbcType=VARCHAR}, #{yltj3,jdbcType=VARCHAR},
+      #{yltj4,jdbcType=VARCHAR}, #{yltj5,jdbcType=VARCHAR}, #{yltj6,jdbcType=VARCHAR},
+      #{yltj7,jdbcType=VARCHAR}, #{yltj8,jdbcType=VARCHAR}, #{yltj9,jdbcType=VARCHAR},
+      #{yltj10,jdbcType=VARCHAR}, #{yltj11,jdbcType=VARCHAR}, #{yltj12,jdbcType=VARCHAR},
+      #{yltj13,jdbcType=VARCHAR}, #{hbzcxtj0,jdbcType=VARCHAR}, #{hbzcxtj1,jdbcType=VARCHAR},
+      #{hbzcxtj2,jdbcType=VARCHAR}, #{hbzcxtj3,jdbcType=VARCHAR}, #{hbzcxtj4,jdbcType=VARCHAR},
+      #{hbzcxtj5,jdbcType=VARCHAR}, #{hbzcxtj6,jdbcType=VARCHAR}, #{hbzcxtj7,jdbcType=VARCHAR},
+      #{hbzcxtj8,jdbcType=VARCHAR}, #{hbzcxtj9,jdbcType=VARCHAR}, #{hbzcxtj10,jdbcType=VARCHAR},
+      #{hbzcxtj11,jdbcType=VARCHAR}, #{hbzcxtj12,jdbcType=VARCHAR}, #{hbzcxtj13,jdbcType=VARCHAR},
+      #{hbzcxtj14,jdbcType=VARCHAR}, #{hbzcxtj15,jdbcType=VARCHAR}, #{hbzcxtj16,jdbcType=VARCHAR},
+      #{hbzcxtj17,jdbcType=VARCHAR}, #{hbzcxtj18,jdbcType=VARCHAR}, #{ywyy0,jdbcType=VARCHAR},
+      #{ywyy1,jdbcType=VARCHAR}, #{ywyy2,jdbcType=VARCHAR}, #{ywyy3,jdbcType=VARCHAR},
+      #{ywyy4,jdbcType=VARCHAR}, #{ywyy5,jdbcType=VARCHAR}, #{ywyy6,jdbcType=VARCHAR},
+      #{ywyy7,jdbcType=VARCHAR}, #{ywyy8,jdbcType=VARCHAR}, #{ywyy9,jdbcType=VARCHAR},
+      #{ywyy10,jdbcType=VARCHAR}, #{ywyy11,jdbcType=VARCHAR}, #{ywyy12,jdbcType=VARCHAR},
+      #{ywyy13,jdbcType=VARCHAR}, #{jczljg0,jdbcType=VARCHAR}, #{jczljg1,jdbcType=VARCHAR},
+      #{jczljg2,jdbcType=VARCHAR}, #{jczljg3,jdbcType=VARCHAR}, #{jczljg4,jdbcType=VARCHAR},
+      #{jczljg5,jdbcType=VARCHAR}, #{jczljg6,jdbcType=VARCHAR}, #{jczljg7,jdbcType=VARCHAR},
+      #{fxzclpm0,jdbcType=VARCHAR}, #{fxzclpm1,jdbcType=VARCHAR}, #{fxzclpm2,jdbcType=VARCHAR},
+      #{fxzclpm3,jdbcType=VARCHAR}, #{fxzclpm4,jdbcType=VARCHAR}, #{fxzclpm5,jdbcType=VARCHAR},
+      #{fxzclpm6,jdbcType=VARCHAR}, #{fxzclpm7,jdbcType=VARCHAR}, #{fxzclpm8,jdbcType=VARCHAR},
+      #{fxzclpm9,jdbcType=VARCHAR}, #{fxzclpm10,jdbcType=VARCHAR}, #{fxzclpm11,jdbcType=VARCHAR},
+      #{flTips,jdbcType=VARCHAR}, #{echartDjhs0,jdbcType=VARCHAR}, #{echartDjhs1,jdbcType=VARCHAR},
+      #{echartDjhs2,jdbcType=VARCHAR}, #{echartDjhs3,jdbcType=VARCHAR}, #{echartDjhs4,jdbcType=VARCHAR},
+      #{echartDjhs5,jdbcType=VARCHAR}, #{echartDjhs6,jdbcType=VARCHAR}, #{echartDjhs7,jdbcType=VARCHAR},
+      #{echartDjhs8,jdbcType=VARCHAR}, #{echartDjhs9,jdbcType=VARCHAR}, #{echartDjhs10,jdbcType=VARCHAR},
+      #{echartDjhs11,jdbcType=VARCHAR}, #{echartDjhs12,jdbcType=VARCHAR}, #{echartDjhs13,jdbcType=VARCHAR},
+      #{echartDjhs14,jdbcType=VARCHAR}, #{echartDjhs15,jdbcType=VARCHAR}, #{echartDjhs16,jdbcType=VARCHAR},
+      #{echartDsjs0,jdbcType=VARCHAR}, #{echartDsjs1,jdbcType=VARCHAR}, #{echartDsjs2,jdbcType=VARCHAR},
+      #{echartDsjs3,jdbcType=VARCHAR}, #{echartDsjs4,jdbcType=VARCHAR}, #{echartDsjs5,jdbcType=VARCHAR},
+      #{echartDsjs6,jdbcType=VARCHAR}, #{echartDsjs7,jdbcType=VARCHAR}, #{echartDsjs8,jdbcType=VARCHAR},
+      #{echartDsjs9,jdbcType=VARCHAR}, #{echartDsjs10,jdbcType=VARCHAR}, #{echartDsjs11,jdbcType=VARCHAR},
+      #{echartDsjs12,jdbcType=VARCHAR}, #{echartDsjs13,jdbcType=VARCHAR}, #{echartDsjs14,jdbcType=VARCHAR},
+      #{echartDsjs15,jdbcType=VARCHAR}, #{echartDsjs16,jdbcType=VARCHAR}, #{rmk,jdbcType=VARCHAR},
+      #{rmk2,jdbcType=VARCHAR}, #{rmk3,jdbcType=VARCHAR}, #{createTm,jdbcType=TIMESTAMP},
+      #{updateTm,jdbcType=TIMESTAMP}, #{createUsr,jdbcType=VARCHAR}, #{updateUsr,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <update id="updateByPDFPrimaryKey" parameterType="com.hq.acdm.vo.effectAnalysis.RunQualityPDFVo" >
+    update T_RUNQUALITY_PDF
+    set yltj0 = #{yltj0,jdbcType=VARCHAR},
+      yltj1 = #{yltj1,jdbcType=VARCHAR},
+      yltj2 = #{yltj2,jdbcType=VARCHAR},
+      yltj3 = #{yltj3,jdbcType=VARCHAR},
+      yltj4 = #{yltj4,jdbcType=VARCHAR},
+      yltj5 = #{yltj5,jdbcType=VARCHAR},
+      yltj6 = #{yltj6,jdbcType=VARCHAR},
+      yltj7 = #{yltj7,jdbcType=VARCHAR},
+      yltj8 = #{yltj8,jdbcType=VARCHAR},
+      yltj9 = #{yltj9,jdbcType=VARCHAR},
+      yltj10 = #{yltj10,jdbcType=VARCHAR},
+      yltj11 = #{yltj11,jdbcType=VARCHAR},
+      yltj12 = #{yltj12,jdbcType=VARCHAR},
+      yltj13 = #{yltj13,jdbcType=VARCHAR},
+      hbzcxtj0 = #{hbzcxtj0,jdbcType=VARCHAR},
+      hbzcxtj1 = #{hbzcxtj1,jdbcType=VARCHAR},
+      hbzcxtj2 = #{hbzcxtj2,jdbcType=VARCHAR},
+      hbzcxtj3 = #{hbzcxtj3,jdbcType=VARCHAR},
+      hbzcxtj4 = #{hbzcxtj4,jdbcType=VARCHAR},
+      hbzcxtj5 = #{hbzcxtj5,jdbcType=VARCHAR},
+      hbzcxtj6 = #{hbzcxtj6,jdbcType=VARCHAR},
+      hbzcxtj7 = #{hbzcxtj7,jdbcType=VARCHAR},
+      hbzcxtj8 = #{hbzcxtj8,jdbcType=VARCHAR},
+      hbzcxtj9 = #{hbzcxtj9,jdbcType=VARCHAR},
+      hbzcxtj10 = #{hbzcxtj10,jdbcType=VARCHAR},
+      hbzcxtj11 = #{hbzcxtj11,jdbcType=VARCHAR},
+      hbzcxtj12 = #{hbzcxtj12,jdbcType=VARCHAR},
+      hbzcxtj13 = #{hbzcxtj13,jdbcType=VARCHAR},
+      hbzcxtj14 = #{hbzcxtj14,jdbcType=VARCHAR},
+      hbzcxtj15 = #{hbzcxtj15,jdbcType=VARCHAR},
+      hbzcxtj16 = #{hbzcxtj16,jdbcType=VARCHAR},
+      hbzcxtj17 = #{hbzcxtj17,jdbcType=VARCHAR},
+      hbzcxtj18 = #{hbzcxtj18,jdbcType=VARCHAR},
+      ywyy0 = #{ywyy0,jdbcType=VARCHAR},
+      ywyy1 = #{ywyy1,jdbcType=VARCHAR},
+      ywyy2 = #{ywyy2,jdbcType=VARCHAR},
+      ywyy3 = #{ywyy3,jdbcType=VARCHAR},
+      ywyy4 = #{ywyy4,jdbcType=VARCHAR},
+      ywyy5 = #{ywyy5,jdbcType=VARCHAR},
+      ywyy6 = #{ywyy6,jdbcType=VARCHAR},
+      ywyy7 = #{ywyy7,jdbcType=VARCHAR},
+      ywyy8 = #{ywyy8,jdbcType=VARCHAR},
+      ywyy9 = #{ywyy9,jdbcType=VARCHAR},
+      ywyy10 = #{ywyy10,jdbcType=VARCHAR},
+      ywyy11 = #{ywyy11,jdbcType=VARCHAR},
+      ywyy12 = #{ywyy12,jdbcType=VARCHAR},
+      ywyy13 = #{ywyy13,jdbcType=VARCHAR},
+      jczljg0 = #{jczljg0,jdbcType=VARCHAR},
+      jczljg1 = #{jczljg1,jdbcType=VARCHAR},
+      jczljg2 = #{jczljg2,jdbcType=VARCHAR},
+      jczljg3 = #{jczljg3,jdbcType=VARCHAR},
+      jczljg4 = #{jczljg4,jdbcType=VARCHAR},
+      jczljg5 = #{jczljg5,jdbcType=VARCHAR},
+      jczljg6 = #{jczljg6,jdbcType=VARCHAR},
+      jczljg7 = #{jczljg7,jdbcType=VARCHAR},
+      fxzclpm0 = #{fxzclpm0,jdbcType=VARCHAR},
+      fxzclpm1 = #{fxzclpm1,jdbcType=VARCHAR},
+      fxzclpm2 = #{fxzclpm2,jdbcType=VARCHAR},
+      fxzclpm3 = #{fxzclpm3,jdbcType=VARCHAR},
+      fxzclpm4 = #{fxzclpm4,jdbcType=VARCHAR},
+      fxzclpm5 = #{fxzclpm5,jdbcType=VARCHAR},
+      fxzclpm6 = #{fxzclpm6,jdbcType=VARCHAR},
+      fxzclpm7 = #{fxzclpm7,jdbcType=VARCHAR},
+      fxzclpm8 = #{fxzclpm8,jdbcType=VARCHAR},
+      fxzclpm9 = #{fxzclpm9,jdbcType=VARCHAR},
+      fxzclpm10 = #{fxzclpm10,jdbcType=VARCHAR},
+      fxzclpm11 = #{fxzclpm11,jdbcType=VARCHAR},
+      flTips = #{flTips,jdbcType=VARCHAR},
+      echartDjhs0 = #{echartDjhs0,jdbcType=VARCHAR},
+      echartDjhs1 = #{echartDjhs1,jdbcType=VARCHAR},
+      echartDjhs2 = #{echartDjhs2,jdbcType=VARCHAR},
+      echartDjhs3 = #{echartDjhs3,jdbcType=VARCHAR},
+      echartDjhs4 = #{echartDjhs4,jdbcType=VARCHAR},
+      echartDjhs5 = #{echartDjhs5,jdbcType=VARCHAR},
+      echartDjhs6 = #{echartDjhs6,jdbcType=VARCHAR},
+      echartDjhs7 = #{echartDjhs7,jdbcType=VARCHAR},
+      echartDjhs8 = #{echartDjhs8,jdbcType=VARCHAR},
+      echartDjhs9 = #{echartDjhs9,jdbcType=VARCHAR},
+      echartDjhs10 = #{echartDjhs10,jdbcType=VARCHAR},
+      echartDjhs11 = #{echartDjhs11,jdbcType=VARCHAR},
+      echartDjhs12 = #{echartDjhs12,jdbcType=VARCHAR},
+      echartDjhs13 = #{echartDjhs13,jdbcType=VARCHAR},
+      echartDjhs14 = #{echartDjhs14,jdbcType=VARCHAR},
+      echartDjhs15 = #{echartDjhs15,jdbcType=VARCHAR},
+      echartDjhs16 = #{echartDjhs16,jdbcType=VARCHAR},
+      echartDsjs0 = #{echartDsjs0,jdbcType=VARCHAR},
+      echartDsjs1 = #{echartDsjs1,jdbcType=VARCHAR},
+      echartDsjs2 = #{echartDsjs2,jdbcType=VARCHAR},
+      echartDsjs3 = #{echartDsjs3,jdbcType=VARCHAR},
+      echartDsjs4 = #{echartDsjs4,jdbcType=VARCHAR},
+      echartDsjs5 = #{echartDsjs5,jdbcType=VARCHAR},
+      echartDsjs6 = #{echartDsjs6,jdbcType=VARCHAR},
+      echartDsjs7 = #{echartDsjs7,jdbcType=VARCHAR},
+      echartDsjs8 = #{echartDsjs8,jdbcType=VARCHAR},
+      echartDsjs9 = #{echartDsjs9,jdbcType=VARCHAR},
+      echartDsjs10 = #{echartDsjs10,jdbcType=VARCHAR},
+      echartDsjs11 = #{echartDsjs11,jdbcType=VARCHAR},
+      echartDsjs12 = #{echartDsjs12,jdbcType=VARCHAR},
+      echartDsjs13 = #{echartDsjs13,jdbcType=VARCHAR},
+      echartDsjs14 = #{echartDsjs14,jdbcType=VARCHAR},
+      echartDsjs15 = #{echartDsjs15,jdbcType=VARCHAR},
+      echartDsjs16 = #{echartDsjs16,jdbcType=VARCHAR},
+      rmk = #{rmk,jdbcType=VARCHAR},
+      rmk2 = #{rmk2,jdbcType=VARCHAR},
+      rmk3 = #{rmk3,jdbcType=VARCHAR},
+
+      UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+
+      UPDATE_USR = #{updateUsr,jdbcType=VARCHAR}
+    where execDate = #{execdate,jdbcType=VARCHAR}
+      and agent = #{agent,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectZclFxlMonthQn" resultType="com.hq.acdm.vo.effectAnalysis.PaiMingDYGVo" parameterType="map" >
+    <![CDATA[
+    SELECT DD.EXEC_DATE execdate,
+    SUM(CASE WHEN DD.AIRLINES='MU' THEN 1 ELSE 0 END) MUB3,
+    SUM(CASE WHEN DD.AIRLINES='FM' THEN 1 ELSE 0 END) FMC3,
+    SUM(CASE WHEN DD.AIRLINES='MU' AND DD.ATOT<=DATE_ADD(DD.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END) MUE3,
+    SUM(CASE WHEN DD.AIRLINES='FM' AND DD.ATOT<=DATE_ADD(DD.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END) FMF3,
+    SUM(CASE WHEN DD.AIRLINES='MU' AND CAST(DD.DELAY_TIME as signed)-CAST(IFNULL(DD.DELAY_TIMEA,0) as signed)<1 THEN 1 ELSE 0 END) MUN3,
+    SUM(CASE WHEN DD.AIRLINES='FM' AND CAST(DD.DELAY_TIME as signed)-CAST(IFNULL(DD.DELAY_TIMEA,0) as signed)<1 THEN 1 ELSE 0 END) FMO3,
+
+    SUM(CASE WHEN DD.AIRLINES='CZ' THEN 1 ELSE 0 END) CZB3,
+    SUM(CASE WHEN DD.AIRLINES='OQ' THEN 1 ELSE 0 END) OQC3,
+    SUM(CASE WHEN DD.AIRLINES='CZ' AND DD.ATOT<=DATE_ADD(DD.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END) CZE3,
+    SUM(CASE WHEN DD.AIRLINES='OQ' AND DD.ATOT<=DATE_ADD(DD.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END) OQF3,
+    SUM(CASE WHEN DD.AIRLINES='CZ' AND CAST(DD.DELAY_TIME as signed)-CAST(IFNULL(DD.DELAY_TIMEA,0) as signed)<1 THEN 1 ELSE 0 END) CZN3,
+    SUM(CASE WHEN DD.AIRLINES='OQ' AND CAST(DD.DELAY_TIME as signed)-CAST(IFNULL(DD.DELAY_TIMEA,0) as signed)<1 THEN 1 ELSE 0 END) OQO3,
+
+    SUM(CASE WHEN DD.AIRLINES='CA' THEN 1 ELSE 0 END) CAB3,
+    SUM(CASE WHEN DD.AIRLINES='ZH' THEN 1 ELSE 0 END) ZHC3,
+    SUM(CASE WHEN DD.AIRLINES='CA' AND DD.ATOT<=DATE_ADD(DD.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END) CAE3,
+    SUM(CASE WHEN DD.AIRLINES='ZH' AND DD.ATOT<=DATE_ADD(DD.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END) ZHF3,
+    SUM(CASE WHEN DD.AIRLINES='CA' AND CAST(DD.DELAY_TIME as signed)-CAST(IFNULL(DD.DELAY_TIMEA,0) as signed)<1 THEN 1 ELSE 0 END) CAN3,
+    SUM(CASE WHEN DD.AIRLINES='ZH' AND CAST(DD.DELAY_TIME as signed)-CAST(IFNULL(DD.DELAY_TIMEA,0) as signed)<1 THEN 1 ELSE 0 END) ZHO3,
+
+    COUNT(1) DFB3,
+
+    SUM(CASE WHEN  DD.ATOT<=DATE_ADD(DD.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END) DFE3,
+
+    SUM(CASE WHEN  CAST(DD.DELAY_TIME as signed)-CAST(IFNULL(DD.DELAY_TIMEA,0) as signed)<1 THEN 1 ELSE 0 END) DFN3
+    from   ]]>
+    (
+    SELECT TA.EXEC_DATE,TA.AIRLINES,TA.ATOT,TA.SOBT,TA.DELAY_TIME,TB.DELAY_TIME DELAY_TIMEA
+    FROM (SELECT * FROM T_LOCAL_FLIGHT_INFO WHERE <![CDATA[ ISDEL <> '1' AND ABNORMAL_FLIGHT_STAT_CD<>'CAN' ]]>
+    AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND EXEC_DATE BETWEEN #{params.execDate,jdbcType=VARCHAR} AND DATE_ADD(DATE_ADD(#{params.execDate,jdbcType=VARCHAR}, INTERVAL 1 MONTH), INTERVAL -1 DAY)
+    AND FLIGHT_TASK IN ('W/Z','C/B','L/W')
+    AND AIRLINES NOT IN ('UW','O3','CF','OZ','Y8','GI','XX')
+    UNION
+    SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE <![CDATA[ ISDEL <> '1' AND ABNORMAL_FLIGHT_STAT_CD<>'CAN' ]]>
+    AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND EXEC_DATE BETWEEN #{params.execDate,jdbcType=VARCHAR} AND DATE_ADD(DATE_ADD(#{params.execDate,jdbcType=VARCHAR}, INTERVAL 1 MONTH), INTERVAL -1 DAY)
+    AND FLIGHT_TASK IN ('W/Z','C/B','L/W')
+    AND AIRLINES NOT IN ('UW','O3','CF','OZ','Y8','GI','XX')
+    ) TA
+    LEFT JOIN (SELECT * FROM T_LOCAL_FLIGHT_INFO WHERE <![CDATA[ ISDEL <> '1' AND ABNORMAL_FLIGHT_STAT_CD<>'CAN' ]]>
+    AND D_OR_A = 'A' AND ALDT IS NOT NULL
+    AND EXEC_DATE BETWEEN DATE_SUB(#{params.execDate,jdbcType=VARCHAR},INTERVAL 1 DAY)
+    AND DATE_ADD(DATE_ADD(#{params.execDate,jdbcType=VARCHAR}, INTERVAL 1 MONTH), INTERVAL -1 DAY)
+    AND FLIGHT_TASK IN ('W/Z','C/B','L/W')
+    AND AIRLINES NOT IN ('UW','O3','CF','OZ','Y8','GI','XX')
+    UNION
+    SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE <![CDATA[ ISDEL <> '1' AND ABNORMAL_FLIGHT_STAT_CD<>'CAN' ]]>
+    AND D_OR_A = 'A' AND ALDT IS NOT NULL
+    AND EXEC_DATE BETWEEN DATE_SUB(#{params.execDate,jdbcType=VARCHAR},INTERVAL 1 DAY)
+    AND DATE_ADD(DATE_ADD(#{params.execDate,jdbcType=VARCHAR}, INTERVAL 1 MONTH), INTERVAL -1 DAY)
+    AND FLIGHT_TASK IN ('W/Z','C/B','L/W')
+    AND AIRLINES NOT IN ('UW','O3','CF','OZ','Y8','GI','XX')
+    ) TB
+    ON TA.ASSOCIATED_FLIGHT_ID = TB.FLIGHT_ID  ORDER BY TA.EXEC_DATE  LIMIT 100000
+    )DD GROUP BY EXEC_DATE
+  </select>
+
+  <insert id="insertZclFxlJqMonthQn" parameterType="com.hq.acdm.vo.effectAnalysis.PaiMingQTVo" >
+    insert into T_RUNQUALITY_RANKING (execDate,agent,
+      qf_j1, qf_j2, qf_j3,
+      qf_z1, qf_z2, qf_z3,
+      qf_b1, qf_b2, qf_b3,
+      fx_j1, fx_j2, fx_j3,
+      fx_z1, fx_z2, fx_z3,
+      fx_b1, fx_b2, fx_b3,
+      jq1, jq2, jq3,CREATE_USR,CREATE_TM
+      )
+    values (#{date,jdbcType=VARCHAR},#{agent,jdbcType=VARCHAR},
+      #{qf_j1,jdbcType=INTEGER},#{qf_j2,jdbcType=INTEGER},#{qf_j3,jdbcType=INTEGER},
+      #{qf_z1,jdbcType=INTEGER},#{qf_z2,jdbcType=INTEGER},#{qf_z3,jdbcType=INTEGER},
+      #{qf_b1,jdbcType=VARCHAR},#{qf_b2,jdbcType=VARCHAR},#{qf_b3,jdbcType=VARCHAR},
+      #{fx_j1,jdbcType=INTEGER},#{fx_j2,jdbcType=INTEGER},#{fx_j3,jdbcType=INTEGER},
+      #{fx_z1,jdbcType=INTEGER},#{fx_z2,jdbcType=INTEGER},#{fx_z3,jdbcType=INTEGER},
+      #{fx_b1,jdbcType=VARCHAR},#{fx_b2,jdbcType=VARCHAR},#{fx_b3,jdbcType=VARCHAR},
+      #{jq1,jdbcType=VARCHAR},#{jq2,jdbcType=VARCHAR},#{jq3,jdbcType=VARCHAR},#{createUsr,jdbcType=VARCHAR},NOW()
+      )
+  </insert>
+
+  <update id="updateByZclFxlJqMonthQn" parameterType="com.hq.acdm.vo.effectAnalysis.PaiMingQTVo" >
+    update T_RUNQUALITY_RANKING
+    set qf_j1 = #{qf_j1,jdbcType=INTEGER},
+      qf_j2 = #{qf_j2,jdbcType=INTEGER},
+      qf_j3 = #{qf_j3,jdbcType=INTEGER},
+      qf_z1 = #{qf_z1,jdbcType=INTEGER},
+      qf_z2 = #{qf_z2,jdbcType=INTEGER},
+      qf_z3 = #{qf_z3,jdbcType=INTEGER},
+      qf_b1 = #{qf_b1,jdbcType=VARCHAR},
+      qf_b2 = #{qf_b2,jdbcType=VARCHAR},
+      qf_b3 = #{qf_b3,jdbcType=VARCHAR},
+      fx_j1 = #{fx_j1,jdbcType=INTEGER},
+      fx_j2 = #{fx_j2,jdbcType=INTEGER},
+      fx_j3 = #{fx_j3,jdbcType=INTEGER},
+      fx_z1 = #{fx_z1,jdbcType=INTEGER},
+      fx_z2 = #{fx_z2,jdbcType=INTEGER},
+      fx_z3 = #{fx_z3,jdbcType=INTEGER},
+      fx_b1 = #{fx_b1,jdbcType=VARCHAR},
+      fx_b2 = #{fx_b2,jdbcType=VARCHAR},
+      fx_b3 = #{fx_b3,jdbcType=VARCHAR},
+      jq1 = #{jq1,jdbcType=VARCHAR},
+      jq2 = #{jq2,jdbcType=VARCHAR},
+      jq3 = #{jq3,jdbcType=VARCHAR},
+      UPDATE_USR = #{updateUsr,jdbcType=VARCHAR},
+      UPDATE_TM = NOW()
+
+    where execDate = #{date,jdbcType=VARCHAR}
+      and agent = #{agent,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectZclFxlRANKING" resultType="com.hq.acdm.vo.effectAnalysis.PaiMingQTVo" parameterType="map" >
+    SELECT execDate AS `date`,agent,
+      qf_j1, qf_j2, qf_j3,
+      qf_z1, qf_z2, qf_z3,
+      qf_b1, qf_b2, qf_b3,
+      fx_j1, fx_j2, fx_j3,
+      fx_z1, fx_z2, fx_z3,
+      fx_b1, fx_b2, fx_b3,
+      jq1, jq2, jq3 FROM T_RUNQUALITY_RANKING WHERE execDate BETWEEN DATE_SUB(#{params.execDate,jdbcType=VARCHAR},INTERVAL 1 DAY)
+    AND DATE_ADD(DATE_ADD(#{params.execDate,jdbcType=VARCHAR}, INTERVAL 1 MONTH), INTERVAL -1 DAY)  ORDER BY execDate
+
+  </select>
+
+  <select id="selectZclFxlRANKINGByDay" resultType="com.hq.acdm.vo.effectAnalysis.PaiMingQTVo" parameterType="map" >
+    SELECT execDate AS `date`,agent,
+      qf_j1, qf_j2, qf_j3,
+      qf_z1, qf_z2, qf_z3,
+      qf_b1, qf_b2, qf_b3,
+      fx_j1, fx_j2, fx_j3,
+      fx_z1, fx_z2, fx_z3,
+      fx_b1, fx_b2, fx_b3,
+      jq1, jq2, jq3 FROM T_RUNQUALITY_RANKING WHERE execDate=#{params.execDate2,jdbcType=VARCHAR}
+      OR execDate=DATE_FORMAT(#{params.execDate,jdbcType=DATE},'%Y-%m-%01') OR
+      execDate= DATE_FORMAT(DATE_ADD(#{params.execDate2,jdbcType=VARCHAR}, INTERVAL -1 YEAR), '%Y-%m-%d') OR
+      execDate= DATE_FORMAT(DATE_ADD(#{params.execDate2,jdbcType=VARCHAR}, INTERVAL -1 YEAR), '%Y-%m-%01')
+      ORDER BY execDate
+
+  </select>
+</mapper>

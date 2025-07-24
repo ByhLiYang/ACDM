@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.supervision.VAordcount1hourMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.supervision.managermonitor.VAordcount1hour" >
+    <result column="DCOUNTTHISH" property="dcountthish" jdbcType="DECIMAL" />
+    <result column="ACOUNTTHISH" property="acountthish" jdbcType="DECIMAL" />
+    <result column="DCOUNTNEXTH" property="dcountnexth" jdbcType="DECIMAL" />
+    <result column="ACOUNTNEXTH" property="acountnexth" jdbcType="DECIMAL" />
+    <result column="DCOUNT" property="dcount" jdbcType="DECIMAL" />
+    <result column="ACOUNT" property="acount" jdbcType="DECIMAL" />
+  </resultMap>
+  <insert id="insert" parameterType="com.hq.acdm.model.supervision.managermonitor.VAordcount1hour" >
+    insert into V_AORDCOUNT_1HOUR (DCOUNTTHISH, ACOUNTTHISH, DCOUNTNEXTH, 
+      ACOUNTNEXTH, DCOUNT, ACOUNT
+      )
+    values (#{dcountthish,jdbcType=DECIMAL}, #{acountthish,jdbcType=DECIMAL}, #{dcountnexth,jdbcType=DECIMAL}, 
+      #{acountnexth,jdbcType=DECIMAL}, #{dcount,jdbcType=DECIMAL}, #{acount,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.supervision.managermonitor.VAordcount1hour" >
+    insert into V_AORDCOUNT_1HOUR
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dcountthish != null" >
+        DCOUNTTHISH,
+      </if>
+      <if test="acountthish != null" >
+        ACOUNTTHISH,
+      </if>
+      <if test="dcountnexth != null" >
+        DCOUNTNEXTH,
+      </if>
+      <if test="acountnexth != null" >
+        ACOUNTNEXTH,
+      </if>
+      <if test="dcount != null" >
+        DCOUNT,
+      </if>
+      <if test="acount != null" >
+        ACOUNT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dcountthish != null" >
+        #{dcountthish,jdbcType=DECIMAL},
+      </if>
+      <if test="acountthish != null" >
+        #{acountthish,jdbcType=DECIMAL},
+      </if>
+      <if test="dcountnexth != null" >
+        #{dcountnexth,jdbcType=DECIMAL},
+      </if>
+      <if test="acountnexth != null" >
+        #{acountnexth,jdbcType=DECIMAL},
+      </if>
+      <if test="dcount != null" >
+        #{dcount,jdbcType=DECIMAL},
+      </if>
+      <if test="acount != null" >
+        #{acount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="get" resultMap="BaseResultMap">
+    select * from V_AORDCOUNT_1HOUR
+  </select>
+
+  <select id="getLastFlightNum_D" resultType="java.lang.Integer">
+    <![CDATA[
+      SELECT
+      COUNT(*) DCOUNTTHISH
+      FROM
+      (
+      SELECT
+      AA.FLIGHT_NO_IATA,
+      AA.ATOT
+      FROM
+      DAILY_FLIGHT_MASTER AA
+      INNER JOIN
+      DAILY_FLIGHT_ADD_DETAILS BB
+      ON
+      AA.FLIGHT_NO_IATA=BB.FLIGHT_NO_IATA AND
+      to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(BB.OPERATIONAL_DATE,'YYYY-MM-DD') AND
+      AA.A_OR_D=BB.A_OR_D AND
+      AA.FLIGHT_REPEAT_COUNT=BB.FLIGHT_REPEAT_COUNT
+      WHERE
+      (to_char(AA.ATOT,'YYYY-MM-DD HH24:MI:SS') BETWEEN (to_char(CURRENT_TIMESTAMP,'YYYY-MM-DD')||' '||to_char((CURRENT_TIMESTAMP-1/24),'hh24')||':00:00') AND
+      (to_char(CURRENT_TIMESTAMP,'YYYY-MM-DD')||' '||to_char(CURRENT_TIMESTAMP,'hh24')||':00:00')
+      ) AND
+      AA.A_OR_D='D' AND
+      nvl(BB.CODE_SHARE_STATUS,' ')<>'SF' AND
+      nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+      BB.FLIGHT_CLASS_CODE IN ('L/W',
+      'W/Z',
+      'C/B')
+      )
+    ]]>
+  </select>
+
+  <select id="getLastFlightNum_A" resultType="java.lang.Integer">
+    <![CDATA[
+      SELECT
+          COUNT(*) ACOUNTTHISH
+      FROM
+          (
+      SELECT
+          AA.FLIGHT_NO_IATA,
+          AA.ALDT
+      FROM
+          DAILY_FLIGHT_MASTER AA
+              INNER JOIN
+              DAILY_FLIGHT_ADD_DETAILS BB
+              ON
+              AA.FLIGHT_NO_IATA=BB.FLIGHT_NO_IATA AND
+          to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(BB.OPERATIONAL_DATE,'YYYY-MM-DD') AND
+          AA.A_OR_D=BB.A_OR_D AND
+          AA.FLIGHT_REPEAT_COUNT=BB.FLIGHT_REPEAT_COUNT
+      WHERE
+      (to_char(AA.ALDT,'YYYY-MM-DD HH24:MI:SS') BETWEEN (to_char((CURRENT_TIMESTAMP-1/24),'YYYY-MM-DD')||' '||to_char((CURRENT_TIMESTAMP-1/24),'hh24')||':00:00') AND
+      (to_char(CURRENT_TIMESTAMP,'YYYY-MM-DD')||' '||to_char(CURRENT_TIMESTAMP,'hh24')||':00:00')
+       ) AND
+          AA.A_OR_D='A' AND
+          nvl(BB.CODE_SHARE_STATUS,' ')<>'SF' AND
+          nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+          BB.FLIGHT_CLASS_CODE IN ('L/W',
+          'W/Z',
+          'C/B') )
+    ]]>
+  </select>
+</mapper>

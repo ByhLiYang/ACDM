@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.detainedPassageMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.statistics.detainedPassage.DetainedPassage" >
+    <result column="queryDate" property="queryDate" jdbcType="TIMESTAMP" />
+    <result column="aircraft_terminal_code" property="aircraft_terminal_code" jdbcType="VARCHAR" />
+    <result column="flight_no_iata" property="flight_no_iata" jdbcType="VARCHAR" />
+    <result column="gate_1" property="gate_1" jdbcType="VARCHAR" />
+  </resultMap>
+    <!--滞留旅客-->
+  <select id="queryDetainedPassage" parameterType="map" resultType="com.hq.acdm.model.statistics.detainedPassage.DetainedPassage"  >
+      select aircraft_terminal_code,areaid,gate_1,flight_no_iata,to_char(operational_date,'yyyy-MM-dd')operational_date,dest_airport_iata,to_char(sobt,'yyyy-MM-dd HH24:MI:SS')sobt,eobt,retention,atot,description,chkcnt,boarcnt,secucnt,gate_1_closedatetime,gate_2_closedatetime,gate_3_closedatetime,gate_1_boardstatus,gate_2_boardstatus,gate_3_boardstatus from v_detained_passage t WHERE 1=1
+
+      <if test="params.terminal !=null and params.terminal != ''">
+          and aircraft_terminal_code=#{params.terminal,jdbcType=VARCHAR}
+      </if>
+      <if test="params.areaid !=null and params.areaid != ''">
+          and areaid=#{params.areaid,jdbcType=VARCHAR}
+      </if>
+      <if test="params.gate !=null and params.gate != ''">
+          AND (GATE_1=#{params.gate,jdbcType=VARCHAR} OR GATE_2=#{params.gate,jdbcType=VARCHAR} OR GATE_3=#{params.gate,jdbcType=VARCHAR})
+      </if>
+      <if test="params.delaytime !=null and params.delaytime != ''">
+          and retention>#{params.delaytime,jdbcType=INTEGER}
+      </if>
+      order by operational_date desc
+  </select>
+    <!--登机异常-->
+    <select id="queryAnomalyPassage" parameterType="map" resultType="com.hq.acdm.model.statistics.detainedPassage.DetainedPassage"  >
+        SELECT FLIGHT_NO_IATA,
+        GATE_1_OPENDATETIME,
+        GATE_2_OPENDATETIME,
+        GATE_3_OPENDATETIME,
+        BELT_1,
+        BELT_2,
+        BELT_3,
+        GATE_1_CLOSEDATETIME,
+        GATE_2_CLOSEDATETIME,
+        GATE_3_CLOSEDATETIME,
+        AOBT,
+        ATOT,
+        SOBT,
+        OPERATIONAL_DATE,
+        A_OR_D,
+        FLIGHT_REPEAT_COUNT,
+        COUNT(
+        CASE
+        WHEN Pax_CheckinTime IS NOT NULL
+        THEN pax_boardingno
+        ELSE NULL
+        END) chkcnt,
+        COUNT(
+        CASE
+        WHEN Pax_BoardingTime IS NOT NULL
+        THEN pax_boardingno
+        ELSE NULL
+        END) boarcnt,
+        COUNT(
+        CASE
+        WHEN Pax_SecurityCheckTime IS NOT NULL
+        THEN pax_boardingno
+        ELSE NULL
+        END) secucnt
+        FROM
+        (SELECT ta.FLIGHT_NO_IATA,
+        GATE_1_OPENDATETIME,
+        GATE_2_OPENDATETIME,
+        GATE_3_OPENDATETIME,
+        BELT_1,
+        BELT_2,
+        BELT_3,
+        AIRCRAFT_TERMINAL_CODE,
+        GATE_1_CLOSEDATETIME,
+        GATE_2_CLOSEDATETIME,
+        GATE_3_CLOSEDATETIME,
+        AOBT,
+        ATOT,
+        SOBT,
+        ta.OPERATIONAL_DATE,
+        ta.A_OR_D,
+        ta.FLIGHT_REPEAT_COUNT
+        FROM DAILY_FLIGHT_MASTER ta,
+        DAILY_FLIGHT_ADD_DETAILS tm
+        WHERE (((  to_date(to_char( GATE_1_OPENDATETIME+30/(24*60),'yyyy-MM-dd HH:MI:ss'),'yyyy-MM-dd HH:MI:ss')  &lt; CURRENT_TIMESTAMP
+                                                                                                                    OR to_date(to_char( GATE_2_OPENDATETIME+30/(24*60),'yyyy-MM-dd HH:MI:ss'),'yyyy-MM-dd HH:MI:ss')  &lt; CURRENT_TIMESTAMP
+                                                                                                                                                                                                                        OR to_date(to_char( GATE_3_OPENDATETIME+30/(24*60),'yyyy-MM-dd HH:MI:ss'),'yyyy-MM-dd HH:MI:ss')  &lt; CURRENT_TIMESTAMP)
+        AND (tm.GATE_1_BOARDSTATUS                 ='C'
+        OR tm.GATE_2_BOARDSTATUS                   ='C'
+        OR tm.GATE_3_BOARDSTATUS                   ='C'))
+        OR ((tm.GATE_1_CLOSEDATETIME              IS NOT NULL
+        OR tm.GATE_2_CLOSEDATETIME                IS NOT NULL
+        OR tm.GATE_3_CLOSEDATETIME                IS NOT NULL)
+        AND (tm.GATE_1_BOARDSTATUS                 ='C'
+        OR tm.GATE_2_BOARDSTATUS                   ='C'
+        OR tm.GATE_3_BOARDSTATUS                   ='C')
+        AND AOBT                                  IS NULL
+        AND ATOT                                  IS NULL)
+        OR (AOBT                                  IS NOT NULL
+        AND ATOT                                  IS NULL)
+        OR (ATOT                                  IS NOT NULL))
+        AND tm.FLIGHT_NO_IATA                      =ta.FLIGHT_NO_IATA
+        AND tm.A_OR_D                              =ta.A_OR_D
+        AND tm.FLIGHT_REPEAT_COUNT                 =ta.FLIGHT_REPEAT_COUNT
+        AND tm.OPERATIONAL_DATE                    =ta.OPERATIONAL_DATE
+        AND tm.A_OR_D                              ='D'
+        AND tm.FLIGHT_CANCEL_CODE                  &lt;> 'C'
+        AND tm.CODE_SHARE_STATUS                   &lt;> 'SF'
+        AND tm.FLIGHT_CLASS_CODE                  IN ('L/W', 'W/Z', 'C/B')
+        AND ta.SOBT BETWEEN to_date(to_char('2018-11-09'|| ' 06:00:00'),'yyyy-MM-dd HH:MI:ss')
+        AND to_date(to_char('2018-11-10'|| ' 06:00:00'),'yyyy-MM-dd HH:MI:ss')--+1天
+        ) tea
+        LEFT JOIN DAILY_PASSENGER_MASTER teb
+        ON teb.DPERATION_DATE            =tea.OPERATIONAL_DATE
+        AND tea.FLIGHT_NO_IATA           =teb.pax_flightno
+        WHERE tea.AIRCRAFT_TERMINAL_CODE &lt;>1
+        AND NOT EXISTS
+        (SELECT 1
+        FROM DAILY_PASSENGER_MASTER
+        WHERE PAX_TANSFERYN      =1
+        AND PAX_FLIGHTNOBEFORETSF=teb.PAX_FLIGHTNO
+        AND PAX_DATEBEFORETSF    =teb.DPERATION_DATE
+        AND PAX_NAME_ENGLISH     =teb.PAX_NAME_ENGLISH
+        )
+        GROUP BY FLIGHT_NO_IATA,
+        GATE_1_OPENDATETIME,
+        GATE_2_OPENDATETIME,
+        GATE_3_OPENDATETIME,
+        BELT_1,
+        BELT_2,
+        BELT_3,
+        GATE_1_CLOSEDATETIME,
+        GATE_2_CLOSEDATETIME,
+        GATE_3_CLOSEDATETIME,
+        AOBT,
+        ATOT,
+        SOBT,
+        OPERATIONAL_DATE,
+        A_OR_D,
+        FLIGHT_REPEAT_COUNT
+
+    </select>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.coordinatedOprt.AloneMapper" >
+  <select id="findAloneFlights" parameterType="map" resultType="com.hq.acdm.vo.coordinatedOprt.AloneVo" >
+    SELECT TA.FLIGHT_ID,TA.EXEC_DATE,TA.FLNO,TA.D_OR_A,B.CHINESE_NAME AS `status`,
+    AA.CHINESE_NAME adep,
+    DD.CHINESE_NAME ades,
+    DATE_FORMAT(TA.ATOT,'%H:%i') AS ATOT,
+    DATE_FORMAT(TA.ALDT,'%H:%i') AS ALDT,
+    TA.CRAFT_TYPE_ICAO,TA.REGN,TA.STAND,
+    DATE_FORMAT(CASE WHEN TA.D_OR_A='A' THEN TA.SIBT ELSE TA.SOBT END,'%H:%i') AS jhsj
+    FROM T_LOCAL_FLIGHT_INFO TA
+    LEFT JOIN T_FLIGHT_STATUS B ON TA.NORMAL_FLIGHT_STAT_CD = B.`CODE`
+    LEFT JOIN T_AIRPORT AA ON TA.ADEP = AA.AIRPORT_IATA
+    LEFT JOIN T_AIRPORT DD ON TA.ADES = DD.AIRPORT_IATA
+    WHERE ISDEL<![CDATA[ <> ]]>'1'
+    AND TA.EXEC_DATE=CURDATE()
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[ <> ]]> 'CAN'
+    ORDER BY CASE WHEN TA.D_OR_A='A' THEN TA.SIBT ELSE TA.SOBT END ASC
+
+
+
+  </select>
+
+</mapper>

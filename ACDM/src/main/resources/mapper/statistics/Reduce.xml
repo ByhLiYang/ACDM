@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.ReduceMapper" >
+    <select id="queryReduce" parameterType="map" resultType="com.hq.acdm.model.statistics.flightQuery.ReduceModel">
+        SELECT * FROM REDUCE WHERE
+        1=1
+        <if test="params.a_or_d !=null and params.a_or_d!=''">
+            AND A_OR_D = #{params.a_or_d}
+        </if>
+        <if test="params.flight_no_iata !=null and params.flight_no_iata!=''">
+            AND  FLIGHT_NO_IATA = #{params.flight_no_iata}
+        </if>
+        <if test="params.operational_date !=null and params.operational_date!=''">
+            AND  to_char(OPERATIONAL_DATE,'YYYY-MM-DD') = #{params.operational_date}
+        </if>
+    </select>
+    <insert id="insertIntoReduce" parameterType="map">
+        insert INTO REDUCE(
+        FLIGHT_NO_IATA,
+        OPERATIONAL_DATE,
+        A_OR_D,
+        OPERATIONAL_USER,
+        OPERATIONAL_FLAG,
+        OPERATE_TIME,
+        DA,
+        OA
+        ) VALUES (
+        #{params.flight_no_iata},
+        to_date(#{params.operational_date},'YYYY-MM-DD'),
+        #{params.a_or_d},
+        #{params.user},
+        '1',
+        sysdate,
+        #{params.da},
+        #{params.oa}
+        )
+    </insert>
+    <update id="updateReduce" parameterType="map">
+        UPDATE REDUCE
+        SET
+        OPERATIONAL_FLAG = #{params.flag},
+        OPERATE_TIME = sysdate
+        where 1=1
+        <if test="params.operational_date!=null and params.operational_date!=''">
+            and to_char(OPERATIONAL_DATE,'YYYY-MM-DD HH24:MI:SS') = #{params.operational_date}
+        </if>
+        <if test="params.flight_no_iata!=null and params.flight_no_iata!=''">
+            and FLIGHT_NO_IATA = #{params.flight_no_iata}
+        </if>
+        <if test="params.a_or_d!=null and params.a_or_d!=''">
+            and A_OR_D = #{params.a_or_d}
+        </if>
+    </update>
+</mapper>

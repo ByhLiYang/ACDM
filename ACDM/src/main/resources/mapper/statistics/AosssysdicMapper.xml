@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--扫描DAO下的接口-->
+<mapper namespace="com.hq.acdm.dao.statistics.AosssysdicMapper" >
+
+    <select id="selectParamtypeList" resultType="com.hq.acdm.model.statistics.aosssysdic.Aosssysdic">
+      SELECT DISTINCT PARAMTYPECODE,PARAMTYPENAME FROM AOSSSYSDIC WHERE STATUS=1
+    </select>
+
+    <select id="selectAllSysdic" resultType="com.hq.acdm.model.statistics.aosssysdic.Aosssysdic">
+      SELECT PARAMTYPECODE,PARAMTYPENAME,PARAMCODE,PARAMNAME,PARAMDESC,PARAMVALUE FROM AOSSSYSDIC WHERE STATUS=1 ORDER BY 1,3
+    </select>
+
+    <update id="deleteDefinedSysdiclogic">
+      UPDATE AOSSSYSDIC SET STATUS=0,STATUS_END=sysdate WHERE STATUS=1 AND PARAMTYPECODE=#{typecode} AND PARAMCODE=#{paracode}
+    </update>
+
+    <insert id="insertDefinedSysdicPhysic" useGeneratedKeys="false" keyProperty="serialNumber">
+      INSERT INTO AOSSSYSDIC VALUES(#{typecode},#{typename},#{paracode},#{paraname},#{paradesc},#{paravalue},1,sysdate,null)
+    </insert>
+
+    <select id="selectDefinedParawvalue" resultType="com.hq.acdm.model.statistics.aosssysdic.Aosssysdic">
+      SELECT PARAMTYPECODE,PARAMTYPENAME,PARAMCODE,PARAMNAME,PARAMDESC,PARAMVALUE FROM AOSSSYSDIC WHERE STATUS=1
+
+        <if test="typecode != null and typecode != ''">
+            and PARAMTYPECODE= #{typecode}
+        </if>
+
+        <if test="paracode != null and paracode != ''">
+            and PARAMCODE = #{paracode}
+        </if>
+        <if test="parameterName != null and parameterName != ''">
+            and PARAMNAME= #{parameterName}
+        </if>
+
+        <if test="parameterDescription != null and parameterDescription != ''">
+            and PARAMDESC = #{parameterDescription}
+        </if>
+
+    </select>
+</mapper>

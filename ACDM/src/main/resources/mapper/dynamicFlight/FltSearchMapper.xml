@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.dynamicFlight.FltSearchMapper" >
+
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.dynamicFlight.FlightInfoVo" >
+    <result column="FLIGHT_ID" property="flightId" jdbcType="VARCHAR" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="EXEC_DATE" property="execDate" jdbcType="VARCHAR" />
+    <result column="FL_STATUS" property="flStatus" jdbcType="VARCHAR" />
+    <result column="AIRLINES" property="airlines" jdbcType="VARCHAR" />
+    <result column="CRAFT_TYPE_ICAO" property="craftTypeIcao" jdbcType="VARCHAR" />
+    <result column="REGN" property="regn" jdbcType="VARCHAR" />
+    <result column="D_OR_A" property="dOrA" jdbcType="VARCHAR" />
+    <result column="ADEP" property="adep" jdbcType="VARCHAR" />
+    <result column="ADES" property="ades" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="SIBT" property="sibt" jdbcType="VARCHAR" />
+    <result column="ELDT" property="eldt" jdbcType="VARCHAR" />
+    <result column="ALDT" property="aldt" jdbcType="VARCHAR" />
+    <result column="ETOT" property="etot" jdbcType="VARCHAR" />
+    <result column="ATOT" property="atot" jdbcType="VARCHAR" />
+    <result column="STAND" property="stand" jdbcType="VARCHAR" />
+    <result column="RUNWAY" property="runway" jdbcType="VARCHAR" />
+    <result column="AXIT" property="axit" jdbcType="VARCHAR" />
+    <result column="AXOT" property="axot" jdbcType="VARCHAR" />
+    <result column="COBT" property="cobt" jdbcType="VARCHAR" />
+    <result column="CTOT" property="ctot" jdbcType="VARCHAR" />
+    <result column="TOBT" property="tobt" jdbcType="VARCHAR" />
+    <result column="A_TOBT" property="aTobt" jdbcType="VARCHAR" />
+    <result column="ISCONTROL" property="iscontrol" jdbcType="VARCHAR" />
+    <result column="EIBT" property="eibt" jdbcType="VARCHAR" />
+    <result column="AIBT" property="aibt" jdbcType="VARCHAR" />
+    <result column="EOBT" property="eobt" jdbcType="VARCHAR" />
+    <result column="AOBT" property="aobt" jdbcType="VARCHAR" />
+    <result column="ETDO" property="etdo" jdbcType="VARCHAR" />
+    <result column="ETDC" property="etdc" jdbcType="VARCHAR" />
+    <result column="ATDO" property="atdo" jdbcType="VARCHAR" />
+    <result column="ATDC" property="atdc" jdbcType="VARCHAR" />
+    <result column="ETFO" property="etfo" jdbcType="VARCHAR" />
+    <result column="ETFC" property="etfc" jdbcType="VARCHAR" />
+    <result column="ATFO" property="atfo" jdbcType="VARCHAR" />
+    <result column="ATFC" property="atfc" jdbcType="VARCHAR" />
+    <result column="ESCT" property="esct" jdbcType="VARCHAR" />
+    <result column="EFCT" property="efct" jdbcType="VARCHAR" />
+    <result column="ASCT" property="asct" jdbcType="VARCHAR" />
+    <result column="AFCT" property="afct" jdbcType="VARCHAR" />
+    <result column="ESC" property="esc" jdbcType="VARCHAR" />
+    <result column="EEC" property="eec" jdbcType="VARCHAR" />
+    <result column="ASC" property="asc" jdbcType="VARCHAR" />
+    <result column="AEC" property="aec" jdbcType="VARCHAR" />
+    <result column="ESR" property="esr" jdbcType="VARCHAR" />
+    <result column="EER" property="eer" jdbcType="VARCHAR" />
+    <result column="ASR" property="asr" jdbcType="VARCHAR" />
+    <result column="AER" property="aer" jdbcType="VARCHAR" />
+    <result column="ESBT" property="esbt" jdbcType="VARCHAR" />
+    <result column="EEBT" property="eebt" jdbcType="VARCHAR" />
+    <result column="ASBT" property="asbt" jdbcType="VARCHAR" />
+    <result column="AEBT" property="aebt" jdbcType="VARCHAR" />
+    <result column="ERSL" property="ersl" jdbcType="VARCHAR" />
+    <result column="ELSW" property="elsw" jdbcType="VARCHAR" />
+    <result column="ARSL" property="arsl" jdbcType="VARCHAR" />
+    <result column="ALSW" property="alsw" jdbcType="VARCHAR" />
+    <result column="A_GRND_TSF_TM" property="aGrndTsfTm" jdbcType="VARCHAR" />
+    <result column="D_GRND_TSF_TM" property="dGrndTsfTm" jdbcType="VARCHAR" />
+    <result column="ISFOCUS" property="isfocus" jdbcType="VARCHAR" />
+    <result column="DELAY_TIME" property="delayTime" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <resultMap id="FlightInquiryResultMap" type="com.hq.acdm.vo.dynamicFlight.FlightInquiryVo" >
+    <result column="FLIGHT_ID" property="flightId" jdbcType="VARCHAR" />
+    <result column="ASSOCIATED_FLIGHT_ID" property="associatedFlightId" jdbcType="VARCHAR" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="FLNO_ASSOCIATED" property="flnoAssociated" jdbcType="VARCHAR" />
+    <result column="EXEC_DATE" property="execDate" jdbcType="VARCHAR" />
+    <result column="FL_STATUS" property="flStatus" jdbcType="VARCHAR" />
+    <result column="FLAB_STATUS" property="flabStatus" jdbcType="VARCHAR" />
+    <result column="REASONS_FOR_DELAY" property="reasonsForDelay" jdbcType="VARCHAR" />
+    <result column="AIRLINES" property="airlines" jdbcType="VARCHAR" />
+    <result column="CRAFT_TYPE_ICAO" property="craftTypeIcao" jdbcType="VARCHAR" />
+    <result column="REGN" property="regn" jdbcType="VARCHAR" />
+    <result column="D_OR_A" property="dOrA" jdbcType="VARCHAR" />
+    <result column="FLIGHT_TASK" property="flightTask" jdbcType="VARCHAR" />
+    <result column="ATTRIBUTE" property="attribute" jdbcType="VARCHAR" />
+    <result column="ADEP" property="adep" jdbcType="VARCHAR" />
+    <result column="ADES" property="ades" jdbcType="VARCHAR" />
+    <result column="ADEP_NAME" property="adepName" jdbcType="VARCHAR" />
+    <result column="ADES_NAME" property="adesName" jdbcType="VARCHAR" />
+    <result column="PLAN_TIME" property="planTime" jdbcType="VARCHAR" />
+    <result column="REAL_TIME" property="realTime" jdbcType="VARCHAR" />
+    <result column="STDC" property="stdc" jdbcType="VARCHAR" />
+    <result column="ATDC" property="atdc" jdbcType="VARCHAR" />
+    <result column="DELAY_TIME" property="delayTime" jdbcType="VARCHAR" />
+    <result column="IS_YW" property="isYw" jdbcType="VARCHAR" />
+    <result column="IS_NORMAL" property="isNormal" jdbcType="VARCHAR" />
+    <result column="IS_FX_NORMAL" property="isFxNormal" jdbcType="VARCHAR" />
+    <result column="IS_SF" property="isSf" jdbcType="VARCHAR" />
+    <result column="IS_SF_NORMAL" property="isSfNormal" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="findAllFltInfo" resultMap="ResultMap" parameterType="map" >
+    SELECT
+    T.FLIGHT_ID, -- 航班唯一ID
+    T.FLNO,-- 航班号
+    T.EXEC_DATE,-- 航班日期
+    B.CHINESE_NAME AS FL_STATUS,-- 航班状态
+    T.AIRLINES, -- 航空公司2码
+    T.CRAFT_TYPE_ICAO, -- 机型
+    T.REGN , -- 机号
+    CASE T.D_OR_A WHEN 'D' THEN '出港' WHEN 'A' THEN '进港' ELSE '' END AS D_OR_A, -- 进出港标志
+    C.CHINESE_NAME AS ADEP, -- 起飞机场
+    D.CHINESE_NAME AS ADES, -- 落地机场
+    T.ELDT, -- 预计落地日期时间
+    T.ALDT, -- 实际落地日期时间
+    T.SOBT,-- 计划起飞时间
+    T.SIBT,-- 计划落地时间
+    T.ETOT, -- 预计起飞日期时间
+    T.ATOT, -- 实际起飞日期时间
+    T.STAND, -- 机位
+    T.RUNWAY,-- 进港跑道号
+    T.AXIT, -- 可变滑入时间
+    T.AXOT, -- 可变滑出时间
+    T.COBT,-- 离港计算撤轮档时间COBT
+    T.CTOT,-- 离港计算起飞时间CTOT
+    T.TOBT,-- 离港目标撤轮档时间TOBT
+    T.A_TOBT,-- 离港机场目标撤轮档时间A_TOBT
+    CASE T.ISCONTROL WHEN '0' THEN '否' WHEN '1' THEN '是' ELSE '否' END AS ISCONTROL, -- 是否流控
+    T.EIBT, -- 预计上轮档时间EIBT
+    T.AIBT, -- 实际上轮档时间AIBT
+    T.EOBT, -- 预计撤轮当时间EOBT
+    T.AOBT, -- 实际撤轮档时间AOBT
+    T.ETDO,-- 预计开客舱门时间ETDO
+    T.ETDC,-- 预计关客舱门时间ETDC
+    T.ATDO,-- 实际开客舱门时间ATDO
+    T.ATDC,-- 实际关客舱门时间ATDC
+    T.ETFO,-- 预计开货舱门时间ETFO
+    T.ETFC,-- 预计关货舱门时间ETFC
+    T.ATFO,-- 实际开货舱门时间 ATFO
+    T.ATFC,-- 实际关货舱门时间ATFC
+    T.ESCT, -- 预计保洁开始时间ESCT
+    T.EFCT,-- 预计保洁结束时间EFCT
+    T.ASCT, -- 实际保洁开始时间ASCT
+    T.AFCT,-- 实际保洁结束时间AFCT
+    T.ESC, -- 预计开始配餐时间ESC
+    T.EEC,-- 预计完成配餐时间EEC
+    T.`ASC`, -- 实际开始配餐时间ASC
+    T.AEC,-- 实际完成配餐时间AEC
+    T.ESR, -- 预计开始供油时间ESR
+    T.EER,-- 预计完成供油时间EER
+    T.ASR, -- 实际开始供油时间ASR
+    T.AER,-- 实际完成供油时间AER
+    T.ESBT, -- 预计开始登机时间ESBT
+    T.EEBT,-- 预计完成登机时间EEBT
+    T.ASBT, -- 实际开始登机时间ASBT
+    T.AEBT,-- 实际完成登机时间AEBT
+    T.ERSL,-- 预计靠桥时间（客梯或桥）ERSL
+    T.ELSW,-- 预计离桥时间/撤客梯车时间ELSW
+    T.ARSL,-- 实际靠桥时间（客梯或桥）ARSL
+    T.ALSW,-- 实际离桥时间/撤客梯车时间ALSW
+    T.A_GRND_TSF_TM, -- 进港地面移交时间
+    T.D_GRND_TSF_TM,-- 离港地面移交时间
+    T.ISFOCUS, -- 是否关注
+    T.DELAY_TIME -- 延误时长
+    FROM
+    (SELECT Q.FLIGHT_ID, -- 航班唯一ID
+    Q.FLNO,-- 航班号
+    Q.EXEC_DATE,-- 航班日期
+    IF ((IFNULL(Q.ABNORMAL_FLIGHT_STAT_CD,'') = ''),Q.NORMAL_FLIGHT_STAT_CD,Q.ABNORMAL_FLIGHT_STAT_CD) AS FL_STATUS,-- 航班状态
+    Q.AIRLINES, -- 航空公司2码
+    Q.CRAFT_TYPE_ICAO, -- 机型
+    Q.REGN , -- 机号
+    Q.D_OR_A, -- 进出港标志
+    Q.ADEP, -- 起飞机场
+    Q.ADES, -- 落地机场
+    DATE_FORMAT(Q.ELDT,'%Y-%m-%d %H:%i:%s') AS ELDT, -- 预计落地日期时间
+    DATE_FORMAT(Q.ALDT,'%Y-%m-%d %H:%i:%s') AS ALDT, -- 实际落地日期时间
+    DATE_FORMAT(Q.SOBT,'%Y-%m-%d %H:%i:%s') AS SOBT,-- 计划起飞时间
+    DATE_FORMAT(Q.SIBT,'%Y-%m-%d %H:%i:%s') AS SIBT,-- 计划落地时间
+    DATE_FORMAT(Q.ETOT,'%Y-%m-%d %H:%i:%s') AS ETOT, -- 预计起飞日期时间
+    DATE_FORMAT(Q.ATOT,'%Y-%m-%d %H:%i:%s') AS ATOT, -- 实际起飞日期时间
+    Q.STAND, -- 机位
+    Q.RUNWAY,-- 进港跑道号
+    DATE_FORMAT(Q.AXIT,'%Y-%m-%d %H:%i:%s') AS AXIT, -- 可变滑入时间
+    DATE_FORMAT(Q.AXOT,'%Y-%m-%d %H:%i:%s') AS AXOT, -- 可变滑出时间
+    DATE_FORMAT(Q.COBT,'%Y-%m-%d %H:%i:%s') AS COBT,-- 离港计算撤轮档时间COBT
+    DATE_FORMAT(Q.CTOT,'%Y-%m-%d %H:%i:%s') AS CTOT,-- 离港计算起飞时间CTOT
+    DATE_FORMAT(Q.TOBT,'%Y-%m-%d %H:%i:%s') AS TOBT,-- 离港目标撤轮档时间TOBT
+    DATE_FORMAT(Q.A_TOBT,'%Y-%m-%d %H:%i:%s') AS A_TOBT,-- 离港机场目标撤轮档时间A_TOBT
+    Q.ISCONTROL, -- 是否流控
+    DATE_FORMAT(Q.EIBT,'%Y-%m-%d %H:%i:%s') AS EIBT, -- 预计上轮档时间EIBT
+    DATE_FORMAT(Q.AIBT,'%Y-%m-%d %H:%i:%s') AS AIBT, -- 实际上轮档时间AIBT
+    DATE_FORMAT(Q.EOBT,'%Y-%m-%d %H:%i:%s') AS EOBT, -- 预计撤轮当时间EOBT
+    DATE_FORMAT(Q.AOBT,'%Y-%m-%d %H:%i:%s') AS AOBT, -- 实际撤轮档时间AOBT
+    DATE_FORMAT(Q.ETDO,'%Y-%m-%d %H:%i:%s') AS ETDO,-- 预计开客舱门时间ETDO
+    DATE_FORMAT(Q.ETDC,'%Y-%m-%d %H:%i:%s') AS ETDC,-- 预计关客舱门时间ETDC
+    DATE_FORMAT(Q.ATDO,'%Y-%m-%d %H:%i:%s') AS ATDO,-- 实际开客舱门时间ATDO
+    DATE_FORMAT(Q.ATDC,'%Y-%m-%d %H:%i:%s') AS ATDC,-- 实际关客舱门时间ATDC
+    DATE_FORMAT(Q.ETFO,'%Y-%m-%d %H:%i:%s') AS ETFO,-- 预计开货舱门时间ETFO
+    DATE_FORMAT(Q.ETFC,'%Y-%m-%d %H:%i:%s') AS ETFC,-- 预计关货舱门时间ETFC
+    DATE_FORMAT(Q.ATFO,'%Y-%m-%d %H:%i:%s') AS ATFO,-- 实际开货舱门时间 ATFO
+    DATE_FORMAT(Q.ATFC,'%Y-%m-%d %H:%i:%s') AS ATFC,-- 实际关货舱门时间ATFC
+    DATE_FORMAT(Q.ESCT,'%Y-%m-%d %H:%i:%s') AS ESCT, -- 预计保洁开始时间ESCT
+    DATE_FORMAT(Q.EFCT,'%Y-%m-%d %H:%i:%s') AS EFCT,-- 预计保洁结束时间EFCT
+    DATE_FORMAT(Q.ASCT,'%Y-%m-%d %H:%i:%s') AS ASCT, -- 实际保洁开始时间ASCT
+    DATE_FORMAT(Q.AFCT,'%Y-%m-%d %H:%i:%s') AS AFCT,-- 实际保洁结束时间AFCT
+    DATE_FORMAT(Q.ESC,'%Y-%m-%d %H:%i:%s') AS ESC, -- 预计开始配餐时间ESC
+    DATE_FORMAT(Q.EEC,'%Y-%m-%d %H:%i:%s') AS EEC,-- 预计完成配餐时间EEC
+    DATE_FORMAT(Q.`ASC`,'%Y-%m-%d %H:%i:%s') AS `ASC`, -- 实际开始配餐时间ASC
+    DATE_FORMAT(Q.AEC,'%Y-%m-%d %H:%i:%s') AS AEC,-- 实际完成配餐时间AEC
+    DATE_FORMAT(Q.ESR,'%Y-%m-%d %H:%i:%s') AS ESR, -- 预计开始供油时间ESR
+    DATE_FORMAT(Q.EER,'%Y-%m-%d %H:%i:%s') AS EER,-- 预计完成供油时间EER
+    DATE_FORMAT(Q.ASR,'%Y-%m-%d %H:%i:%s') AS ASR, -- 实际开始供油时间ASR
+    DATE_FORMAT(Q.AER,'%Y-%m-%d %H:%i:%s') AS AER,-- 实际完成供油时间AER
+    DATE_FORMAT(Q.ESBT,'%Y-%m-%d %H:%i:%s') AS ESBT, -- 预计开始登机时间ESBT
+    DATE_FORMAT(Q.EEBT,'%Y-%m-%d %H:%i:%s') AS EEBT,-- 预计完成登机时间EEBT
+    DATE_FORMAT(Q.ASBT,'%Y-%m-%d %H:%i:%s') AS ASBT, -- 实际开始登机时间ASBT
+    DATE_FORMAT(Q.AEBT,'%Y-%m-%d %H:%i:%s') AS AEBT,-- 实际完成登机时间AEBT
+    DATE_FORMAT(Q.ERSL,'%Y-%m-%d %H:%i:%s') AS ERSL,-- 预计靠桥时间（客梯或桥）ERSL
+    DATE_FORMAT(Q.ELSW,'%Y-%m-%d %H:%i:%s') AS ELSW,-- 预计离桥时间/撤客梯车时间ELSW
+    DATE_FORMAT(Q.ARSL,'%Y-%m-%d %H:%i:%s') AS ARSL,-- 实际靠桥时间（客梯或桥）ARSL
+    DATE_FORMAT(Q.ALSW,'%Y-%m-%d %H:%i:%s') AS ALSW,-- 实际离桥时间/撤客梯车时间ALSW
+    DATE_FORMAT(Q.A_GRND_TSF_TM,'%Y-%m-%d %H:%i:%s') AS A_GRND_TSF_TM, -- 进港地面移交时间
+    DATE_FORMAT(Q.D_GRND_TSF_TM,'%Y-%m-%d %H:%i:%s') AS D_GRND_TSF_TM,-- 离港地面移交时间
+    Q.ISFOCUS, -- 是否关注
+    Q.DELAY_TIME -- 延误时长
+    FROM T_LOCAL_FLIGHT_INFO Q
+    WHERE IFNULL(Q.ISDEL,'0') = '0'
+    UNION
+    SELECT
+    '' AS FLIGHT_ID, -- 航班唯一ID
+    R.FLNO,-- 航班号
+    R.EXDT AS EXEC_DATE,-- 航班日期
+    '' AS FL_STATUS,-- 航班状态
+    R.AWCD AS AIRLINES, -- 航空公司2码
+    R.CFTP AS CRAFT_TYPE_ICAO, -- 机型
+    '' AS REGN , -- 机号
+    R.FLIO AS D_OR_A, -- 进出港标志
+    R.DPCD AS ADEP, -- 起飞机场
+    R.ARCD AS ADES, -- 落地机场
+    '' AS ELDT, -- 预计落地日期时间
+    '' AS ALDT, -- 实际落地日期时间
+    R.FPTT AS SOBT,-- 计划起飞时间
+    R.FPLT AS SIBT,-- 计划落地时间
+    '' AS ETOT, -- 预计起飞日期时间
+    '' AS ATOT, -- 实际起飞日期时间
+    '' AS STAND, -- 机位
+    '' AS RUNWAY,-- 进港跑道号
+    '' AS AXIT, -- 可变滑入时间
+    '' AS AXOT, -- 可变滑出时间
+    '' AS COBT,-- 离港计算撤轮档时间COBT
+    '' AS CTOT,-- 离港计算起飞时间CTOT
+    '' AS TOBT,-- 离港目标撤轮档时间TOBT
+    '' AS A_TOBT,-- 离港机场目标撤轮档时间A_TOBT
+    '' AS ISCONTROL, -- 是否流控
+    '' AS EIBT, -- 预计上轮档时间EIBT
+    '' AS AIBT, -- 实际上轮档时间AIBT
+    '' AS EOBT, -- 预计撤轮当时间EOBT
+    '' AS AOBT, -- 实际撤轮档时间AOBT
+    '' AS ETDO,-- 预计开客舱门时间ETDO
+    '' AS ETDC,-- 预计关客舱门时间ETDC
+    '' AS ATDO,-- 实际开客舱门时间ATDO
+    '' AS ATDC,-- 实际关客舱门时间ATDC
+    '' AS ETFO,-- 预计开货舱门时间ETFO
+    '' AS ETFC,-- 预计关货舱门时间ETFC
+    '' AS ATFO,-- 实际开货舱门时间 ATFO
+    '' AS ATFC,-- 实际关货舱门时间ATFC
+    '' AS ESCT, -- 预计保洁开始时间ESCT
+    '' AS EFCT,-- 预计保洁结束时间EFCT
+    '' AS ASCT, -- 实际保洁开始时间ASCT
+    '' AS AFCT,-- 实际保洁结束时间AFCT
+    '' AS ESC, -- 预计开始配餐时间ESC
+    '' AS EEC,-- 预计完成配餐时间EEC
+    '' AS `ASC`, -- 实际开始配餐时间ASC
+    '' AS AEC,-- 实际完成配餐时间AEC
+    '' AS ESR, -- 预计开始供油时间ESR
+    '' AS EER,-- 预计完成供油时间EER
+    '' AS ASR, -- 实际开始供油时间ASR
+    '' AS AER,-- 实际完成供油时间AER
+    '' AS ESBT, -- 预计开始登机时间ESBT
+    '' AS EEBT,-- 预计完成登机时间EEBT
+    '' AS ASBT, -- 实际开始登机时间ASBT
+    '' AS AEBT,-- 实际完成登机时间AEBT
+    '' AS ERSL,-- 预计靠桥时间（客梯或桥）ERSL
+    '' AS ELSW,-- 预计离桥时间/撤客梯车时间ELSW
+    '' AS ARSL,-- 实际靠桥时间（客梯或桥）ARSL
+    '' AS ALSW,-- 实际离桥时间/撤客梯车时间ALSW
+    '' AS A_GRND_TSF_TM, -- 进港地面移交时间
+    '' AS D_GRND_TSF_TM,-- 离港地面移交时间
+    '' AS ISFOCUS, -- 是否关注
+    '' AS DELAY_TIME -- 延误时长
+    FROM (SELECT A.FLNO,A.EXDT,A.AWCD,A.CFTP,A.FPTT,A.FPLT,A.DPCD,A.ARCD,A.FLIO,A.ISDEL FROM T_FLIGHT_SCHEDULING A
+    LEFT JOIN T_LOCAL_FLIGHT_INFO B ON B.FLNO = A.FLNO
+    AND B.EXEC_DATE = A.EXDT AND B.D_OR_A = A.FLIO
+    WHERE A.EXDT BETWEEN DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY),'%Y-%m-%d')
+    AND DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 5 DAY),'%Y-%m-%d') AND B.FLIGHT_ID IS NULL
+    AND A.ISSH = 'N' AND (A.DPCD = 'WUH' OR A.ARCD = 'WUH') AND IFNULL(A.ISDEL,'0') = '0') R) T
+    LEFT JOIN T_FLIGHT_STATUS B ON T.FL_STATUS = B.`CODE`
+    LEFT JOIN T_AIRPORT C ON T.ADEP = C.AIRPORT_IATA
+    LEFT JOIN T_AIRPORT D ON T.ADES = D.AIRPORT_IATA
+    WHERE 1=1
+
+    <if test="params.startTime !=null and params.startTime != '' and params.endTime !=null and params.endTime != '' ">
+     AND ((T.D_OR_A = 'D' AND T.SOBT BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR})
+     OR (T.D_OR_A = 'A' AND T.SIBT BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR}))
+    </if>
+    <if test="params.flno !=null and params.flno != ''">
+      AND T.FLNO LIKE CONCAT('%',#{params.flno,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="params.airlines !=null and params.airlines != ''">
+      AND T.AIRLINES = #{params.airlines,jdbcType=VARCHAR}
+    </if>
+    <if test="params.regn !=null and params.regn != ''">
+      AND T.REGN LIKE CONCAT('%',#{params.regn,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="params.normal !=null and params.normal == 1">
+      AND ((T.D_OR_A='A' AND T.ALDT IS NOT NULL) OR (T.D_OR_A='D' AND T.ATOT IS NOT NULL))
+    </if>
+    <if test="params.retFl !=null and params.retFl == 1">
+      AND T.FL_STATUS = 'RTN'
+    </if>
+    <if test="params.alternate !=null and params.alternate == 1">
+      AND T.FL_STATUS = 'ALT'
+    </if>
+    <if test="params.delay !=null and params.delay == 1">
+      -- AND T.ABNORMAL_FLIGHT_STAT_CD = 'DLY'
+      <![CDATA[
+      AND (T.DELAY_TIME > 0 AND T.D_OR_A='D')
+      ]]>
+    </if>
+    <if test="params.cancel !=null and params.cancel == 1">
+      AND T.FL_STATUS = 'CAN'
+    </if>
+    <if test="params.dOrA !=null and params.dOrA != ''">
+      AND T.D_OR_A = #{params.dOrA,jdbcType=VARCHAR}
+    </if>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND T.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND T.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY T.SOBT DESC
+  </select>
+
+  <select id="findCOBTByID" resultType="String" parameterType="String" >
+    	SELECT COBT FROM T_LOCAL_FLIGHT_INFO WHERE FLIGHT_ID=#{flightId,jdbcType=VARCHAR}
+  </select>
+    <select id="findFLNOByID" resultType="String" parameterType="String" >
+    	SELECT FLNO FROM T_LOCAL_FLIGHT_INFO WHERE FLIGHT_ID=#{flightId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="findIndexFltDetailInfo" resultMap="ResultMap" parameterType="map" >
+    SELECT T.FLIGHT_ID, -- 航班唯一ID
+    T.FLNO,-- 航班号
+    T.EXEC_DATE,-- 航班日期
+    IF ((IFNULL(BB.CHINESE_NAME,'') = ''),B.CHINESE_NAME,BB.CHINESE_NAME) AS FL_STATUS,-- 航班状态
+    T.AIRLINES, -- 航空公司2码
+    T.CRAFT_TYPE_ICAO, -- 机型
+    T.REGN , -- 机号
+    CASE T.D_OR_A WHEN 'D' THEN '出港' WHEN 'A' THEN '进港' ELSE '' END AS D_OR_A, -- 进出港标志
+    C.CHINESE_NAME AS ADEP, -- 起飞机场
+    D.CHINESE_NAME AS ADES, -- 落地机场
+    DATE_FORMAT(T.ELDT,'%Y-%m-%d %H:%i:%s') AS ELDT, -- 预计落地日期时间
+    DATE_FORMAT(T.ALDT,'%Y-%m-%d %H:%i:%s') AS ALDT, -- 实际落地日期时间
+    DATE_FORMAT(T.SOBT,'%Y-%m-%d %H:%i:%s') AS SOBT,-- 计划起飞时间
+    DATE_FORMAT(T.SIBT,'%Y-%m-%d %H:%i:%s') AS SIBT,-- 计划落地时间
+    DATE_FORMAT(T.ETOT,'%Y-%m-%d %H:%i:%s') AS ETOT, -- 预计起飞日期时间
+    DATE_FORMAT(T.ATOT,'%Y-%m-%d %H:%i:%s') AS ATOT, -- 实际起飞日期时间
+    T.STAND, -- 机位
+    T.RUNWAY,-- 进港跑道号
+    DATE_FORMAT(T.AXIT,'%Y-%m-%d %H:%i:%s') AS AXIT, -- 可变滑入时间
+    DATE_FORMAT(T.AXOT,'%Y-%m-%d %H:%i:%s') AS AXOT, -- 可变滑出时间
+    DATE_FORMAT(T.COBT,'%Y-%m-%d %H:%i:%s') AS COBT,-- 离港计算撤轮档时间COBT
+    DATE_FORMAT(T.CTOT,'%Y-%m-%d %H:%i:%s') AS CTOT,-- 离港计算起飞时间CTOT
+    DATE_FORMAT(T.TOBT,'%Y-%m-%d %H:%i:%s') AS TOBT,-- 离港目标撤轮档时间TOBT
+    DATE_FORMAT(T.A_TOBT,'%Y-%m-%d %H:%i:%s') AS A_TOBT,-- 离港机场目标撤轮档时间A_TOBT
+    CASE T.ISCONTROL WHEN '0' THEN '否' WHEN '1' THEN '是' ELSE '否' END AS ISCONTROL, -- 是否流控
+    DATE_FORMAT(T.EIBT,'%Y-%m-%d %H:%i:%s') AS EIBT, -- 预计上轮档时间EIBT
+    DATE_FORMAT(T.AIBT,'%Y-%m-%d %H:%i:%s') AS AIBT, -- 实际上轮档时间AIBT
+    DATE_FORMAT(T.EOBT,'%Y-%m-%d %H:%i:%s') AS EOBT, -- 预计撤轮当时间EOBT
+    DATE_FORMAT(T.AOBT,'%Y-%m-%d %H:%i:%s') AS AOBT, -- 实际撤轮档时间AOBT
+    DATE_FORMAT(T.ETDO,'%Y-%m-%d %H:%i:%s') AS ETDO,-- 预计开客舱门时间ETDO
+    DATE_FORMAT(T.ETDC,'%Y-%m-%d %H:%i:%s') AS ETDC,-- 预计关客舱门时间ETDC
+    DATE_FORMAT(T.ATDO,'%Y-%m-%d %H:%i:%s') AS ATDO,-- 实际开客舱门时间ATDO
+    DATE_FORMAT(T.ATDC,'%Y-%m-%d %H:%i:%s') AS ATDC,-- 实际关客舱门时间ATDC
+    DATE_FORMAT(T.ETFO,'%Y-%m-%d %H:%i:%s') AS ETFO,-- 预计开货舱门时间ETFO
+    DATE_FORMAT(T.ETFC,'%Y-%m-%d %H:%i:%s') AS ETFC,-- 预计关货舱门时间ETFC
+    DATE_FORMAT(T.ATFO,'%Y-%m-%d %H:%i:%s') AS ATFO,-- 实际开货舱门时间 ATFO
+    DATE_FORMAT(T.ATFC,'%Y-%m-%d %H:%i:%s') AS ATFC,-- 实际关货舱门时间ATFC
+    DATE_FORMAT(T.ESCT,'%Y-%m-%d %H:%i:%s') AS ESCT, -- 预计保洁开始时间ESCT
+    DATE_FORMAT(T.EFCT,'%Y-%m-%d %H:%i:%s') AS EFCT,-- 预计保洁结束时间EFCT
+    DATE_FORMAT(T.ASCT,'%Y-%m-%d %H:%i:%s') AS ASCT, -- 实际保洁开始时间ASCT
+    DATE_FORMAT(T.AFCT,'%Y-%m-%d %H:%i:%s') AS AFCT,-- 实际保洁结束时间AFCT
+    DATE_FORMAT(T.ESC,'%Y-%m-%d %H:%i:%s') AS ESC, -- 预计开始配餐时间ESC
+    DATE_FORMAT(T.EEC,'%Y-%m-%d %H:%i:%s') AS EEC,-- 预计完成配餐时间EEC
+    DATE_FORMAT(T.`ASC`,'%Y-%m-%d %H:%i:%s') AS `ASC`, -- 实际开始配餐时间ASC
+    DATE_FORMAT(T.AEC,'%Y-%m-%d %H:%i:%s') AS AEC,-- 实际完成配餐时间AEC
+    DATE_FORMAT(T.ESR,'%Y-%m-%d %H:%i:%s') AS ESR, -- 预计开始供油时间ESR
+    DATE_FORMAT(T.EER,'%Y-%m-%d %H:%i:%s') AS EER,-- 预计完成供油时间EER
+    DATE_FORMAT(T.ASR,'%Y-%m-%d %H:%i:%s') AS ASR, -- 实际开始供油时间ASR
+    DATE_FORMAT(T.AER,'%Y-%m-%d %H:%i:%s') AS AER,-- 实际完成供油时间AER
+    DATE_FORMAT(T.ESBT,'%Y-%m-%d %H:%i:%s') AS ESBT, -- 预计开始登机时间ESBT
+    DATE_FORMAT(T.EEBT,'%Y-%m-%d %H:%i:%s') AS EEBT,-- 预计完成登机时间EEBT
+    DATE_FORMAT(T.ASBT,'%Y-%m-%d %H:%i:%s') AS ASBT, -- 实际开始登机时间ASBT
+    DATE_FORMAT(T.AEBT,'%Y-%m-%d %H:%i:%s') AS AEBT,-- 实际完成登机时间AEBT
+    DATE_FORMAT(T.ERSL,'%Y-%m-%d %H:%i:%s') AS ERSL,-- 预计靠桥时间（客梯或桥）ERSL
+    DATE_FORMAT(T.ELSW,'%Y-%m-%d %H:%i:%s') AS ELSW,-- 预计离桥时间/撤客梯车时间ELSW
+    DATE_FORMAT(T.ARSL,'%Y-%m-%d %H:%i:%s') AS ARSL,-- 实际靠桥时间（客梯或桥）ARSL
+    DATE_FORMAT(T.ALSW,'%Y-%m-%d %H:%i:%s') AS ALSW,-- 实际离桥时间/撤客梯车时间ALSW
+    DATE_FORMAT(T.A_GRND_TSF_TM,'%Y-%m-%d %H:%i:%s') AS A_GRND_TSF_TM, -- 进港地面移交时间
+    DATE_FORMAT(T.D_GRND_TSF_TM,'%Y-%m-%d %H:%i:%s') AS D_GRND_TSF_TM,-- 离港地面移交时间
+    T.ISFOCUS, -- 是否关注
+    T.DELAY_TIME -- 延误时长
+    FROM V_UTIL_DAILY_FLIGHT T
+    LEFT JOIN T_FLIGHT_STATUS B ON T.NORMAL_FLIGHT_STAT_CD = B.`CODE`
+    LEFT JOIN T_FLIGHT_STATUS BB ON T.ABNORMAL_FLIGHT_STAT_CD = BB.`CODE`
+    LEFT JOIN T_AIRPORT C ON T.ADEP = C.AIRPORT_IATA
+    LEFT JOIN T_AIRPORT D ON T.ADES = D.AIRPORT_IATA
+    WHERE 1=1
+
+    <if test="params.startTime !=null and params.startTime != '' and params.endTime !=null and params.endTime != '' ">
+      AND T.SOBT BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR}
+    </if>
+    <if test="params.flno !=null and params.flno != ''">
+      AND T.FLNO LIKE CONCAT('%',#{params.flno,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="params.airlines !=null and params.airlines != ''">
+      AND T.AIRLINES = #{params.airlines,jdbcType=VARCHAR}
+    </if>
+    <if test="params.regn !=null and params.regn != ''">
+      AND T.REGN LIKE CONCAT('%',#{params.regn,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="params.normal !=null and params.normal == 1">
+      AND ((T.D_OR_A='A' AND T.ALDT IS NOT NULL) OR (T.D_OR_A='D' AND T.ATOT IS NOT NULL))
+    </if>
+    <if test="params.retFl !=null and params.retFl == 1">
+      AND T.ABNORMAL_FLIGHT_STAT_CD = 'RTN'
+    </if>
+    <if test="params.alternate !=null and params.alternate == 1">
+      AND T.ABNORMAL_FLIGHT_STAT_CD = 'ALT'
+    </if>
+    <if test="params.delay !=null and params.delay == 1">
+      -- AND T.ABNORMAL_FLIGHT_STAT_CD = 'DLY'
+      <![CDATA[
+      AND (T.DELAY_TIME > 0 AND T.D_OR_A='D' AND T.ATOT IS NOT NULL
+      AND T.FLIGHT_TASK IN ('W/Z','C/B','L/W'))
+      ]]>
+    </if>
+    <if test="params.cancel !=null and params.cancel == 1">
+      AND T.ABNORMAL_FLIGHT_STAT_CD = 'CAN'
+    </if>
+    <!--
+    <if test="params.dOrA !=null and params.dOrA != ''">
+      AND T.D_OR_A = #{params.dOrA,jdbcType=VARCHAR}
+    </if>
+    -->
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND T.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND T.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY T.SOBT DESC
+  </select>
+
+
+
+  <select id="selectAllFlightInfo" resultMap="FlightInquiryResultMap" parameterType="map" >
+    SELECT
+    CASE WHEN T.DELAY_TIME > 0 THEN 1 ELSE 0 END AS IS_YW, -- 表示是否延误
+    CASE WHEN T.DELAY_TIME > 0 THEN 1 ELSE 0 END AS IS_NORMAL, -- 表示是否正常
+    CASE WHEN T.ATOT IS NOT NULL AND DATE_ADD(T.STDC,INTERVAL 25 MINUTE) >= T.ATOT THEN 0
+    WHEN T.ATOT IS NULL AND DATE_ADD(T.STDC,INTERVAL 25 MINUTE) >= NOW() THEN 0 ELSE 1 END AS IS_FX_NORMAL,-- 放行是否正常
+    CASE WHEN T.D_OR_A = 'D' AND T.ASSOCIATED_FLIGHT_ID IS NULL THEN 1 ELSE 0 END AS IS_SF,-- 是否始发
+    CASE WHEN T.D_OR_A = 'D' AND T.ASSOCIATED_FLIGHT_ID IS NULL AND T.ATOT IS NOT NULL AND DATE_ADD(T.STDC,INTERVAL 25 MINUTE) >= T.ATOT THEN 1
+    WHEN T.D_OR_A = 'D' AND T.ASSOCIATED_FLIGHT_ID IS NULL AND T.ATOT IS NULL AND DATE_ADD(T.STDC,INTERVAL 25 MINUTE) >= NOW() THEN 1 ELSE 0 END AS IS_SF_NORMAL,-- 始发是否正常
+    T.FLIGHT_ID, -- 航班唯一ID
+    T.ASSOCIATED_FLIGHT_ID, -- 航班关联唯一ID
+    T.FLNO,-- 航班号
+    T.FLNO_ASSOCIATED,-- 关联航班号
+    T.EXEC_DATE,-- 航班日期
+    B.CHINESE_NAME AS FL_STATUS,-- 航班状态
+    BB.CHINESE_NAME AS FLAB_STATUS,-- 航班异常状态
+    G.CHINESE_NAME AS REASONS_FOR_DELAY,-- 异常原因
+    T.AIRLINES, -- 航空公司2码
+    T.CRAFT_TYPE_ICAO, -- 机型
+    T.REGN , -- 机号
+    CASE T.D_OR_A WHEN 'D' THEN '出港' WHEN 'A' THEN '进港' ELSE '' END AS D_OR_A, -- 进出港标志
+    F.CHINESE_NAME AS FLIGHT_TASK,-- 航班任务
+    CASE WHEN T.ATTRIBUTE = '2401' THEN '国际' WHEN T.ATTRIBUTE = '2402' THEN '地区'
+    WHEN T.ATTRIBUTE = '2403' THEN '国内' WHEN T.ATTRIBUTE = '2404' THEN '混合' ELSE NULL END AS ATTRIBUTE,-- 航班属性
+    T.ADEP AS ADEP, -- 起飞机场代码
+    T.ADES AS ADES, -- 落地机场代码
+    C.CHINESE_NAME AS ADEP_NAME, -- 起飞机场名称
+    D.CHINESE_NAME AS ADES_NAME, -- 落地机场名称
+    CASE WHEN T.D_OR_A = 'D' THEN T.SOBT WHEN T.D_OR_A = 'A' THEN T.SIBT ELSE NULL END AS PLAN_TIME,-- 计划时间
+    CASE WHEN T.D_OR_A = 'D' THEN T.ATOT WHEN T.D_OR_A = 'A' THEN T.ALDT ELSE NULL END AS REAL_TIME,-- 实际时间
+    T.STDC,-- 计划关客舱门时间STDC
+    T.ATDC,-- 实际关客舱门时间ATDC
+    T.DELAY_TIME -- 延误时长
+    FROM
+    (SELECT Q.FLIGHT_ID, -- 航班唯一ID
+    Q.ASSOCIATED_FLIGHT_ID, -- 航班关联唯一ID
+    Q.FLNO,-- 航班号
+    CASE WHEN Q.ASSOCIATED_FLIGHT_ID IS NOT NULL THEN
+    (SELECT FLNO FROM T_LOCAL_FLIGHT_INFO WHERE FLIGHT_ID = Q.ASSOCIATED_FLIGHT_ID)
+    ELSE NULL END AS FLNO_ASSOCIATED,-- 关联航班号
+    Q.EXEC_DATE,-- 航班日期
+    Q.NORMAL_FLIGHT_STAT_CD AS FL_STATUS,-- 航班进展状态
+    Q.ABNORMAL_FLIGHT_STAT_CD AS FLAB_STATUS,-- 航班异常状态
+    Q.AIRLINES, -- 航空公司2码
+    Q.CRAFT_TYPE_ICAO, -- 机型
+    Q.REGN , -- 机号
+    Q.D_OR_A, -- 进出港标志
+    Q.FLIGHT_TASK,-- 航班任务
+    Q.ATTRIBUTE,-- 航班属性
+    Q.ADEP, -- 起飞机场
+    Q.ADES, -- 落地机场
+    DATE_FORMAT(Q.ALDT,'%Y-%m-%d %H:%i:%s') AS ALDT, -- 实际落地日期时间
+    DATE_FORMAT(Q.SOBT,'%Y-%m-%d %H:%i:%s') AS SOBT,-- 计划起飞时间
+    DATE_FORMAT(Q.SIBT,'%Y-%m-%d %H:%i:%s') AS SIBT,-- 计划落地时间
+    DATE_FORMAT(Q.ATOT,'%Y-%m-%d %H:%i:%s') AS ATOT, -- 实际起飞日期时间
+    DATE_FORMAT(Q.STDC,'%Y-%m-%d %H:%i:%s') AS STDC,-- 计划关客舱门时间STDC
+    DATE_FORMAT(Q.ATDC,'%Y-%m-%d %H:%i:%s') AS ATDC,-- 实际关客舱门时间ATDC
+    Q.REASONS_FOR_DELAY,-- 延误原因
+    Q.DELAY_TIME -- 延误时长
+    FROM T_LOCAL_FLIGHT_INFO Q
+    WHERE IFNULL(Q.ISDEL,'0') = '0'
+    UNION
+    SELECT
+    '' AS FLIGHT_ID, -- 航班唯一ID
+    '' AS ASSOCIATED_FLIGHT_ID, -- 航班关联唯一ID
+    R.FLNO,-- 航班号
+    '' AS FLNO_ASSOCIATED,-- 关联航班号
+    R.EXDT AS EXEC_DATE,-- 航班日期
+    '' AS FL_STATUS,-- 航班进展状态
+    '' AS FLAB_STATUS,-- 航班异常状态
+    R.AWCD AS AIRLINES, -- 航空公司2码
+    R.CFTP AS CRAFT_TYPE_ICAO, -- 机型
+    '' AS REGN , -- 机号
+    R.FLIO AS D_OR_A, -- 进出港标志
+    '' AS FLIGHT_TASK,-- 航班任务
+    '' AS ATTRIBUTE,-- 航班属性
+    R.DPCD AS ADEP, -- 起飞机场
+    R.ARCD AS ADES, -- 落地机场
+    '' AS ALDT, -- 实际落地日期时间
+    R.FPTT AS SOBT,-- 计划起飞时间
+    R.FPLT AS SIBT,-- 计划落地时间
+    '' AS ATOT, -- 实际起飞日期时间
+    '' AS STDC,-- 计划关客舱门时间STDC
+    '' AS ATDC,-- 实际关客舱门时间ATDC
+    '' AS REASONS_FOR_DELAY,-- 延误原因
+    '' AS DELAY_TIME -- 延误时长
+    FROM (SELECT A.FLNO,A.EXDT,A.AWCD,A.CFTP,A.FPTT,A.FPLT,A.DPCD,A.ARCD,A.FLIO,A.ISDEL FROM T_FLIGHT_SCHEDULING A
+    LEFT JOIN T_LOCAL_FLIGHT_INFO B ON B.FLNO = A.FLNO
+    AND B.EXEC_DATE = A.EXDT AND B.D_OR_A = A.FLIO
+    WHERE A.EXDT BETWEEN DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY),'%Y-%m-%d')
+    AND DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 5 DAY),'%Y-%m-%d') AND B.FLIGHT_ID IS NULL
+    AND A.ISSH = 'N' AND (A.DPCD = 'WUH' OR A.ARCD = 'WUH') AND IFNULL(A.ISDEL,'0') = '0') R) T
+    LEFT JOIN T_FLIGHT_STATUS B ON T.FL_STATUS = B.`CODE`
+    LEFT JOIN T_FLIGHT_STATUS BB ON T.FLAB_STATUS = BB.`CODE`
+    LEFT JOIN T_AIRPORT C ON T.ADEP = C.AIRPORT_IATA
+    LEFT JOIN T_AIRPORT D ON T.ADES = D.AIRPORT_IATA
+    LEFT JOIN T_FLIGHT_TASK F ON T.FLIGHT_TASK = F.`CODE`
+    LEFT JOIN T_ABNORMAL_REASON G ON T.REASONS_FOR_DELAY = G.`CODE`
+    WHERE 1=1
+
+    <if test="params.startTime !=null and params.startTime != '' and params.endTime !=null and params.endTime != '' ">
+      AND ((T.D_OR_A = 'D' AND T.SOBT BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR})
+      OR (T.D_OR_A = 'A' AND T.SIBT BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR}))
+    </if>
+    <if test="params.flno !=null and params.flno != ''">
+      AND T.FLNO LIKE CONCAT('%',#{params.flno,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND T.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND T.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY T.SOBT DESC
+  </select>
+
+
+</mapper>

@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.dynamicFlight.FltSituationMapper" >
+
+  <resultMap id="ResultMapCriticalFltA" type="com.hq.acdm.vo.dynamicFlight.CriticalFltAVo" >
+    <result column="FLIGHT_ID" property="flightId" jdbcType="VARCHAR" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="SIBT" property="sibt" jdbcType="VARCHAR" />
+    <result column="ELDT" property="eldt" jdbcType="VARCHAR" />
+    <result column="FLIGHT_STATUS" property="flightStatus" jdbcType="VARCHAR" />
+    <result column="ISFOCUS" property="isfocus" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <resultMap id="ResultMapCriticalFltD" type="com.hq.acdm.vo.dynamicFlight.CriticalFltDVo" >
+    <result column="FLIGHT_ID" property="flightId" jdbcType="VARCHAR" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="COBT" property="cobt" jdbcType="VARCHAR" />
+    <result column="ISFOCUS" property="isfocus" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="ResultMapCriticalFltRls" type="com.hq.acdm.vo.dynamicFlight.CriticalFltRlsVo" >
+    <result column="FLIGHT_ID" property="flightId" jdbcType="VARCHAR" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="TASK" property="task" jdbcType="VARCHAR" />
+    <result column="YWLJ" property="ywlj" jdbcType="VARCHAR" />
+    <result column="FXLJ" property="fxlj" jdbcType="VARCHAR" />
+    <result column="DDSC" property="ddsc" jdbcType="VARCHAR" />
+    <result column="ATDC" property="atdc" jdbcType="VARCHAR" />
+    <result column="AOBT" property="aobt" jdbcType="VARCHAR" />
+    <result column="TOBT" property="tobt" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CTOT" property="ctot" jdbcType="VARCHAR" />
+    <result column="CTOT_STATUS" property="ctotStatus" jdbcType="VARCHAR" />
+    <result column="TTOT" property="ttot" jdbcType="VARCHAR" />
+    <result column="ISFOCUS" property="isfocus" jdbcType="VARCHAR" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="TRDT_STATUS" property="trdtStatus" jdbcType="VARCHAR" />
+    <result column="STAND" property="stand" jdbcType="VARCHAR" />
+    <result column="TY_STATUS" property="tyStatus" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="DelayCoordination" type="com.hq.acdm.vo.dynamicFlight.DelayCoordinationVo" >
+    <result column="FLIGHT_ID" property="flightId" jdbcType="VARCHAR" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="COBT" property="cobt" jdbcType="VARCHAR" />
+    <result column="STRICT_FLOW_CONTROL" property="strictFlowControl" jdbcType="VARCHAR" />
+    <result column="ISFOCUS" property="isfocus" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="TobtToCobt" type="com.hq.acdm.vo.dynamicFlight.TobtToCobtVo" >
+    <result column="FLIGHT_ID" property="flightId" jdbcType="VARCHAR" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="TOBT" property="tobt" jdbcType="VARCHAR" />
+    <result column="COBT" property="cobt" jdbcType="VARCHAR" />
+    <result column="ISFOCUS" property="isfocus" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="coordinationDelayCountMap" type="com.hq.acdm.vo.dynamicFlight.CoordinationDelayCountVo" >
+    <result column="FLIGHT_ID" property="flightId" jdbcType="VARCHAR" />
+    <result column="EXEC_DATE" property="execDate" jdbcType="VARCHAR" />
+    <result column="ADES" property="ades" jdbcType="VARCHAR" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="YWLJ" property="ywlj" jdbcType="VARCHAR" />
+    <result column="FXLJ" property="fxlj" jdbcType="VARCHAR" />
+    <result column="FLIGHT_TM" property="flightTm" jdbcType="VARCHAR" />
+    <result column="ATOT" property="atot" jdbcType="VARCHAR" />
+    <result column="FLOW_CONTROL_REASON" property="flowControlReason" jdbcType="VARCHAR" />
+    <result column="COORDINATION_UNIT_AND_CONTENT" property="coordinationUnitAndContent" jdbcType="VARCHAR" />
+    <result column="COORDINATION_RESULT" property="coordinationResult" jdbcType="VARCHAR" />
+    <result column="COORDINATOR" property="coordinator" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="getCriticalFltA" resultMap="ResultMapCriticalFltA" parameterType="map" >
+    SELECT A.FLIGHT_ID, A.FLNO,
+    IFNULL(DATE_FORMAT(A.SIBT, '%H:%i'),'-') AS SIBT,
+    IFNULL(DATE_FORMAT(A.ELDT, '%H:%i'),'-') AS ELDT,
+    B.CHINESE_NAME AS FLIGHT_STATUS,
+    IFNULL(A.ISFOCUS,'0') AS ISFOCUS
+    FROM T_LOCAL_FLIGHT_INFO A
+    LEFT JOIN T_FLIGHT_STATUS B ON A.NORMAL_FLIGHT_STAT_CD = B.`CODE`
+    WHERE A.D_OR_A = 'A'
+    AND A.FLIGHT_TASK IN ('L/W','W/Z','C/B')
+    AND IFNULL(A.ISDEL,'0') = '0'
+	AND A.ALDT IS NULL
+    AND A.ELDT BETWEEN DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s')
+    AND DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 30 MINUTE),'%Y-%m-%d %H:%i:%s')
+    ORDER BY A.ISFOCUS DESC, A.SOBT ASC
+    LIMIT 8
+  </select>
+
+  <select id="getCriticalFltRls" resultMap="ResultMapCriticalFltRls" parameterType="map">
+    <![CDATA[
+	SELECT TA.FLIGHT_ID,LEFT(TB.CHINESE_NAME,1) TASK,TA.FLNO,
+      TA.SOBT,DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) YWLJ,
+      DATE_ADD(TA.STDC,INTERVAL 25 MINUTE) FXLJ,TA.ATDC,TA.AOBT,
+      TC.CHINESE_NAME `STATUS`,TA.CTOT,TA.STAND,
+    CASE WHEN (SELECT COUNT(1) FROM T_CONTROL_INFO TG
+        LEFT JOIN T_CONTROL_MAP TF ON TG.CONTROL_ID = TF.CONTROL_ID
+        LEFT JOIN T_ATC_FLIGHT_INFO TE ON TE.FUID = TF.FUID
+        WHERE TE.FLIGHTID = TA.FLIGHT_ID
+        AND TG.ISAVAILABLE = 1
+        AND TG.CONTROL_CONTENT LIKE '%统一放行%') > 0 THEN 1
+    ELSE 0 END AS TY_STATUS,
+    CASE WHEN DATE_FORMAT(TA.CTOT, '%H%I') <> '0600'
+        AND DATE_FORMAT(TA.CTOT, '%H') <> '05'
+        AND DATE_FORMAT(TA.CTOT, '%Y') <> '9999'
+        AND TA.CTOT >= DATE_ADD(TA.STDC,INTERVAL 20 MINUTE)
+        AND TA.CTOT <= DATE_ADD(TA.STDC,INTERVAL 30 MINUTE) THEN 1
+    WHEN DATE_FORMAT(TA.CTOT, '%H%I') <> '0600'
+        AND DATE_FORMAT(TA.CTOT, '%H') <> '05'
+        AND DATE_FORMAT(TA.CTOT, '%Y') <> '9999'
+        AND TA.CTOT > DATE_ADD(TA.STDC,INTERVAL 30 MINUTE) THEN 2
+    ELSE 0 END AS CTOT_STATUS,
+      TA.TTOT,TA.ISFOCUS,TA.TOBT,IFNULL(TD.STATE,0) STATE,
+    CASE WHEN TA.TRDT IS NOT NULL THEN 1 ELSE 0 END AS TRDT_STATUS
+      FROM T_LOCAL_FLIGHT_INFO TA
+      LEFT JOIN T_FLIGHT_TASK TB ON TA.FLIGHT_TASK=TB.`CODE`
+      LEFT JOIN T_FLIGHT_STATUS TC ON TA.NORMAL_FLIGHT_STAT_CD = TC.`CODE`
+	  LEFT JOIN T_DELAY_COORDINATION TD ON TA.FLIGHT_ID=TD.FLIGHT_ID
+      WHERE TA.ISDEL <> '1' AND TA.D_OR_A='D' AND TA.ATOT IS NULL
+      AND TA.SOBT > DATE_SUB(NOW(),INTERVAL 12 HOUR)
+      AND TA.SOBT < DATE_ADD(NOW(),INTERVAL 45 MINUTE)
+      -- AND STDC < DATE_ADD(NOW(),INTERVAL 20 MINUTE)
+      AND TA.ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+      AND TA.AIRLINES <> 'XX'
+      AND TA.FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+	  AND TA.ATDC IS NOT NULL
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND TA.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND TA.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY FXLJ
+  </select>
+
+  <select id="getCriticalFltRlsOpen" resultMap="ResultMapCriticalFltRls" parameterType="map">
+    <![CDATA[
+	SELECT TA.FLIGHT_ID,LEFT(TB.CHINESE_NAME,1) TASK,TA.FLNO,
+      TA.SOBT,DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) YWLJ,
+      DATE_ADD(TA.STDC,INTERVAL 25 MINUTE) FXLJ,TA.ATDC,TA.AOBT,
+      TC.CHINESE_NAME `STATUS`,TA.CTOT,TA.STAND,
+    CASE WHEN (SELECT COUNT(1) FROM T_CONTROL_INFO TG
+        LEFT JOIN T_CONTROL_MAP TF ON TG.CONTROL_ID = TF.CONTROL_ID
+        LEFT JOIN T_ATC_FLIGHT_INFO TE ON TE.FUID = TF.FUID
+        WHERE TE.FLIGHTID = TA.FLIGHT_ID
+        AND TG.ISAVAILABLE = 1
+        AND TG.CONTROL_CONTENT LIKE '%统一放行%') > 0 THEN 1
+    ELSE 0 END AS TY_STATUS,
+    CASE WHEN DATE_FORMAT(TA.CTOT, '%H%I') <> '0600'
+        AND DATE_FORMAT(TA.CTOT, '%H') <> '05'
+        AND DATE_FORMAT(TA.CTOT, '%Y') <> '9999'
+        AND TA.CTOT >= DATE_ADD(TA.STDC,INTERVAL 20 MINUTE)
+        AND TA.CTOT <= DATE_ADD(TA.STDC,INTERVAL 30 MINUTE) THEN 1
+    WHEN DATE_FORMAT(TA.CTOT, '%H%I') <> '0600'
+        AND DATE_FORMAT(TA.CTOT, '%H') <> '05'
+        AND DATE_FORMAT(TA.CTOT, '%Y') <> '9999'
+        AND TA.CTOT > DATE_ADD(TA.STDC,INTERVAL 30 MINUTE) THEN 2
+    ELSE 0 END AS CTOT_STATUS,
+      TA.TTOT,TA.ISFOCUS,TA.TOBT,IFNULL(TD.STATE,0) STATE,
+    CASE WHEN TA.TRDT IS NOT NULL THEN 1 ELSE 0 END AS TRDT_STATUS
+      FROM T_LOCAL_FLIGHT_INFO TA
+      LEFT JOIN T_FLIGHT_TASK TB ON TA.FLIGHT_TASK=TB.`CODE`
+      LEFT JOIN T_FLIGHT_STATUS TC ON TA.NORMAL_FLIGHT_STAT_CD = TC.`CODE`
+	  LEFT JOIN T_DELAY_COORDINATION TD ON TA.FLIGHT_ID=TD.FLIGHT_ID
+      WHERE TA.ISDEL <> '1' AND TA.D_OR_A='D' AND TA.ATOT IS NULL
+      AND TA.SOBT > DATE_SUB(NOW(),INTERVAL 12 HOUR)
+      AND TA.SOBT < DATE_ADD(NOW(),INTERVAL 45 MINUTE)
+      -- AND STDC < DATE_ADD(NOW(),INTERVAL 20 MINUTE)
+      AND TA.ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+      AND TA.AIRLINES <> 'XX'
+      AND TA.FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+	  AND TA.ATDC IS NULL
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND TA.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND TA.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY FXLJ
+  </select>
+
+  <select id="getCriticalFltIWt" resultType="com.hq.acdm.vo.dynamicFlight.CriticalFltRlsVo" parameterType="map">
+    <![CDATA[
+    SELECT TA.FLIGHT_ID flightId,LEFT(TB.CHINESE_NAME,1) task,TA.FLNO flno,TA.SOBT sobt,
+    DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) ywlj,DATE_ADD(TA.STDC,INTERVAL 25 MINUTE) fxlj,
+    TA.ASBT asbt,TA.AEBT aebt,TIMESTAMPDIFF(MINUTE,TA.ATDC,NOW()) ddsc,TA.ATDC atdc,TA.AOBT aobt,
+    TA.CTOT ctot,TA.TTOT ttot,TA.ISFOCUS isfocus,TA.TOBT tobt,IFNULL(TC.STATE,0) state
+    FROM T_LOCAL_FLIGHT_INFO TA
+    LEFT JOIN T_FLIGHT_TASK TB ON TA.FLIGHT_TASK=TB.`CODE` LEFT JOIN T_DELAY_COORDINATION TC ON TA.FLIGHT_ID=TC.FLIGHT_ID
+    WHERE TA.ISDEL <> '1' AND TA.D_OR_A='D' AND TA.ATOT IS NULL AND TA.EXEC_DATE = CURRENT_DATE
+    AND TA.ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+    AND TA.AIRLINES <> 'XX'
+    AND(((NOW() BETWEEN DATE_SUB(TA.SOBT,INTERVAL 10 MINUTE) AND DATE_ADD(TA.SOBT,INTERVAL 20 MINUTE) AND TA.ATDC IS NULL)
+    OR(NOW() BETWEEN TA.SOBT AND DATE_ADD(TA.SOBT,INTERVAL 20 MINUTE) AND TA.AOBT IS NULL))
+    OR ((NOW() BETWEEN DATE_SUB(TA.STDC,INTERVAL 10 MINUTE) AND DATE_ADD(TA.STDC,INTERVAL 20 MINUTE) AND TA.ATDC IS NULL)
+    OR (NOW() BETWEEN TA.STDC AND DATE_ADD(TA.STDC,INTERVAL 20 MINUTE) AND TA.AOBT IS NULL)))
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND TA.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND TA.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY TA.SOBT ASC
+  </select>
+
+  <select id="getCriticalFltD" resultMap="ResultMapCriticalFltD" parameterType="map" >
+    SELECT A.FLIGHT_ID, A.FLNO,
+    IFNULL(DATE_FORMAT(A.SOBT, '%H:%i'),'-') AS SOBT,
+    IFNULL(DATE_FORMAT(A.COBT, '%H:%i'),'-') AS COBT,
+    IFNULL(A.ISFOCUS,'0') AS ISFOCUS
+    FROM T_LOCAL_FLIGHT_INFO A
+    LEFT JOIN T_FLIGHT_STATUS B ON A.NORMAL_FLIGHT_STAT_CD = B.`CODE`
+    WHERE A.D_OR_A = 'D'
+    AND A.FLIGHT_TASK IN ('L/W','W/Z','C/B')
+    AND IFNULL(A.ISDEL,'0') = '0'
+	AND A.ATOT IS NULL
+    AND A.ETOT BETWEEN DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s')
+    AND DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 30 MINUTE),'%Y-%m-%d %H:%i:%s')
+    ORDER BY A.ISFOCUS DESC, A.SOBT ASC
+    LIMIT 8
+  </select>
+
+  <update id="updateFlightFocus" parameterType="map" >
+    UPDATE T_LOCAL_FLIGHT_INFO SET ISFOCUS = #{params.flag,jdbcType=INTEGER}
+    WHERE FLIGHT_ID = #{params.flightId,jdbcType=BIGINT}
+  </update>
+
+  <select id="getFltSchedulingByTime" resultType="com.hq.acdm.vo.dynamicFlight.FltSchedulingVo"  >
+    SELECT T.* FROM (SELECT FLIGHT_ID FltId,'' FltNumA,FLNO FltNumD,DATE_FORMAT(SOBT,'%H:%i') Time FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='D' GROUP BY SOBT
+    UNION SELECT FLIGHT_ID FltId,FLNO FltNumA,'' FltNumD,DATE_FORMAT(ELDT,'%H:%i') Time FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='A' GROUP BY ELDT) T
+    GROUP BY T.Time HAVING COUNT(T.Time) > 1
+  </select>
+
+  <select id="getFltScheduling" resultType="com.hq.acdm.vo.dynamicFlight.FltSchedulingVo"  >
+    SELECT T.* FROM
+    (SELECT FLIGHT_ID FltId,FLNO FltNumA,'' FltNumD,DATE_FORMAT(ELDT,'%H:%i') Time FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='A' GROUP BY ELDT
+    UNION SELECT FLIGHT_ID FltId,'' FltNumA,FLNO FltNumD,DATE_FORMAT(SOBT,'%H:%i') Time FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='D' GROUP BY SOBT) T
+    GROUP BY T.Time
+  </select>
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.dynamicFlight.ControlInfoVo" >
+    <result column="CONTROL_ID" property="controlId" jdbcType="VARCHAR" />
+    <result column="INFO_TM" property="infoTm" jdbcType="VARCHAR" />
+    <result column="INFO_CONTENT" property="infoContent" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="findControlId" resultMap="ResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT CONTROL_ID,CONCAT(DATE_FORMAT(CONTROL_REAL_STARTTM, '%Y-%m-%d %H:%i:%s'),'至',
+    DATE_FORMAT(CONTROL_ALTERAT_ENDTM, '%Y-%m-%d %H:%i:%s')) AS INFO_TM, CONCAT('流控信息:',CONTROL_CONTENT) AS INFO_CONTENT
+    FROM T_CONTROL_INFO
+    WHERE ISAVAILABLE = 1
+    AND DATE_FORMAT(PUBTIME,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
+
+    ]]>
+  </select>
+  <select id="getFltTimeAxis" resultType="com.hq.acdm.vo.dynamicFlight.FltTimeAxisVo"   parameterType="map">
+   SELECT t.FLIGHT_ID flid,t.FLNO flno,t.CRAFT_TYPE_ICAO type,t.STAND stand,t.isiteffective,
+      (case WHEN t.ATOT IS NOT NULL and (IFNULL(t.DELAY_TIMED,0) - IFNULL(t.DELAY_TIMEA,0) > 0)
+      THEN 2
+      WHEN t.ATOT IS NOT NULL and (t.DELAY_TIMED > 0)
+      THEN 1
+      WHEN t.ATOT IS NULL and t.ctot>date_add(t.STDC, interval 25 MINUTE)
+      THEN 2
+      WHEN t.ATOT IS NULL and t.ctot>date_add(t.SOBT, interval 25 MINUTE)
+      THEN 1
+      ELSE 0 END) AS delaytime,
+      date_format(t.ctot, '%Y-%m-%d %H:%i:%s') bigtimes,t.shorttimes,IF(t.ATOT IS NOT NULL,1,0) isatot,t.execDate from (
+      SELECT D.FLIGHT_ID ,D.FLNO,D.CRAFT_TYPE_ICAO,D.STAND,
+      D.DELAY_TIME DELAY_TIMED,A.DELAY_TIME DELAY_TIMEA,
+      CASE WHEN D.ATOT is not null then '1'
+      WHEN D.ctot is null or date_format(D.ctot, '%H%i')='0600' or date_format(D.ctot, '%H')='05'
+        or date_format(D.ctot, '%Y')='9999' THEN '0' ELSE '1' END isiteffective,
+      CASE  WHEN D.ATOT is not null then D.ATOT
+      WHEN D.ctot is null or date_format(D.ctot, '%H%i')='0600' or date_format(D.ctot, '%H')='05'
+        or date_format(D.ctot, '%Y')='9999'  THEN date_add(D.TOBT, interval (IFNULL(D.AXOT,0)) MINUTE) ELSE D.CTOT END ctot,
+      CASE  WHEN D.ATOT is not null then date_format(D.ATOT, '%Y-%m-%d %H:%i:%s')
+      WHEN D.ctot is null or date_format(D.ctot, '%H%i')='0600' or date_format(D.ctot, '%H')='05'
+        or date_format(D.ctot, '%Y')='9999'  THEN date_format(date_add(D.TOBT, interval (IFNULL(D.AXOT,0)) MINUTE), '%Y-%m-%d %H:%i:%s') ELSE date_format(D.CTOT, '%Y-%m-%d %H:%i:%s') END shorttimes
+       ,D.ATOT,D.STDC,D.SOBT,D.AXOT,date_format(D.EXEC_DATE, '%Y-%m-%d') execDate
+        from T_LOCAL_FLIGHT_INFO D
+        LEFT JOIN T_LOCAL_FLIGHT_INFO A ON D.ASSOCIATED_FLIGHT_ID=A.FLIGHT_ID
+        <if test="params.fuids !=null and params.fuids != ''">
+          INNER JOIN (
+          SELECT DISTINCT ATC.FLIGHTID FROM T_ATC_FLIGHT_INFO ATC
+          INNER JOIN T_CONTROL_MAP M ON ATC.FUID=M.FUID
+          WHERE M.CONTROL_ID IN (${params.fuids})
+          ) F ON D.FLIGHT_ID=F.FLIGHTID
+        </if>
+      where D.D_OR_A='D' AND  <![CDATA[ D.ABNORMAL_FLIGHT_STAT_CD <>'CAN' AND D.ISDEL <>'1' AND  ]]>
+      D.SOBT BETWEEN  date_add(NOW(), interval -12 hour) AND  date_add(NOW(), interval 12 hour)
+      <if test="params.flno !=null and params.flno != ''">
+        and D.ADES like #{params.flno,jdbcType=VARCHAR}
+      </if>
+      ) t
+       ORDER BY bigtimes
+  </select>
+
+  <select id="getFltTimeAxisTobt" resultType="com.hq.acdm.vo.dynamicFlight.FltTimeAxisVo"   parameterType="map">
+    SELECT t.FLIGHT_ID flid,t.FLNO flno,t.CRAFT_TYPE_ICAO type,t.STAND stand,t.isiteffective,
+    (case
+    WHEN t.ATOT IS NULL and date_add(t.ctot, interval (IFNULL(t.AXOT,0)) MINUTE)>date_add(t.STDC, interval 25 MINUTE)
+    THEN 2
+    WHEN t.ATOT IS NULL and date_add(t.ctot, interval (IFNULL(t.AXOT,0)) MINUTE)>date_add(t.SOBT, interval 25 MINUTE)
+    THEN 1
+    ELSE 0 END) AS delaytime,
+    date_format(t.ctot, '%Y-%m-%d %H:%i:%s') bigtimes,t.shorttimes,IF(t.ATOT IS NOT NULL,1,0) isatot,t.execDate from (
+    SELECT D.FLIGHT_ID ,D.FLNO,D.CRAFT_TYPE_ICAO,D.STAND,
+    D.DELAY_TIME DELAY_TIMED,A.DELAY_TIME DELAY_TIMEA,
+    "1" isiteffective,
+    D.TOBT ctot,
+    date_format(D.TOBT, '%Y-%m-%d %H:%i:%s') shorttimes
+    ,D.ATOT,D.STDC,D.SOBT,D.AXOT,date_format(D.EXEC_DATE, '%Y-%m-%d') execDate
+    from T_LOCAL_FLIGHT_INFO D
+    LEFT JOIN T_LOCAL_FLIGHT_INFO A ON D.ASSOCIATED_FLIGHT_ID=A.FLIGHT_ID
+    <if test="params.fuids !=null and params.fuids != ''">
+      INNER JOIN (
+      SELECT DISTINCT ATC.FLIGHTID FROM T_ATC_FLIGHT_INFO ATC
+      INNER JOIN T_CONTROL_MAP M ON ATC.FUID=M.FUID
+      WHERE M.CONTROL_ID IN (${params.fuids})
+      ) F ON D.FLIGHT_ID=F.FLIGHTID
+    </if>
+    where D.D_OR_A='D' AND   <![CDATA[ D.ABNORMAL_FLIGHT_STAT_CD <>'CAN' AND D.ISDEL <>'1' AND  ]]>
+    D.SOBT BETWEEN  date_add(NOW(), interval -12 hour) AND  date_add(NOW(), interval 12 hour)
+    <if test="params.flno !=null and params.flno != ''">
+      and D.ADES like #{params.flno,jdbcType=VARCHAR}
+    </if>
+    ) t
+    ORDER BY bigtimes
+  </select>
+
+  <update id="updateTimeAxis" parameterType="map" >
+    UPDATE T_LOCAL_FLIGHT_INFO SET CTOT = #{params.updateTime,jdbcType=TIMESTAMP}
+    WHERE FLIGHT_ID = #{params.flid,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMapbyflid" type="com.hq.acdm.vo.dynamicFlight.TCoordinatedDisposal" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="EVENT_TYPE" property="eventType" jdbcType="VARCHAR" />
+    <result column="FLIGHT_ID" property="flightId" jdbcType="BIGINT" />
+    <result column="AFID" property="afid" jdbcType="BIGINT" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="EXEC_DATE" property="execDate" jdbcType="DATE" />
+    <result column="D_OR_A" property="dOrA" jdbcType="VARCHAR" />
+    <result column="ADEP" property="adep" jdbcType="VARCHAR" />
+    <result column="ADES" property="ades" jdbcType="VARCHAR" />
+    <result column="SIBT" property="sibt" jdbcType="TIMESTAMP" />
+    <result column="SOBT" property="sobt" jdbcType="TIMESTAMP" />
+    <result column="ASBT" property="asbt" jdbcType="TIMESTAMP" />
+    <result column="AEBT" property="aebt" jdbcType="TIMESTAMP" />
+    <result column="ATDC" property="atdc" jdbcType="TIMESTAMP" />
+    <result column="YWLJ" property="ywlj" jdbcType="TIMESTAMP" />
+    <result column="FXLJ" property="fxlj" jdbcType="TIMESTAMP" />
+    <result column="CDM" property="cdm" jdbcType="TIMESTAMP" />
+    <result column="ATOT" property="atot" jdbcType="TIMESTAMP" />
+    <result column="ALDT" property="aldt" jdbcType="TIMESTAMP" />
+    <result column="AIBT" property="aibt" jdbcType="TIMESTAMP" />
+    <result column="AOBT" property="aobt" jdbcType="TIMESTAMP" />
+    <result column="RMK" property="rmk" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="TIMESTAMP" />
+    <result column="CREATE_USR" property="createUsr" jdbcType="VARCHAR" />
+    <result column="UPDATE_USR" property="updateUsr" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectByFlid" resultMap="BaseResultMapbyflid" parameterType="java.lang.String" >
+    SELECT D.FLIGHT_ID,D.FLNO,D.EXEC_DATE,D.D_OR_A,D.ADEP,D.ADES,D.SIBT,D.SOBT,D.ASBT,D.AEBT,D.ATDC,
+    DATE_ADD(D.SOBT,INTERVAL 25 MINUTE) YWLJ,DATE_ADD(D.STDC,INTERVAL 25 MINUTE) FXLJ,
+    D.CTOT CDM,D.ATOT,A.ALDT,D.AIBT,D.AOBT,T.CHINESE_NAME RMK
+    from T_LOCAL_FLIGHT_INFO D
+    LEFT JOIN T_LOCAL_FLIGHT_INFO A
+    ON D.ASSOCIATED_FLIGHT_ID=A.FLIGHT_ID
+    LEFT JOIN T_AIRPORT T
+    ON D.ADES=T.AIRPORT_IATA
+    where D.D_OR_A='D' AND  D.FLIGHT_ID = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insertCDSelective" parameterType="com.hq.acdm.vo.dynamicFlight.TCoordinatedDisposal" >
+    insert into T_COORDINATED_DISPOSAL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="eventType != null" >
+        EVENT_TYPE,
+      </if>
+      <if test="flightId != null" >
+        FLIGHT_ID,
+      </if>
+      <if test="afid != null" >
+        AFID,
+      </if>
+      <if test="flno != null" >
+        FLNO,
+      </if>
+      <if test="execDate != null" >
+        EXEC_DATE,
+      </if>
+      <if test="dOrA != null" >
+        D_OR_A,
+      </if>
+      <if test="adep != null" >
+        ADEP,
+      </if>
+      <if test="ades != null" >
+        ADES,
+      </if>
+      <if test="sibt != null" >
+        SIBT,
+      </if>
+      <if test="sobt != null" >
+        SOBT,
+      </if>
+      <if test="asbt != null" >
+        ASBT,
+      </if>
+      <if test="aebt != null" >
+        AEBT,
+      </if>
+      <if test="atdc != null" >
+        ATDC,
+      </if>
+      <if test="ywlj != null" >
+        YWLJ,
+      </if>
+      <if test="fxlj != null" >
+        FXLJ,
+      </if>
+      <if test="cdm != null" >
+        CDM,
+      </if>
+      <if test="atot != null" >
+        ATOT,
+      </if>
+      <if test="aldt != null" >
+        ALDT,
+      </if>
+      <if test="aibt != null" >
+        AIBT,
+      </if>
+      <if test="aobt != null" >
+        AOBT,
+      </if>
+      <if test="rmk != null" >
+        RMK,
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM,
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM,
+      </if>
+      <if test="createUsr != null" >
+        CREATE_USR,
+      </if>
+      <if test="updateUsr != null" >
+        UPDATE_USR,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="eventType != null" >
+        #{eventType,jdbcType=VARCHAR},
+      </if>
+      <if test="flightId != null" >
+        #{flightId,jdbcType=BIGINT},
+      </if>
+      <if test="afid != null" >
+        #{afid,jdbcType=BIGINT},
+      </if>
+      <if test="flno != null" >
+        #{flno,jdbcType=VARCHAR},
+      </if>
+      <if test="execDate != null" >
+        #{execDate,jdbcType=DATE},
+      </if>
+      <if test="dOrA != null" >
+        #{dOrA,jdbcType=VARCHAR},
+      </if>
+      <if test="adep != null" >
+        #{adep,jdbcType=VARCHAR},
+      </if>
+      <if test="ades != null" >
+        #{ades,jdbcType=VARCHAR},
+      </if>
+      <if test="sibt != null" >
+        #{sibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sobt != null" >
+        #{sobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asbt != null" >
+        #{asbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aebt != null" >
+        #{aebt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atdc != null" >
+        #{atdc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ywlj != null" >
+        #{ywlj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fxlj != null" >
+        #{fxlj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cdm != null" >
+        #{cdm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atot != null" >
+        #{atot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aldt != null" >
+        #{aldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aibt != null" >
+        #{aibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aobt != null" >
+        #{aobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rmk != null" >
+        #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUsr != null" >
+        #{createUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUsr != null" >
+        #{updateUsr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateCDByPrimaryKeySelective" parameterType="com.hq.acdm.vo.dynamicFlight.TCoordinatedDisposal" >
+    update T_COORDINATED_DISPOSAL
+    <set >
+      <if test="eventType != null" >
+        EVENT_TYPE = #{eventType,jdbcType=VARCHAR},
+      </if>
+      <if test="flightId != null" >
+        FLIGHT_ID = #{flightId,jdbcType=BIGINT},
+      </if>
+      <if test="afid != null" >
+        AFID = #{afid,jdbcType=BIGINT},
+      </if>
+      <if test="flno != null" >
+        FLNO = #{flno,jdbcType=VARCHAR},
+      </if>
+      <if test="execDate != null" >
+        EXEC_DATE = #{execDate,jdbcType=DATE},
+      </if>
+      <if test="dOrA != null" >
+        D_OR_A = #{dOrA,jdbcType=VARCHAR},
+      </if>
+      <if test="adep != null" >
+        ADEP = #{adep,jdbcType=VARCHAR},
+      </if>
+      <if test="ades != null" >
+        ADES = #{ades,jdbcType=VARCHAR},
+      </if>
+      <if test="sibt != null" >
+        SIBT = #{sibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sobt != null" >
+        SOBT = #{sobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asbt != null" >
+        ASBT = #{asbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aebt != null" >
+        AEBT = #{aebt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atdc != null" >
+        ATDC = #{atdc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ywlj != null" >
+        YWLJ = #{ywlj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fxlj != null" >
+        FXLJ = #{fxlj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cdm != null" >
+        CDM = #{cdm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atot != null" >
+        ATOT = #{atot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aldt != null" >
+        ALDT = #{aldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aibt != null" >
+        AIBT = #{aibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aobt != null" >
+        AOBT = #{aobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rmk != null" >
+        RMK = #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUsr != null" >
+        CREATE_USR = #{createUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUsr != null" >
+        UPDATE_USR = #{updateUsr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where FLIGHT_ID = #{flightId,jdbcType=BIGINT}
+  </update>
+
+  <!--
+  <select id="getDelayCoordinationInfo" resultMap="DelayCoordination" parameterType="map" >
+    SELECT A.FLIGHT_ID, A.FLNO,
+    IFNULL(DATE_FORMAT(A.SOBT, '%H:%i'),'-') AS SOBT,
+    IFNULL(DATE_FORMAT(A.COBT, '%H:%i'),'-') AS COBT,
+    A.ISCONTROL AS STRICT_FLOW_CONTROL,
+    IFNULL(A.ISFOCUS,'0') AS ISFOCUS
+    FROM T_LOCAL_FLIGHT_INFO A
+    WHERE A.D_OR_A = 'D'
+    AND A.FLIGHT_TASK IN ('L/W','W/Z','C/B')
+    AND IFNULL(A.ISDEL,'0') = '0'
+    AND ROUND((UNIX_TIMESTAMP(A.CTOT)-UNIX_TIMESTAMP(A.COBT))/60) &gt; 30
+    AND ROUND((UNIX_TIMESTAMP(A.CTOT)-UNIX_TIMESTAMP(A.COBT))/60) &lt; 40
+    ORDER BY A.ISFOCUS DESC, A.COBT DESC
+    LIMIT 8
+  </select>
+  -->
+
+  <select id="getDelayCoordinationInfo" resultType="com.hq.acdm.vo.dynamicFlight.DelayCoordinationVo" parameterType="map" >
+    <![CDATA[
+    SELECT A.id, A.flight_id AS flightId, B.flno, B.sobt, B.sibt, B.ades, A.ywlj, A.fxlj, B.cobt, B.ctot, B.tobt, B.ttot, B.atdc, B.aobt, B.atot,
+    A.state, A.priority, A.rmk, A.create_tm AS createTm, A.create_emp AS createEmp, A.update_tm AS updateTm, A.update_emp AS updateEmp,
+    B.isfocus, B.iscontrol
+    FROM T_DELAY_COORDINATION A
+    LEFT JOIN T_LOCAL_FLIGHT_INFO B ON A.FLIGHT_ID = B.FLIGHT_ID
+    WHERE A.STATE NOT IN ('4','3') AND B.ATOT IS NULL AND B.ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+    AND B.FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND A.SOBT BETWEEN DATE_ADD(NOW(),INTERVAL -12 HOUR) AND DATE_ADD(NOW(),INTERVAL 12 HOUR)
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND B.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND B.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY B.ISFOCUS DESC, A.FXLJ ASC
+
+  </select>
+
+  <!--
+  <select id="getTobtToCobtInfo" resultMap="TobtToCobt" parameterType="map" >
+    SELECT A.FLIGHT_ID, A.FLNO,
+    IFNULL(DATE_FORMAT(A.SOBT, '%H:%i'),'-') AS SOBT,
+    IFNULL(DATE_FORMAT(A.TOBT, '%H:%i'),'-') AS TOBT,
+    IFNULL(DATE_FORMAT(A.COBT, '%H:%i'),'-') AS COBT,
+    IFNULL(A.ISFOCUS,'0') AS ISFOCUS
+    FROM T_LOCAL_FLIGHT_INFO A
+    WHERE A.D_OR_A = 'D'
+    AND A.FLIGHT_TASK IN ('L/W','W/Z','C/B')
+    AND IFNULL(A.ISDEL,'0') = '0'
+    AND A.TOBT > A.COBT
+    ORDER BY A.ISFOCUS DESC, A.COBT DESC
+    LIMIT 8
+  </select>
+  -->
+
+  <select id="getTobtToCobtInfo" resultType="com.hq.acdm.vo.dynamicFlight.DelayCoordinationVo" parameterType="map" >
+    <![CDATA[
+    SELECT A.id, A.flight_id AS flightId, B.flno, B.sobt, B.sibt, B.ades, A.ywlj, A.fxlj, B.cobt, B.ctot, B.tobt, B.ttot, B.atdc, B.aobt, B.atot,
+    A.state, A.priority, A.rmk, A.create_tm AS createTm, A.create_emp AS createEmp, A.update_tm AS updateTm, A.update_emp AS updateEmp ,B.isfocus
+    FROM T_DELAY_COORDINATION A
+    LEFT JOIN T_LOCAL_FLIGHT_INFO B ON A.FLIGHT_ID = B.FLIGHT_ID
+    WHERE A.STATE <> '4' AND B.ATOT IS NOT NULL AND B.EXEC_DATE = CURDATE() AND B.ISFOCUS = '1'
+    AND B.FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND A.SOBT BETWEEN DATE_ADD(NOW(),INTERVAL -12 HOUR) AND DATE_ADD(NOW(),INTERVAL 12 HOUR)
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND B.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND B.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY fxlj
+  </select>
+
+  <select id="findDelayCoordinationInfo" resultType="com.hq.acdm.model.realtimeSituation.TDelayCoordination" parameterType="map" >
+    SELECT FLIGHT_ID flightId,FLNO flno,SOBT sobt,SIBT sibt,ADES ades,
+    DATE_ADD(SOBT,INTERVAL 25 MINUTE) ywlj,DATE_ADD(STDC,INTERVAL 25 MINUTE) fxlj,TOBT tobt,COBT cobt,
+    CTOT ctot,TTOT ttot,ATDC atdc,AOBT aobt,ATOT atot
+    FROM T_LOCAL_FLIGHT_INFO
+    WHERE FLIGHT_ID = #{params.flightId,jdbcType=BIGINT}
+  </select>
+
+  <select id="findCoordinationDelayCountInfo" resultMap="coordinationDelayCountMap" parameterType="map" >
+    SELECT B.FLIGHT_ID,B.EXEC_DATE,C.CHINESE_NAME AS ADES,B.FLNO,
+    DATE_FORMAT(B.SOBT, '%H:%i') SOBT,
+    DATE_FORMAT(A.YWLJ, '%H:%i') YWLJ,
+    DATE_FORMAT(A.FXLJ, '%H:%i') FXLJ,
+    DATE_FORMAT(A.FLIGHT_TM, '%H:%i') FLIGHT_TM,
+    DATE_FORMAT(B.ATOT, '%H:%i') ATOT,
+    A.FLOW_CONTROL_REASON,A.COORDINATION_UNIT_AND_CONTENT,
+    TIMESTAMPDIFF(MINUTE,B.ATOT,A.FXLJ) AS COORDINATION_RESULT,COORDINATOR
+    FROM T_DELAY_COORDINATION A
+    LEFT JOIN T_LOCAL_FLIGHT_INFO B ON A.FLIGHT_ID = B.FLIGHT_ID
+    LEFT JOIN T_AIRPORT C ON A.ADES = C.AIRPORT_IATA
+    WHERE B.D_OR_A = 'D'
+    -- AND A.FLIGHT_TM IS NOT NULL
+    AND B.EXEC_DATE BETWEEN #{params.startDate} AND #{params.endDate}
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND B.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND B.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <update id="updateTDelayCoordinationContent" parameterType="map" >
+    UPDATE T_DELAY_COORDINATION
+    SET FLOW_CONTROL_REASON = #{params.flowControlReason,jdbcType=VARCHAR},
+    COORDINATION_UNIT_AND_CONTENT = #{params.coordinationUnitAndContent,jdbcType=VARCHAR},
+    COORDINATOR = #{params.coordinator,jdbcType=VARCHAR}
+    WHERE FLIGHT_ID = #{params.flightId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

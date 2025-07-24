@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.monitioring.PassagerFlowMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.monitoring.smallDelay.smallDelay" >
+    <result column="queryDate" property="queryDate" jdbcType="TIMESTAMP" />
+    <result column="aircraft_terminal_code" property="aircraft_terminal_code" jdbcType="VARCHAR" />
+    <result column="flight_no_iata" property="flight_no_iata" jdbcType="VARCHAR" />
+    <result column="gate_1" property="gate_1" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="queryTerminalPassager" parameterType="map" resultType="com.hq.acdm.model.monitoring.passager.PassagerFlow"  >
+      SELECT  * from V_RPT_PAX_SUM_ALERT where 1=1
+
+      <if test="params.terminal !=null and params.terminal != ''">
+          and terminal=#{params.terminal,jdbcType=VARCHAR}
+      </if>
+      <if test="params.destination !=null and params.destination != ''">
+          and dest_airport_iata=#{params.destination,jdbcType=VARCHAR}
+      </if>
+  </select>
+
+    <select id="queryAirCompanyPassager" parameterType="map" resultType="com.hq.acdm.model.monitoring.passager.PassagerFlow"  >
+        SELECT  * from V_DAILY_PAX_SUM_RPT where 1=1
+
+        <if test="params.airCompany !=null and params.airCompany != ''">
+            and airCompany=#{params.airCompany}
+        </if>
+        <if test="params.destination !=null and params.destination != ''">
+            and airport_dest=#{params.destination,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+<select id="queryHourPassager" parameterType="map" resultType="com.hq.acdm.model.monitoring.passager.PassagerFlow"  >
+ select pax_count_hour24h,pax_count_date ,sum(COUNT_CHECKED_IN) checkin,sum(count_insecurityzone)security,sum(count_onflights)boarding from   V_HOURLY_PASSENGER_count  where to_char(pax_count_date,'yyyy-MM-dd')=to_char(current_date,'yyyy-MM-dd')
+ group by pax_count_hour24h,pax_count_date   order by pax_count_hour24h
+ </select>
+</mapper>

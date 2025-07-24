@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.monitioring.ReportRunInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.monitoring.reportInfo.ReportRunInfo" >
+     <result column="flight_run" property="flight_run" jdbcType="VARCHAR" />
+    <result column="flight_cancel" property="flight_cancel" jdbcType="VARCHAR" />
+    <result column="delay_2hour" property="delay_2hour" jdbcType="VARCHAR" />
+    <result column="delay_4hour" property="delay_4hour" jdbcType="VARCHAR" />
+    <result column="report_user" property="report_user" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="schedule_date" property="schedule_date" jdbcType="TIMESTAMP" />
+    <result column="operational_date" property="operational_date" jdbcType="TIMESTAMP" />
+    <result column="status" property="sort" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    flight_run, flight_cancel, delay_2hour, delay_4hour,report_user, report_time,content,schedule_date,
+    operational_date,status
+  </sql>
+  <select id="queryList" resultType="com.hq.acdm.model.monitoring.reportInfo.ReportRunInfo" parameterType="map" >
+    select * from REPORT_RUN_INFO where 1=1
+    <if test="params.flight_no_iata !=null and params.flight_no_iata != ''">
+      and flight_no_iata=#{params.flight_no_iata,jdbcType=VARCHAR}
+    </if>
+    order by report_time desc
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from task
+    where id = #{taskid,jdbcType=INTEGER}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from REPORT_RUN_INFO
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.monitoring.reportInfo.ReportRunInfo" >
+    <selectKey keyProperty="id" resultType="int" order="BEFORE">
+      select report_runinfo_sequence.nextval from dual
+    </selectKey>
+    insert into REPORT_RUN_INFO ( id,flight_a,flight_d,
+    flight_cancel, delay_2hour, delay_4hour,report_user, report_time,content,schedule_date,
+    operational_date,status,flight_schedule)
+    values (
+    #{id},#{flight_a,jdbcType=VARCHAR},#{flight_d,jdbcType=VARCHAR}, #{flight_cancel,jdbcType=VARCHAR}, #{delay_2hour,jdbcType=VARCHAR},
+       #{delay_4hour,jdbcType=VARCHAR},#{report_user,jdbcType=VARCHAR},#{report_time,jdbcType=TIMESTAMP},
+      #{content,jdbcType=VARCHAR},to_date(#{schedule_date,jdbcType=TIMESTAMP},'yyyy-MM-dd HH24:MI:ss'),
+      to_date(#{operational_date,jdbcType=TIMESTAMP},'yyyy-MM-dd HH24:MI:ss'), #{status,jdbcType=INTEGER},#{flight_schedule,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="update" parameterType="com.hq.acdm.model.monitoring.reportInfo.ReportRunInfo" >
+    update REPORT_RUN_INFO
+     set flight_a=#{flight_a,jdbcType=VARCHAR},
+         flight_d=#{flight_d,jdbcType=VARCHAR},
+         flight_schedule=#{flight_schedule,jdbcType=VARCHAR},
+         flight_cancel=#{flight_cancel,jdbcType=VARCHAR},
+         delay_2hour=#{delay_2hour,jdbcType=VARCHAR},
+         delay_4hour=#{delay_4hour,jdbcType=VARCHAR},
+         report_user=#{report_user,jdbcType=VARCHAR},
+        content = #{content,jdbcType=VARCHAR}
+         where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateStatus" parameterType="com.hq.acdm.model.monitoring.reportInfo.ReportRunInfo" >
+    update REPORT_RUN_INFO
+
+    <if test="status ==1">
+      set status = #{status,jdbcType=INTEGER},
+      report_time=#{report_time,jdbcType=TIMESTAMP}
+    </if>
+    <if test="status ==2">
+      set status = #{status,jdbcType=INTEGER}
+    </if>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="getAll" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM sys_role
+  </select>
+
+  <select id="countByName" parameterType="map" resultType="int">
+    SELECT count(1)
+    FROM sys_role
+    WHERE name = #{name}
+    <if test="parentId != null">
+      AND parent_id = #{parentId}
+    </if>
+    <if test="id != null">
+      AND id != #{id}
+    </if>
+  </select>
+
+  <select id="getByIdList" parameterType="map" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM sys_role
+    WHERE id IN
+    <foreach collection="idList" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+    order by role_level
+  </select>
+
+  <select id="getByLevel" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from sys_role
+    where role_level = #{level}
+  </select>
+</mapper>

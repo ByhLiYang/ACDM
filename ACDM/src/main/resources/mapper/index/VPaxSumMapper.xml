@@ -1,0 +1,1636 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.index.VPaxSumMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.index.VPaxSum" >
+    <result column="PAX_NUM" property="paxNum" jdbcType="DECIMAL" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="S_HOUR" property="sHour" jdbcType="DECIMAL" />
+  </resultMap>
+  <insert id="insert" parameterType="com.hq.acdm.model.index.VPaxSum" >
+    insert into V_PAX_SUM (PAX_NUM, TYPE, S_HOUR
+      )
+    values (#{paxNum,jdbcType=DECIMAL}, #{type,jdbcType=VARCHAR}, #{sHour,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.index.VPaxSum" >
+    insert into V_PAX_SUM
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="paxNum != null" >
+        PAX_NUM,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="sHour != null" >
+        S_HOUR,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="paxNum != null" >
+        #{paxNum,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="sHour != null" >
+        #{sHour,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getRecord" resultMap="BaseResultMap">
+    select SUM(PAX_NUM) paxNum,type from V_PAX_SUM
+    GROUP  BY type
+  </select>
+  <select id="getRecordCA" resultMap="BaseResultMap">
+    select SUM(PAX_NUM) paxNum,type from V_PAX_SUM_CA
+    GROUP  BY type
+  </select>
+  <select id="getRecordCZ" resultMap="BaseResultMap">
+    select SUM(PAX_NUM) paxNum,type from V_PAX_SUM_CZ
+    GROUP  BY type
+  </select>
+  <select id="getRecordHAS" resultMap="BaseResultMap">
+    select SUM(PAX_NUM) paxNum,type from V_PAX_SUM_HAS
+    GROUP  BY type
+  </select>
+  <select id="getRecordHO" resultMap="BaseResultMap">
+    select SUM(PAX_NUM) paxNum,type from V_PAX_SUM_HO
+    GROUP  BY type
+  </select>
+  <select id="getRecordMU" resultMap="BaseResultMap">
+    select SUM(PAX_NUM) paxNum,type from V_PAX_SUM_MU
+    GROUP  BY type
+  </select>
+
+  <select id="getYesterdayPlanFlightNum" resultType="integer">
+  <![CDATA[
+        select sum(total) from (
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' and
+                (
+                    AA.SIBT BETWEEN to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND
+                    AA.A_OR_D = 'A'
+                )
+
+        union all
+
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' and
+                (
+                    AA.SOBT BETWEEN  to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS')  AND
+                    AA.A_OR_D = 'D'
+                )
+        ) a
+    ]]>
+</select>
+
+  <select id="getYesterdayPlanFlightNumCA" resultType="integer">
+    <![CDATA[
+        select sum(total) from (
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA IN ('CA','ZH') and
+                (
+                    AA.SIBT BETWEEN to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND
+                    AA.A_OR_D = 'A'
+                )
+
+        union all
+
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA IN ('CA','ZH') and
+                (
+                    AA.SOBT BETWEEN  to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS')  AND
+                    AA.A_OR_D = 'D'
+                )
+        ) a
+    ]]>
+  </select>
+
+  <select id="getYesterdayPlanFlightNumCZ" resultType="integer">
+    <![CDATA[
+        select sum(total) from (
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA = 'CZ' and
+                (
+                    AA.SIBT BETWEEN to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND
+                    AA.A_OR_D = 'A'
+                )
+
+        union all
+
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA = 'CZ' and
+                (
+                    AA.SOBT BETWEEN  to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS')  AND
+                    AA.A_OR_D = 'D'
+                )
+        ) a
+    ]]>
+  </select>
+
+  <select id="getYesterdayPlanFlightNumHAS" resultType="integer">
+    <![CDATA[
+        select sum(total) from (
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA IN ('MF','HU','TV','8L','NS','SC') and
+                (
+                    AA.SIBT BETWEEN to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND
+                    AA.A_OR_D = 'A'
+                )
+
+        union all
+
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA IN ('MF','HU','TV','8L','NS','SC') and
+                (
+                    AA.SOBT BETWEEN  to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS')  AND
+                    AA.A_OR_D = 'D'
+                )
+        ) a
+    ]]>
+  </select>
+
+  <select id="getYesterdayPlanFlightNumHO" resultType="integer">
+    <![CDATA[
+        select sum(total) from (
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA = 'HO' and
+                (
+                    AA.SIBT BETWEEN to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND
+                    AA.A_OR_D = 'A'
+                )
+
+        union all
+
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA = 'HO' and
+                (
+                    AA.SOBT BETWEEN  to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS')  AND
+                    AA.A_OR_D = 'D'
+                )
+        ) a
+    ]]>
+  </select>
+
+  <select id="getYesterdayPlanFlightNumMU" resultType="integer">
+    <![CDATA[
+        select sum(total) from (
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA IN ('FM','KN','MU') and
+                (
+                    AA.SIBT BETWEEN to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND
+                    AA.A_OR_D = 'A'
+                )
+
+        union all
+
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA IN ('FM','KN','MU') and
+                (
+                    AA.SOBT BETWEEN  to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS')  AND
+                    AA.A_OR_D = 'D'
+                )
+        ) a
+    ]]>
+  </select>
+
+  <select id="getYesterdayActualFlightNum" resultType="integer">
+        <![CDATA[
+        select sum(total) from (
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' and
+                (
+                    AA.SIBT BETWEEN to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND
+                    AA.A_OR_D = 'A' and AA.ALDT IS NOT NULL
+                )
+
+        union all
+
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' and
+                (
+                    AA.SOBT BETWEEN  to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS')  AND
+                    AA.A_OR_D = 'D' and AA.atot IS NOT NULL
+                )
+        ) a
+    ]]>
+  </select>
+
+  <select id="getYesterdayActualFlightNumCA" resultType="integer">
+    <![CDATA[
+        select sum(total) from (
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA IN ('CA','ZH') and
+                (
+                    AA.SIBT BETWEEN to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND
+                    AA.A_OR_D = 'A' and AA.ALDT IS NOT NULL
+                )
+
+        union all
+
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA IN ('CA','ZH') and
+                (
+                    AA.SOBT BETWEEN  to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS')  AND
+                    AA.A_OR_D = 'D' and AA.atot IS NOT NULL
+                )
+        ) a
+    ]]>
+  </select>
+
+  <select id="getYesterdayActualFlightNumCZ" resultType="integer">
+    <![CDATA[
+        select sum(total) from (
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA = 'CZ' and
+                (
+                    AA.SIBT BETWEEN to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND
+                    AA.A_OR_D = 'A' and AA.ALDT IS NOT NULL
+                )
+
+        union all
+
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA = 'CZ' and
+                (
+                    AA.SOBT BETWEEN  to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS')  AND
+                    AA.A_OR_D = 'D' and AA.atot IS NOT NULL
+                )
+        ) a
+    ]]>
+  </select>
+
+  <select id="getYesterdayActualFlightNumHAS" resultType="integer">
+    <![CDATA[
+        select sum(total) from (
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA IN ('MF','HU','TV','8L','NS','SC') and
+                (
+                    AA.SIBT BETWEEN to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND
+                    AA.A_OR_D = 'A' and AA.ALDT IS NOT NULL
+                )
+
+        union all
+
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA IN ('MF','HU','TV','8L','NS','SC') and
+                (
+                    AA.SOBT BETWEEN  to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS')  AND
+                    AA.A_OR_D = 'D' and AA.atot IS NOT NULL
+                )
+        ) a
+    ]]>
+  </select>
+
+  <select id="getYesterdayActualFlightNumHO" resultType="integer">
+    <![CDATA[
+        select sum(total) from (
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA = 'HO' and
+                (
+                    AA.SIBT BETWEEN to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND
+                    AA.A_OR_D = 'A' and AA.ALDT IS NOT NULL
+                )
+
+        union all
+
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA = 'HO' and
+                (
+                    AA.SOBT BETWEEN  to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS')  AND
+                    AA.A_OR_D = 'D' and AA.atot IS NOT NULL
+                )
+        ) a
+    ]]>
+  </select>
+
+  <select id="getYesterdayActualFlightNumMU" resultType="integer">
+    <![CDATA[
+        select sum(total) from (
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA IN ('FM','KN','MU') and
+                (
+                    AA.SIBT BETWEEN to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND
+                    AA.A_OR_D = 'A' and AA.ALDT IS NOT NULL
+                )
+
+        union all
+
+        SELECT count(*) total FROM
+            DAILY_FLIGHT_MASTER AA,
+            DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+            AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+            nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND AA.AIRLINE_CODE_IATA IN ('FM','KN','MU') and
+                (
+                    AA.SOBT BETWEEN  to_date((to_char((current_date-1),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS') AND to_date((to_char((current_date),'YYYY-MM-DD')|| ' 00:00:00'),'YYYY-MM-DD HH24:MI:SS')  AND
+                    AA.A_OR_D = 'D' and AA.atot IS NOT NULL
+                )
+        ) a
+    ]]>
+  </select>
+
+  <select id="getPreparationForDrop" resultType="integer">
+  select count(*) from DAILY_FLIGHT_MASTER
+  WHERE A_OR_D = 'A' AND DIVERSIONSTATUS = 'ALT'
+  AND to_char(operational_date,'YYYY-MM-DD') = to_char((current_date),'YYYY-MM-DD')
+</select>
+  <select id="getPreparationForDropCA" resultType="integer">
+    select count(*) from DAILY_FLIGHT_MASTER
+    WHERE A_OR_D = 'A' AND DIVERSIONSTATUS = 'ALT' AND AIRLINE_CODE_IATA IN ('CA','ZH')
+    AND to_char(operational_date,'YYYY-MM-DD') = to_char((current_date),'YYYY-MM-DD')
+  </select>
+  <select id="getPreparationForDropCZ" resultType="integer">
+    select count(*) from DAILY_FLIGHT_MASTER
+    WHERE A_OR_D = 'A' AND DIVERSIONSTATUS = 'ALT' AND AIRLINE_CODE_IATA = 'CZ'
+    AND to_char(operational_date,'YYYY-MM-DD') = to_char((current_date),'YYYY-MM-DD')
+  </select>
+  <select id="getPreparationForDropHAS" resultType="integer">
+    select count(*) from DAILY_FLIGHT_MASTER
+    WHERE A_OR_D = 'A' AND DIVERSIONSTATUS = 'ALT' AND AIRLINE_CODE_IATA IN ('MF','HU','TV','8L','NS','SC')
+    AND to_char(operational_date,'YYYY-MM-DD') = to_char((current_date),'YYYY-MM-DD')
+  </select>
+  <select id="getPreparationForDropHO" resultType="integer">
+    select count(*) from DAILY_FLIGHT_MASTER
+    WHERE A_OR_D = 'A' AND DIVERSIONSTATUS = 'ALT' AND AIRLINE_CODE_IATA = 'HO'
+    AND to_char(operational_date,'YYYY-MM-DD') = to_char((current_date),'YYYY-MM-DD')
+  </select>
+  <select id="getPreparationForDropMU" resultType="integer">
+    select count(*) from DAILY_FLIGHT_MASTER
+    WHERE A_OR_D = 'A' AND DIVERSIONSTATUS = 'ALT' AND AIRLINE_CODE_IATA IN ('FM','KN','MU')
+    AND to_char(operational_date,'YYYY-MM-DD') = to_char((current_date),'YYYY-MM-DD')
+  </select>
+
+  <select id="getInternationalNum" resultType="integer">
+    <![CDATA[
+        select count(flight_no_iata) FROM (
+        SELECT AA.*,BB.FLIGHT_CANCEL_CODE,BB.CODE_SHARE_STATUS,BB.AIRCRAFT_TERMINAL_CODE FROM
+        DAILY_FLIGHT_MASTER AA,
+        DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+        AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+        nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF'  AND
+        (
+        (
+        AA.SOBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+
+        to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+         ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END)
+        AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+        ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+        AA.A_OR_D = 'D' and BB.FLIGHT_SECTOR_CODE = 'I'
+        )
+        OR
+        (
+        AA.SIBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+        THEN to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+        ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+        THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+        AA.A_OR_D = 'A' and BB.FLIGHT_SECTOR_CODE = 'I'
+        )
+        ))
+    ]]>
+  </select>
+
+  <select id="getInternationalNumCA" resultType="integer">
+    <![CDATA[
+        select count(flight_no_iata) FROM (
+        SELECT AA.*,BB.FLIGHT_CANCEL_CODE,BB.CODE_SHARE_STATUS,BB.AIRCRAFT_TERMINAL_CODE FROM
+        DAILY_FLIGHT_MASTER AA,
+        DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+        AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+        nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND AA.AIRLINE_CODE_IATA IN ('CA','ZH')  AND
+        (
+        (
+        AA.SOBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+
+        to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+         ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END)
+        AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+        ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+        AA.A_OR_D = 'D' and BB.FLIGHT_SECTOR_CODE = 'I'
+        )
+        OR
+        (
+        AA.SIBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+        THEN to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+        ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+        THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+        AA.A_OR_D = 'A' and BB.FLIGHT_SECTOR_CODE = 'I'
+        )
+        ))
+    ]]>
+  </select>
+
+  <select id="getInternationalNumCZ" resultType="integer">
+    <![CDATA[
+        select count(flight_no_iata) FROM (
+        SELECT AA.*,BB.FLIGHT_CANCEL_CODE,BB.CODE_SHARE_STATUS,BB.AIRCRAFT_TERMINAL_CODE FROM
+        DAILY_FLIGHT_MASTER AA,
+        DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+        AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+        nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND AA.AIRLINE_CODE_IATA='CZ'  AND
+        (
+        (
+        AA.SOBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+
+        to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+         ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END)
+        AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+        ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+        AA.A_OR_D = 'D' and BB.FLIGHT_SECTOR_CODE = 'I'
+        )
+        OR
+        (
+        AA.SIBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+        THEN to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+        ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+        THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+        AA.A_OR_D = 'A' and BB.FLIGHT_SECTOR_CODE = 'I'
+        )
+        ))
+    ]]>
+  </select>
+
+  <select id="getInternationalNumHAS" resultType="integer">
+    <![CDATA[
+        select count(flight_no_iata) FROM (
+        SELECT AA.*,BB.FLIGHT_CANCEL_CODE,BB.CODE_SHARE_STATUS,BB.AIRCRAFT_TERMINAL_CODE FROM
+        DAILY_FLIGHT_MASTER AA,
+        DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+        AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+        nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND AA.AIRLINE_CODE_IATA IN ('MF','HU','TV','8L','NS','SC')  AND
+        (
+        (
+        AA.SOBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+
+        to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+         ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END)
+        AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+        ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+        AA.A_OR_D = 'D' and BB.FLIGHT_SECTOR_CODE = 'I'
+        )
+        OR
+        (
+        AA.SIBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+        THEN to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+        ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+        THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+        AA.A_OR_D = 'A' and BB.FLIGHT_SECTOR_CODE = 'I'
+        )
+        ))
+    ]]>
+  </select>
+
+  <select id="getInternationalNumHO" resultType="integer">
+    <![CDATA[
+        select count(flight_no_iata) FROM (
+        SELECT AA.*,BB.FLIGHT_CANCEL_CODE,BB.CODE_SHARE_STATUS,BB.AIRCRAFT_TERMINAL_CODE FROM
+        DAILY_FLIGHT_MASTER AA,
+        DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+        AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+        nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND AA.AIRLINE_CODE_IATA='HO'  AND
+        (
+        (
+        AA.SOBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+
+        to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+         ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END)
+        AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+        ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+        AA.A_OR_D = 'D' and BB.FLIGHT_SECTOR_CODE = 'I'
+        )
+        OR
+        (
+        AA.SIBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+        THEN to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+        ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+        THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+        AA.A_OR_D = 'A' and BB.FLIGHT_SECTOR_CODE = 'I'
+        )
+        ))
+    ]]>
+  </select>
+
+  <select id="getInternationalNumMU" resultType="integer">
+    <![CDATA[
+        select count(flight_no_iata) FROM (
+        SELECT AA.*,BB.FLIGHT_CANCEL_CODE,BB.CODE_SHARE_STATUS,BB.AIRCRAFT_TERMINAL_CODE FROM
+        DAILY_FLIGHT_MASTER AA,
+        DAILY_FLIGHT_ADD_DETAILS BB
+        WHERE
+        AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+        nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND AA.AIRLINE_CODE_IATA IN ('FM','KN','MU')  AND
+        (
+        (
+        AA.SOBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+
+        to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+         ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END)
+        AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+        ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+        AA.A_OR_D = 'D' and BB.FLIGHT_SECTOR_CODE = 'I'
+        )
+        OR
+        (
+        AA.SIBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+        THEN to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+        ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+        THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+        AA.A_OR_D = 'A' and BB.FLIGHT_SECTOR_CODE = 'I'
+        )
+        ))
+    ]]>
+  </select>
+
+  <select id="getDomesticNum" resultType="integer">
+    <![CDATA[
+      select count(flight_no_iata) FROM (
+      SELECT AA.*,BB.FLIGHT_CANCEL_CODE,BB.CODE_SHARE_STATUS,BB.AIRCRAFT_TERMINAL_CODE FROM
+          DAILY_FLIGHT_MASTER AA,
+         DAILY_FLIGHT_ADD_DETAILS BB
+      WHERE
+          AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+          nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF'  AND
+          (
+              (
+                  AA.SOBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+                  to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END)
+                  AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+                  ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+                  AA.A_OR_D = 'D' and (BB.FLIGHT_SECTOR_CODE = 'D' OR BB.FLIGHT_SECTOR_CODE = 'R')
+              )
+              OR
+              (
+                  AA.SIBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+                  to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE
+                  to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+                  THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE
+                  to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+                  AA.A_OR_D = 'A' and (BB.FLIGHT_SECTOR_CODE = 'D' OR BB.FLIGHT_SECTOR_CODE = 'R')
+              )
+          ))
+    ]]>
+  </select>
+
+  <select id="getDomesticNumCA" resultType="integer">
+    <![CDATA[
+      select count(flight_no_iata) FROM (
+      SELECT AA.*,BB.FLIGHT_CANCEL_CODE,BB.CODE_SHARE_STATUS,BB.AIRCRAFT_TERMINAL_CODE FROM
+          DAILY_FLIGHT_MASTER AA,
+         DAILY_FLIGHT_ADD_DETAILS BB
+      WHERE
+          AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+          nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND AA.AIRLINE_CODE_IATA IN ('CA','ZH')  AND
+          (
+              (
+                  AA.SOBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+                  to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END)
+                  AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+                  ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+                  AA.A_OR_D = 'D' and (BB.FLIGHT_SECTOR_CODE = 'D' OR BB.FLIGHT_SECTOR_CODE = 'R')
+              )
+              OR
+              (
+                  AA.SIBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+                  to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE
+                  to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+                  THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE
+                  to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+                  AA.A_OR_D = 'A' and (BB.FLIGHT_SECTOR_CODE = 'D' OR BB.FLIGHT_SECTOR_CODE = 'R')
+              )
+          ))
+    ]]>
+  </select>
+
+  <select id="getDomesticNumCZ" resultType="integer">
+    <![CDATA[
+      select count(flight_no_iata) FROM (
+      SELECT AA.*,BB.FLIGHT_CANCEL_CODE,BB.CODE_SHARE_STATUS,BB.AIRCRAFT_TERMINAL_CODE FROM
+          DAILY_FLIGHT_MASTER AA,
+         DAILY_FLIGHT_ADD_DETAILS BB
+      WHERE
+          AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+          nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND AA.AIRLINE_CODE_IATA = 'CZ'  AND
+          (
+              (
+                  AA.SOBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+                  to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END)
+                  AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+                  ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+                  AA.A_OR_D = 'D' and (BB.FLIGHT_SECTOR_CODE = 'D' OR BB.FLIGHT_SECTOR_CODE = 'R')
+              )
+              OR
+              (
+                  AA.SIBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+                  to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE
+                  to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+                  THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE
+                  to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+                  AA.A_OR_D = 'A' and (BB.FLIGHT_SECTOR_CODE = 'D' OR BB.FLIGHT_SECTOR_CODE = 'R')
+              )
+          ))
+    ]]>
+  </select>
+
+  <select id="getDomesticNumHAS" resultType="integer">
+    <![CDATA[
+      select count(flight_no_iata) FROM (
+      SELECT AA.*,BB.FLIGHT_CANCEL_CODE,BB.CODE_SHARE_STATUS,BB.AIRCRAFT_TERMINAL_CODE FROM
+          DAILY_FLIGHT_MASTER AA,
+         DAILY_FLIGHT_ADD_DETAILS BB
+      WHERE
+          AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+          nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND AA.AIRLINE_CODE_IATA IN ('MF','HU','TV','8L','NS','SC')  AND
+          (
+              (
+                  AA.SOBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+                  to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END)
+                  AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+                  ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+                  AA.A_OR_D = 'D' and (BB.FLIGHT_SECTOR_CODE = 'D' OR BB.FLIGHT_SECTOR_CODE = 'R')
+              )
+              OR
+              (
+                  AA.SIBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+                  to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE
+                  to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+                  THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE
+                  to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+                  AA.A_OR_D = 'A' and (BB.FLIGHT_SECTOR_CODE = 'D' OR BB.FLIGHT_SECTOR_CODE = 'R')
+              )
+          ))
+    ]]>
+  </select>
+
+  <select id="getDomesticNumHO" resultType="integer">
+    <![CDATA[
+      select count(flight_no_iata) FROM (
+      SELECT AA.*,BB.FLIGHT_CANCEL_CODE,BB.CODE_SHARE_STATUS,BB.AIRCRAFT_TERMINAL_CODE FROM
+          DAILY_FLIGHT_MASTER AA,
+         DAILY_FLIGHT_ADD_DETAILS BB
+      WHERE
+          AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+          nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND AA.AIRLINE_CODE_IATA = 'HO'  AND
+          (
+              (
+                  AA.SOBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+                  to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END)
+                  AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+                  ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+                  AA.A_OR_D = 'D' and (BB.FLIGHT_SECTOR_CODE = 'D' OR BB.FLIGHT_SECTOR_CODE = 'R')
+              )
+              OR
+              (
+                  AA.SIBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+                  to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE
+                  to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+                  THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE
+                  to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+                  AA.A_OR_D = 'A' and (BB.FLIGHT_SECTOR_CODE = 'D' OR BB.FLIGHT_SECTOR_CODE = 'R')
+              )
+          ))
+    ]]>
+  </select>
+
+  <select id="getDomesticNumMU" resultType="integer">
+    <![CDATA[
+      select count(flight_no_iata) FROM (
+      SELECT AA.*,BB.FLIGHT_CANCEL_CODE,BB.CODE_SHARE_STATUS,BB.AIRCRAFT_TERMINAL_CODE FROM
+          DAILY_FLIGHT_MASTER AA,
+         DAILY_FLIGHT_ADD_DETAILS BB
+      WHERE
+          AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.A_OR_D = BB.A_OR_D AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT AND
+          nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND AA.AIRLINE_CODE_IATA IN ('FM','KN','MU')  AND
+          (
+              (
+                  AA.SOBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+                  to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END)
+                  AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+                  ELSE to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+                  AA.A_OR_D = 'D' and (BB.FLIGHT_SECTOR_CODE = 'D' OR BB.FLIGHT_SECTOR_CODE = 'R')
+              )
+              OR
+              (
+                  AA.SIBT BETWEEN (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5 THEN
+                  to_date((to_char(sysdate-1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE
+                  to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND (CASE WHEN trunc(to_number(to_char(current_timestamp, 'hh24'))) BETWEEN 0 AND 5
+                  THEN to_date((to_char(sysdate,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') ELSE
+                  to_date((to_char(sysdate+1,'YYYY-MM-DD')|| ' 06:00:00'),'YYYY-MM-DD HH24:MI:SS') END) AND
+                  AA.A_OR_D = 'A' and (BB.FLIGHT_SECTOR_CODE = 'D' OR BB.FLIGHT_SECTOR_CODE = 'R')
+              )
+          ))
+    ]]>
+  </select>
+
+  <select id="getYesterdayFlightReleaseRateNumerator" resultType="java.math.BigDecimal">
+    <![CDATA[
+    SELECT sum(YWS) total from (
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT< to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+    AND AA.ATOT<=AA.SOBT+ 30/(24*60)
+
+      union all
+
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT> to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+    AND ((AA.ATOT-65/(24*60)<=CC.ALDT+40/(24*60))
+    OR( AA.SOBT>(AA.ATOT-30/(24*60))))
+    ) a
+    ]]>
+  </select>
+  <select id="getYesterdayFlightReleaseRateNumeratorCA" resultType="java.math.BigDecimal">
+    <![CDATA[
+    SELECT sum(YWS) total from (
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('CA','ZH') AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT< to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+    AND AA.ATOT<=AA.SOBT+ 30/(24*60)
+
+      union all
+
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('CA','ZH') AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT> to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+    AND ((AA.ATOT-65/(24*60)<=CC.ALDT+40/(24*60))
+    OR( AA.SOBT>(AA.ATOT-30/(24*60))))
+    ) a
+    ]]>
+  </select>
+  <select id="getYesterdayFlightReleaseRateNumeratorCZ" resultType="java.math.BigDecimal">
+    <![CDATA[
+    SELECT sum(YWS) total from (
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA = 'CZ' AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT< to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+    AND AA.ATOT<=AA.SOBT+ 30/(24*60)
+
+      union all
+
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA = 'CZ' AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT> to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+    AND ((AA.ATOT-65/(24*60)<=CC.ALDT+40/(24*60))
+    OR( AA.SOBT>(AA.ATOT-30/(24*60))))
+    ) a
+    ]]>
+  </select>
+  <select id="getYesterdayFlightReleaseRateNumeratorHAS" resultType="java.math.BigDecimal">
+    <![CDATA[
+    SELECT sum(YWS) total from (
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('MF','HU','TV','8L','NS','SC') AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT< to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+    AND AA.ATOT<=AA.SOBT+ 30/(24*60)
+
+      union all
+
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('MF','HU','TV','8L','NS','SC') AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT> to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+    AND ((AA.ATOT-65/(24*60)<=CC.ALDT+40/(24*60))
+    OR( AA.SOBT>(AA.ATOT-30/(24*60))))
+    ) a
+    ]]>
+  </select>
+  <select id="getYesterdayFlightReleaseRateNumeratorHO" resultType="java.math.BigDecimal">
+    <![CDATA[
+    SELECT sum(YWS) total from (
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA = 'HO' AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT< to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+    AND AA.ATOT<=AA.SOBT+ 30/(24*60)
+
+      union all
+
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA = 'HO' AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT> to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+    AND ((AA.ATOT-65/(24*60)<=CC.ALDT+40/(24*60))
+    OR( AA.SOBT>(AA.ATOT-30/(24*60))))
+    ) a
+    ]]>
+  </select>
+  <select id="getYesterdayFlightReleaseRateNumeratorMU" resultType="java.math.BigDecimal">
+    <![CDATA[
+    SELECT sum(YWS) total from (
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('FM','KN','MU') AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT< to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+    AND AA.ATOT<=AA.SOBT+ 30/(24*60)
+
+      union all
+
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('FM','KN','MU') AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT> to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+    AND ((AA.ATOT-65/(24*60)<=CC.ALDT+40/(24*60))
+    OR( AA.SOBT>(AA.ATOT-30/(24*60))))
+    ) a
+    ]]>
+  </select>
+
+  <select id="getYesterdayFlightReleaseRateDenominator" resultType="java.math.BigDecimal">
+    <![CDATA[
+    SELECT sum(YWS) total from (
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT< to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+
+      union all
+
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT> to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+     ) a
+     ]]>
+  </select>
+  <select id="getYesterdayFlightReleaseRateDenominatorCA" resultType="java.math.BigDecimal">
+    <![CDATA[
+    SELECT sum(YWS) total from (
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('CA','ZH') AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT< to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+
+      union all
+
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('CA','ZH') AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT> to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+     ) a
+     ]]>
+  </select>
+  <select id="getYesterdayFlightReleaseRateDenominatorCZ" resultType="java.math.BigDecimal">
+    <![CDATA[
+    SELECT sum(YWS) total from (
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA = 'CZ' AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT< to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+
+      union all
+
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA = 'CZ' AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT> to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+     ) a
+     ]]>
+  </select>
+  <select id="getYesterdayFlightReleaseRateDenominatorHAS" resultType="java.math.BigDecimal">
+    <![CDATA[
+    SELECT sum(YWS) total from (
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('MF','HU','TV','8L','NS','SC') AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT< to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+
+      union all
+
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('MF','HU','TV','8L','NS','SC') AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT> to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+     ) a
+     ]]>
+  </select>
+  <select id="getYesterdayFlightReleaseRateDenominatorHO" resultType="java.math.BigDecimal">
+    <![CDATA[
+    SELECT sum(YWS) total from (
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA = 'HO' AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT< to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+
+      union all
+
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA = 'HO' AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT> to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+     ) a
+     ]]>
+  </select>
+  <select id="getYesterdayFlightReleaseRateDenominatorMU" resultType="java.math.BigDecimal">
+    <![CDATA[
+    SELECT sum(YWS) total from (
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('FM','KN','MU') AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT< to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+
+      union all
+
+    SELECT count(*) YWS
+    FROM daily_FLIGHT_MASTER AA
+    LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+    AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+    AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND
+    AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+    (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+    BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+    BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+    WHERE
+    AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('FM','KN','MU') AND
+    nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+    nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+    BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+    to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    AND CC.ALDT> to_date((to_char(sysdate-1,'YYYY-MM-DD')||' 06:00:00'),'YYYY-MM-DD HH24:MI:SS')
+     ) a
+     ]]>
+  </select>
+
+  <select id="getYesterdayFlightNormalRateNumerator" resultType="java.math.BigDecimal">
+    <![CDATA[
+      SELECT count(*) YWS
+      FROM daily_FLIGHT_MASTER AA
+      LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+      AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+      AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+      AA.A_OR_D = BB.A_OR_D AND
+      AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+      LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+      (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+      BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+      BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+      WHERE
+      AA.A_OR_D ='D' AND
+      nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+      nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+      BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+      to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD') AND AA.SOBT<AA.ATOT-30/(24*60)
+    ]]>
+  </select>
+  <select id="getYesterdayFlightNormalRateNumeratorCA" resultType="java.math.BigDecimal">
+    <![CDATA[
+      SELECT count(*) YWS
+      FROM daily_FLIGHT_MASTER AA
+      LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+      AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+      AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+      AA.A_OR_D = BB.A_OR_D AND
+      AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+      LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+      (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+      BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+      BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+      WHERE
+      AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('CA','ZH') AND
+      nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+      nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+      BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+      to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD') AND AA.SOBT<AA.ATOT-30/(24*60)
+    ]]>
+  </select>
+  <select id="getYesterdayFlightNormalRateNumeratorCZ" resultType="java.math.BigDecimal">
+    <![CDATA[
+      SELECT count(*) YWS
+      FROM daily_FLIGHT_MASTER AA
+      LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+      AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+      AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+      AA.A_OR_D = BB.A_OR_D AND
+      AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+      LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+      (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+      BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+      BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+      WHERE
+      AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA = 'CZ' AND
+      nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+      nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+      BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+      to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD') AND AA.SOBT<AA.ATOT-30/(24*60)
+    ]]>
+  </select>
+  <select id="getYesterdayFlightNormalRateNumeratorHAS" resultType="java.math.BigDecimal">
+    <![CDATA[
+      SELECT count(*) YWS
+      FROM daily_FLIGHT_MASTER AA
+      LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+      AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+      AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+      AA.A_OR_D = BB.A_OR_D AND
+      AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+      LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+      (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+      BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+      BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+      WHERE
+      AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('MF','HU','TV','8L','NS','SC') AND
+      nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+      nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+      BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+      to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD') AND AA.SOBT<AA.ATOT-30/(24*60)
+    ]]>
+  </select>
+  <select id="getYesterdayFlightNormalRateNumeratorHO" resultType="java.math.BigDecimal">
+    <![CDATA[
+      SELECT count(*) YWS
+      FROM daily_FLIGHT_MASTER AA
+      LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+      AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+      AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+      AA.A_OR_D = BB.A_OR_D AND
+      AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+      LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+      (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+      BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+      BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+      WHERE
+      AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA = 'HO' AND
+      nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+      nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+      BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+      to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD') AND AA.SOBT<AA.ATOT-30/(24*60)
+    ]]>
+  </select>
+  <select id="getYesterdayFlightNormalRateNumeratorMU" resultType="java.math.BigDecimal">
+    <![CDATA[
+      SELECT count(*) YWS
+      FROM daily_FLIGHT_MASTER AA
+      LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+      AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+      AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+      AA.A_OR_D = BB.A_OR_D AND
+      AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+      LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+      (BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+      BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+      BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+      WHERE
+      AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('FM','KN','MU') AND
+      nvl(BB.FLIGHT_CANCEL_CODE,' ') <> 'C' AND
+      nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+      BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+      to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD') AND AA.SOBT<AA.ATOT-30/(24*60)
+    ]]>
+  </select>
+
+  <select id="getYesterdayFlightNormalRateDenominator" resultType="java.math.BigDecimal">
+    <![CDATA[
+      SELECT count(*) YWS
+           FROM daily_FLIGHT_MASTER AA
+			LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+				AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+				AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+				AA.A_OR_D = BB.A_OR_D AND
+				AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+			LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+				(BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+				BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+				BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+			WHERE
+				AA.A_OR_D ='D' AND
+				nvl(BB.FLIGHT_CANCEL_CODE,' ')<> 'C' AND
+				nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+				BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+                to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    ]]>
+  </select>
+  <select id="getYesterdayFlightNormalRateDenominatorCA" resultType="java.math.BigDecimal">
+    <![CDATA[
+      SELECT count(*) YWS
+           FROM daily_FLIGHT_MASTER AA
+			LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+				AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+				AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+				AA.A_OR_D = BB.A_OR_D AND
+				AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+			LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+				(BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+				BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+				BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+			WHERE
+				AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('CA','ZH') AND
+				nvl(BB.FLIGHT_CANCEL_CODE,' ')<> 'C' AND
+				nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+				BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+                to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    ]]>
+  </select>
+  <select id="getYesterdayFlightNormalRateDenominatorCZ" resultType="java.math.BigDecimal">
+    <![CDATA[
+      SELECT count(*) YWS
+           FROM daily_FLIGHT_MASTER AA
+			LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+				AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+				AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+				AA.A_OR_D = BB.A_OR_D AND
+				AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+			LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+				(BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+				BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+				BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+			WHERE
+				AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA = 'CZ' AND
+				nvl(BB.FLIGHT_CANCEL_CODE,' ')<> 'C' AND
+				nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+				BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+                to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    ]]>
+  </select>
+  <select id="getYesterdayFlightNormalRateDenominatorHAS" resultType="java.math.BigDecimal">
+    <![CDATA[
+      SELECT count(*) YWS
+           FROM daily_FLIGHT_MASTER AA
+			LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+				AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+				AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+				AA.A_OR_D = BB.A_OR_D AND
+				AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+			LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+				(BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+				BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+				BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+			WHERE
+				AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('MF','HU','TV','8L','NS','SC') AND
+				nvl(BB.FLIGHT_CANCEL_CODE,' ')<> 'C' AND
+				nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+				BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+                to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    ]]>
+  </select>
+  <select id="getYesterdayFlightNormalRateDenominatorHO" resultType="java.math.BigDecimal">
+    <![CDATA[
+      SELECT count(*) YWS
+           FROM daily_FLIGHT_MASTER AA
+			LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+				AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+				AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+				AA.A_OR_D = BB.A_OR_D AND
+				AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+			LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+				(BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+				BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+				BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+			WHERE
+				AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA = 'HO' AND
+				nvl(BB.FLIGHT_CANCEL_CODE,' ')<> 'C' AND
+				nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+				BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+                to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    ]]>
+  </select>
+  <select id="getYesterdayFlightNormalRateDenominatorMU" resultType="java.math.BigDecimal">
+    <![CDATA[
+      SELECT count(*) YWS
+           FROM daily_FLIGHT_MASTER AA
+			LEFT JOIN daily_FLIGHT_ADD_DETAILS BB ON
+				AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+				AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+				AA.A_OR_D = BB.A_OR_D AND
+				AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+			LEFT JOIN (SELECT SIBT,FLIGHT_NO_IATA,OPERATIONAL_DATE,FLIGHT_REPEAT_COUNT,ALDT FROM daily_FLIGHT_MASTER WHERE A_OR_D='A') CC ON
+				(BB.LNK_CARRIER_CODE || BB.LNK_FLIGHT_NO || COALESCE(BB.LNK_FLIGHT_SUFFIX,'')) = CC.FLIGHT_NO_IATA AND
+				BB.LNK_FLIGHT_REPEAT_COUNT = CC.FLIGHT_REPEAT_COUNT AND
+				BB.LNK_SCHEDULE_DATE = CC.OPERATIONAL_DATE
+			WHERE
+				AA.A_OR_D ='D' AND AA.AIRLINE_CODE_IATA IN ('FM','KN','MU') AND
+				nvl(BB.FLIGHT_CANCEL_CODE,' ')<> 'C' AND
+				nvl(BB.CODE_SHARE_STATUS,' ') <> 'SF' AND
+				BB.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND
+                to_char(AA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(sysdate-1,'YYYY-MM-DD')
+    ]]>
+  </select>
+</mapper>

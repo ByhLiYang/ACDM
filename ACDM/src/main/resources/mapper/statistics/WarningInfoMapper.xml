@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.WarningInfoMapper" >
+    <select id="SELECT_EXECRATE_08_23" resultType="com.hq.acdm.model.statistics.warningInfo.ExecutionModel">
+        SELECT
+        t3.HOUR AHOUR,
+        CASE
+        WHEN t1.scnt &gt;0 THEN
+        ROUND(coalesce( t2.acnt * 100 / t1.scnt, 0 ),2) ELSE 0
+        END ARATE
+        FROM
+        T_HOUR t3
+        LEFT JOIN (
+        SELECT
+        trunc(to_number(to_char(t.SOBT,'HH24'))) shour,
+        count( * ) scnt
+        FROM
+        V_UTIL_DAILY_FLIGHT t
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+        AND to_char(t.OPERATIONAL_DATE,'YYYY-MM-DD') = TO_CHAR(tt.OPERATIONAL_DATE,'YYYY-MM-DD')
+        AND t.A_OR_D = tt.A_OR_D
+        AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+        WHERE
+        TO_CHAR(t.OPERATIONAL_DATE,'YYYY-MM-DD') = TO_CHAR(SYSDATE,'YYYY-MM-DD')
+        AND t.A_OR_D = 'D'
+        AND t.SOBT IS NOT NULL
+        AND ( trunc(to_number(to_char(t.SOBT,'HH24'))) &gt;= 8 AND trunc(to_number(to_char(t.SOBT,'HH24'))) &lt;= 23 )
+        AND NVL(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C'
+        AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        GROUP BY
+        trunc(to_number(to_char(t.SOBT,'HH24')))) t1 ON t3.HOUR = t1.shour
+        LEFT JOIN (
+        SELECT
+        trunc(to_number(to_char(t.ATOT,'HH24'))) ahour,
+        count( * ) acnt
+        FROM
+        V_UTIL_DAILY_FLIGHT t
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+        AND TO_CHAR(t.OPERATIONAL_DATE,'YYYY-MM-DD') = TO_CHAR(tt.OPERATIONAL_DATE,'YYYY-MM-DD')
+        AND t.A_OR_D = tt.A_OR_D
+        AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+        WHERE
+        TO_CHAR(t.OPERATIONAL_DATE,'YYYY-MM-DD') = TO_CHAR(SYSDATE,'YYYY-MM-DD')
+        AND t.A_OR_D = 'D'
+        AND t.SOBT IS NOT NULL
+        AND ( trunc(to_number(to_char(t.SOBT,'HH24'))) &gt;= 8 AND trunc(to_number(to_char(t.SOBT,'HH24'))) &lt;= 23 )
+        AND t.ATOT IS NOT NULL
+        AND NVL(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C'
+        AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        GROUP BY
+        trunc(to_number(to_char(t.ATOT,'HH24')))) t2 ON t1.shour = t2.ahour
+        WHERE
+        t3.HOUR &gt;= 8
+        AND t3.HOUR &lt;= 23
+        ORDER BY
+        t3.HOUR
+    </select>
+    <select id="SELECT_DELAY1H_UNEXEC_08_23" resultType="com.hq.acdm.model.statistics.warningInfo.ExecutionModel">
+        SELECT
+        t3.HOUR AHOUR,
+        coalesce( t2.cnt, 0 ) ARATE
+        FROM
+        T_HOUR t3
+        LEFT JOIN (
+        SELECT
+        trunc(to_number(to_char(SOBT,'HH24'))) dhour,
+        count( * ) cnt
+        FROM
+        V_DELAY_FLI_NO
+        WHERE
+        TO_CHAR(OPERATIONAL_DATE,'YYYY-MM-DD') = TO_CHAR(SYSDATE,'YYYY-MM-DD')
+        AND A_OR_D = 'D'
+        AND DELAY_TIME &gt;= 60
+        AND ATOT IS NULL
+        GROUP BY
+        trunc(to_number(to_char(SOBT,'HH24')))) t2 ON t3.HOUR = t2.dhour
+        WHERE
+        t3.HOUR &gt;= 8
+        AND t3.HOUR &lt;= 23
+        ORDER BY AHOUR
+    </select>
+    <select id="SELECT_BASIC_DATA_01" resultType="com.hq.acdm.model.statistics.warningInfo.V_UTIL_DAILY_FLIGHTModel">
+        SELECT * FROM V_REAL_INTERFACE
+    </select>
+    <select id="SELECT_BASIC_DATA_02" resultType="com.hq.acdm.model.statistics.warningInfo.ScheduleModel">
+        SELECT
+        COUNT( TM.FLIGHT_NO_IATA ) AS FLIGHT_NUM
+        FROM
+        V_UTIL_DAILY_FLIGHT TM
+        WHERE
+        ( TM.A_OR_D = 'D' AND to_char(TM.SOBT,'yyyy-mm-dd hh24:mi:ss') &lt;= to_char(sysdate,'yyyy-mm-dd hh24:mi:ss') )
+        OR (
+        TM.A_OR_D = 'A'
+        AND to_char(TM.SIBT,'yyyy-mm-dd hh24:mi:ss') &lt;= to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'))
+    </select>
+    <select id="SELECT_BASIC_DATA_03" resultType="com.hq.acdm.model.statistics.warningInfo.ReturnFlightNumberModel">
+        SELECT
+	COUNT( t.FLIGHT_NO_IATA ) AS FLIGHT_NUM
+    FROM
+	V_UTIL_DAILY_FLIGHT t
+	LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+	AND to_char(t.OPERATIONAL_DATE,'YYYY-MM-DD') = to_char(tt.OPERATIONAL_DATE,'YYYY-MM-DD')
+	AND t.A_OR_D = tt.A_OR_D
+	AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+    WHERE
+	tt.OPERATION_TYPE_CODE_1 = 'ALT'
+	OR tt.OPERATION_TYPE_CODE_1 = 'RET'
+    </select>
+    <select id="SELECT_BASIC_DATA_04" resultType="com.hq.acdm.model.statistics.warningInfo.OutBoundDelayModel">
+SELECT
+	( SELECT count( * ) excnt FROM V_DELAY_FLI_NO WHERE to_char(OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') AND A_OR_D = 'D' AND ATOT IS NOT NULL ) excnt,
+	( SELECT count( * ) uncnt FROM V_DELAY_FLI_NO WHERE to_char(OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') AND A_OR_D = 'D' AND ATOT IS NULL ) uncnt,
+	(
+	SELECT
+		count( * ) excnt
+	FROM
+		V_DELAY_FLI_NO
+	WHERE
+		to_char(OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+		AND A_OR_D = 'D'
+		AND ATOT IS NOT NULL
+		AND DELAY_TIME &gt;= 120
+	) ex2cnt,
+	( SELECT count( * ) uncnt FROM V_DELAY_FLI_NO WHERE to_char(OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') AND A_OR_D = 'D' AND ATOT IS NULL AND DELAY_TIME &gt;= 120 ) un2cnt
+FROM
+	dual
+</select>
+<select id="SELECT_BASIC_DATA_05" resultType="com.hq.acdm.model.statistics.warningInfo.ThisHourExcuteScheduleModel">
+    SELECT
+    (
+    SELECT
+    count( * ) predcnt
+    FROM
+    V_UTIL_DAILY_FLIGHT t
+    LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+    AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+    AND t.A_OR_D = tt.A_OR_D
+    AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+    WHERE
+    to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+    AND nvl(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C'
+    AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+    AND ((
+    t.A_OR_D = 'A'
+    AND t.SIBT IS NOT NULL
+    AND trunc(to_number(to_char(t.SIBT,'hh24'))) = trunc(to_number(to_char(sysdate,'hh24'))-1)
+    )
+    OR (
+    t.A_OR_D = 'D'
+    AND t.SOBT IS NOT NULL
+    AND trunc(to_number(to_char(t.SOBT,'hh24'))) = trunc(to_number(to_char(sysdate,'hh24'))-1)
+    ))
+    ) PREDCNT,
+    (
+    SELECT
+    count( * ) preacnt
+    FROM
+    V_UTIL_DAILY_FLIGHT t
+    LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+    AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+    AND t.A_OR_D = tt.A_OR_D
+    AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+    WHERE
+    to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+    AND nvl(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C'
+    AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+    AND ((
+    t.A_OR_D = 'A'
+    AND t.SIBT IS NOT NULL
+    AND trunc(to_number(to_char(t.ALDT,'hh24'))) = trunc(to_number(to_char(sysdate,'hh24'))-1)
+    AND t.ALDT IS NOT NULL
+    )
+    OR (
+    t.A_OR_D = 'D'
+    AND t.SOBT IS NOT NULL
+    AND trunc(to_number(to_char(t.ATOT,'hh24'))) = trunc(to_number(to_char(sysdate,'hh24'))-1)
+    AND t.ATOT IS NOT NULL
+    ))
+    ) PREACNT,
+    (
+    SELECT
+    count( * ) thishourdcnt
+    FROM
+    V_UTIL_DAILY_FLIGHT t
+    LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+    AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+    AND t.A_OR_D = tt.A_OR_D
+    AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+    WHERE
+    to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+    AND nvl(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C'
+    AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+    AND ((
+    t.A_OR_D = 'A'
+    AND t.SIBT IS NOT NULL
+    AND trunc(to_number(to_char(t.SIBT,'hh24'))) = trunc(to_number(to_char(sysdate,'hh24'))))
+    OR (
+    t.A_OR_D = 'D'
+    AND t.SOBT IS NOT NULL
+    AND trunc(to_number(to_char(t.SOBT,'hh24'))) = trunc(to_number(to_char(sysdate,'hh24')))))
+    ) THISHOURDCNT,
+    (
+    SELECT
+    count( * ) thishouracnt
+    FROM
+    V_UTIL_DAILY_FLIGHT t
+    LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+    AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+    AND t.A_OR_D = tt.A_OR_D
+    AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+    WHERE
+    to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+    AND nvl(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C'
+    AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+    AND ((
+    t.A_OR_D = 'A'
+    AND t.SIBT IS NOT NULL
+    AND trunc(to_number(to_char(t.ALDT,'hh24'))) = trunc(to_number(to_char(sysdate,'hh24')))
+    AND t.ALDT IS NOT NULL
+    )
+    OR (
+    t.A_OR_D = 'D'
+    AND t.SOBT IS NOT NULL
+    AND trunc(to_number(to_char(t.ATOT,'hh24'))) = trunc(to_number(to_char(sysdate,'hh24')))
+    AND t.ATOT IS NOT NULL
+    ))
+    ) THISHOURACNT
+    FROM
+    dual
+</select>
+<select id="SELECT_BASIC_DATA_06" resultType="com.hq.acdm.model.statistics.warningInfo.StandModel">
+    select STANDS from V_FREESTAND_TOTAL
+</select>
+    <select id="SELECT_BASIC_DATA_07" resultType="com.hq.acdm.model.statistics.warningInfo.CurrentWarningStatusModel">
+        SELECT
+	CURSTATUS
+FROM
+	EARLY_WARNING_REPORT
+WHERE
+	DTIME IN ( SELECT max( DTIME ) FROM EARLY_WARNING_REPORT )
+    </select>
+    <select id="SELECT_DELAY1H_UNEXEC" resultType="com.hq.acdm.model.statistics.warningInfo.ExecutionModel">
+        SELECT
+        CASE
+
+        WHEN
+        t1.scnt &gt; 0 THEN
+        round(coalesce( t2.cnt * 100 / t1.scnt, 0 ),2) ELSE 0
+        END ARATE
+        FROM
+        (
+        SELECT
+        count( * ) scnt
+        FROM
+        V_UTIL_DAILY_FLIGHT t
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+        AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND t.A_OR_D = tt.A_OR_D
+        AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+        WHERE
+        to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+        AND t.A_OR_D = 'D'
+        AND t.SOBT IS NOT NULL
+        AND ( trunc(to_number(to_char(t.SOBT,'hh24'))) &gt;= 8 AND trunc(to_number(to_char(t.SOBT,'hh24'))) &lt;= 23 )
+        AND nvl(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C'
+        AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )) t1
+        LEFT JOIN (
+        SELECT
+        count( * ) cnt
+        FROM
+        V_DELAY_FLI_NO
+        WHERE
+        to_char(OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+        AND A_OR_D = 'D'
+        AND DELAY_TIME &gt;= 60
+        AND ATOT IS NULL
+        AND ( trunc(to_number(to_char(SOBT,'hh24'))) &gt;= 8 AND trunc(to_number(to_char(SOBT,'hh24'))) &lt;= 23 )) t2 ON 1 = 1
+    </select>
+    <select id="SELECT_UNEXEC_HOURS" resultType="com.hq.acdm.model.statistics.warningInfo.NoFlightHourModel">
+        SELECT
+        ADT
+        FROM
+        (
+        SELECT DISTINCT
+        TO_CHAR( t.ATOT, 'YYYY-MM-DD HH24:MI:SS' ) ADT
+        FROM
+        V_UTIL_DAILY_FLIGHT t
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+        AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND t.A_OR_D = tt.A_OR_D
+        AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+        WHERE
+        to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+        AND t.A_OR_D = 'D'
+        AND t.SOBT IS NOT NULL
+        AND ( trunc(to_number(to_char(t.SOBT,'hh24'))) &gt;= 8 AND trunc(to_number(to_char(t.SOBT,'hh24'))) &lt;= 23 )
+        AND nvl(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C'
+        AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        AND t.ATOT IS NOT NULL UNION
+        SELECT DISTINCT
+        TO_CHAR( t.ALDT, 'YYYY-MM-DD HH24:MI:SS' ) ADT
+        FROM
+        V_UTIL_DAILY_FLIGHT t
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+        AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND t.A_OR_D = tt.A_OR_D
+        AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+        WHERE
+        to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+        AND t.A_OR_D = 'A'
+        AND t.SIBT IS NOT NULL
+        AND ( trunc(to_number(to_char(t.SIBT,'hh24'))) &gt;= 8 AND trunc(to_number(to_char(t.SIBT,'hh24'))) &lt;= 23 )
+        AND nvl(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C'
+        AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+        AND t.ALDT IS NOT NULL UNION
+        SELECT
+        TO_CHAR( sysdate, 'YYYY-MM-DD HH24:MI:SS' ) ADT
+        FROM
+        dual
+        )
+        ORDER BY
+        ADT
+    </select>
+    <select id="SELECT_EXECDRATE_1HOURAFTER" resultType="com.hq.acdm.model.statistics.warningInfo.ExecutionModel">
+        SELECT
+        CASE
+
+        WHEN
+        t1.scnt &gt; 0 THEN
+        round(coalesce( t2.acnt * 100 / t1.scnt, 0 ),2) ELSE 0
+        END ARATE
+        FROM
+        (
+        SELECT
+        count( * ) scnt
+        FROM
+        V_UTIL_DAILY_FLIGHT t
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+        AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND t.A_OR_D = tt.A_OR_D
+        AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+        WHERE
+        to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+        AND t.A_OR_D = 'D'
+        AND t.SOBT IS NOT NULL
+        AND ( trunc(to_number(to_char(t.SOBT,'hh24')))= trunc(to_number(to_char(sysdate,'hh24'))+1))
+        AND nvl(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C'
+        AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )) t1
+        LEFT JOIN (
+        SELECT
+        count( * ) acnt
+        FROM
+        V_UTIL_DAILY_FLIGHT t
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+        AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND t.A_OR_D = tt.A_OR_D
+        AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+        WHERE
+        to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')		AND t.A_OR_D = 'D'
+        AND t.SOBT IS NOT NULL
+        AND ( trunc(to_number(to_char(tt.CTOT,'hh24'))) = trunc(to_number(to_char(sysdate,'hh24'))+1) )
+        AND tt.CTOT IS NOT NULL
+        AND nvl(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C'
+        AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )) t2 ON 1 =1
+    </select>
+    <select id="SELECT_EXECARATE_1HOURAFTER" resultType="com.hq.acdm.model.statistics.warningInfo.ExecutionModel">
+        SELECT
+        CASE
+
+        WHEN
+        t1.scnt &gt; 0 THEN
+        ROUND(coalesce( t2.acnt * 100 / t1.scnt, 0 ),2) ELSE 0
+        END ARATE
+        FROM
+        (
+        SELECT
+        count( * ) scnt
+        FROM
+        V_UTIL_DAILY_FLIGHT t
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+        AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND t.A_OR_D = tt.A_OR_D
+        AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+        WHERE
+        to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+        AND t.A_OR_D = 'A'
+        AND t.SIBT IS NOT NULL
+        AND ( trunc(to_number(to_char(t.SIBT,'hh24')))= trunc(to_number(to_char(sysdate,'hh24'))+1) )
+        AND NVL(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )) t1
+        LEFT JOIN (
+        SELECT
+        count( * ) acnt
+        FROM
+        V_UTIL_DAILY_FLIGHT t
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+        AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND t.A_OR_D = tt.A_OR_D
+        AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+        WHERE
+        to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+        AND t.A_OR_D = 'A'
+        AND t.SIBT IS NOT NULL
+        AND ( trunc(to_number(to_char(t.ELDT,'hh24')))= trunc(to_number(to_char(sysdate,'hh24'))+1) )
+        AND t.ELDT IS NOT NULL
+        AND NVL(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )) t2 ON 1 = 1
+    </select>
+    <select id="SELECT_EXECDRATE_THISHOUR" resultType="com.hq.acdm.model.statistics.warningInfo.ExecutionModel">
+        SELECT
+        CASE
+
+        WHEN
+        t1.scnt &gt; 0 THEN
+        round(coalesce( t2.acnt * 100 / t1.scnt, 0 ),2) ELSE 0
+        END ARATE
+        FROM
+        (
+        SELECT
+        count( * ) scnt
+        FROM
+        V_UTIL_DAILY_FLIGHT t
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+        AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND t.A_OR_D = tt.A_OR_D
+        AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+        WHERE
+        to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+        AND t.A_OR_D = 'D'
+        AND t.SOBT IS NOT NULL
+        AND (
+        trunc(to_number(to_char(t.SOBT,'hh24')))= trunc(to_number(to_char(sysdate,'hh24'))))
+        AND nvl(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )) t1
+        LEFT JOIN (
+        SELECT
+        count( * ) acnt
+        FROM
+        V_UTIL_DAILY_FLIGHT t
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+        AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND t.A_OR_D = tt.A_OR_D
+        AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+        WHERE
+        to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+        AND t.A_OR_D = 'D'
+        AND t.SOBT IS NOT NULL
+        AND (
+        trunc(to_number(to_char(t.ATOT,'hh24')))= trunc(to_number(to_char(sysdate,'hh24'))))
+        AND t.ATOT IS NOT NULL
+        AND nvl(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )) t2 ON 1 = 1
+    </select>
+    <select id="SELECT_EXECARATE_THISHOUR" resultType="com.hq.acdm.model.statistics.warningInfo.ExecutionModel">
+        SELECT
+        CASE
+
+        WHEN
+        t1.scnt &gt; 0 THEN
+        round(coalesce( t2.acnt * 100 / t1.scnt, 0 ),2) ELSE 0
+        END ARATE
+        FROM
+        (
+        SELECT
+        count( * ) scnt
+        FROM
+        V_UTIL_DAILY_FLIGHT t
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+        AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND t.A_OR_D = tt.A_OR_D
+        AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+        WHERE
+        to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+        AND t.A_OR_D = 'A'
+        AND t.SIBT IS NOT NULL
+        AND (
+        trunc(to_number(to_char(t.SIBT,'hh24')))= trunc(to_number(to_char(sysdate,'hh24'))))
+        AND nvl(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )) t1
+        LEFT JOIN (
+        SELECT
+        count( * ) acnt
+        FROM
+        V_UTIL_DAILY_FLIGHT t
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS tt ON t.FLIGHT_NO_IATA = tt.FLIGHT_NO_IATA
+        AND to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(tt.OPERATIONAL_DATE,'yyyy-mm-dd')
+        AND t.A_OR_D = tt.A_OR_D
+        AND t.FLIGHT_REPEAT_COUNT = t.FLIGHT_REPEAT_COUNT
+        WHERE
+        to_char(t.OPERATIONAL_DATE,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd')
+        AND t.A_OR_D = 'A'
+        AND t.SIBT IS NOT NULL
+        AND (
+        trunc(to_number(to_char(t.ALDT,'hh24')))= trunc(to_number(to_char(sysdate,'hh24'))))
+        AND t.ALDT IS NOT NULL
+        AND nvl(t.FLIGHT_CANCEL_CODE,' ') <![CDATA[<>]]> 'C'
+        AND tt.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )) t2 ON 1 =1
+    </select>
+    <insert id="INSERT_OPERATION_LOG" parameterType="map">
+        INSERT INTO EARLY_WARNING_REPORT
+        VALUES
+        (
+        sysdate,
+        #{params.user},
+        #{params.status}
+        )
+    </insert>
+    <select id="QUERY_OPERATION_LOG" resultType="com.hq.acdm.model.statistics.warningInfo.WarningInfo">
+        SELECT * FROM EARLY_WARNING_REPORT where DTIME = (SELECT max(DTIME) FROM EARLY_WARNING_REPORT)
+    </select>
+    <select id="queryStatus" resultType="com.hq.acdm.model.statistics.warningInfo.WarningInfo">
+        SELECT * FROM EARLY_WARNING_REPORT WHERE DTIME = (SELECT MAX(DTIME) FROM EARLY_WARNING_REPORT)
+    </select>
+</mapper>

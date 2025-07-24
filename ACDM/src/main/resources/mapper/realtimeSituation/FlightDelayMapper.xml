@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.FlightDelayMapper" >
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.realtimeSituation.FlightDelayVo" >
+    <result column="ZCL" property="zCL" jdbcType="DOUBLE" />
+    <result column="FXL" property="fXL" jdbcType="DOUBLE" />
+    <result column="YW" property="yW" jdbcType="INTEGER" />
+
+    <result column="YWZS" property="yWZS" jdbcType="INTEGER" />
+    <result column="QX" property="qX" jdbcType="INTEGER" />
+    <result column="QXZS" property="qXZS" jdbcType="INTEGER" />
+    <result column="ZL" property="zL" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="getDelayRlsIdx" resultType="com.hq.acdm.vo.realtimeSituation.FlightDelayVo"  parameterType="map" >
+
+     SELECT
+      SUM(
+      CASE WHEN (TA.ALDT IS NOT NULL AND TIMESTAMPDIFF( MINUTE, TA.SIBT, TA.ALDT )  <![CDATA[ <= ]]>  -10)
+      OR (TA.ATOT IS NOT NULL AND TIMESTAMPDIFF( MINUTE, TA.SOBT, TA.ATOT ) <![CDATA[ <= ]]> 25)
+      THEN 1 ELSE 0 END
+      ) / SUM(CASE WHEN TA.ATOT IS NOT NULL OR (TA.ALDT IS NULL AND TIMESTAMPDIFF( MINUTE, TA.SIBT, TA.ALDT ) > -10)
+      OR (TA.ATOT IS NULL AND TIMESTAMPDIFF( MINUTE, TA.SOBT, TA.ATOT ) > 25) THEN 1 ELSE 0 END) ZCL,
+      SUM(CASE WHEN
+      TA.ATOT IS NOT NULL AND CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)<![CDATA[ <= ]]>0 THEN
+      1 ELSE 0 END
+      ) / SUM(CASE WHEN
+      TA.ATOT IS NOT NULL OR (TA.ATOT IS NULL AND CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0) THEN
+      1 ELSE 0 END
+      ) FXL,
+           SUM(case when TA.DELAY_TIME>0 and (TA.ATOT IS NULL
+                <if test="params.startTime !=null and params.startTime != '' and params.endTime !=null and params.endTime != '' ">
+                            OR TA.ATOT NOT BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR}
+                </if>
+                  ) THEN 1 ELSE 0 END) YW,
+           SUM(case when TA.DELAY_TIME>0 THEN 1 ELSE 0 END) YWZS,
+            0 QX,
+           SUM(case when TA.NORMAL_FLIGHT_STAT_CD='CAN' OR TA.ABNORMAL_FLIGHT_STAT_CD='CAN' THEN 1 ELSE 0 END) QXZS,
+           SUM(case when TA.DELAY_TIME>0 THEN 1 ELSE 0 END) ZL
+                  FROM
+                      V_UTIL_DAILY_FLIGHT TA
+                      LEFT JOIN V_UTIL_DAILY_FLIGHT TB ON TA.FLIGHT_ID = TB.ASSOCIATED_FLIGHT_ID
+              WHERE
+      TA.D_OR_A = 'D'  and TA.`ISDEL` <![CDATA[ <> ]]> '1'
+
+      <if test="params.startTime !=null and params.startTime != '' and params.endTime !=null and params.endTime != '' ">
+        AND TA.SOBT BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR}
+      </if>
+  </select>
+
+    <select id="getFXL" resultType="com.hq.acdm.vo.realtimeSituation.FlightDelayVo"  parameterType="map" >
+        <![CDATA[
+        SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+        FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+        WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL
+        AND TA.FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+        ]]>
+        <if test="params.startTime !=null and params.startTime != '' and params.endTime !=null and params.endTime != '' ">
+            AND TA.SOBT BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="getZCL" resultType="com.hq.acdm.vo.realtimeSituation.FlightDelayVo"  parameterType="map" >
+        <![CDATA[
+        SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) OR TA.ALDT<=DATE_ADD(TA.SIBT,INTERVAL 20 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+        FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN'
+        AND TA.ATOT IS NOT NULL AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W')
+        AND TA.D_OR_A='D'
+        ]]>
+        <if test="params.startTime !=null and params.startTime != '' and params.endTime !=null and params.endTime != '' ">
+            AND TA.SOBT BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="getDelayZL" resultType="com.hq.acdm.vo.realtimeSituation.FlightDelayVo"  parameterType="map" >
+
+        SELECT
+
+        SUM(case when TA.DELAY_TIME>0 and (TA.ATOT IS NULL
+        <if test="params.startTime !=null and params.startTime != '' and params.endTime !=null and params.endTime != '' ">
+            OR TA.ATOT  > #{params.endTime,jdbcType=VARCHAR}
+        </if>
+        ) THEN 1 ELSE 0 END) ZL
+        FROM
+        V_UTIL_DAILY_FLIGHT TA
+        INNER  JOIN T_PASSENGER_INFO TC ON TA.FLIGHT_ID =TC.flightId
+        WHERE
+        TA.EXEC_DATE=CURRENT_DATE AND TA.D_OR_A='D' AND TA.ISDEL <![CDATA[<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD <>'CAN']]>
+
+        <if test="params.startTime !=null and params.startTime != '' and params.endTime !=null and params.endTime != '' ">
+            AND TA.SOBT BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="getDelayTimeCount" resultType="com.hq.acdm.vo.realtimeSituation.FDelayVo"  parameterType="map" >
+        <![CDATA[
+        SELECT
+        SUM(case when TA.DELAY_TIME > 0 AND TA.DELAY_TIME < 30  THEN 1 ELSE 0 END) count0,
+        SUM(case when TA.DELAY_TIME>=30 and TA.DELAY_TIME < 60   THEN 1 ELSE 0 END) count1,
+        SUM(case when TA.DELAY_TIME>=60 and TA.DELAY_TIME < 120   THEN 1 ELSE 0 END) count2,
+        SUM(case when TA.DELAY_TIME>=120 and TA.DELAY_TIME < 240   THEN 1 ELSE 0 END) count3,
+        SUM(case when TA.DELAY_TIME>=240  THEN 1 ELSE 0 END) count4
+        FROM
+        V_UTIL_DAILY_FLIGHT TA
+        LEFT JOIN V_UTIL_DAILY_FLIGHT TB ON TA.FLIGHT_ID = TB.ASSOCIATED_FLIGHT_ID
+        WHERE TA.D_OR_A = 'D'  and TA.`ISDEL`  <> '1'
+        ]]>
+        <if test="params.startTime !=null and params.startTime != '' and params.endTime !=null and params.endTime != '' ">
+            AND TA.SOBT BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <resultMap id="ResultMapCount" type="com.hq.acdm.vo.realtimeSituation.HBSPerHour" >
+        <result column="TIME_H" property="time_H" jdbcType="VARCHAR" />
+        <result column="HBS" property="hBS" jdbcType="INTEGER" />
+    </resultMap>
+    <select id="getWDelayHourCount" resultMap="ResultMapCount">
+       SELECT substring(ta.SOBT,-8,2) TIME_H,SUM(CASE WHEN ta.ATOT IS NULL OR (ta.ATOT>ta.SOBT AND substring(ta.ATOT,-8,2)>substring(ta.SOBT,-8,2)) THEN 1 ELSE 0 END) HBS
+       FROM V_UTIL_DAILY_FLIGHT ta
+       LEFT JOIN T_PASSENGER_INFO tp on ta.FLIGHT_ID=tp.flightId
+       WHERE   ta.DELAY_TIME>0 and
+       ta.D_OR_A='D'    and CAST(gate AS SIGNED) BETWEEN 1 and 14
+         GROUP BY TIME_H
+    </select>
+    <select id="getWDelayHourCount2" resultMap="ResultMapCount">
+       SELECT substring(ta.SOBT,-8,2) TIME_H,SUM(CASE WHEN ta.ATOT IS NULL OR (ta.ATOT>ta.SOBT AND substring(ta.ATOT,-8,2)>substring(ta.SOBT,-8,2)) THEN 1 ELSE 0 END) HBS
+       FROM V_UTIL_DAILY_FLIGHT ta
+       LEFT JOIN T_PASSENGER_INFO tp on ta.FLIGHT_ID=tp.flightId
+       WHERE   ta.DELAY_TIME>0 and
+       ta.D_OR_A='D'    and CAST(gate AS SIGNED) BETWEEN 15 and 27
+         GROUP BY TIME_H
+    </select>
+    <select id="getEDelayHourCount2" resultMap="ResultMapCount">
+       SELECT substring(ta.SOBT,-8,2) TIME_H,SUM(CASE WHEN ta.ATOT IS NULL OR (ta.ATOT>ta.SOBT AND substring(ta.ATOT,-8,2)>substring(ta.SOBT,-8,2)) THEN 1 ELSE 0 END) HBS
+       FROM V_UTIL_DAILY_FLIGHT ta
+       LEFT JOIN T_PASSENGER_INFO tp on ta.FLIGHT_ID=tp.flightId
+       WHERE   ta.DELAY_TIME>0 and
+       ta.D_OR_A='D'    and CAST(gate AS SIGNED) BETWEEN 36 and 49
+         GROUP BY TIME_H
+    </select>
+    <select id="getEDelayHourCount" resultMap="ResultMapCount">
+       SELECT substring(ta.SOBT,-8,2) TIME_H,SUM(CASE WHEN ta.ATOT IS NULL OR (ta.ATOT>ta.SOBT AND substring(ta.ATOT,-8,2)>substring(ta.SOBT,-8,2)) THEN 1 ELSE 0 END) HBS
+       FROM V_UTIL_DAILY_FLIGHT ta
+       LEFT JOIN T_PASSENGER_INFO tp on ta.FLIGHT_ID=tp.flightId
+       WHERE   ta.DELAY_TIME>0 and
+       ta.D_OR_A='D'    and CAST(gate AS SIGNED) BETWEEN 50 and 61
+         GROUP BY TIME_H
+    </select>
+    <resultMap id="ResultMapBack" type="com.hq.acdm.vo.realtimeSituation.FlightBackVo" >
+        <result column="TIME_H" property="flightId" jdbcType="VARCHAR" />
+        <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+        <result column="ATOT" property="atot" jdbcType="VARCHAR" />
+        <result column="DELAY_TIME" property="delayTime" jdbcType="INTEGER" />
+    </resultMap>
+    <select id="getAllFlight" resultMap="ResultMapBack">
+       SELECT FLIGHT_ID,date_format(SOBT,'%Y%m%d%H%i%s') SOBT,date_format(ATOT,'%Y%m%d%H%i%s') ATOT,DELAY_TIME FROM V_UTIL_DAILY_FLIGHT WHERE DELAY_TIME >0 AND D_OR_A='D' AND SOBT IS NOT NULL  ORDER BY SOBT;
+    </select>
+    <select id="getTmdmcDgrm" resultType="com.hq.acdm.vo.realtimeSituation.TmdmcDgrmVo">
+       SELECT TA.GATE area,COUNT(1) num FROM V_UTIL_DAILY_FLIGHT TA LEFT JOIN T_PASSENGER_INFO TB ON TA.FLIGHT_ID=TB.flightId WHERE (TB.stsPscTime IS NOT NULL OR TB.stsPscIsPass='2') AND TA.ATOT IS NULL AND TA.GATE IS NOT NULL GROUP BY TA.GATE;
+   </select>
+    <select id="getPsgCountByFloor" parameterType="string" resultType="int">
+        SELECT COUNT(1) FROM T_GATE_AREA TA LEFT JOIN V_UTIL_DAILY_FLIGHT TB ON TA.GATE=TB.GATE LEFT JOIN T_PASSENGER_INFO TC ON TB.FLIGHT_ID=TC.flightId WHERE (TC.stsPscTime IS NOT NULL OR TC.stsPscIsPass='2')  AND TB.ATOT IS NULL AND TA.floor= #{floor,jdbcType=VARCHAR}
+   </select>
+    <select id="getAvgWaitTime" resultMap="ResultMapCount">
+        <![CDATA[
+        SELECT  substring(SOBT,-8,2) TIME_H,FLOOR(AVG(TIMESTAMPDIFF( MINUTE, (AEBT +  interval   5 minute) , ATOT ))) HBS FROM T_LOCAL_FLIGHT_INFO WHERE EXEC_DATE=CURRENT_DATE AND D_OR_A='D' AND ISDEL <>'1' AND ABNORMAL_FLIGHT_STAT_CD <>'CAN'
+        AND ATOT IS NOT NULL AND AEBT is not null GROUP BY TIME_H
+         ]]>
+    </select>
+
+    <select id="getDelayRetentionP" resultType="com.hq.acdm.vo.realtimeSituation.FlightDelayVo" parameterType="map" >
+        <![CDATA[
+        SELECT  SUM(
+        CASE WHEN AIRLINES IN ('CA','ZH')
+        THEN 1 ELSE 0 END
+        )/COUNT(1) gh,
+        SUM(
+        CASE WHEN AIRLINES IN ('CZ','OQ')
+        THEN 1 ELSE 0 END
+        )/COUNT(1) nh,
+        SUM(
+        CASE WHEN AIRLINES IN ('FM','MU')
+        THEN 1 ELSE 0 END
+        )/COUNT(1) dh,
+        SUM(
+        CASE WHEN AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','GI','XX')
+        THEN 1 ELSE 0 END
+        )/COUNT(1) df
+        FROM T_LOCAL_FLIGHT_INFO ta
+        INNER JOIN T_PASSENGER_INFO  tp on ta.FLIGHT_ID=tp.flightId
+        WHERE ta.EXEC_DATE=CURRENT_DATE AND ta.D_OR_A='D' AND ta.ISDEL <>'1' AND ta.ABNORMAL_FLIGHT_STAT_CD <>'CAN'
+        ]]>
+
+        <if test="params.startTime !=null and params.startTime != '' and params.endTime !=null and params.endTime != '' ">
+            AND (   ta.DELAY_TIME>0 and (ta.ATOT IS NULL OR ta.ATOT >#{params.endTime,jdbcType=VARCHAR}))
+            AND ta.SOBT BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="findStandStartEndTime" resultType="com.hq.acdm.vo.realtimeSituation.FltDelayStartEndTimeVo">
+        <![CDATA[
+        SELECT
+        DATE_FORMAT(COALESCE(START_REAL_TIME_1,ALTERATE_START_TIME_1),'%H') startTimeH,
+        DATE_FORMAT(COALESCE(END_REAL_TIME_1,ALTERATE_END_TIME_1),'%H') endTimeH
+        FROM T_DYN_RESOURCE
+        WHERE RSC_TYPE = 'STAND'
+        AND DATE_FORMAT(COALESCE(START_REAL_TIME_1,ALTERATE_START_TIME_1), '%Y-%m-%d %H:%i:%s') >= DATE_FORMAT(NOW(), '%Y-%m-%d %00:%00:%00')
+        AND DATE_FORMAT(COALESCE(END_REAL_TIME_1,ALTERATE_END_TIME_1), '%Y-%m-%d %H:%i:%s') <= DATE_FORMAT(NOW(), '%Y-%m-%d %23:%59:%59')
+         ]]>
+    </select>
+
+    <select id="findRunwayInfoA" resultType="com.hq.acdm.vo.realtimeSituation.FltDelayTimeAndNumVo">
+        <![CDATA[
+        SELECT T.TIME_H timeH,T.HBS hbs FROM (
+        SELECT SUBSTRING(ALDT,-8,2) TIME_H,COUNT(1) HBS
+        FROM T_LOCAL_FLIGHT_INFO
+        WHERE D_OR_A='A' AND ISDEL <> '1'
+        AND ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+        AND DATE_FORMAT(ALDT, '%Y-%m-%d %H:%i:%s') >= DATE_FORMAT(NOW(), '%Y-%m-%d %00:%00:%00')
+        AND DATE_FORMAT(ALDT, '%Y-%m-%d %H:%i:%s') <= DATE_FORMAT(NOW(), '%Y-%m-%d %23:%59:%59')
+        GROUP BY TIME_H ) T
+        WHERE T.TIME_H >= '00' AND T.TIME_H <= '23'
+        ORDER BY T.TIME_H ASC
+        ]]>
+    </select>
+
+    <select id="findRunwayInfoD" resultType="com.hq.acdm.vo.realtimeSituation.FltDelayTimeAndNumVo">
+        <![CDATA[
+        SELECT T.TIME_H timeH,T.HBS hbs FROM (
+        SELECT SUBSTRING(ATOT,-8,2) TIME_H,COUNT(1) HBS
+        FROM T_LOCAL_FLIGHT_INFO
+        WHERE D_OR_A='D' AND ISDEL <> '1'
+        AND ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+        AND DATE_FORMAT(ATOT, '%Y-%m-%d %H:%i:%s') >= DATE_FORMAT(NOW(), '%Y-%m-%d %00:%00:%00')
+        AND DATE_FORMAT(ATOT, '%Y-%m-%d %H:%i:%s') <= DATE_FORMAT(NOW(), '%Y-%m-%d %23:%59:%59')
+        GROUP BY TIME_H ) T
+        WHERE T.TIME_H >= '00' AND T.TIME_H <= '23'
+        ORDER BY T.TIME_H ASC
+        ]]>
+    </select>
+
+    <select id="findTerminalBuilding" resultType="com.hq.acdm.vo.realtimeSituation.FltDelayStartEndTimeVo">
+        <![CDATA[
+        SELECT DATE_FORMAT(stsPscTime,'%H') startTimeH,
+        DATE_FORMAT(stsBoardTime,'%H') endTimeH
+        FROM T_PASSENGER_INFO
+        WHERE DATE_FORMAT(stsPscTime, '%Y-%m-%d %H:%i:%s') >= DATE_FORMAT(NOW(), '%Y-%m-%d %00:%00:%00')
+        AND DATE_FORMAT(stsBoardTime, '%Y-%m-%d %H:%i:%s') <= DATE_FORMAT(NOW(), '%Y-%m-%d %23:%59:%59')
+        AND stsPscTime IS NOT NULL
+        AND stsBoardTime IS NOT NULL
+         ]]>
+    </select>
+
+</mapper>

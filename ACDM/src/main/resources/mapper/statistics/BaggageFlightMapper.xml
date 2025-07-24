@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.baggageFlightMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.statistics.baggageFlight.baggageFlight" >
+    <result column="queryDate" property="queryDate" jdbcType="TIMESTAMP" />
+    <result column="AIRLINE_CODE_IATA" property="airline_code_iata" jdbcType="VARCHAR" />
+    <result column="AIRPORTTYPE" property="airport_type" jdbcType="VARCHAR" />
+    <result column="AVGTime" property="averageTime" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="queryBaggageFlight" parameterType="map" resultType="com.hq.acdm.model.statistics.baggageFlight.baggageFlight"  >
+      select sibt,to_char(operational_date, 'yyyy-MM-dd') operational_date,airline_code_iata,executecount,normal,(executecount-normal)   unormal,(normal/executecount)*100||'%' reach,((executecount-normal)/executecount)*100||'%' unreach from v_baggage_flights t WHERE 1=1
+      <if test="params.startDate != null and params.startDate != ''" >
+       and operational_date&gt;=to_date(#{params.startDate},'yyyy-mm-dd hh24:mi:ss')
+      </if>
+      <if test="params.endDate != null and params.endDate != ''">
+          and operational_date&lt;=to_date(#{params.endDate},'yyyy-mm-dd hh24:mi:ss')
+
+      </if>
+
+      <if test="params.airCompany !=null and params.airCompany != ''">
+          and AIRLINE_CODE_IATA=#{params.airCompany}
+      </if>
+  </select>
+</mapper>

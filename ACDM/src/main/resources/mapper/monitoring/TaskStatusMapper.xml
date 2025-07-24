@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.monitioring.TaskStatusMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.monitoring.taskStatus.TaskStatus" >
+    <id column="taskid" property="taskid" jdbcType="INTEGER" />
+    <result column="taskName" property="taskName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="context" property="remarks" jdbcType="VARCHAR" />
+    <result column="sender" property="operator" jdbcType="VARCHAR" />
+    <result column="senderTime" property="operateTime" jdbcType="TIMESTAMP" />
+    <result column="sendDept" property="operateIp" jdbcType="VARCHAR" />
+    <result column="receiver" property="parentId" jdbcType="VARCHAR" />
+    <result column="receiveDept" property="roleLevel" jdbcType="VARCHAR" />
+    <result column="receiveTime" property="enName" jdbcType="TIMESTAMP" />
+    <result column="status" property="sort" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="BaseResultMap2" type="java.util.Map" >
+  <id column="airline_code_iata" property="airline_code_iata" jdbcType="VARCHAR" />
+    <id column="airline_code_icao" property="airline_code_icao" jdbcType="VARCHAR" />
+   </resultMap>
+  <sql id="Base_Column_List" >
+    taskid, taskName, type, title, context, sender, sendDept, senderTime,receiver,receiveDept,receiveTime,status
+  </sql>
+  <select id="queryList" resultType="com.hq.acdm.model.monitoring.taskStatus.TaskStatus" parameterType="map" >
+    select
+    title,
+    advise, sender, companyName,stand, send_Time,receiver,A_OR_D,OPERATIONAL_DATE,OPERATIONAL_DATE_D,
+    flight_NO_IATA flight_NO_IATA_A,flight_NO_IATA_D,receive_Time,status
+    from task_status where 1=1
+    <if test="params.flight_no_iata !=null and params.flight_no_iata != ''">
+      and flight_no_iata=#{params.flight_no_iata,jdbcType=VARCHAR}
+    </if>
+    <if test="params.receiver !=null and params.receiver != ''">
+      and receiver=#{params.receiver,jdbcType=VARCHAR}
+    </if>
+    <if test="params.query_date !=null and params.query_date != ''">
+      and to_char(OPERATIONAL_DATE,'yyyy-MM-dd') = #{params.query_date,jdbcType=VARCHAR}
+    </if>
+    order by send_Time desc
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from task
+    where id = #{taskid,jdbcType=INTEGER}
+  </select>
+  <!--查询当日航班，带状态，与task_status关联-->
+  <select id="queryFlightList" parameterType="map" resultType="com.hq.acdm.model.monitoring.taskStatus.TaskStatus" >
+    SELECT AA.FLIGHT_NO_IATA FLIGHT_NO_IATA_A,
+    AA.STAND STAND_A,
+    AA.OPERATIONAL_DATE,
+    AA.SIBT,
+    AA.ELDT,
+    AA.ALDT,aa.airline_code_icao,
+    BB.FLIGHT_NO_IATA FLIGHT_NO_IATA_D,
+    BB.SOBT,
+    BB.AOBT,
+    BB.ATOT,
+    CC.STATUS STATUS,  CC.STATUS STATE,cc.SENDER,cc.RECEIVER
+    FROM
+    (SELECT TA.FLIGHT_NO_IATA,
+    TA.OPERATIONAL_DATE,
+    TA.A_OR_D,
+    TA.FLIGHT_REPEAT_COUNT,
+    TA.STAND,
+    TA.SIBT,
+    TA.ELDT,
+    TA.ALDT,ta.airline_code_icao,
+    TB.LNK_CARRIER_CODE,
+    TB.LNK_FLIGHT_NO,
+    TB.LNK_FLIGHT_SUFFIX,
+    TB.LNK_FLIGHT_REPEAT_COUNT,
+    TB.LNK_SCHEDULE_DATE
+    FROM DAILY_FLIGHT_MASTER TA
+    LEFT JOIN DAILY_FLIGHT_ADD_DETAILS TB
+    ON TA.FLIGHT_NO_IATA   =TB.FLIGHT_NO_IATA
+    AND TA.OPERATIONAL_DATE=TB.OPERATIONAL_DATE
+    AND TA.A_OR_D          =TB.A_OR_D
+    LEFT JOIN DAILY_FLIGHT_AIRLINES TC
+    ON TA.FLIGHT_NO_IATA   =TC.FLIGHT_NO_IATA
+    AND TA.OPERATIONAL_DATE=TC.OPERATIONAL_DATE
+    AND TA.A_OR_D          =TC.A_OR_D
+    LEFT JOIN DAILY_FLIGHT_AIRLINES_MORE TD
+    ON TA.FLIGHT_NO_IATA       =TD.FLIGHT_NO_IATA
+    AND TA.OPERATIONAL_DATE    =TD.OPERATIONAL_DATE
+    AND TA.A_OR_D              =TD.A_OR_D
+    WHERE nvl(TB.CODE_SHARE_STATUS,' ') &lt;>'SF'
+    AND nvl(TB.FLIGHT_CANCEL_CODE,' ') &lt;>'C'
+    AND TB.FLIGHT_CLASS_CODE  IN ('L/W','W/Z','C/B')
+    AND TA.A_OR_D              ='A'
+    AND to_char(TA.OPERATIONAL_DATE,'yyyy-MM-dd')=#{params.planDate,jdbcType=VARCHAR}
+    ) AA
+    LEFT JOIN
+    (SELECT T1.FLIGHT_NO_IATA,
+    T1.OPERATIONAL_DATE,
+    T1.A_OR_D,
+    T1.FLIGHT_REPEAT_COUNT,
+    T1.ATOT ,
+    T1.SOBT,
+    T1.AOBT
+    FROM DAILY_FLIGHT_MASTER T1
+    LEFT JOIN DAILY_FLIGHT_ADD_DETAILS T2
+    ON T1.FLIGHT_NO_IATA   =T2.FLIGHT_NO_IATA
+    AND T1.OPERATIONAL_DATE=T2.OPERATIONAL_DATE
+    AND T1.A_OR_D          =T2.A_OR_D
+    LEFT JOIN DAILY_FLIGHT_AIRLINES T3
+    ON T1.FLIGHT_NO_IATA   =T3.FLIGHT_NO_IATA
+    AND T1.OPERATIONAL_DATE=T3.OPERATIONAL_DATE
+    AND T1.A_OR_D          =T3.A_OR_D
+    LEFT JOIN DAILY_FLIGHT_AIRLINES_MORE T4
+    ON T1.FLIGHT_NO_IATA       =T4.FLIGHT_NO_IATA
+    AND T1.OPERATIONAL_DATE    =T4.OPERATIONAL_DATE
+    AND T1.A_OR_D              =T4.A_OR_D
+    WHERE nvl(T2.CODE_SHARE_STATUS,' ') &lt;>'SF'
+    AND nvl(T2.FLIGHT_CANCEL_CODE,' ')  &lt;>'C'
+    AND T2.FLIGHT_CLASS_CODE  IN ('L/W','W/Z','C/B')
+    AND T1.A_OR_D              ='D'
+    ) BB ON (AA.LNK_CARRIER_CODE
+    || AA.LNK_FLIGHT_NO
+    || COALESCE(AA.LNK_FLIGHT_SUFFIX,''))=BB.FLIGHT_NO_IATA
+    AND AA.LNK_FLIGHT_REPEAT_COUNT         =BB.FLIGHT_REPEAT_COUNT
+    AND AA.LNK_SCHEDULE_DATE               = BB.OPERATIONAL_DATE
+    left join task_status cc on AA.OPERATIONAL_DATE=cc.OPERATIONAL_DATE and AA.flight_no_iata=cc.flight_no_iata
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from task
+    where taskid = #{taskid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.monitoring.taskStatus.TaskStatus" >
+    insert into task_Status ( title,
+    advise, sender, companyName,stand, send_Time,receiver,A_OR_D,OPERATIONAL_DATE,
+    flight_no_iata,receive_Time,status)
+    values (
+      #{title,jdbcType=INTEGER}, #{advise,jdbcType=VARCHAR}, #{sender,jdbcType=VARCHAR},
+       #{companyName,jdbcType=VARCHAR},#{stand_A,jdbcType=VARCHAR},#{send_Time,jdbcType=TIMESTAMP},
+      #{receiver,jdbcType=VARCHAR},#{A_OR_D,jdbcType=VARCHAR},to_date(#{OPERATIONAL_DATE,jdbcType=TIMESTAMP},'yyyy-MM-dd HH24:MI:ss'), #{flight_NO_IATA_A,jdbcType=VARCHAR},
+      #{receive_Time,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER})
+  </insert>
+ 
+  <update id="updateStatus" parameterType="com.hq.acdm.model.monitoring.taskStatus.TaskStatus" >
+    update TASK_STATUS
+
+    <if test="status ==2">
+      set status = #{status,jdbcType=INTEGER},
+      receive_Time=#{receive_Time,jdbcType=TIMESTAMP}
+    </if>
+    <if test="status ==3">
+      set status = #{status,jdbcType=INTEGER}
+    </if>
+    where FLIGHT_NO_IATA = #{flight_NO_IATA_A,jdbcType=VARCHAR}
+    and  to_char(OPERATIONAL_DATE,'yyyy-MM-dd HH24:MI:SS')=#{OPERATIONAL_DATE,jdbcType=VARCHAR}
+  </update>
+
+  <select id="getAll" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM sys_role
+  </select>
+  <select id="queryAirline" resultMap="BaseResultMap2" parameterType="map" >
+    select distinct(airline_code_iata),airline_code_icao from daily_flight_master
+  </select>
+  <select id="countByName" parameterType="map" resultType="int">
+    SELECT count(1)
+    FROM sys_role
+    WHERE name = #{name}
+    <if test="parentId != null">
+      AND parent_id = #{parentId}
+    </if>
+    <if test="id != null">
+      AND id != #{id}
+    </if>
+  </select>
+
+  <select id="getByIdList" parameterType="map" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM sys_role
+    WHERE id IN
+    <foreach collection="idList" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+    order by role_level
+  </select>
+
+  <select id="getByLevel" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from sys_role
+    where role_level = #{level}
+  </select>
+</mapper>

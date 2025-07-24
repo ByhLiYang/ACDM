@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.timer.GetTimeAVGByHour.GetTimeAVGByHourMapper" >
+<select id="queryRecord" resultType="com.hq.acdm.model.timer.GetTimeAVGByHour.GetTimeAVGByHour">
+    SELECT
+    abs(
+    cast(
+    avg(
+    (
+    CASE
+    WHEN f.A_OR_D = 'A' THEN
+    to_char(CEIL((TO_DATE(to_char(f.AIBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(f.ALDT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60))
+    ELSE
+    to_char(CEIL((TO_DATE(to_char(f.ATOT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(f.AOBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60))
+    END
+    )
+    ) AS INT
+    )
+    ) AS SLIDE_TIME,
+    r.RWY,
+    s.AIRPORTTYPE,
+    f.STAND,
+    ( CASE WHEN f.A_OR_D = 'A' THEN trunc(to_number(to_char(f.AIBT,'hh24')))ELSE trunc(to_number(to_char(f.AOBT,'hh24')))END ) AS HOURTIME,
+    f.OPERATIONAL_DATE,
+    f.A_OR_D
+    FROM
+    DAILY_RUNWAY r
+    INNER JOIN DAILY_FLIGHT_MASTER f ON r.OPERATIONAL_DATE = f.OPERATIONAL_DATE
+    AND r.A_OR_D = f.A_OR_D
+    INNER JOIN DAILY_FLIGHT_ADD_DETAILS ta ON ta.FLIGHT_NO_IATA = f.FLIGHT_NO_IATA
+    AND ta.A_OR_D = f.A_OR_D
+    AND ta.FLIGHT_REPEAT_COUNT = f.FLIGHT_REPEAT_COUNT
+    AND ta.OPERATIONAL_DATE = f.OPERATIONAL_DATE
+    INNER JOIN AIRCRAFT_SUBTYPE s ON TA.AIRCRAFT_IATA_SUBTYPE = S.IATA_SUBTYPE
+    WHERE
+    nvl(ta.CODE_SHARE_STATUS,' ') <![CDATA[ <> ]]> 'SF'
+    AND r.OPERATIONAL_DATE &lt; sysdate
+                             AND r.FLG = '1'
+                             AND ( CASE WHEN f.A_OR_D = 'A' THEN trunc(to_number(to_char(f.AIBT,'hh24'))) ELSE trunc(to_number(to_char(f.AOBT,'hh24'))) END ) &gt;= r.STARTTIME
+    AND ( CASE WHEN f.A_OR_D = 'A' THEN trunc(to_number(to_char(f.AIBT,'hh24'))) ELSE trunc(to_number(to_char(f.AOBT,'hh24'))) END ) &lt;= r.ENDTIME
+    AND nvl(TA.FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C'
+    AND TA.FLIGHT_CLASS_CODE IN ( 'L/W', 'W/Z', 'C/B' )
+    GROUP BY
+    r.RWY,
+    s.AIRPORTTYPE,
+    f.STAND,
+    f.OPERATIONAL_DATE,
+    f.A_OR_D,
+    f.AIBT,
+    f.AOBT
+</select>
+<select id="queryHistoricalTaxiTimeRecord" parameterType="map" resultType="com.hq.acdm.model.timer.GetTimeAVGByHour.GetTimeAVGByHour">
+    SELECT
+	*
+    FROM
+	HISTORY_TAXI_TIME_AVG
+    WHERE
+    1=1
+    <if test="params.AIRCRAFT_TYPE !=null and params.AIRCRAFT_TYPE!=''">
+        AND AIRCRAFT_TYPE = #{params.AIRCRAFT_TYPE}
+    </if>
+	<if test="params.STAND !=null and params.STAND !=''">
+        AND STAND = #{params.STAND}
+    </if>
+	<if test="params.A_OR_D !=null and params.A_OR_D !=''">
+        AND A_OR_D = #{params.A_OR_D}
+    </if>
+    <if test="params.HOURTIME !=null and params.HOURTIME !=''">
+        AND HOURTIME = #{params.HOURTIME}
+    </if>
+    <if test="params.RWY !=null and params.RWY !=''">
+        AND RWY = #{params.RWY}
+    </if>
+    <if test="params.OPERATIONAL_DATE !=null and params.OPERATIONAL_DATE !=''">
+        AND to_char(OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.OPERATIONAL_DATE}
+    </if>
+</select>
+<insert id="insertHistoricalTaxiTimeRecord" parameterType="map">
+    INSERT INTO HISTORY_TAXI_TIME_AVG
+    (
+    AIRCRAFT_TYPE,
+    STAND,
+    A_OR_D,
+    HOURTIME,
+    RWY,
+    OPERATIONAL_DATE,
+    SLIDE_TIME
+    )
+    VALUES
+	(
+	#{params.AIRCRAFT_TYPE},
+	#{params.STAND},
+	#{params.A_OR_D},
+	#{params.HOURTIME},
+	#{params.RWY},
+	#{params.OPERATIONAL_DATE},
+	#{params.SLIDE_TIME}
+	)
+</insert>
+<update id="updateHistoricalTaxiTimeRecord" parameterType="map">
+    UPDATE HISTORY_TAXI_TIME_AVG
+    SET SLIDE_TIME = #{params.SLIDE_TIME}
+    WHERE
+    1=1
+    <if test="params.AIRCRAFT_TYPE !=null and params.AIRCRAFT_TYPE!=''">
+        AND AIRCRAFT_TYPE = #{params.AIRCRAFT_TYPE}
+    </if>
+    <if test="params.STAND !=null and params.STAND !=''">
+        AND STAND = #{params.STAND}
+    </if>
+    <if test="params.A_OR_D !=null and params.A_OR_D !=''">
+        AND A_OR_D = #{params.A_OR_D}
+    </if>
+    <if test="params.HOURTIME !=null and params.HOURTIME !=''">
+        AND HOURTIME = #{params.HOURTIME}
+    </if>
+    <if test="params.RWY !=null and params.RWY !=''">
+        AND RWY = #{params.RWY}
+    </if>
+    <if test="params.OPERATIONAL_DATE !=null and params.OPERATIONAL_DATE !=''">
+        AND to_char(OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.OPERATIONAL_DATE}
+    </if>
+</update>
+<update id="updateDailyRunway" parameterType="map">
+    UPDATE DAILY_RUNWAY
+    SET FLG = '0'
+    WHERE
+    1=1
+    <if test="params.OPERATIONAL_DATE !=null and params.OPERATIONAL_DATE !=''">
+        AND to_char(OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.OPERATIONAL_DATE}
+    </if>
+    <if test="params.RWY !=null and params.RWY !=''">
+        AND RWY = #{params.RWY}
+    </if>
+    <if test="params.A_OR_D !=null and params.A_OR_D !=''">
+        AND A_OR_D = #{params.A_OR_D}
+    </if>
+</update>
+</mapper>

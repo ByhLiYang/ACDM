@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.rscMonitors.DeicingSupervisionMapper" >
+
+  <select id="findDeicingWait" resultType="com.hq.acdm.vo.rscMonitors.DeicingWaitVo">
+    SELECT A.FLIGHT_ID AS flightId, A.FLNO AS flno,A.STAND AS stand,A.ECDT AS ecdt,A.ECDT AS ecdts,
+    A.EEDT AS eedt,A.TOBT AS tobt,B.CHINESE_NAME AS state,
+	C.DEICING_FLUID AS deicingFluid,C.DEICING_CAR deicingCar
+    FROM V_UTIL_DAILY_FLIGHT A
+    LEFT JOIN T_FLIGHT_STATUS B ON A.NORMAL_FLIGHT_STAT_CD = B.`CODE`
+    LEFT JOIN T_DEICING_FLUID C ON A.FLIGHT_ID = C.FLIGHT_ID
+    WHERE D_OR_A = 'D'
+    AND ATOT IS NULL
+    AND ISDEICING = '1'
+    AND ACDT IS NULL
+    AND AEDT IS NULL
+    ORDER BY ECDT ASC
+  </select>
+
+  <select id="findDeicingNow" resultType="com.hq.acdm.vo.rscMonitors.DeicingNowVo">
+    SELECT A.FLIGHT_ID AS flightId, A.FLNO AS flno,'单车模式' AS deicingWay,
+    A.ACDT AS acdt,A.EEDT AS eedt,A.TOBT AS tobt,DATE_ADD(A.STDC,INTERVAL 25 MINUTE) fxlj,
+    C.DEICING_FLUID AS deicingFluid,C.DEICING_CAR deicingCar
+    FROM V_UTIL_DAILY_FLIGHT A
+    LEFT JOIN T_DEICING_FLUID C ON A.FLIGHT_ID = C.FLIGHT_ID
+    WHERE D_OR_A = 'D'
+    AND ATOT IS NULL
+    AND ISDEICING = '1'
+    AND ACDT IS NOT NULL
+    AND AEDT IS NULL
+  </select>
+
+  <select id="findDeicingOver" resultType="com.hq.acdm.vo.rscMonitors.DeicingOverVo">
+    SELECT A.FLIGHT_ID AS flightId, A.FLNO AS flno,A.STAND AS stand,A.AEDT AS aedt,A.COBT AS cobt,A.TOBT AS tobt,
+	C.DEICING_FLUID AS deicingFluid,C.DEICING_CAR deicingCar,TIMESTAMPDIFF(MINUTE,A.AEDT,NOW()) AS jetLag
+    FROM V_UTIL_DAILY_FLIGHT A
+	LEFT JOIN T_DEICING_FLUID C ON A.FLIGHT_ID = C.FLIGHT_ID
+    WHERE D_OR_A = 'D'
+    AND ISDEICING = '1'
+    AND APOT IS NULL
+    AND ATOT IS NULL
+    AND AEDT IS NOT NULL
+  </select>
+
+  <select id="findDeicingInfo" resultType="com.hq.acdm.vo.rscMonitors.DeicingInfoVo">
+    SELECT DEICING_BIT deicingBit,DEICING_CAR deicingCar FROM T_DEICING_INFO
+  </select>
+
+  <update id="updDeicingFlt" parameterType="String" >
+    update T_LOCAL_FLIGHT_INFO set ISDEICING = #{flag} where FLIGHT_ID = #{flightId}
+  </update>
+
+  <update id="updateDeicingBit" parameterType="String" >
+    update T_DEICING_INFO set DEICING_BIT = #{number} where ID = '1'
+  </update>
+
+  <update id="updateDeicingCar" parameterType="String" >
+    update T_DEICING_INFO set DEICING_CAR = #{number} where ID = '1'
+  </update>
+
+  <select id="findDeicingEChartInfo" resultType="com.hq.acdm.vo.rscMonitors.DeicingEChartVo">
+    <![CDATA[
+    SELECT T.TIME_H timeH,T.HBS hbs FROM (
+    SELECT SUBSTRING(AEDT,-8,2) TIME_H,COUNT(1) HBS
+    FROM T_LOCAL_FLIGHT_INFO
+    WHERE D_OR_A='D' AND ISDEL <> '1'
+    AND ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+    AND EXEC_DATE = CURRENT_DATE
+    AND ISDEICING = 1
+    GROUP BY TIME_H ) T
+    WHERE T.TIME_H >= '00' AND T.TIME_H <= '23'
+    ORDER BY T.TIME_H ASC
+    ]]>
+  </select>
+
+  <select id="findDeicingResourcesData" resultType="com.hq.acdm.vo.rscMonitors.DeicingResourcesVo">
+    SELECT
+    ID id,
+    DEICING_CAR deicingCar,
+    DEICING_CAR_CES deicingCarCes,
+    DEICING_CAR_CSN deicingCarCsn,
+    DEICING_CAR_CCA deicingCarCca,
+    DEICING_CAR_AIR deicingCarAir,
+    USE_CAR useCar,
+    IDLE_CAR idleCar,
+    REHYDRATION_CAR rehydrationCar
+    FROM T_DEICING_RESOURCES
+  </select>
+
+
+  <update id="updateDeicingResourcesData" parameterType="map" >
+    update T_DEICING_RESOURCES
+    set USE_CAR = #{params.number},IDLE_CAR = DEICING_CAR - #{params.number}
+    where ID = '1'
+  </update>
+
+  <select id="findDeicingUseCar" resultType="Integer">
+    <![CDATA[
+    SELECT COUNT(1) HBS
+    FROM T_LOCAL_FLIGHT_INFO
+    WHERE ISDEL <> '1'
+    AND ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+    AND EXEC_DATE = CURDATE()
+    AND D_OR_A = 'D'
+    AND ATOT IS NULL
+    AND ISDEICING = 1
+    AND ACDT IS NOT NULL
+    AND ACDT IS NOT NULL
+    AND AEDT IS NULL
+    ]]>
+  </select>
+
+  <update id="updateECDTEEDT" parameterType="map" >
+    update T_LOCAL_FLIGHT_INFO,(SELECT FLOOR(1 + (RAND() * 5)) n)nn
+    set ECDT = DATE_ADD(tobt,INTERVAL -(nn.n+22) minute),
+     EEDT =DATE_ADD(tobt,INTERVAL -nn.n minute)
+    where FLIGHT_ID = #{params.flightId,jdbcType=BIGINT} and tobt is not null
+  </update>
+
+
+  <insert id="insertDeicingRunwayData" parameterType="map" >
+    insert into T_DEICING_RUNWAY (ID, EXEC_DATE, DURATION_04R,
+      NUM_04R, DURATION_04L, NUM_04L,
+      UPDATE_TIME)
+    values (#{params.id,jdbcType=VARCHAR}, #{params.execDate,jdbcType=TIMESTAMP}, #{params.duration04r,jdbcType=VARCHAR},
+      #{params.num04r,jdbcType=VARCHAR}, #{params.duration04l,jdbcType=VARCHAR}, #{params.num04l,jdbcType=VARCHAR},
+      #{params.updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <update id="updateDeicingRunwayData" parameterType="map" >
+    update T_DEICING_RUNWAY set
+    DURATION_04R = #{params.duration04r,jdbcType=VARCHAR},
+    NUM_04R = #{params.num04r,jdbcType=VARCHAR},
+    DURATION_04L = #{params.duration04l,jdbcType=VARCHAR},
+    NUM_04L = #{params.num04l,jdbcType=VARCHAR},
+    UPDATE_TIME = #{params.updateTime,jdbcType=TIMESTAMP}
+    where EXEC_DATE = #{params.execDate,jdbcType=TIMESTAMP}
+  </update>
+
+
+  <select id="findDeicingRunwayData" parameterType="map" resultType = "com.hq.acdm.vo.rscMonitors.DeicingRunwayVo">
+    SELECT
+    ID id,
+    EXEC_DATE execDate,
+    DURATION_04R duration04r,
+    NUM_04R num04r,
+    DURATION_04L duration04l,
+    NUM_04L num04l,
+    UPDATE_TIME updateTime
+    FROM T_DEICING_RUNWAY
+    WHERE EXEC_DATE = #{params.execDate,jdbcType=TIMESTAMP}
+  </select>
+
+  <insert id="insertDeicingFluidByFlightId" parameterType="map" >
+    insert into T_DEICING_FLUID (ID, FLIGHT_ID, DEICING_FLUID, DEICING_CAR)
+    values (#{params.id,jdbcType=VARCHAR}, #{params.flightId,jdbcType=BIGINT},
+    #{params.deicingFluid,jdbcType=VARCHAR}, #{params.deicingCar,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateDeicingFluidByFlightId" parameterType="map" >
+    update T_DEICING_FLUID
+    <set>
+      <if test="params.deicingFluid != null" >
+        DEICING_FLUID = #{params.deicingFluid,jdbcType=VARCHAR},
+      </if>
+      <if test="params.deicingCar != null" >
+        DEICING_CAR = #{params.deicingCar,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where FLIGHT_ID = #{params.flightId}
+  </update>
+
+  <select id="selectDeicingFluidByFlightId" parameterType="map" resultType = "com.hq.acdm.vo.rscMonitors.DeicingFluidVo">
+    SELECT
+    ID id,
+    FLIGHT_ID flightId,
+    DEICING_FLUID deicingFluid,
+    DEICING_CAR deicingCar
+    FROM T_DEICING_FLUID
+    WHERE FLIGHT_ID = #{params.flightId}
+  </select>
+
+
+  <select id="selectDeicingCarInfo" resultType = "com.hq.acdm.vo.rscMonitors.DeicingCarVo">
+      SELECT
+    A.ID id,
+    A.DEICING_CAR_CODE deicingCarCode,
+    A.HS hs,
+    CASE WHEN A.DEICING_CAR_STATUS = '0' AND B.DEICING_FLUID IS NULL THEN '待命'
+    WHEN A.DEICING_CAR_STATUS = '1' OR   B.DEICING_FLUID IS NOT NULL  THEN '占用'
+    WHEN A.DEICING_CAR_STATUS = '2' THEN '加液' WHEN A.DEICING_CAR_STATUS = '3' THEN '加油' ELSE NULL END deicingCarStatus,
+    B.DEICING_FLUID deicingFluid,
+    A.DEICING_CAR_GRADE deicingCarGrade
+    FROM T_DEICING_CAR_INFO A
+  LEFT JOIN (SELECT C.DEICING_FLUID,C.DEICING_CAR
+    FROM T_LOCAL_FLIGHT_INFO V
+    INNER  JOIN T_DEICING_FLUID C ON V.FLIGHT_ID = C.FLIGHT_ID
+    WHERE D_OR_A = 'D'
+    AND ATOT IS NULL
+    AND ISDEICING = '1'
+    AND ACDT IS NOT NULL
+    AND AEDT IS NULL ) B ON A.DEICING_CAR_CODE = B.DEICING_CAR
+	GROUP BY A.DEICING_CAR_CODE ORDER BY B.DEICING_FLUID DESC
+  </select>
+
+  <select id="selectTVehicleTracksInfo" parameterType="map" resultType="com.hq.acdm.vo.rscMonitors.TVehicleTracksVo">
+    SELECT ID id ,LL_TIME ll_time,VEHICLE_NO vehicle_no,LON lon,LAT lat,DIRECT direct  from T_VEHICLE_TRACKS
+    where 1=1
+    <if test="params.startTime!=null and params.startTime!=''">
+      and LL_TIME&gt;=#{params.startTime}
+    </if>
+    <if test="params.endTime!=null and params.endTime !=''">
+      and LL_TIME&lt;=#{params.endTime}
+    </if>
+
+    <if test="params.vehicleNo!=null and params.vehicleNo!=''">
+      and VEHICLE_NO in (
+      <foreach collection="params.list" item="item" index="index" open="" close="" separator=",">
+        <if test="item !=null and item != ''">
+          #{item}
+        </if>
+      </foreach>
+      )
+    </if>
+
+    ORDER BY LL_TIME
+  </select>
+
+  <select id="findLatelyVehicleTracks" parameterType="map" resultType="com.hq.acdm.vo.rscMonitors.TVehicleTracksVo">
+    SELECT VEHICLE_NO vehicle_no from T_VEHICLE_TRACKS WHERE VEHICLE_NO is not null    GROUP BY VEHICLE_NO
+  </select>
+
+  <select id="selectTVehicleTracksInfoGroupBy3" parameterType="map" resultType="com.hq.acdm.vo.rscMonitors.TVehicleTracksVo">
+    <![CDATA[
+    SELECT  ID id ,LL_TIME ll_time,VEHICLE_NO vehicle_no,LON lon,LAT lat,DIRECT direct from
+    (
+    SELECT  ID id ,LL_TIME ll_time,VEHICLE_NO vehicle_no,LON lon,LAT lat,DIRECT direct from T_VEHICLE_TRACKS
+    WHERE VEHICLE_ID in ('90345','90492','90493','90310','90340','91305','90343','90462','91075','90382',
+    '90595','90614','91405','90665','90655','90165','90190','91165','90185','90186')
+    and TO_DAYS(NOW()) - TO_DAYS(LL_TIME)<=2 ORDER BY LL_TIME DESC LIMIT 2000000
+    ) T
+    GROUP BY VEHICLE_NO
+    ]]>
+  </select>
+
+</mapper>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.coordinatedOprt.FlightCutsMapper" >
+  <select id="getCutFlights" parameterType="map" resultType="com.hq.acdm.vo.coordinatedOprt.FlightCutsVo" >
+    SELECT TA.FLIGHT_ID,TA.EXEC_DATE,TA.AIRLINES,TA.FLNO,TA.ADES,TA.SOBT,TA.ATOT,TB.N_SOBT,TA.ISCONTROL,CASE WHEN TA.ABNORMAL_FLIGHT_STAT_CD='CAN' THEN 1 ELSE 0 END YYJ,
+    CASE WHEN TB.OPERATIONAL_FLAG='1' THEN 1  WHEN TB.OPERATIONAL_FLAG='2' THEN 2 ELSE 0 END JHXJ FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_REDUCE TB ON TA.FLIGHT_ID=TB.FLIGHT_ID LEFT JOIN T_AIRPORT TC ON TA.ADES=TC.AIRPORT_IATA WHERE ISDEL=0
+    <if test="params.cancel == '1'.toString()">
+      AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[ <> ]]> 'CAN'
+    </if>
+    <if test="params.startDate !=null and params.startDate !='' and params.endDate != null and params.endDate != ''">
+      AND SOBT&gt;=#{params.startDate}
+      AND SOBT&lt;#{params.endDate}
+    </if>
+    <if test="params.destinationList !=null and params.destinationList.size() >0">
+      AND TC.AIRPORT_ICAO IN
+      <foreach collection="params.destinationList" index="index" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+    </if>
+    <if test="params.airCompanyList !=null and params.airCompanyList.size() >0">
+      AND  AIRLINES IN
+      <foreach collection="params.airCompanyList" index="index" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+    </if>
+    <if test="params.execute == '1'.toString()">
+      AND ATOT is null
+    </if>
+  </select>
+
+  <select id="getIsReduce" parameterType="String" resultType="int" >
+    	SELECT COUNT(1) FROM T_REDUCE WHERE FLIGHT_ID=#{flightId}
+  </select>
+  <insert id="insertReduce" parameterType="String" >
+    	INSERT INTO T_REDUCE (ID,FLIGHT_ID,OPERATIONAL_FLAG,OPERATE_TIME) VALUES(REPLACE(UUID(),'-',''),#{flightId},#{optFlag},NOW())
+  </insert>
+  <update id="updateReduce" parameterType="String" >
+    	UPDATE T_REDUCE SET OPERATIONAL_FLAG=#{optFlag},OPERATE_TIME=NOW() WHERE FLIGHT_ID=#{flightId}
+  </update>
+
+  <insert id="insertReduceSOBT" parameterType="String" >
+    	INSERT INTO T_REDUCE (ID,FLIGHT_ID,OPERATIONAL_FLAG,OPERATE_TIME,N_SOBT) VALUES(REPLACE(UUID(),'-',''),#{flightId},#{optFlag},NOW(),#{nsobt})
+  </insert>
+  <update id="updateReduceSOBT" parameterType="String" >
+    	UPDATE T_REDUCE SET OPERATIONAL_FLAG=#{optFlag},OPERATE_TIME=NOW(),N_SOBT=#{nsobt} WHERE FLIGHT_ID=#{flightId}
+  </update>
+
+  <resultMap id="BaseResultMap" type="com.hq.acdm.vo.coordinatedOprt.TFlightScheduling" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="FFID" property="ffid" jdbcType="VARCHAR" />
+    <result column="EXDT" property="exdt" jdbcType="VARCHAR" />
+    <result column="FLIO" property="flio" jdbcType="VARCHAR" />
+    <result column="DPCD" property="dpcd" jdbcType="VARCHAR" />
+    <result column="DPCT" property="dpct" jdbcType="VARCHAR" />
+    <result column="ARCD" property="arcd" jdbcType="VARCHAR" />
+    <result column="ARCT" property="arct" jdbcType="VARCHAR" />
+    <result column="AWCD" property="awcd" jdbcType="VARCHAR" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="FPTT" property="fptt" jdbcType="VARCHAR" />
+    <result column="FPLT" property="fplt" jdbcType="VARCHAR" />
+    <result column="CFTP" property="cftp" jdbcType="VARCHAR" />
+    <result column="ISSP" property="issp" jdbcType="VARCHAR" />
+    <result column="ISSH" property="issh" jdbcType="VARCHAR" />
+    <result column="SFNO" property="sfno" jdbcType="VARCHAR" />
+    <result column="DSTN" property="dstn" jdbcType="INTEGER" />
+    <result column="FOOD" property="food" jdbcType="VARCHAR" />
+    <result column="ARTM" property="artm" jdbcType="VARCHAR" />
+    <result column="MTTM" property="mttm" jdbcType="VARCHAR" />
+    <result column="UPTM" property="uptm" jdbcType="VARCHAR" />
+    <result column="ISDEL" property="isdel" jdbcType="VARCHAR" />
+    <result column="RMK" property="rmk" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="VARCHAR" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="VARCHAR" />
+    <result column="CREATE_USR" property="createUsr" jdbcType="VARCHAR" />
+    <result column="UPDATE_USR" property="updateUsr" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="getFlightScheduling" parameterType="map"  resultMap="BaseResultMap" >
+    SELECT ID, FFID, EXDT, FLIO, DPCD, DPCT, ARCD, ARCT, AWCD, FLNO, FPTT, FPLT, CFTP, ISSP,
+    ISSH, SFNO, DSTN, FOOD, ARTM, MTTM, UPTM, ISDEL, RMK, CREATE_TM, UPDATE_TM, CREATE_USR,
+    UPDATE_USR from T_FLIGHT_SCHEDULING WHERE ISSH = 'N' AND (DPCD = 'WUH' OR ARCD = 'WUH') AND IFNULL(ISDEL,'0') = '0'
+    <if test="params.cancel == '1'.toString()">
+      AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[ <> ]]> 'CAN'
+    </if>
+    <if test="params.startDate !=null and params.startDate !='' and params.endDate != null and params.endDate != ''">
+      AND ((FLIO  = 'D' AND FPTT BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR})
+      OR (FLIO  = 'A' AND FPLT BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR}))
+    </if>
+
+    <if test="params.agent != null and params.agent != ''" >
+      <if test="params.agentSys !=null and params.agentSys != ''">
+        <choose>
+          <when test="params.dept !=null and params.dept == 'IGO'">
+            AND AWCD NOT IN (${params.agentSys})
+          </when>
+          <otherwise>
+            AND AWCD IN (${params.agentSys})
+          </otherwise>
+        </choose>
+      </if>
+    </if>
+    order by (case when FLIO  = 'A'then FPLT ELSE FPTT END  )
+  </select>
+
+    <update id="updateVrfFlightRmk" parameterType="String" >
+    	UPDATE T_FLIGHT_SCHEDULING SET RMK=#{rmk} WHERE ID=#{id}
+  </update>
+</mapper>

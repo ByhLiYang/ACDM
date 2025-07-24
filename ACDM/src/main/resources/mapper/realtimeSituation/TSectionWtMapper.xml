@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TSectionWtMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TSectionWt" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="SECTION" property="section" jdbcType="VARCHAR" />
+    <result column="VISB" property="visb" jdbcType="VARCHAR" />
+    <result column="WSPD" property="wspd" jdbcType="VARCHAR" />
+    <result column="WDRT" property="wdrt" jdbcType="VARCHAR" />
+    <result column="CBHT" property="cbht" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, SECTION, VISB, WSPD, WDRT, CBHT
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TSectionWtExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_SECTION_WT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_SECTION_WT
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAllTSectionWt" resultMap="BaseResultMap"  >
+    select
+    <include refid="Base_Column_List" />
+    from T_SECTION_WT
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_SECTION_WT
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TSectionWtExample" >
+    delete from T_SECTION_WT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TSectionWt" >
+    insert into T_SECTION_WT (ID, SECTION, VISB, 
+      WSPD, WDRT, CBHT)
+    values (#{id,jdbcType=VARCHAR}, #{section,jdbcType=VARCHAR}, #{visb,jdbcType=VARCHAR}, 
+      #{wspd,jdbcType=VARCHAR}, #{wdrt,jdbcType=VARCHAR}, #{cbht,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TSectionWt" >
+    insert into T_SECTION_WT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="section != null" >
+        SECTION,
+      </if>
+      <if test="visb != null" >
+        VISB,
+      </if>
+      <if test="wspd != null" >
+        WSPD,
+      </if>
+      <if test="wdrt != null" >
+        WDRT,
+      </if>
+      <if test="cbht != null" >
+        CBHT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="section != null" >
+        #{section,jdbcType=VARCHAR},
+      </if>
+      <if test="visb != null" >
+        #{visb,jdbcType=VARCHAR},
+      </if>
+      <if test="wspd != null" >
+        #{wspd,jdbcType=VARCHAR},
+      </if>
+      <if test="wdrt != null" >
+        #{wdrt,jdbcType=VARCHAR},
+      </if>
+      <if test="cbht != null" >
+        #{cbht,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TSectionWtExample" resultType="java.lang.Integer" >
+    select count(*) from T_SECTION_WT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_SECTION_WT
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.section != null" >
+        SECTION = #{record.section,jdbcType=VARCHAR},
+      </if>
+      <if test="record.visb != null" >
+        VISB = #{record.visb,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wspd != null" >
+        WSPD = #{record.wspd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wdrt != null" >
+        WDRT = #{record.wdrt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cbht != null" >
+        CBHT = #{record.cbht,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_SECTION_WT
+    set ID = #{record.id,jdbcType=VARCHAR},
+      SECTION = #{record.section,jdbcType=VARCHAR},
+      VISB = #{record.visb,jdbcType=VARCHAR},
+      WSPD = #{record.wspd,jdbcType=VARCHAR},
+      WDRT = #{record.wdrt,jdbcType=VARCHAR},
+      CBHT = #{record.cbht,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TSectionWt" >
+    update T_SECTION_WT
+    <set >
+      <if test="section != null" >
+        SECTION = #{section,jdbcType=VARCHAR},
+      </if>
+      <if test="visb != null" >
+        VISB = #{visb,jdbcType=VARCHAR},
+      </if>
+      <if test="wspd != null" >
+        WSPD = #{wspd,jdbcType=VARCHAR},
+      </if>
+      <if test="wdrt != null" >
+        WDRT = #{wdrt,jdbcType=VARCHAR},
+      </if>
+      <if test="cbht != null" >
+        CBHT = #{cbht,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TSectionWt" >
+    update T_SECTION_WT
+    set SECTION = #{section,jdbcType=VARCHAR},
+      VISB = #{visb,jdbcType=VARCHAR},
+      WSPD = #{wspd,jdbcType=VARCHAR},
+      WDRT = #{wdrt,jdbcType=VARCHAR},
+      CBHT = #{cbht,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

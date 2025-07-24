@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.rscMonitors.TEarlyDeicingMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.rscMonitors.TEarlyDeicing" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="EXEC_DATE" property="execDate" jdbcType="DATE" />
+    <result column="SOBT" property="sobt" jdbcType="TIMESTAMP" />
+    <result column="ATOT" property="atot" jdbcType="TIMESTAMP" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="ECDT" property="ecdt" jdbcType="TIMESTAMP" />
+    <result column="LCDT" property="lcdt" jdbcType="TIMESTAMP" />
+    <result column="ACDT" property="acdt" jdbcType="TIMESTAMP" />
+    <result column="AEDT" property="aedt" jdbcType="TIMESTAMP" />
+    <result column="LTDC" jdbcType="TIMESTAMP" property="ltdc" />
+    <result column="AREA" jdbcType="VARCHAR" property="area" />
+    <result column="STAND" jdbcType="VARCHAR" property="stand" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="MANUAL" property="manual" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, FLNO, EXEC_DATE, SOBT, ATOT, TYPE, ECDT, LCDT, ACDT, AEDT, LTDC, AREA, STAND, 
+    STATUS, MANUAL, REMARK
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_EARLY_DEICING
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_EARLY_DEICING
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.rscMonitors.TEarlyDeicing" >
+    insert into T_EARLY_DEICING (ID, FLNO, EXEC_DATE, 
+      SOBT, ATOT, TYPE, 
+      ECDT, LCDT, ACDT, 
+      AEDT, LTDC, AREA, 
+      STAND, STATUS, MANUAL, 
+      REMARK)
+    values (REPLACE(UUID(),'-',''), #{flno,jdbcType=VARCHAR}, #{execDate,jdbcType=DATE},
+      #{sobt,jdbcType=TIMESTAMP}, #{atot,jdbcType=TIMESTAMP}, #{type,jdbcType=VARCHAR}, 
+      #{ecdt,jdbcType=TIMESTAMP}, #{lcdt,jdbcType=TIMESTAMP}, #{acdt,jdbcType=TIMESTAMP}, 
+      #{aedt,jdbcType=TIMESTAMP}, #{ltdc,jdbcType=TIMESTAMP}, #{area,jdbcType=VARCHAR}, 
+      #{stand,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{manual,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.rscMonitors.TEarlyDeicing" >
+    update T_EARLY_DEICING
+    set FLNO = #{flno,jdbcType=VARCHAR},
+      EXEC_DATE = #{execDate,jdbcType=DATE},
+      SOBT = #{sobt,jdbcType=TIMESTAMP},
+      ATOT = #{atot,jdbcType=TIMESTAMP},
+      TYPE = #{type,jdbcType=VARCHAR},
+      ECDT = #{ecdt,jdbcType=TIMESTAMP},
+      LCDT = #{lcdt,jdbcType=TIMESTAMP},
+      ACDT = #{acdt,jdbcType=TIMESTAMP},
+      AEDT = #{aedt,jdbcType=TIMESTAMP},
+	  LTDC = #{ltdc,jdbcType=TIMESTAMP},
+      AREA = #{area,jdbcType=VARCHAR},
+	  STAND = #{stand,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      MANUAL = #{manual,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByDate" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from T_EARLY_DEICING
+    where ATOT IS NULL AND EXEC_DATE = #{execDate,jdbcType=DATE} ORDER BY SOBT,ECDT
+  </select>
+  <select id="selectEarlyFltByDate" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    <![CDATA[
+    SELECT FLNO,DATE_ADD(SOBT,INTERVAL 7 DAY) SOBT FROM T_LOCAL_FLIGHT_INFO WHERE ISDEL<>'1' AND FLIGHT_TASK IN ('W/Z','C/B','L/W') AND D_OR_A='D'
+    AND EXEC_DATE=DATE_SUB(#{execDate,jdbcType=DATE},INTERVAL 7 DAY) AND ASSOCIATED_FLIGHT_ID IS NULL AND DATE_FORMAT(SOBT,'%H:%i') <= '11:00' ORDER BY SOBT
+        ]]>
+  </select>
+  <update id="updateByFlno" parameterType="com.hq.acdm.model.rscMonitors.TEarlyDeicing" >
+    update T_EARLY_DEICING
+    set ECDT = #{ecdt,jdbcType=TIMESTAMP},
+      AREA = #{area,jdbcType=VARCHAR},
+      MANUAL = #{manual,jdbcType=VARCHAR}
+    where FLNO = #{flno,jdbcType=VARCHAR} AND EXEC_DATE = #{execDate,jdbcType=DATE}
+  </update>
+  <update id="updateStand" parameterType="com.hq.acdm.model.rscMonitors.TEarlyDeicing" >
+    update T_EARLY_DEICING
+    set STAND = #{stand,jdbcType=TIMESTAMP}
+    where FLNO = #{flno,jdbcType=VARCHAR} AND EXEC_DATE = #{execDate,jdbcType=DATE}
+  </update>
+  <select id="selectStand" resultType="string" parameterType="com.hq.acdm.model.rscMonitors.TEarlyDeicing" >
+    SELECT TA.STAND FROM T_AREA_STAND TA LEFT JOIN T_EARLY_DEICING TB ON TA.STAND = TB.STAND
+    AND TB.EXEC_DATE=#{execDate,jdbcType=DATE} WHERE TA.AREA = #{area,jdbcType=VARCHAR} AND TB.STAND IS NULL ORDER BY TA.STAND;
+  </select>
+  <select id="selectFltLocation" resultType="com.hq.acdm.vo.rscMonitors.EarlyDeicingVo" parameterType="string" >
+    SELECT TA.FLNO,TA.EXEC_DATE execDate,TA.SOBT,TA.AREA,TA.STAND,TB.LON,TB.LAT FROM T_EARLY_DEICING TA LEFT JOIN T_AREA_STAND TB ON TA.STAND = TB.STAND
+    WHERE TA.EXEC_DATE=#{execDate,jdbcType=DATE} AND TA.STAND IS NOT NULL ORDER BY STAND
+  </select>
+</mapper>

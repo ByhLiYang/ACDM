@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TMultiDatasourceSettingMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TMultiDatasourceSetting" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="TABLE" property="table" jdbcType="VARCHAR" />
+    <result column="FIELD" property="field" jdbcType="VARCHAR" />
+    <result column="DATASOURCE" property="datasource" jdbcType="VARCHAR" />
+    <result column="PRIORITY" property="priority" jdbcType="INTEGER" />
+    <result column="REMK" property="remk" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, TABLE, FIELD, DATASOURCE, PRIORITY, REMK
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TMultiDatasourceSettingExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_MULTI_DATASOURCE_SETTING
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_MULTI_DATASOURCE_SETTING
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_MULTI_DATASOURCE_SETTING
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TMultiDatasourceSettingExample" >
+    delete from T_MULTI_DATASOURCE_SETTING
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TMultiDatasourceSetting" >
+    insert into T_MULTI_DATASOURCE_SETTING (ID, TABLE, FIELD, 
+      DATASOURCE, PRIORITY, REMK
+      )
+    values (#{id,jdbcType=VARCHAR}, #{table,jdbcType=VARCHAR}, #{field,jdbcType=VARCHAR}, 
+      #{datasource,jdbcType=VARCHAR}, #{priority,jdbcType=INTEGER}, #{remk,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TMultiDatasourceSetting" >
+    insert into T_MULTI_DATASOURCE_SETTING
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="table != null" >
+        TABLE,
+      </if>
+      <if test="field != null" >
+        FIELD,
+      </if>
+      <if test="datasource != null" >
+        DATASOURCE,
+      </if>
+      <if test="priority != null" >
+        PRIORITY,
+      </if>
+      <if test="remk != null" >
+        REMK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="table != null" >
+        #{table,jdbcType=VARCHAR},
+      </if>
+      <if test="field != null" >
+        #{field,jdbcType=VARCHAR},
+      </if>
+      <if test="datasource != null" >
+        #{datasource,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null" >
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="remk != null" >
+        #{remk,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TMultiDatasourceSettingExample" resultType="java.lang.Integer" >
+    select count(*) from T_MULTI_DATASOURCE_SETTING
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_MULTI_DATASOURCE_SETTING
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.table != null" >
+        TABLE = #{record.table,jdbcType=VARCHAR},
+      </if>
+      <if test="record.field != null" >
+        FIELD = #{record.field,jdbcType=VARCHAR},
+      </if>
+      <if test="record.datasource != null" >
+        DATASOURCE = #{record.datasource,jdbcType=VARCHAR},
+      </if>
+      <if test="record.priority != null" >
+        PRIORITY = #{record.priority,jdbcType=INTEGER},
+      </if>
+      <if test="record.remk != null" >
+        REMK = #{record.remk,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_MULTI_DATASOURCE_SETTING
+    set ID = #{record.id,jdbcType=VARCHAR},
+      TABLE = #{record.table,jdbcType=VARCHAR},
+      FIELD = #{record.field,jdbcType=VARCHAR},
+      DATASOURCE = #{record.datasource,jdbcType=VARCHAR},
+      PRIORITY = #{record.priority,jdbcType=INTEGER},
+      REMK = #{record.remk,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TMultiDatasourceSetting" >
+    update T_MULTI_DATASOURCE_SETTING
+    <set >
+      <if test="table != null" >
+        TABLE = #{table,jdbcType=VARCHAR},
+      </if>
+      <if test="field != null" >
+        FIELD = #{field,jdbcType=VARCHAR},
+      </if>
+      <if test="datasource != null" >
+        DATASOURCE = #{datasource,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null" >
+        PRIORITY = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="remk != null" >
+        REMK = #{remk,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TMultiDatasourceSetting" >
+    update T_MULTI_DATASOURCE_SETTING
+    set TABLE = #{table,jdbcType=VARCHAR},
+      FIELD = #{field,jdbcType=VARCHAR},
+      DATASOURCE = #{datasource,jdbcType=VARCHAR},
+      PRIORITY = #{priority,jdbcType=INTEGER},
+      REMK = #{remk,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

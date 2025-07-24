@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.monitioring.ReportDailyInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.monitoring.reportInfo.ReportDailyInfo" >
+     <result column="flight_run" property="flight_run" jdbcType="VARCHAR" />
+    <result column="flight_cancel" property="flight_cancel" jdbcType="VARCHAR" />
+    <result column="delay_2hour" property="delay_2hour" jdbcType="VARCHAR" />
+    <result column="delay_4hour" property="delay_4hour" jdbcType="VARCHAR" />
+    <result column="report_user" property="report_user" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="schedule_date" property="schedule_date" jdbcType="TIMESTAMP" />
+    <result column="operational_date" property="operational_date" jdbcType="TIMESTAMP" />
+    <result column="status" property="sort" jdbcType="INTEGER" />
+
+    <result column="flight_un" property="flight_un" jdbcType="VARCHAR" />
+    <result column="normal_rate" property="normal_rate" jdbcType="VARCHAR" />
+    <result column="over_rate" property="over_rate" jdbcType="VARCHAR" />
+    <result column="start_rate" property="start_rate" jdbcType="VARCHAR" />
+    <result column="jh_schedule" property="jh_schedule" jdbcType="VARCHAR" />
+    <result column="jh_run" property="jh_run" jdbcType="VARCHAR" />
+    <result column="free_pax" property="free_pax" jdbcType="VARCHAR" />
+    <result column="free_pax_east" property="free_pax_east" jdbcType="VARCHAR" />
+    <result column="flight_un_today" property="flight_un_today" jdbcType="VARCHAR" />
+    <result column="flight_run_today" property="flight_un_today" jdbcType="VARCHAR" />
+    <result column="level_day" property="level_day" jdbcType="VARCHAR" />
+    <result column="network_opinion" property="network_opinion" jdbcType="VARCHAR" />
+    <result column="airport_status" property="airport_status" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    flight_run, flight_cancel, delay_2hour, delay_4hour,report_user, report_time,content,schedule_date,
+    operational_date,status
+  </sql>
+  <select id="queryList" resultType="com.hq.acdm.model.monitoring.reportInfo.ReportDailyInfo" parameterType="map" >
+    select * from REPORT_DAILY_INFO where 1=1
+    <if test="params.flight_no_iata !=null and params.flight_no_iata != ''">
+      and flight_no_iata=#{params.flight_no_iata,jdbcType=VARCHAR}
+    </if>
+    order by report_time desc
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from task
+    where id = #{taskid,jdbcType=INTEGER}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from REPORT_DAILY_INFO
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.monitoring.reportInfo.ReportDailyInfo" >
+    <selectKey keyProperty="id" resultType="int" order="BEFORE">
+      select report_rundaily_sequence.nextval from dual
+    </selectKey>
+    insert into REPORT_DAILY_INFO ( id,flight_run,
+    flight_cancel, delay_2hour, delay_4hour,report_user, report_time,content,schedule_date,
+    operational_date,status,over_rate,start_rate,jh_schedule,jh_run,free_pax,free_pax_east,flight_un_today,flight_run_today,level_today,network_opinion,
+    airport_status,flight_schedule,passager_d)
+    values (
+    #{id},#{flight_run,jdbcType=VARCHAR}, #{flight_cancel,jdbcType=VARCHAR}, #{delay_2hour,jdbcType=VARCHAR},
+       #{delay_4hour,jdbcType=VARCHAR},#{report_user,jdbcType=VARCHAR},#{report_time,jdbcType=TIMESTAMP},
+      #{content,jdbcType=VARCHAR},to_date(#{schedule_date,jdbcType=TIMESTAMP},'yyyy-MM-dd HH24:MI:ss'),
+      to_date(#{operational_date,jdbcType=TIMESTAMP},'yyyy-MM-dd HH24:MI:ss'), #{status,jdbcType=INTEGER}
+    ,#{over_rate,jdbcType=VARCHAR},#{start_rate,jdbcType=VARCHAR},#{jh_schedule,jdbcType=VARCHAR},#{jh_run,jdbcType=VARCHAR},#{free_pax,jdbcType=VARCHAR}
+    ,#{free_pax_east,jdbcType=VARCHAR},#{flight_un_today,jdbcType=VARCHAR}
+    ,#{flight_run_today,jdbcType=VARCHAR},#{level_today,jdbcType=VARCHAR},#{network_opinion,jdbcType=VARCHAR},#{airport_status,jdbcType=VARCHAR}
+    ,#{flight_schedule,jdbcType=VARCHAR},#{passager_d,jdbcType=VARCHAR}
+    )
+  </insert>
+   <update id="update" parameterType="com.hq.acdm.model.monitoring.reportInfo.ReportDailyInfo" >
+    update REPORT_DAILY_INFO
+     set flight_run=#{flight_run,jdbcType=VARCHAR},
+         over_rate=#{over_rate,jdbcType=VARCHAR},
+         flight_cancel=#{flight_cancel,jdbcType=VARCHAR},
+         delay_2hour=#{delay_2hour,jdbcType=VARCHAR},
+         delay_4hour=#{delay_4hour,jdbcType=VARCHAR},
+         report_user=#{report_user,jdbcType=VARCHAR},
+        content = #{content,jdbcType=VARCHAR},
+        start_rate=#{start_rate,jdbcType=VARCHAR},
+        jh_schedule=#{jh_schedule,jdbcType=VARCHAR},
+        jh_run=#{jh_run,jdbcType=VARCHAR},
+        free_pax=#{free_pax,jdbcType=VARCHAR},
+        free_pax_east=#{free_pax_east,jdbcType=VARCHAR},
+        flight_un_today=#{flight_un_today,jdbcType=VARCHAR},
+        flight_run_today=#{flight_run_today,jdbcType=VARCHAR},
+        level_today=#{level_today,jdbcType=VARCHAR},
+        network_opinion=#{network_opinion,jdbcType=VARCHAR},
+        airport_status=#{airport_status,jdbcType=VARCHAR},
+        flight_schedule=#{flight_schedule,jdbcType=VARCHAR},
+        passager_d=#{passager_d,jdbcType=VARCHAR}
+         where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateStatus" parameterType="com.hq.acdm.model.monitoring.reportInfo.ReportDailyInfo" >
+    update REPORT_DAILY_INFO
+
+    <if test="status ==1">
+      set status = #{status,jdbcType=INTEGER},
+      report_time=#{report_time,jdbcType=TIMESTAMP}
+    </if>
+    <if test="status ==2">
+      set status = #{status,jdbcType=INTEGER}
+    </if>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="queryDaily" resultType="com.hq.acdm.model.monitoring.reportInfo.ReportDailyInfo" parameterType="map" >
+    select  * from (select
+    (SELECT to_char(sysdate, 'HH24:MI') from dual)                                        as deadline,
+    (SELECT COUNT(FLIGHT_NO_IATA) FROM V_UTIL_TODAY_FLIGHT where COMPARE_DATE &lt;= sysdate) as flight_schedule_today,
+    (SELECT COUNT(FLIGHT_NO_IATA) CNT
+    FROM V_UTIL_TODAY_FLIGHT
+    WHERE (ALDT IS NOT NULL AND A_OR_D = 'A')
+    AND nvl(FLIGHT_CANCEL_CODE, '-1') &lt;> 'C'
+    and COMPARE_DATE &lt;= sysdate)                                                       as flight_in_today,
+    (SELECT COUNT(FLIGHT_NO_IATA) CNT
+    FROM V_UTIL_TODAY_FLIGHT
+    WHERE (ALDT IS NOT NULL AND A_OR_D = 'D')
+    AND nvl(FLIGHT_CANCEL_CODE, '-1') &lt;> 'C'
+    and COMPARE_DATE &lt;= sysdate)                                                       as flight_out_today,
+    (SELECT COUNT(FLIGHT_NO_IATA) CNT
+    FROM V_UTIL_TODAY_FLIGHT
+    WHERE nvl(FLIGHT_CANCEL_CODE, '-1') = 'C'
+    and COMPARE_DATE &lt;= sysdate)                                                       as flight_cancel_today,
+    (SELECT COUNT(FLIGHT_NO_IATA) CNT
+    FROM V_UTIL_TODAY_FLIGHT
+    WHERE CEIL((TO_DATE(to_char(COALESCE(ATOT, CURRENT_TIMESTAMP), 'YYYY-MM-DD HH24:MI:SS'),
+    'YYYY-MM-DD HH24:MI:SS') -
+    TO_DATE(to_char(SOBT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24) > 2
+    and COMPARE_DATE &lt;= sysdate)                                                       as delay_2hour_today,
+    (SELECT COUNT(FLIGHT_NO_IATA) CNT
+    FROM V_UTIL_TODAY_FLIGHT
+    WHERE CEIL((TO_DATE(to_char(COALESCE(ATOT, CURRENT_TIMESTAMP), 'YYYY-MM-DD HH24:MI:SS'),
+    'YYYY-MM-DD HH24:MI:SS') -
+    TO_DATE(to_char(SOBT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24) > 4
+    and COMPARE_DATE &lt;= sysdate)                                                       as delay_4hour_today,
+
+    (SELECT COUNT(FLIGHT_NO_IATA) CNT FROM V_UTIL_YESTERDAY_FLIGHT)                       as flight_schedule,
+    (SELECT COUNT(FLIGHT_NO_IATA) CNT
+    FROM V_UTIL_YESTERDAY_FLIGHT
+    WHERE ((ALDT IS NOT NULL AND A_OR_D = 'A') OR (ATOT IS NOT NULL AND A_OR_D = 'D'))
+    AND nvl(FLIGHT_CANCEL_CODE, '-1') &lt;> 'C')                                          as flight_run,
+    (SELECT COUNT(FLIGHT_NO_IATA) CNT
+    FROM V_UTIL_YESTERDAY_FLIGHT
+    WHERE ((ALDT IS NOT NULL AND A_OR_D = 'A') )
+    AND nvl(FLIGHT_CANCEL_CODE, '-1') &lt;> 'C')                                          as flight_a,
+    (SELECT COUNT(FLIGHT_NO_IATA) CNT
+    FROM V_UTIL_YESTERDAY_FLIGHT
+    WHERE ((ALDT IS NOT NULL AND A_OR_D = 'A') OR (ATOT IS NOT NULL AND A_OR_D = 'D'))
+    AND nvl(FLIGHT_CANCEL_CODE, '-1') &lt;> 'C'
+    AND FLIGHT_CLASS_CODE = 'U/H')                                                     as flight_un,
+    (SELECT COUNT(FLIGHT_NO_IATA) CNT
+    FROM V_UTIL_YESTERDAY_FLIGHT
+    WHERE CEIL((TO_DATE(to_char(COALESCE(ATOT, CURRENT_TIMESTAMP), 'YYYY-MM-DD HH24:MI:SS'),
+    'YYYY-MM-DD HH24:MI:SS') -
+    TO_DATE(to_char(SOBT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24) >
+    2)                                                                             as delay_2hour,
+    (SELECT COUNT(FLIGHT_NO_IATA) CNT
+    FROM V_UTIL_YESTERDAY_FLIGHT
+    WHERE CEIL((TO_DATE(to_char(COALESCE(ATOT, CURRENT_TIMESTAMP), 'YYYY-MM-DD HH24:MI:SS'),
+    'YYYY-MM-DD HH24:MI:SS') -
+    TO_DATE(to_char(SOBT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24) >
+    4)                                                                             as delay_4hour,
+    (SELECT COUNT(FLIGHT_NO_IATA) CNT
+    FROM V_UTIL_YESTERDAY_FLIGHT
+    WHERE (ORIGIN_AIRPORT_IATA = 'PEK' OR DEST_AIRPORT_IATA = 'PEK')
+    AND (FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B')))                                  as jh_schedule,
+    (SELECT COUNT(FLIGHT_NO_IATA) CNT
+    FROM V_UTIL_YESTERDAY_FLIGHT
+    WHERE ((ALDT IS NOT NULL AND A_OR_D = 'A') OR (ATOT IS NOT NULL AND A_OR_D = 'D'))
+    AND nvl(FLIGHT_CANCEL_CODE, '-1') &lt;> 'C'
+    AND (ORIGIN_AIRPORT_IATA = 'PEK' OR DEST_AIRPORT_IATA = 'PEK')
+    AND (FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B')))                                  as jh_run,
+    (SELECT FLIGHT_NUM FROM V_REAL_INTERFACE)                                             as TO_PLAN,
+    (SELECT COUNT(AA.FLIGHT_NO_IATA) CNT
+    FROM V_UTIL_DAILY_FLIGHT AA
+    LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB
+    ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+    AA.A_OR_D = BB.A_OR_D AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+    WHERE BB.FLIGHT_CLASS_CODE = 'U/H'
+    AND ((AA.ALDT IS NOT NULL AND AA.A_OR_D = 'A') OR (AA.ATOT IS NOT NULL AND AA.A_OR_D = 'D'))
+    AND nvl(AA.FLIGHT_CANCEL_CODE, '-1') &lt;> 'C')                                       as TO_AFFAIR_PLAN
+    from dual) a
+
+  </select>
+
+  <select id="getAll" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM sys_role
+  </select>
+
+  <select id="countByName" parameterType="map" resultType="int">
+    SELECT count(1)
+    FROM sys_role
+    WHERE name = #{name}
+    <if test="parentId != null">
+      AND parent_id = #{parentId}
+    </if>
+    <if test="id != null">
+      AND id != #{id}
+    </if>
+  </select>
+
+  <select id="getByIdList" parameterType="map" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM sys_role
+    WHERE id IN
+    <foreach collection="idList" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+    order by role_level
+  </select>
+
+  <select id="getByLevel" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from sys_role
+    where role_level = #{level}
+  </select>
+</mapper>

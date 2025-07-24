@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.FltRlsIdxMapper" >
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.realtimeSituation.FltRlsIdxVo" >
+    <result column="ZCL" property="zCL" jdbcType="DOUBLE" />
+    <result column="FXL" property="fXL" jdbcType="DOUBLE" />
+  </resultMap>
+  <select id="getFltRlsIdx" resultType="double" parameterType="map">
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL AND TA.EXEC_DATE=CURRENT_DATE
+    AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W')
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND TA.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND TA.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getFltNormIdx" resultType="double" parameterType="map">
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN'
+    AND TA.D_OR_A = 'D' AND TA.ATOT IS NOT NULL AND TA.EXEC_DATE=CURRENT_DATE AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W')
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND TA.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND TA.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getFltRlsIdxByApts" resultType="double" >
+    SELECT SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 0 ELSE 1 END) / COUNT( 1 ) FXL
+    FROM V_UTIL_DAILY_FLIGHT TA LEFT JOIN V_UTIL_DAILY_FLIGHT TB ON TA.FLIGHT_ID=TB.ASSOCIATED_FLIGHT_ID WHERE TA.D_OR_A='D' AND TA.ADES IN
+    <foreach collection="array" open="(" separator="," close=")" item="item">
+            #{item}
+    </foreach>
+  </select>
+  <select id="getFltRlsIdxByApt" resultType="double" parameterType="map">
+    <![CDATA[
+    SELECT 1-IFNULL(SUM(CASE WHEN CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 THEN 1 ELSE 0 END)/COUNT(1),0) FXL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL AND TA.EXEC_DATE=CURRENT_DATE
+    AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND TA.ADES = #{params.airport,jdbcType=VARCHAR}
+        ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND TA.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND TA.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+</mapper>

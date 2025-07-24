@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.sysManager.OnDutyManageMapper" >
+
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.sysManager.OnDutyOrgVo" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="ORG_TYPE" property="orgType" jdbcType="VARCHAR" />
+    <result column="LABEL" property="label" jdbcType="VARCHAR" />
+    <result column="ORG_ROOT_ID" property="orgRootId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="OndutyResultMap" type="com.hq.acdm.vo.sysManager.OnDutyDetailsVo" >
+    <result column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+    <result column="ORG_NAME" property="orgName" jdbcType="VARCHAR" />
+    <result column="ONDUTY_EMP" property="ondutyEmp" jdbcType="VARCHAR" />
+    <result column="TEL" property="tel" jdbcType="VARCHAR" />
+    <result column="ONDUTY_TIME" property="ondutyTime" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="UserResultMap" type="com.hq.acdm.vo.sysManager.OnDutyUserVo" >
+    <result column="USERNAME" property="userName" jdbcType="VARCHAR" />
+    <result column="TPHONE" property="phone" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="findOnDutyOrgAllInfo" resultType="map" parameterType="map" >
+    SELECT A.ID AS ROOT_ID,A.ORG_NAME AS ROOT_NAME,B.ID,B.ORG_NAME,B.ORG_ROOT_ID
+    FROM T_ONDUTY_ORG_ROOT A
+    LEFT JOIN T_ONDUTY_ORG B ON A.ID = B.ORG_ROOT_ID
+    WHERE A.IS_VALID = '1' AND (B.IS_VALID = '1' OR B.IS_VALID IS NULL)
+  </select>
+
+  <select id="findOnDutyOrgRootInfo" resultMap="ResultMap" parameterType="map" >
+    SELECT ID,ORG_NAME AS LABEL,NULL AS ORG_ROOT_ID,'1' AS ORG_TYPE
+    FROM T_ONDUTY_ORG_ROOT
+    WHERE IS_VALID = '1'
+  </select>
+
+  <select id="findOnDutyOrgInfo" resultMap="ResultMap" parameterType="map" >
+    SELECT ID,ORG_NAME AS LABEL,ORG_ROOT_ID,'2' AS ORG_TYPE
+    FROM T_ONDUTY_ORG
+    WHERE IS_VALID = '1' AND ORG_ROOT_ID = #{params.id,jdbcType=VARCHAR}
+    ORDER BY SORT ASC
+  </select>
+
+  <select id="findOnDutyAllInfo" resultMap="OndutyResultMap" parameterType="map" >
+    SELECT A.ORG_ID,A.ORG_NAME,A.ONDUTY_EMP,A.MOBILE_PHONE AS TEL,A.ONDUTY_TIME
+    FROM T_ONDUTY_INFO A
+    LEFT JOIN T_ONDUTY_ORG B ON A.ORG_ID = B.ID
+    WHERE A.ONDUTY_TIME BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR}
+    <if test="params.orgType !=null and params.orgType == '1'">
+      AND B.ORG_ROOT_ID = #{params.orgId,jdbcType=VARCHAR}
+    </if>
+    <if test="params.orgType !=null and params.orgType == '2'">
+      AND B.ID = #{params.orgId,jdbcType=VARCHAR}
+    </if>
+    <if test="params.userInfo !=null and params.userInfo != ''">
+      AND (A.ONDUTY_EMP LIKE CONCAT('%',#{params.userInfo,jdbcType=VARCHAR},'%')
+            OR A.TEL LIKE CONCAT('%',#{params.userInfo,jdbcType=VARCHAR},'%')
+            OR A.MOBILE_PHONE LIKE CONCAT('%',#{params.userInfo,jdbcType=VARCHAR},'%'))
+    </if>
+    ORDER BY A.ONDUTY_TIME ASC
+  </select>
+
+  <select id="findOnDutyAllInfoById" resultMap="OndutyResultMap" parameterType="map" >
+    SELECT A.ORG_ID,A.ORG_NAME,A.ONDUTY_EMP,A.MOBILE_PHONE AS TEL,A.ONDUTY_TIME
+    FROM T_ONDUTY_INFO A
+    WHERE A.ONDUTY_TIME BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR}
+    AND A.ORG_ID = #{params.orgId,jdbcType=VARCHAR}
+    <if test="params.userInfo !=null and params.userInfo != ''">
+      AND (A.ONDUTY_EMP LIKE CONCAT('%',#{params.userInfo,jdbcType=VARCHAR},'%')
+      OR A.TEL LIKE CONCAT('%',#{params.userInfo,jdbcType=VARCHAR},'%')
+      OR A.MOBILE_PHONE LIKE CONCAT('%',#{params.userInfo,jdbcType=VARCHAR},'%'))
+    </if>
+    ORDER BY A.ONDUTY_TIME ASC
+  </select>
+
+
+  <select id="findOnDutyUser" resultMap="UserResultMap" parameterType="map" >
+    SELECT USERNAME,TPHONE FROM T_ONDUTY_USERDEP
+    WHERE DEP = #{params.orgName,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

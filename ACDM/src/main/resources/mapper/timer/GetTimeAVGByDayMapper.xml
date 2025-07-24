@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.timer.GetTimeAVGByDay.GetTimeAVGByDayMapper" >
+<select id="queryHISTORY_TAXI_TIME_AVG_By10_12" resultType="com.hq.acdm.model.timer.GetTimeAVGByDay.GetTimeAVGByDay">
+    SELECT
+    cast( avg( SLIDE_TIME ) AS int ) AS timeavg,
+    AIRCRAFT_TYPE,
+    STAND,
+    A_OR_D,
+    RWY
+    FROM
+    HISTORY_TAXI_TIME_AVG
+    WHERE
+    ROUND(TO_NUMBER ( sysdate - OPERATIONAL_DATE )) &gt; 0
+    AND ROUND(TO_NUMBER ( sysdate - OPERATIONAL_DATE )) &lt;= 30
+    AND trunc(to_number(to_char(sysdate,'hh24'))) &gt;= 10
+    AND trunc(to_number(to_char(sysdate,'hh24'))) &lt; 12
+    GROUP BY
+    RWY,
+    A_OR_D,
+    STAND,
+    AIRCRAFT_TYPE;
+</select>
+    <select id="queryHISTORY_TAXI_TIME_AVG_By7_10" resultType="com.hq.acdm.model.timer.GetTimeAVGByDay.GetTimeAVGByDay">
+        SELECT
+        cast( avg( SLIDE_TIME ) AS int ) AS timeavg,
+        AIRCRAFT_TYPE,
+        STAND,
+        A_OR_D,
+        RWY
+        FROM
+        HISTORY_TAXI_TIME_AVG
+        WHERE
+        ROUND(TO_NUMBER ( sysdate - OPERATIONAL_DATE )) &gt; 0
+        AND ROUND(TO_NUMBER ( sysdate - OPERATIONAL_DATE )) &lt;= 30
+        AND trunc(to_number(to_char(sysdate,'hh24'))) &gt;= 7
+        AND trunc(to_number(to_char(sysdate,'hh24'))) &lt; 10
+        GROUP BY
+        RWY,
+        A_OR_D,
+        STAND,
+        AIRCRAFT_TYPE;
+    </select>
+    <select id="queryHISTORY_TAXI_TIME_AVG_ByOTHER" resultType="com.hq.acdm.model.timer.GetTimeAVGByDay.GetTimeAVGByDay">
+        SELECT
+        cast( avg( SLIDE_TIME ) AS int ) AS timeavg,
+        AIRCRAFT_TYPE,
+        STAND,
+        A_OR_D,
+        RWY
+        FROM
+        HISTORY_TAXI_TIME_AVG
+        WHERE
+        ROUND(TO_NUMBER ( sysdate - OPERATIONAL_DATE )) &gt; 0
+        AND ROUND(TO_NUMBER ( sysdate - OPERATIONAL_DATE )) &lt;= 30
+        AND trunc(to_number(to_char(sysdate,'hh24'))) &lt; 7
+        OR trunc(to_number(to_char(sysdate,'hh24'))) &gt;= 12
+        GROUP BY
+        RWY,
+        A_OR_D,
+        STAND,
+        AIRCRAFT_TYPE;
+    </select>
+    <select id="queryTAXI_TIME_TABLE_BYPK" parameterType="map" resultType="com.hq.acdm.model.timer.GetTimeAVGByDay.GetTimeAVGByDay">
+        SELECT
+	    *
+        FROM
+	    TAXI_TIME_TABLE
+        WHERE
+        1=1
+        <if test="params.AIRCRAFT_TYPE !=null and params.AIRCRAFT_TYPE!=''">
+            AND AIRCRAFT_TYPE = #{params.AIRCRAFT_TYPE}
+        </if>
+        <if test="params.STAND !=null and params.STAND !=''">
+            AND STAND = #{params.STAND}
+        </if>
+        <if test="params.A_OR_D !=null and params.A_OR_D !=''">
+            AND A_OR_D = #{params.A_OR_D}
+        </if>
+        <if test="params.TIME_RANGE !=null and params.TIME_RANGE !=''">
+            AND TIME_RANGE = #{params.TIME_RANGE}
+        </if>
+        <if test="params.RWY !=null and params.RWY !=''">
+            AND RWY = #{params.RWY}
+        </if>
+    </select>
+    <insert id="insertTAXI_TIME_TABLE" parameterType="map">
+        INSERT INTO TAXI_TIME_TABLE
+        ( AIRCRAFT_TYPE,
+        STAND,
+        A_OR_D,
+        TIME_RANGE,
+        RWY,
+        TAXITIMEAVG,
+        TAXITIME )
+        VALUES
+            (
+            #{params.AIRCRAFT_TYPE},
+            #{params.STAND},
+            #{params.A_OR_D},
+            #{params.TIME_RANGE},
+            #{params.RWY},
+            #{params.TAXITIMEAVG}
+            #{params.TAXITIME}
+            )
+    </insert>
+    <update id="updateTAXI_TIME_TABLE" parameterType="map">
+        UPDATE TAXI_TIME_TABLE
+        SET TAXITIMEAVG = #{params.TAXITIMEAVG}
+        WHERE
+        1=1
+        <if test="params.AIRCRAFT_TYPE !=null and params.AIRCRAFT_TYPE!=''">
+            AND AIRCRAFT_TYPE = #{params.AIRCRAFT_TYPE}
+        </if>
+        <if test="params.STAND !=null and params.STAND !=''">
+            AND STAND = #{params.STAND}
+        </if>
+        <if test="params.A_OR_D !=null and params.A_OR_D !=''">
+            AND A_OR_D = #{params.A_OR_D}
+        </if>
+        <if test="params.TIME_RANGE !=null and params.TIME_RANGE !=''">
+            AND TIME_RANGE = #{params.TIME_RANGE}
+        </if>
+        <if test="params.RWY !=null and params.RWY !=''">
+            AND RWY = #{params.RWY}
+        </if>
+    </update>
+</mapper>

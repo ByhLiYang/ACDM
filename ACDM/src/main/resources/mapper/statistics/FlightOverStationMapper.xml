@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.FlightOverStationMapper" >
+    <select id="queryDelay" resultType="com.hq.acdm.model.statistics.flightOverStation.Delay"  >
+        WITH TABLE_A AS (
+        SELECT
+        A .A_OR_D,
+        A .OPERATIONAL_DATE,
+        A .FLIGHT_NO_IATA,
+        A .FLIGHT_REPEAT_COUNT,
+        C.SIBT,
+        B.ICAO_TYPE
+        FROM
+        DAILY_FLIGHT_ADD_DETAILS A
+        LEFT JOIN AIRCRAFT_SUBTYPE B ON A .AIRCRAFT_IATA_SUBTYPE = B.IATA_SUBTYPE
+        LEFT JOIN DAILY_FLIGHT_MASTER C ON A .FLIGHT_NO_IATA = C.FLIGHT_NO_IATA
+        AND A .OPERATIONAL_DATE = C.OPERATIONAL_DATE
+        AND A .FLIGHT_REPEAT_COUNT = C.FLIGHT_REPEAT_COUNT
+        AND A .A_OR_D = C.A_OR_D
+        WHERE
+        A .A_OR_D = 'A'
+        AND NVL (A .CODE_SHARE_STATUS, ' ') &lt;&gt; 'SF'
+        ),
+        TABLE_B AS (
+        SELECT
+        A .FLIGHT_NO_IATA,
+        A .OPERATIONAL_DATE,
+        C.SOBT,
+        A .LNK_CARRIER_CODE,
+        A .LNK_FLIGHT_NO,
+        A .LNK_FLIGHT_SUFFIX,
+        A .LNK_FLIGHT_REPEAT_COUNT,
+        A .LNK_SCHEDULE_DATE,
+        A .FLIGHT_CANCEL_CODE,
+        A .FLIGHT_CLASS_CODE
+        FROM
+        DAILY_FLIGHT_ADD_DETAILS A
+        LEFT JOIN AIRCRAFT_SUBTYPE B ON A .AIRCRAFT_IATA_SUBTYPE = B.IATA_SUBTYPE
+        LEFT JOIN DAILY_FLIGHT_MASTER C ON A .FLIGHT_NO_IATA = C.FLIGHT_NO_IATA
+        AND A .OPERATIONAL_DATE = C.OPERATIONAL_DATE
+        AND A .FLIGHT_REPEAT_COUNT = C.FLIGHT_REPEAT_COUNT
+        AND A .A_OR_D = C.A_OR_D
+        WHERE
+        A .A_OR_D = 'D'
+        AND NVL (A .CODE_SHARE_STATUS, ' ') &lt;&gt; 'SF'
+        AND (
+        (
+        TO_CHAR (
+        A .OPERATIONAL_DATE,
+        'YYYY-MM-DD'
+        ) != TO_CHAR (SYSDATE, 'YYYY-MM-DD')
+        AND C.ATOT IS NOT NULL
+        AND CEIL (
+        (
+        (
+        TO_DATE (
+        TO_CHAR (
+        C.ATOT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        ) - TO_DATE (
+        TO_CHAR (
+        C.SOBT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        )
+        )
+        ) * 24 * 60
+        ) &gt; 30
+        )
+        OR (
+        TO_CHAR (
+        A .OPERATIONAL_DATE,
+        'YYYY-MM-DD'
+        ) = TO_CHAR (SYSDATE, 'YYYY-MM-DD')
+        AND (
+        (
+        C.ATOT IS NOT NULL
+        AND CEIL (
+        (
+        (
+        TO_DATE (
+        TO_CHAR (
+        C.ATOT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        ) - TO_DATE (
+        TO_CHAR (
+        C.SOBT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        )
+        )
+        ) * 24 * 60
+        ) &gt; 30
+        )
+        OR (
+        C.ATOT IS NULL
+        AND CEIL (
+        (
+        (
+        TO_DATE (
+        TO_CHAR (
+        C.SOBT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        ) - TO_DATE (
+        TO_CHAR (
+        CURRENT_TIMESTAMP,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        )
+        )
+        ) * 24 * 60
+        ) &gt; 30
+        )
+        )
+        )
+        )
+        ) SELECT
+        TO_CHAR(OPERATIONAL_DATE,'YYYY-MM-DD') OPERATIONAL_DATE,
+        IATA_A,
+        IATA_D,
+        SIBT,
+        SOBT,
+        TM,
+        TO_CHAR(DATE_D,'YYYY-MM-DD') DATE_D
+        FROM
+        (
+        SELECT
+        A .ICAO_TYPE,
+        D .OPERATIONAL_DATE DATE_D,
+        A .OPERATIONAL_DATE,
+        A .FLIGHT_NO_IATA IATA_A,
+        D .FLIGHT_NO_IATA IATA_D,
+        A .SIBT,
+        D .SOBT,
+        CEIL (
+        (
+        (
+        TO_DATE (
+        TO_CHAR (
+        D .SOBT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        ) - TO_DATE (
+        TO_CHAR (
+        A .SIBT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        )
+        )
+        ) * 24 * 60
+        ) TM,
+        D .FLIGHT_CANCEL_CODE,
+        D .FLIGHT_CLASS_CODE
+        FROM
+        TABLE_A A
+        INNER JOIN TABLE_B D ON D .LNK_CARRIER_CODE || D .LNK_FLIGHT_NO || NVL (D .LNK_FLIGHT_SUFFIX, '') = A .FLIGHT_NO_IATA
+        AND D .LNK_FLIGHT_REPEAT_COUNT = A .FLIGHT_REPEAT_COUNT
+        AND TO_CHAR (
+        D .LNK_SCHEDULE_DATE,
+        'YYYY-MM-DD'
+        ) = TO_CHAR (
+        A .OPERATIONAL_DATE,
+        'YYYY-MM-DD'
+        )
+        ) A
+        WHERE
+        A .SIBT IS NOT NULL
+        AND A .SOBT IS NOT NULL
+        AND (
+        (
+        A .ICAO_TYPE IN ('EMBB145', 'ATR72', 'CRJ200')
+        AND TO_NUMBER (TM) &lt; TO_NUMBER (40)
+        )
+        OR (
+        A .ICAO_TYPE IN (
+        'CRJ700',
+        'E190',
+        'A319',
+        'B737',
+        'B73M',
+        'B73L',
+        'B73N'
+        )
+        AND TO_NUMBER (TM) &lt; TO_NUMBER (55)
+        )
+        OR (
+        A .ICAO_TYPE IN (
+        'B757',
+        'B767',
+        'A320',
+        'A321',
+        'A32L',
+        'A32M',
+        'A32N'
+        )
+        AND TO_NUMBER (TM) &lt; TO_NUMBER (65)
+        )
+        OR (
+        A .ICAO_TYPE IN (
+        'B747',
+        'B777',
+        'A300',
+        'A330',
+        'A340',
+        'B748',
+        'B772',
+        'B77W',
+        'B788',
+        'B789'
+        )
+        AND TO_NUMBER (TM) &lt; TO_NUMBER (75)
+        )
+        OR (
+        A .ICAO_TYPE = 'A380'
+        AND TO_NUMBER (TM) &lt; TO_NUMBER (120)
+        )
+        )
+        AND NVL (FLIGHT_CANCEL_CODE, ' ') &lt;&gt; 'C'
+        AND NVL (FLIGHT_CLASS_CODE, ' ') &lt;&gt; 'U/H'
+        AND TO_CHAR (DATE_D, 'YYYY-MM-DD') &lt;= #{endDate}
+        AND TO_CHAR (DATE_D, 'YYYY-MM-DD') &gt;= #{startDate}
+    </select>
+
+    <select id="queryNotDelay" resultType="com.hq.acdm.model.statistics.flightOverStation.Delay">
+        WITH TABLE_A AS (
+        SELECT
+        A .A_OR_D,
+        A .OPERATIONAL_DATE,
+        A .FLIGHT_NO_IATA,
+        A .FLIGHT_REPEAT_COUNT,
+        C.SIBT,
+        B.ICAO_TYPE
+        FROM
+        DAILY_FLIGHT_ADD_DETAILS A
+        LEFT JOIN AIRCRAFT_SUBTYPE B ON A .AIRCRAFT_IATA_SUBTYPE = B.IATA_SUBTYPE
+        LEFT JOIN DAILY_FLIGHT_MASTER C ON A .FLIGHT_NO_IATA = C.FLIGHT_NO_IATA
+        AND A .OPERATIONAL_DATE = C.OPERATIONAL_DATE
+        AND A .FLIGHT_REPEAT_COUNT = C.FLIGHT_REPEAT_COUNT
+        AND A .A_OR_D = C.A_OR_D
+        WHERE
+        A .A_OR_D = 'A'
+        AND NVL (A .CODE_SHARE_STATUS, ' ') &lt;&gt; 'SF'
+        ),
+        TABLE_B AS (
+        SELECT
+        A .FLIGHT_NO_IATA,
+        A .OPERATIONAL_DATE,
+        C.SOBT,
+        A .LNK_CARRIER_CODE,
+        A .LNK_FLIGHT_NO,
+        A .LNK_FLIGHT_SUFFIX,
+        A .LNK_FLIGHT_REPEAT_COUNT,
+        A .LNK_SCHEDULE_DATE,
+        A .FLIGHT_CANCEL_CODE,
+        A .FLIGHT_CLASS_CODE
+        FROM
+        DAILY_FLIGHT_ADD_DETAILS A
+        LEFT JOIN AIRCRAFT_SUBTYPE B ON A .AIRCRAFT_IATA_SUBTYPE = B.IATA_SUBTYPE
+        LEFT JOIN DAILY_FLIGHT_MASTER C ON A .FLIGHT_NO_IATA = C.FLIGHT_NO_IATA
+        AND A .OPERATIONAL_DATE = C.OPERATIONAL_DATE
+        AND A .FLIGHT_REPEAT_COUNT = C.FLIGHT_REPEAT_COUNT
+        AND A .A_OR_D = C.A_OR_D
+        WHERE
+        A .A_OR_D = 'D'
+        AND NVL (A .CODE_SHARE_STATUS, ' ') &lt;&gt; 'SF'
+        AND (
+        (
+        TO_CHAR (
+        A .OPERATIONAL_DATE,
+        'YYYY-MM-DD'
+        ) != TO_CHAR (SYSDATE, 'YYYY-MM-DD')
+        AND C.ATOT IS NOT NULL
+        AND CEIL (
+        (
+        (
+        TO_DATE (
+        TO_CHAR (
+        C.ATOT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        ) - TO_DATE (
+        TO_CHAR (
+        C.SOBT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        )
+        )
+        ) * 24 * 60
+        ) &lt;= 30
+        )
+        OR (
+        TO_CHAR (
+        A .OPERATIONAL_DATE,
+        'YYYY-MM-DD'
+        ) = TO_CHAR (SYSDATE, 'YYYY-MM-DD')
+        AND (
+        (
+        C.ATOT IS NOT NULL
+        AND CEIL (
+        (
+        (
+        TO_DATE (
+        TO_CHAR (
+        C.ATOT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        ) - TO_DATE (
+        TO_CHAR (
+        C.SOBT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        )
+        )
+        ) * 24 * 60
+        ) &lt;= 30
+        )
+        OR (
+        C.ATOT IS NULL
+        AND CEIL (
+        (
+        (
+        TO_DATE (
+        TO_CHAR (
+        C.SOBT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        ) - TO_DATE (
+        TO_CHAR (
+        CURRENT_TIMESTAMP,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        )
+        )
+        ) * 24 * 60
+        ) &lt;= 30
+        )
+        )
+        )
+        )
+        ) SELECT
+        TO_CHAR(OPERATIONAL_DATE,'YYYY-MM-DD') OPERATIONAL_DATE,
+        IATA_A,
+        IATA_D,
+        SIBT,
+        SOBT,
+        TM,
+        TO_CHAR(DATE_D,'YYYY-MM-DD') DATE_D
+        FROM
+        (
+        SELECT
+        A .ICAO_TYPE,
+        D .OPERATIONAL_DATE DATE_D,
+        A .OPERATIONAL_DATE,
+        A .FLIGHT_NO_IATA IATA_A,
+        D .FLIGHT_NO_IATA IATA_D,
+        A .SIBT,
+        D .SOBT,
+        CEIL (
+        (
+        (
+        TO_DATE (
+        TO_CHAR (
+        D .SOBT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        ) - TO_DATE (
+        TO_CHAR (
+        A .SIBT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        )
+        )
+        ) * 24 * 60
+        ) TM,
+        D .FLIGHT_CANCEL_CODE,
+        D .FLIGHT_CLASS_CODE
+        FROM
+        TABLE_A A
+        INNER JOIN TABLE_B D ON D .LNK_CARRIER_CODE || D .LNK_FLIGHT_NO || NVL (D .LNK_FLIGHT_SUFFIX, '') = A .FLIGHT_NO_IATA
+        AND D .LNK_FLIGHT_REPEAT_COUNT = A .FLIGHT_REPEAT_COUNT
+        AND TO_CHAR (
+        D .LNK_SCHEDULE_DATE,
+        'YYYY-MM-DD'
+        ) = TO_CHAR (
+        A .OPERATIONAL_DATE,
+        'YYYY-MM-DD'
+        )
+        ) A
+        WHERE
+        A .SIBT IS NOT NULL
+        AND A .SOBT IS NOT NULL
+        AND (
+        (
+        A .ICAO_TYPE IN ('EMBB145', 'ATR72', 'CRJ200')
+        AND TO_NUMBER (TM) &lt; TO_NUMBER (40)
+        )
+        OR (
+        A .ICAO_TYPE IN (
+        'CRJ700',
+        'E190',
+        'A319',
+        'B737',
+        'B73M',
+        'B73L',
+        'B73N'
+        )
+        AND TO_NUMBER (TM) &lt; TO_NUMBER (55)
+        )
+        OR (
+        A .ICAO_TYPE IN (
+        'B757',
+        'B767',
+        'A320',
+        'A321',
+        'A32L',
+        'A32M',
+        'A32N'
+        )
+        AND TO_NUMBER (TM) &lt; TO_NUMBER (65)
+        )
+        OR (
+        A .ICAO_TYPE IN (
+        'B747',
+        'B777',
+        'A300',
+        'A330',
+        'A340',
+        'B748',
+        'B772',
+        'B77W',
+        'B788',
+        'B789'
+        )
+        AND TO_NUMBER (TM) &lt; TO_NUMBER (75)
+        )
+        OR (
+        A .ICAO_TYPE = 'A380'
+        AND TO_NUMBER (TM) &lt; TO_NUMBER (120)
+        )
+        )
+        AND NVL (FLIGHT_CANCEL_CODE, ' ') &lt;&gt; 'C'
+        AND NVL (FLIGHT_CLASS_CODE, ' ') &lt;&gt; 'U/H'
+        AND TO_CHAR (DATE_D, 'YYYY-MM-DD') &lt;= #{endDate}
+        AND TO_CHAR (DATE_D, 'YYYY-MM-DD') &gt;= #{startDate}
+    </select>
+
+    <select id="queryFlightOver" resultType="com.hq.acdm.model.statistics.flightOverStation.Delay"  >
+        WITH TABLE_A AS (
+        SELECT
+        A .A_OR_D,
+        A .OPERATIONAL_DATE,
+        A .FLIGHT_NO_IATA,
+        A .FLIGHT_REPEAT_COUNT,
+        C.SIBT,
+        B.ICAO_TYPE
+        FROM
+        DAILY_FLIGHT_ADD_DETAILS A
+        LEFT JOIN AIRCRAFT_SUBTYPE B ON A .AIRCRAFT_IATA_SUBTYPE = B.IATA_SUBTYPE
+        LEFT JOIN DAILY_FLIGHT_MASTER C ON A .FLIGHT_NO_IATA = C.FLIGHT_NO_IATA
+        AND A .OPERATIONAL_DATE = C.OPERATIONAL_DATE
+        AND A .FLIGHT_REPEAT_COUNT = C.FLIGHT_REPEAT_COUNT
+        AND A .A_OR_D = C.A_OR_D
+        WHERE
+        A .A_OR_D = 'A'
+        AND NVL (A .CODE_SHARE_STATUS, ' ') &lt;&gt; 'SF'
+        ),
+        TABLE_B AS (
+        SELECT
+        A .FLIGHT_NO_IATA,
+        A .OPERATIONAL_DATE,
+        C.SOBT,
+        A .LNK_CARRIER_CODE,
+        A .LNK_FLIGHT_NO,
+        A .LNK_FLIGHT_SUFFIX,
+        A .LNK_FLIGHT_REPEAT_COUNT,
+        A .LNK_SCHEDULE_DATE,
+        A .FLIGHT_CANCEL_CODE,
+        A .FLIGHT_CLASS_CODE
+        FROM
+        DAILY_FLIGHT_ADD_DETAILS A
+        LEFT JOIN AIRCRAFT_SUBTYPE B ON A .AIRCRAFT_IATA_SUBTYPE = B.IATA_SUBTYPE
+        LEFT JOIN DAILY_FLIGHT_MASTER C ON A .FLIGHT_NO_IATA = C.FLIGHT_NO_IATA
+        AND A .OPERATIONAL_DATE = C.OPERATIONAL_DATE
+        AND A .FLIGHT_REPEAT_COUNT = C.FLIGHT_REPEAT_COUNT
+        AND A .A_OR_D = C.A_OR_D
+        WHERE
+        A .A_OR_D = 'D'
+        AND NVL (A .CODE_SHARE_STATUS, ' ') &lt;&gt; 'SF'
+        ) SELECT
+        TO_CHAR(OPERATIONAL_DATE,'YYYY-MM-DD') OPERATIONAL_DATE,
+        IATA_A,
+        IATA_D,
+        SIBT,
+        SOBT,
+        TM,
+        TO_CHAR(DATE_D,'YYYY-MM-DD') DATE_D
+        FROM
+        (
+        SELECT
+        A .ICAO_TYPE,
+        D .OPERATIONAL_DATE DATE_D,
+        A .OPERATIONAL_DATE,
+        A .FLIGHT_NO_IATA IATA_A,
+        D .FLIGHT_NO_IATA IATA_D,
+        A .SIBT,
+        D .SOBT,
+        CEIL (
+        (
+        (
+        TO_DATE (
+        TO_CHAR (
+        D .SOBT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        ) - TO_DATE (
+        TO_CHAR (
+        A .SIBT,
+        'yyyy-mm-dd hh24-mi-ss'
+        ),
+        'yyyy-mm-dd hh24-mi-ss'
+        )
+        )
+        ) * 24 * 60
+        ) TM,
+        D .FLIGHT_CANCEL_CODE,
+        D .FLIGHT_CLASS_CODE
+        FROM
+        TABLE_A A
+        INNER JOIN TABLE_B D ON D .LNK_CARRIER_CODE || D .LNK_FLIGHT_NO || NVL (D .LNK_FLIGHT_SUFFIX, '') = A .FLIGHT_NO_IATA
+        AND D .LNK_FLIGHT_REPEAT_COUNT = A .FLIGHT_REPEAT_COUNT
+        AND TO_CHAR (
+        D .LNK_SCHEDULE_DATE,
+        'YYYY-MM-DD'
+        ) = TO_CHAR (
+        A .OPERATIONAL_DATE,
+        'yyyy-mm-dd'
+        )
+        ) A
+        WHERE
+        A .SIBT IS NOT NULL
+        AND A .SOBT IS NOT NULL
+        AND (
+        (
+        A .ICAO_TYPE IN ('EMBB145', 'ATR72', 'CRJ200')
+        AND TM &lt; 40
+        )
+        OR (
+        A .ICAO_TYPE IN (
+        'CRJ700',
+        'E190',
+        'A319',
+        'B737',
+        'B73M',
+        'B73L',
+        'B73N'
+        )
+        AND TM &lt; 55
+        )
+        OR (
+        A .ICAO_TYPE IN (
+        'B757',
+        'B767',
+        'A320',
+        'A321',
+        'A32L',
+        'A32M',
+        'A32N'
+        )
+        AND TM &lt; 65
+        )
+        OR (
+        A .ICAO_TYPE IN (
+        'B747',
+        'B777',
+        'A300',
+        'A330',
+        'A340',
+        'B748',
+        'B772',
+        'B77W',
+        'B788',
+        'B789'
+        )
+        AND TM &lt; 75
+        )
+        OR (
+        A .ICAO_TYPE = 'A380'
+        AND TM &lt; 120
+        )
+        )
+        AND NVL (FLIGHT_CANCEL_CODE, ' ') &lt;&gt; 'C'
+        AND NVL (FLIGHT_CLASS_CODE, ' ') &lt;&gt; 'U/H'
+        AND TO_CHAR (DATE_D, 'YYYY-MM-DD') &lt;= #{endDate}
+        AND TO_CHAR (DATE_D, 'YYYY-MM-DD') &gt;= #{startDate}
+    </select>
+</mapper>

@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.dynamicFlight.PrcsSupervisionMapper" >
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.dynamicFlight.PrcsJJJGVo" >
+    <result column="FLIGHT_ID_A" property="flightId" jdbcType="VARCHAR" />
+    <result column="FLNO_D" property="flnoD" jdbcType="VARCHAR" />
+    <result column="FLNO_A" property="flnoA" jdbcType="VARCHAR" />
+    <result column="STAND_A" property="standA" jdbcType="VARCHAR" />
+    <result column="STAND_D" property="standD" jdbcType="VARCHAR" />
+    <result column="ADEP_A" property="adepA" jdbcType="VARCHAR" />
+    <result column="ADES_A" property="adesA" jdbcType="VARCHAR" />
+    <result column="ADEP_D" property="adepD" jdbcType="VARCHAR" />
+    <result column="ADES_D" property="adesD" jdbcType="VARCHAR" />
+    <result column="RUNWAY_A" property="runwayA" jdbcType="VARCHAR" />
+    <result column="ISDELAY" property="isDelay" jdbcType="VARCHAR" />
+    <result column="ISCONTROL" property="isControl" jdbcType="VARCHAR" />
+    <result column="ATOT_A" property="atotA" jdbcType="VARCHAR" />
+    <result column="DURATION_A" property="duration" jdbcType="VARCHAR" />
+    <result column="ELDT" property="eldt" jdbcType="VARCHAR" />
+    <result column="SIBT" property="sibt" jdbcType="VARCHAR" />
+    <result column="SIBT" property="sibt" jdbcType="VARCHAR" />
+    <result column="isconflict" property="isconflict" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="TaskNodeMap" type="com.hq.acdm.vo.dynamicFlight.TaskNodeVo" >
+    <result column="tskcodes" property="tskcodes" jdbcType="VARCHAR" />
+    <result column="TASK_NAME" property="taskName" jdbcType="VARCHAR" />
+    <result column="dora" property="dora" jdbcType="VARCHAR" />
+    <result column="startnode" property="startnode" jdbcType="VARCHAR" />
+    <result column="endnode" property="endnode" jdbcType="INTEGER" />
+    <result column="startcolumn" property="startcolumn" jdbcType="TIMESTAMP" />
+    <result column="startestcolumn" property="startestcolumn" jdbcType="TIMESTAMP" />
+    <result column="endcolumn" property="endcolumn" jdbcType="TIMESTAMP" />
+    <result column="endestcolumn" property="endestcolumn" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <select id="getJJJG" resultMap="ResultMap" parameterType="map">
+    <![CDATA[
+     SELECT CASE WHEN FLIGHT_ID_A IS NOT NULL THEN FLIGHT_ID_A ELSE FLIGHT_ID_D END FLIGHT_ID_A,
+    CASE WHEN T.FLIGHT_ID IS NOT NULL THEN '1' ELSE '0' END isconflict,
+    FLNO_A,FLNO_D,STAND_A,STAND_D,ADEP_A,ADES_A,ADEP_D,ADES_D,RUNWAY_A,
+    CASE WHEN DELAY_TIME_A>0 THEN 1 ELSE 0 END ISDELAY,ISCONTROL, ATOT_A,DURATION_A,V.ELDT,V.SIBT,
+    IF((IFNULL(V.ELDT,'') = ''),V.SIBT,V.ELDT) AS sortTime
+    FROM V_UTIL_UNITE_FLIGHT  V
+    LEFT JOIN V_UTIL_STAND2 T
+    ON V.STAND_A=T.STAND AND T.FLIGHT_ID!=CASE WHEN V.FLIGHT_ID_A IS NOT NULL THEN V.FLIGHT_ID_A ELSE V.FLIGHT_ID_D END and  T.ait IS NOT NULL AND T.aot is null
+    WHERE (V.FL_STATUS <> 'CAN' OR V.FL_STATUS IS NULL) AND (V.FL_STATUS_A <> 'CAN' OR V.FL_STATUS_A IS NULL)
+    AND V.ELDT <= date_add(now(),interval +30 minute) AND V.ATOT_A IS NOT NULL AND V.ALDT IS NULL
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    GROUP BY FLIGHT_ID_A
+    ORDER BY sortTime ASC
+  </select>
+  <select id="getLDHX" resultType="com.hq.acdm.vo.dynamicFlight.PrcsLDHXVo" parameterType="map">
+    <![CDATA[
+    SELECT CASE WHEN FLIGHT_ID_A IS NOT NULL THEN FLIGHT_ID_A ELSE FLIGHT_ID_D END flightId,FLNO_A flnoA,FLNO_D flnoD,STAND_A standA,STAND_D standD,ADEP_A adepA,ADES_A adesA,ADEP_D adepD,ADES_D adesD,RUNWAY_A runwayA,
+    CASE WHEN DELAY_TIME_A>0 THEN 1 ELSE 0 END isDelay,ISCONTROL isControl, ALDT aldt,`EXIT` `exit`,A_GRND_TSF_TM aGrndTsfTm,COBT cobt,ETOT etot,SOBT sobt,
+    IF((IFNULL(EIBT,'') = ''),ALDT,EIBT) AS sortTime
+    FROM V_UTIL_UNITE_FLIGHT
+    WHERE (FL_STATUS <> 'CAN' OR FL_STATUS IS NULL) AND (FL_STATUS_A <> 'CAN' OR FL_STATUS_A IS NULL)
+    AND ALDT IS NOT NULL AND AIBT IS NULL AND ARSL IS NULL AND NOW()<DATE_ADD(ALDT,INTERVAL 1 HOUR)
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY sortTime ASC;
+  </select>
+  <select id="getLGHX" resultType="com.hq.acdm.vo.dynamicFlight.PrcsLGHXVo" parameterType="map">
+    <![CDATA[
+    SELECT CASE WHEN FLIGHT_ID_A IS NOT NULL THEN FLIGHT_ID_A ELSE FLIGHT_ID_D END flightId,FLNO_A flnoA,FLNO_D flnoD,STAND_A standA,STAND_D standD,ADEP_A adepA,ADES_A adesA,ADEP_D adepD,ADES_D adesD,RUNWAY_D runwayD,
+    CASE WHEN DELAY_TIME_A>0 THEN 1 ELSE 0 END isDelay,ISCONTROL isControl, AOBT aobt,`EXOT` `exot`,D_GRND_TSF_TM dGrndTsfTm,CTOT ctot,TTOT ttot,
+    IF((IFNULL(AOBT,'') = ''),EOBT,AOBT) AS sortTime
+    FROM V_UTIL_UNITE_FLIGHT
+    WHERE (FL_STATUS <> 'CAN' OR FL_STATUS IS NULL) AND (FL_STATUS_A <> 'CAN' OR FL_STATUS_A IS NULL)
+    AND AOBT IS NOT NULL AND ATOT IS NULL
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY sortTime ASC
+  </select>
+  <select id="getQZYW" resultType="com.hq.acdm.vo.dynamicFlight.PrcsQZYWVo" parameterType="map">
+    <![CDATA[
+    SELECT CASE WHEN FLIGHT_ID_A IS NOT NULL THEN FLIGHT_ID_A ELSE FLIGHT_ID_D END flightId,FLNO_A flnoA,FLNO_D flnoD,STAND_A standA,STAND_D standD,ADEP_A adepA,ADES_A adesA,ADEP_D adepD,ADES_D adesD,RUNWAY_A runwayA,
+    CASE WHEN DELAY_TIME_A>0 THEN 1 ELSE 0 END isDelay,ISCONTROL isControl, ATOT_A atotA,DURATION_A duration,ELDT eldt,SIBT sibt,
+    CASE WHEN NOW()>SIBT THEN TIMESTAMPDIFF(MINUTE,SIBT,NOW())
+    WHEN NOW()<SIBT AND ATOT_A IS NULL THEN TIMESTAMPDIFF(MINUTE,SOBT_A,NOW())
+    WHEN NOW()<SIBT AND ATOT_A IS NOT NULL THEN TIMESTAMPDIFF(MINUTE,date_add(ATOT_A, INTERVAL DURATION_A MINUTE),NOW()) END delayTime,
+    IF((IFNULL(ELDT,'') = ''),SIBT,ELDT) AS sortTime
+    FROM V_UTIL_UNITE_FLIGHT
+    WHERE (FL_STATUS <> 'CAN' OR FL_STATUS IS NULL) AND (FL_STATUS_A <> 'CAN' OR FL_STATUS_A IS NULL)
+    AND ALDT IS NULL AND (NOW()>SIBT OR ( NOW()< SIBT AND ATOT_A IS NULL AND NOW()>SOBT_A) OR ( NOW()< SIBT AND ATOT_A IS NOT NULL AND NOW()>date_add(ATOT_A, INTERVAL DURATION_A MINUTE)))
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY sortTime ASC
+  </select>
+  <select id="getQZQF" resultType="com.hq.acdm.vo.dynamicFlight.PrcsQZYWVo" parameterType="map">
+    <![CDATA[
+		SELECT CASE WHEN FLIGHT_ID_A IS NOT NULL THEN FLIGHT_ID_A ELSE FLIGHT_ID_D END flightId,FLNO_A flnoA,FLNO_D flnoD,STAND_A standA,STAND_D standD,ADEP_A adepA,ADES_A adesA,ADEP_D adepD,ADES_D adesD,RUNWAY_A runwayA,
+    CASE WHEN DELAY_TIME_A>0 THEN 1 ELSE 0 END isDelay,ISCONTROL isControl, ATOT_A atotA,DURATION_A duration,ELDT eldt,SIBT sibt,
+    DELAY_TIME_A delayTime,
+    IF((IFNULL(ELDT,'') = ''),SIBT,ELDT) AS sortTime
+    FROM V_UTIL_UNITE_FLIGHT
+    WHERE (FL_STATUS <> 'CAN' OR FL_STATUS IS NULL) AND (FL_STATUS_A <> 'CAN' OR FL_STATUS_A IS NULL)
+    AND ALDT IS NULL AND ATOT_A IS NOT NULL AND ELDT > date_add(now(),interval +30 minute)
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY sortTime ASC
+  </select>
+  <select id="getTQQF" resultType="com.hq.acdm.vo.dynamicFlight.PrcsQZYWVo" parameterType="map">
+    <![CDATA[
+		SELECT CASE WHEN FLIGHT_ID_A IS NOT NULL THEN FLIGHT_ID_A ELSE FLIGHT_ID_D END flightId,FLNO_A flnoA,FLNO_D flnoD,STAND_A standA,STAND_D standD,ADEP_A adepA,ADES_A adesA,ADEP_D adepD,ADES_D adesD,RUNWAY_A runwayA,
+    CASE WHEN DELAY_TIME_A>0 THEN 1 ELSE 0 END isDelay,ISCONTROL isControl, ATOT_A atotA,DURATION_A duration,ELDT eldt,SIBT sibt,
+    DELAY_TIME_A delayTime,
+    IF((IFNULL(ELDT,'') = ''),SIBT,ELDT) AS sortTime
+    FROM V_UTIL_UNITE_FLIGHT
+    WHERE (FL_STATUS <> 'CAN' OR FL_STATUS IS NULL) AND (FL_STATUS_A <> 'CAN' OR FL_STATUS_A IS NULL)
+    AND ALDT IS NULL AND ATOT_A IS NOT NULL AND ELDT < date_sub(SIBT,INTERVAL 30 MINUTE)
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY sortTime ASC
+  </select>
+  <select id="getGZBZ" resultType="com.hq.acdm.vo.dynamicFlight.PrcsGZBZVo" parameterType="map">
+    <![CDATA[
+    SELECT CASE WHEN FLIGHT_ID_A IS NOT NULL THEN FLIGHT_ID_A ELSE FLIGHT_ID_D END flightId,FLIGHT_ID_D flightIdD,FLNO_A flnoA,FLNO_D flnoD,STAND_A standA,STAND_D standD,CRAFT_TYPE_ICAO type, ALDT aldt ,AIBT aibt,ADEP_A adepA,
+    ADES_A adesA,ADEP_D adepD,ADES_D adesD,RUNWAY_D runwayD,COBT cobt, '' mttt,'0' gateOpen,'0' meal,'0' clean,'0' addFuel,'0' luggage,'0' board,
+    '0' gateClose,'4' deicing,CASE WHEN DELAY_TIME_A>0 THEN 1 ELSE 0 END isDelay,ISCONTROL isControl,
+    IF((IFNULL(COBT,'') = ''),IF((ifnull(ETOT,'') = ''),SOBT,ETOT),COBT) AS sortTime
+    FROM V_UTIL_UNITE_FLIGHT
+    WHERE (FL_STATUS <> 'CAN' OR FL_STATUS IS NULL) AND (FL_STATUS_A <> 'CAN' OR FL_STATUS_A IS NULL)
+    AND (AIBT IS NOT NULL OR ATDO IS NOT NULL OR ARSL IS NOT NULL) AND AOBT IS NULL AND ATOT IS NULL AND FLIGHT_ID_D IS NOT NULL AND FL_STATUS <> 'CAN'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY sortTime ASC
+  </select>
+
+  <select id="getGZBZlist" resultType="map">
+    SELECT
+    CASE WHEN FLIGHT_ID_A IS NOT NULL THEN FLIGHT_ID_A ELSE FLIGHT_ID_D END flightId,FLIGHT_ID_D flightIdD,FLNO_A flnoA,FLNO_D flnoD,STAND_A standA,STAND_D standD,CRAFT_TYPE_ICAO type, ALDT aldt ,AIBT aibt,ADEP_A adepA,
+    ADES_A adesA,ADEP_D adepD,ADES_D adesD,RUNWAY_D runwayD,COBT cobt, '' mttt,'0' gateOpen,'0' meal,'0' clean,'0' addFuel,'0' luggage,'0' board,
+    '0' gateClose,'4' deicing,CASE WHEN DELAY_TIME_A>0 THEN 1 ELSE 0 END isDelay,ISCONTROL isControl,
+    IF((IFNULL(COBT,'') = ''),IF((ifnull(ETOT,'') = ''),SOBT,ETOT),COBT) AS sortTime,
+    <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+      <if test="item !=null and item != ''">
+        `${item}`
+      </if>
+    </foreach>
+    FROM
+    V_UTIL_UNITE_FLIGHT
+    WHERE (FL_STATUS <![CDATA[<>]]> 'CAN' OR FL_STATUS IS NULL) AND (FL_STATUS_A <![CDATA[<>]]> 'CAN' OR FL_STATUS_A IS NULL)
+    AND (AIBT IS NOT NULL OR ATDO IS NOT NULL OR ARSL IS NOT NULL) AND AOBT IS NULL AND ATOT IS NULL AND FLIGHT_ID_D IS NOT NULL AND FL_STATUS <![CDATA[<>]]> 'CAN'
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ORDER BY sortTime ASC
+  </select>
+
+  <select id="getGZBZState" resultType="com.hq.acdm.model.realtimeSituation.TDynTask" >
+    <![CDATA[
+    SELECT ID id,	FLIGHT_ID flightId,	TASK_CODE taskCode,	TASK_NAME taskName,	TASK_STATUS taskStatus,	TASK_ESTM taskEstm,	TASK_ASTM taskAstm,	TASK_EETM taskEetm,	TASK_AETM taskAetm,	RMK rmk, CREATE_TM createTm,	UPDATE_TM updateTm
+    FROM T_DYN_TASK WHERE FLIGHT_ID = #{params.flightA,jdbcType=VARCHAR} OR FLIGHT_ID = #{params.flightD,jdbcType=VARCHAR}
+    ]]>
+  </select>
+
+  <select id="findTaskNode" resultMap="TaskNodeMap" >
+    <![CDATA[
+    SELECT starttast.tskcodes,starttast.TASK_NAME, starttast.dora,starttast.startnode,starttast.endnode,
+    starttast.startcolumn,starttast.startestcolumn,ndcf.NODE_COLUMN endcolumn,ndcf.NODE_ESTIMATE_COLUMN endestcolumn
+     FROM
+     ( SELECT task.TASK_CODE tskcodes,task.TASK_SEQ,task.TASK_NAME,task.D_OR_A dora,task.START_NODE startnode,task.END_NODE endnode,
+       node.NODE_COLUMN startcolumn,node.NODE_ESTIMATE_COLUMN startestcolumn
+       FROM T_TASK_CONFIG task
+       LEFT JOIN T_NODE_CONFIG_INFO node on (task.START_NODE = node.NODE_CODE )
+       WHERE task.ISAVAILABLE = 1 ORDER BY task.TASK_SEQ ASC
+     ) starttast
+    LEFT JOIN T_NODE_CONFIG_INFO ndcf ON (starttast.endnode = ndcf.NODE_CODE)
+    ORDER BY starttast.TASK_SEQ
+    ]]>
+  </select>
+
+  <select id="SelectNoticeTime" resultType="java.util.Map" parameterType="map">
+    SELECT T.FLIGHT_ID_D FLIGHT_ID,T.FLNO_D FLNO,IFNULL(S.MSG,'') MSG,IFNULL(S.DEVICE_NO,'') DEVICE_NO,IFNULL(IFNULL(UU.USER_NAME,UUA.USER_NAME),'') EXEC_EMP,IFNULL(S.`STATUS`,'') STATUS,IFNULL(IFNULL(U.USER_NAME,UA.USER_NAME),'')  dispatcher
+    <if test="params.agent !=null and params.agent != ''">
+      ,${params.agent}
+    </if>
+    FROM V_UTIL_UNITE_FLIGHT T
+    LEFT  JOIN T_DYN_TASK K
+    on T.FLIGHT_ID_D=K.FLIGHT_ID AND K.TASK_CODE=#{params.ename,jdbcType=VARCHAR}
+    LEFT  JOIN T_DYN_TASK KK
+    on T.FLIGHT_ID_A=KK.FLIGHT_ID AND KK.TASK_CODE=#{params.ename,jdbcType=VARCHAR}
+    LEFT  JOIN users U
+    on U.EMPLOYEE_ID=K.TASK_CMID
+    LEFT  JOIN users UU
+    on UU.EMPLOYEE_ID=K.TASK_PSID
+    LEFT  JOIN users UA
+    on UA.EMPLOYEE_ID=KK.TASK_CMID
+    LEFT  JOIN users UUA
+    on UUA.EMPLOYEE_ID=KK.TASK_PSID
+    LEFT  JOIN T_SCHEDULING_NOTICE_INFO S
+    on T.FLIGHT_ID_D=S.FLIGHT_ID AND S.TASK_TYPE=#{params.ename,jdbcType=VARCHAR}
+    WHERE (T.FL_STATUS <![CDATA[<>]]> 'CAN' OR T.FL_STATUS IS NULL) AND (T.FL_STATUS_A <![CDATA[<>]]> 'CAN' OR T.FL_STATUS_A IS NULL)
+    AND T.FLIGHT_ID_D= #{params.flightId,jdbcType=VARCHAR} OR T.FLIGHT_ID_A= #{params.flightId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="findSchedulingNoticeInfo" resultType="String" parameterType="map">
+    SELECT MSG FROM T_SCHEDULING_NOTICE_INFO
+    WHERE FLIGHT_ID = #{params.flightId,jdbcType=VARCHAR}
+    AND TASK_TYPE = #{params.taskType,jdbcType=VARCHAR}
+    ORDER BY MSG_TIME DESC
+  </select>
+
+</mapper>

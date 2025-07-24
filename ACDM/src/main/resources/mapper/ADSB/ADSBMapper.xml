@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.ADSB.ADSBMapper" >
+    <select id="queryADSB" resultType="com.hq.acdm.model.ADSB.ADSBModel">
+            SELECT * FROM ADSBSHA WHERE TE &lt;= to_char((SYSDATE-1),'YYYY-MM-DD HH24:MI:SS')
+    </select>
+    <select id="queryADSBSHA" resultType="com.hq.acdm.model.ADSB.ADSBModel">
+        SELECT * FROM ADSBSHA
+    </select>
+    <select id="queryADSBOTHERS" resultType="com.hq.acdm.model.ADSB.ADSBModel">
+        SELECT * FROM ADSBOTHERS
+    </select>
+    <select id="queryADSBDATAisExist" resultType="com.hq.acdm.model.ADSB.ADSBModel" parameterType="com.hq.acdm.model.ADSB.ADSBModel">
+        SELECT * FROM ADSBSHA WHERE
+        1=1
+        <if test="FN!=null and FN!=''">
+            AND FN = #{FN,jdbcType=VARCHAR}
+        </if>
+        <if test="RE!=null and RE!=''">
+            AND RE = #{RE,jdbcType=VARCHAR}
+        </if>
+        <if test="FT!=null and FT!=''">
+            AND FT = #{FT,jdbcType=VARCHAR}
+        </if>
+        <if test="OA!=null and OA!=''">
+            AND OA = #{OA,jdbcType=VARCHAR}
+        </if>
+        <if test="DA!=null and DA!=''">
+            AND DA = #{DA,jdbcType=VARCHAR}
+        </if>
+        <if test="LO!=null and LO!=''">
+            AND LO = #{LO,jdbcType=VARCHAR}
+        </if>
+        <if test="LA!=null and LA!=''">
+            AND LA = #{LA,jdbcType=VARCHAR}
+        </if>
+        <if test="HE!=null and HE!=''">
+            AND HE = #{HE,jdbcType=VARCHAR}
+        </if>
+        <if test="GV!=null and GV!=''">
+            AND GV = #{GV,jdbcType=VARCHAR}
+        </if>
+        <if test="CO!=null and CO!=''">
+            AND CO = #{CO,jdbcType=VARCHAR}
+        </if>
+        <if test="RW!=null and RW!=''">
+            AND RW = #{RW,jdbcType=VARCHAR}
+        </if>
+        <if test="TE!=null and TE!=''">
+            AND TE = #{TE,jdbcType=VARCHAR}
+        </if>
+    </select>
+    <select id="queryADSBSHAisExist" resultType="com.hq.acdm.model.ADSB.ADSBModel" parameterType="com.hq.acdm.model.ADSB.ADSBModel">
+            SELECT * FROM ADSBSHA WHERE
+            1=1
+        <if test="FN!=null and FN!=''">
+            AND FN = #{FN,jdbcType=VARCHAR}
+        </if>
+        <if test="RE!=null and RE!=''">
+            AND RE = #{RE,jdbcType=VARCHAR}
+        </if>
+        <if test="FT!=null and FT!=''">
+            AND FT = #{FT,jdbcType=VARCHAR}
+        </if>
+        <if test="OA!=null and OA!=''">
+            AND OA = #{OA,jdbcType=VARCHAR}
+        </if>
+        <if test="DA!=null and DA!=''">
+            AND DA = #{DA,jdbcType=VARCHAR}
+        </if>
+        <if test="LO!=null and LO!=''">
+            AND LO = #{LO,jdbcType=VARCHAR}
+        </if>
+        <if test="LA!=null and LA!=''">
+            AND LA = #{LA,jdbcType=VARCHAR}
+        </if>
+        <if test="HE!=null and HE!=''">
+            AND HE = #{HE,jdbcType=VARCHAR}
+        </if>
+        <if test="GV!=null and GV!=''">
+            AND GV = #{GV,jdbcType=VARCHAR}
+        </if>
+        <if test="CO!=null and CO!=''">
+            AND CO = #{CO,jdbcType=VARCHAR}
+        </if>
+        <if test="RW!=null and RW!=''">
+            AND RW = #{RW,jdbcType=VARCHAR}
+        </if>
+        <if test="TE!=null and TE!=''">
+            AND TE = #{TE,jdbcType=VARCHAR}
+        </if>
+    </select>
+    <select id="queryADSBOTHERSisExist" resultType="com.hq.acdm.model.ADSB.ADSBModel" parameterType="com.hq.acdm.model.ADSB.ADSBModel">
+        SELECT * FROM ADSBOTHERS WHERE
+        1=1
+        <if test="FN!=null and FN!=''">
+            AND FN = #{FN,jdbcType=VARCHAR}
+        </if>
+        <if test="RE!=null and RE!=''">
+            AND RE = #{RE,jdbcType=VARCHAR}
+        </if>
+        <if test="FT!=null and FT!=''">
+            AND FT = #{FT,jdbcType=VARCHAR}
+        </if>
+        <if test="OA!=null and OA!=''">
+            AND OA = #{OA,jdbcType=VARCHAR}
+        </if>
+        <if test="DA!=null and DA!=''">
+            AND DA = #{DA,jdbcType=VARCHAR}
+        </if>
+        <if test="LO!=null and LO!=''">
+            AND LO = #{LO,jdbcType=VARCHAR}
+        </if>
+        <if test="LA!=null and LA!=''">
+            AND LA = #{LA,jdbcType=VARCHAR}
+        </if>
+        <if test="HE!=null and HE!=''">
+            AND HE = #{HE,jdbcType=VARCHAR}
+        </if>
+        <if test="GV!=null and GV!=''">
+            AND GV = #{GV,jdbcType=VARCHAR}
+        </if>
+        <if test="CO!=null and CO!=''">
+            AND CO = #{CO,jdbcType=VARCHAR}
+        </if>
+        <if test="RW!=null and RW!=''">
+            AND RW = #{RW,jdbcType=VARCHAR}
+        </if>
+        <if test="TE!=null and TE!=''">
+            AND TE = #{TE,jdbcType=VARCHAR}
+        </if>
+    </select>
+    <insert id="insertADSBSHA" parameterType="com.hq.acdm.model.ADSB.ADSBModel">
+            INSERT INTO ADSBSHA VALUES (
+            #{FN,jdbcType=VARCHAR},
+            #{RE,jdbcType=VARCHAR},
+            #{FT,jdbcType=VARCHAR},
+            #{OA,jdbcType=VARCHAR},
+            #{DA,jdbcType=VARCHAR},
+            #{LO,jdbcType=VARCHAR},
+            #{LA,jdbcType=VARCHAR},
+            #{HE,jdbcType=VARCHAR},
+            #{GV,jdbcType=VARCHAR},
+            #{CO,jdbcType=VARCHAR},
+            #{RW,jdbcType=VARCHAR},
+            #{TE,jdbcType=VARCHAR}
+            )
+    </insert>
+    <insert id="insertADSBOTHERS" parameterType="com.hq.acdm.model.ADSB.ADSBModel">
+            INSERT INTO ADSBOTHERS VALUES (
+            #{FN,jdbcType=VARCHAR},
+            #{RE,jdbcType=VARCHAR},
+            #{FT,jdbcType=VARCHAR},
+            #{OA,jdbcType=VARCHAR},
+            #{DA,jdbcType=VARCHAR},
+            #{LO,jdbcType=VARCHAR},
+            #{LA,jdbcType=VARCHAR},
+            #{HE,jdbcType=VARCHAR},
+            #{GV,jdbcType=VARCHAR},
+            #{CO,jdbcType=VARCHAR},
+            #{RW,jdbcType=VARCHAR},
+            #{TE,jdbcType=VARCHAR}
+            )
+    </insert>
+    <insert id="insertADSBDATA" parameterType="com.hq.acdm.model.ADSB.ADSBModel">
+        INSERT INTO ADSBSHA VALUES (
+        #{FN,jdbcType=VARCHAR},
+        #{RE,jdbcType=VARCHAR},
+        #{FT,jdbcType=VARCHAR},
+        #{OA,jdbcType=VARCHAR},
+        #{DA,jdbcType=VARCHAR},
+        #{LO,jdbcType=VARCHAR},
+        #{LA,jdbcType=VARCHAR},
+        #{HE,jdbcType=VARCHAR},
+        #{GV,jdbcType=VARCHAR},
+        #{CO,jdbcType=VARCHAR},
+        #{RW,jdbcType=VARCHAR},
+        #{TE,jdbcType=VARCHAR}
+        )
+    </insert>
+    <delete id="deleteADSBDATA" parameterType="com.hq.acdm.model.ADSB.ADSBModel">
+        delete from ADSBSHA
+        WHERE
+        1=1
+        <if test="FN!=null and FN!=''">
+            AND FN = #{FN,jdbcType=VARCHAR}
+        </if>
+        <if test="RE!=null and RE!=''">
+            AND RE = #{RE,jdbcType=VARCHAR}
+        </if>
+        <if test="FT!=null and FT!=''">
+            AND FT = #{FT,jdbcType=VARCHAR}
+        </if>
+        <if test="OA!=null and OA!=''">
+            AND OA = #{OA,jdbcType=VARCHAR}
+        </if>
+        <if test="DA!=null and DA!=''">
+            AND DA = #{DA,jdbcType=VARCHAR}
+        </if>
+        <if test="LO!=null and LO!=''">
+            AND LO = #{LO,jdbcType=VARCHAR}
+        </if>
+        <if test="LA!=null and LA!=''">
+            AND LA = #{LA,jdbcType=VARCHAR}
+        </if>
+        <if test="HE!=null and HE!=''">
+            AND HE = #{HE,jdbcType=VARCHAR}
+        </if>
+        <if test="GV!=null and GV!=''">
+            AND GV = #{GV,jdbcType=VARCHAR}
+        </if>
+        <if test="CO!=null and CO!=''">
+            AND CO = #{CO,jdbcType=VARCHAR}
+        </if>
+        <if test="RW!=null and RW!=''">
+            AND RW = #{RW,jdbcType=VARCHAR}
+        </if>
+        <if test="TE!=null and TE!=''">
+            AND TE = #{TE,jdbcType=VARCHAR}
+        </if>
+    </delete>
+    <delete id="deleteADSBOTHERS" parameterType="com.hq.acdm.model.ADSB.ADSBModel">
+        delete from ADSBOTHERS
+        WHERE
+        1=1
+        <if test="FN!=null and FN!=''">
+            AND FN = #{FN,jdbcType=VARCHAR}
+        </if>
+        <if test="RE!=null and RE!=''">
+            AND RE = #{RE,jdbcType=VARCHAR}
+        </if>
+        <if test="FT!=null and FT!=''">
+            AND FT = #{FT,jdbcType=VARCHAR}
+        </if>
+        <if test="OA!=null and OA!=''">
+            AND OA = #{OA,jdbcType=VARCHAR}
+        </if>
+        <if test="DA!=null and DA!=''">
+            AND DA = #{DA,jdbcType=VARCHAR}
+        </if>
+        <if test="LO!=null and LO!=''">
+            AND LO = #{LO,jdbcType=VARCHAR}
+        </if>
+        <if test="LA!=null and LA!=''">
+            AND LA = #{LA,jdbcType=VARCHAR}
+        </if>
+        <if test="HE!=null and HE!=''">
+            AND HE = #{HE,jdbcType=VARCHAR}
+        </if>
+        <if test="GV!=null and GV!=''">
+            AND GV = #{GV,jdbcType=VARCHAR}
+        </if>
+        <if test="CO!=null and CO!=''">
+            AND CO = #{CO,jdbcType=VARCHAR}
+        </if>
+        <if test="RW!=null and RW!=''">
+            AND RW = #{RW,jdbcType=VARCHAR}
+        </if>
+        <if test="TE!=null and TE!=''">
+            AND TE = #{TE,jdbcType=VARCHAR}
+        </if>
+    </delete>
+    <delete id="deleteADSBSHA" parameterType="com.hq.acdm.model.ADSB.ADSBModel">
+        delete from ADSBSHA
+        WHERE
+        1=1
+        <if test="FN!=null and FN!=''">
+            AND FN = #{FN,jdbcType=VARCHAR}
+        </if>
+        <if test="RE!=null and RE!=''">
+            AND RE = #{RE,jdbcType=VARCHAR}
+        </if>
+        <if test="FT!=null and FT!=''">
+            AND FT = #{FT,jdbcType=VARCHAR}
+        </if>
+        <if test="OA!=null and OA!=''">
+            AND OA = #{OA,jdbcType=VARCHAR}
+        </if>
+        <if test="DA!=null and DA!=''">
+            AND DA = #{DA,jdbcType=VARCHAR}
+        </if>
+        <if test="LO!=null and LO!=''">
+            AND LO = #{LO,jdbcType=VARCHAR}
+        </if>
+        <if test="LA!=null and LA!=''">
+            AND LA = #{LA,jdbcType=VARCHAR}
+        </if>
+        <if test="HE!=null and HE!=''">
+            AND HE = #{HE,jdbcType=VARCHAR}
+        </if>
+        <if test="GV!=null and GV!=''">
+            AND GV = #{GV,jdbcType=VARCHAR}
+        </if>
+        <if test="CO!=null and CO!=''">
+            AND CO = #{CO,jdbcType=VARCHAR}
+        </if>
+        <if test="RW!=null and RW!=''">
+            AND RW = #{RW,jdbcType=VARCHAR}
+        </if>
+        <if test="TE!=null and TE!=''">
+            AND TE = #{TE,jdbcType=VARCHAR}
+        </if>
+    </delete>
+
+    <select id="query5minutesData" resultType="com.hq.acdm.model.ADSB.ADSBModel">
+        select * from adsbsha
+
+        where rowid in (select min(rowid) from adsbsha
+        where (lo&gt;='121.32518' and lo&lt;='121.34350') and (la&gt;='31.17713' and la&lt;='31.21944') and te&gt;=TO_CHAR(SYSDATE-15/60/24,'YYYY-MM-DD HH24:MI:SS')
+        group by fn having count(*)&gt;=1)
+
+        ORDER BY te desc
+    </select>
+    <select id="queryOneAdsb" resultType="com.hq.acdm.model.ADSB.ADSBModel" parameterType="map">
+         select * from ADSBSHA where
+         1=1
+         <if test="params.fn !=null and params.fn !=''">
+         and FN = #{params.fn}
+         </if>
+         and TE &gt;=to_char((sysdate-(30/24/60)),'yyyy-mm-dd hh24:mi:ss')
+         and TE &lt;=to_char(sysdate,'yyyy-mm-dd hh24:mi:ss')
+         order by TE
+    </select>
+</mapper>

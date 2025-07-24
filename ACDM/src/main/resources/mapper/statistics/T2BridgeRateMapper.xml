@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.T2BridgeRateMapper" >
+  <select id="queryT2BridgeRate" parameterType="map" resultType="com.hq.acdm.model.statistics.T2BridgeRate.T2BridgeRate">
+      select OPERATIONAL_DATE,
+      COUNT(OPERATIONAL_DATE) AS JIHUASHU,
+      COUNT(  case when ZHIXINGSHU=0 then null else ZHIXINGSHU end  ) AS ZHIXINGSHU,
+      COUNT(  case when JINJIWEI=0 then null else JINJIWEI end ) AS KAOQIAOSHU,
+      AIRLINE_CODE_IATA
+      from V_T2BOARDINGRATE
+      where 1=1
+      <if test="params.startTime!=null and params.startTime!=''">
+        and to_char(SOBT,'YYYY-MM-DD HH24:MI:SS')&gt;=#{params.startTime}
+      </if>
+      <if test="params.endTime!=null and params.endTime !=''">
+        and to_char(SOBT,'YYYY-MM-DD HH24:MI:SS')&lt;=#{params.endTime}
+      </if>
+      <if test="params.airCompany!=null and params.airCompany!=''">
+        and AIRLINE_CODE_IATA = #{params.airCompany}
+      </if>
+      GROUP BY AIRLINE_CODE_IATA,OPERATIONAL_DATE
+  </select>
+</mapper>

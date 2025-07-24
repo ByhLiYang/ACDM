@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.monitioring.PositionMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.monitoring.broadingPort.BroadingPortDetail" >
+    <result column="queryDate" property="queryDate" jdbcType="TIMESTAMP" />
+    <result column="AIRLINE_CODE_IATA" property="airline_code_iata" jdbcType="VARCHAR" />
+    <result column="AIRPORTTYPE" property="airport_type" jdbcType="VARCHAR" />
+    <result column="AVGTime" property="averageTime" jdbcType="INTEGER" />
+  </resultMap>
+  <!--可使用机位查询-->
+  <select id="queryFree" parameterType="map" resultType="com.hq.acdm.model.monitoring.position.availablePosition"  >
+    SELECT STAND,
+    STARTTIME,
+    TIMES,
+    TERMINAL,
+    IS_REMOTE,
+    AIRPORTTYPE,
+    TO_CHAR(
+    CASE
+    WHEN(ENDTIME    >STATUS_START
+    AND STATUS_START>'$ENDTIME')
+    THEN STATUS_START
+    ELSE ENDTIME
+    END,'HH24:MI') ENDTIME
+    FROM
+    (SELECT T1.STAND,
+    TO_CHAR(
+    CASE
+    WHEN(T1.TO &lt; '$BEGTIME')
+    THEN '$BEGTIME'
+    ELSE T1.TO
+    END,'HH24:MI') STARTTIME,
+    (
+    CASE
+    WHEN(DATE(T2.TI)>DATE('$ENDTIME'))
+    THEN DATE('$ENDTIME')
+    ||' 23:59:59'
+    ELSE T2.TI
+    END) ENDTIME,
+    timestampdiff(4,CHAR(TIMESTAMP(
+    CASE
+    WHEN(DATE(T2.TI)>DATE('$ENDTIME'))
+    THEN DATE('$ENDTIME')
+    ||' 23:59:59'
+    ELSE T2.TI
+    END) - TIMESTAMP(
+    CASE
+    WHEN(T1.TO &lt; '$BEGTIME')
+    THEN '$BEGTIME'
+    ELSE T1.TO
+    END))) TIMES,
+    T3.TERMINAL,
+    T3.IS_REMOTE,
+    T3.DESCRIPTION AIRPORTTYPE,
+    T3.STATUS_START,
+    T3.STATUS_END
+    FROM
+    (SELECT COALESCE(TO, '$BEGTIME') TO,
+    COALESCE(TI, '$BEGTIME') TI,
+    STAND
+    FROM
+    (SELECT MAX(OUTTIME) TO,
+    MAX(INTIME) TI,
+    STAND
+    FROM V_UTIL_STAND
+    WHERE (OUTTIME &lt;= '$BEGTIME'
+    AND INTIME     IS NULL)
+    OR (INTIME     &lt;= '$BEGTIME'
+    AND OUTTIME    IS NULL)
+    OR (INTIME     IS NULL
+    AND OUTTIME    IS NULL)
+    GROUP BY STAND
+    )
+    WHERE TO > TI
+    OR TI   IS NULL
+    ) T1,
+    (SELECT COALESCE(TO, '$ENDTIME') TO,
+    COALESCE(TI, DATE('$ENDTIME')
+    ||' 23:59:59') TI,
+    STAND
+    FROM
+    (SELECT MIN(OUTTIME) TO,
+    MIN(INTIME) TI,
+    STAND
+    FROM V_UTIL_STAND
+    WHERE (OUTTIME >= '$BEGTIME'
+    AND INTIME     IS NULL)
+    OR (INTIME     >= '$BEGTIME'
+    AND OUTTIME    IS NULL)
+    OR (INTIME     IS NULL
+    AND OUTTIME    IS NULL)
+    GROUP BY STAND
+    )
+    WHERE (TI >= '$ENDTIME'
+    AND (TO    > TI
+    OR TO     IS NULL))
+    OR (TI    IS NULL
+    AND TO    IS NULL)
+    ) T2,
+    db2inst2.STAND T3
+    WHERE T1.STAND = T2.STAND
+    AND T1.STAND   = T3.STAND
+
+  </select>
+
+  <!--机位使用明细  视图里注销了一句话，不然报无效数字-->
+  <select id="queryDetail" parameterType="map" resultType="com.hq.acdm.model.monitoring.position.availablePosition"  >
+select airline_code_iata,stand,sum(timesum) timesum,sum(flicnt) USEDTIMES,to_char(operational_date,'yyyy-MM-dd') operational_date from V_USEDSTAND_DETAILS
+where 1=1
+ <if test="params.startDate !=null and params.startDate != ''">
+    and  operational_date >=to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')
+ </if>
+    <if test="params.endDate !=null and params.endDate != ''">
+      and  operational_date &lt;=to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')
+    </if>
+<if test="params.airCompany !=null and params.airCompany != ''">
+  and airline_code_iata=#{params.airCompany,jdbcType=VARCHAR}
+</if>
+<if test="params.stand !=null and params.stand != ''">
+   and stand=#{params.stand,jdbcType=VARCHAR}
+</if>
+group by stand,airline_code_iata,to_char(operational_date,'yyyy-MM-dd') order by airline_code_iata,stand
+
+  </select>
+  <!--机位使用明细  视图里注销了一句话，不然报无效数字-->
+  <select id="querySummary" parameterType="map" resultType="com.hq.acdm.model.monitoring.position.availablePosition"  >
+    select airline_code_iata,sum(timesum) timesum,sum(flicnt) USEDTIMES,to_char(operational_date,'yyyy-MM-dd') operational_date from V_USEDSTAND_DETAILS
+    where 1=1
+    <if test="params.startDate !=null and params.startDate != ''">
+      and  operational_date >=to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')
+    </if>
+    <if test="params.endDate !=null and params.endDate != ''">
+      and  operational_date &lt;=to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')
+    </if>
+    <if test="params.airCompany !=null and params.airCompany != ''">
+      and airline_code_iata=#{params.airCompany,jdbcType=VARCHAR}
+    </if>
+    <if test="params.stand !=null and params.stand != ''">
+      and stand=#{params.stand,jdbcType=VARCHAR}
+    </if>
+    group by airline_code_iata,to_char(operational_date,'yyyy-MM-dd') order by airline_code_iata
+</select>
+  <!--远机位使用明细  视图里注销了一句话，不然报无效数字-->
+  <select id="queryFar" parameterType="map" resultType="com.hq.acdm.model.monitoring.position.farArea"  >
+    select count(flight_no_iata) flight_count,areaid,sum(pax_num)pax_num,sum(max_num)max_num,sobt_date,high_hour_code high_hour,high_flight_nums,max_num HIGH_MAX_NUMS from V_REMOTEWAITINGHOURSE_NEW_2
+    where 1=1
+    <if test="params.startDate !=null and params.startDate != ''">
+      and  sobt >=to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')
+    </if>
+    <if test="params.endDate !=null and params.endDate != ''">
+      and  sobt &lt;=to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')
+    </if>
+    <if test="params.airCompany !=null and params.airCompany != ''">
+      and airline_code_iata=#{params.airCompany,jdbcType=VARCHAR}
+    </if>
+    group by areaid,sobt_date,high_hour_code,high_flight_nums,max_num
+  </select>
+</mapper>

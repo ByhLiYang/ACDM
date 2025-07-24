@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.coordinatedOprt.TEdResponseMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.vo.coordinatedOprt.TEdResponse" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="ED_ID" property="edId" jdbcType="VARCHAR" />
+    <result column="LEVEL" property="level" jdbcType="VARCHAR" />
+    <result column="FACTORS_PERIOD" property="factorsPeriod" jdbcType="VARCHAR" />
+    <result column="DESCEND_CAPACITY" property="descendCapacity" jdbcType="VARCHAR" />
+    <result column="CURDATE_PLANA" property="curdatePlana" jdbcType="VARCHAR" />
+    <result column="CURDATE_PLAND" property="curdatePland" jdbcType="VARCHAR" />
+    <result column="CURTIME_PLANA" property="curtimePlana" jdbcType="VARCHAR" />
+    <result column="CURTIME_PLAND" property="curtimePland" jdbcType="VARCHAR" />
+    <result column="EXECUTED_A" property="executedA" jdbcType="VARCHAR" />
+    <result column="EXECUTED_D" property="executedD" jdbcType="VARCHAR" />
+    <result column="CANCELED_A" property="canceledA" jdbcType="VARCHAR" />
+    <result column="CANCELED_D" property="canceledD" jdbcType="VARCHAR" />
+    <result column="RETURN_ALTERNATE" property="returnAlternate" jdbcType="VARCHAR" />
+    <result column="HOUR_PLANA" property="hourPlana" jdbcType="VARCHAR" />
+    <result column="HOUR_ACTUALA" property="hourActuala" jdbcType="VARCHAR" />
+    <result column="HOUR_PLAND" property="hourPland" jdbcType="VARCHAR" />
+    <result column="HOUR_ACTUALD" property="hourActuald" jdbcType="VARCHAR" />
+    <result column="FREE_STAND" property="freeStand" jdbcType="VARCHAR" />
+    <result column="DELAY_RATIO" property="delayRatio" jdbcType="VARCHAR" />
+    <result column="DELAY_FLNO" property="delayFlno" jdbcType="VARCHAR" />
+    <result column="DCLS_RATIO" property="dclsRatio" jdbcType="VARCHAR" />
+    <result column="DCLS_FLNO" property="dclsFlno" jdbcType="VARCHAR" />
+    <result column="EXECUTIVE_CDTN" property="executiveCdtn" jdbcType="VARCHAR" />
+    <result column="SPECIAL_PLANE" property="specialPlane" jdbcType="VARCHAR" />
+    <result column="TERMINAL_ORDER" property="terminalOrder" jdbcType="VARCHAR" />
+    <result column="MATTERS_COORDINATED" property="mattersCoordinated" jdbcType="VARCHAR" />
+    <result column="OTHER_SPECIAL" property="otherSpecial" jdbcType="VARCHAR" />
+    <result column="CURDATE_MANAGER" property="curdateManager" jdbcType="VARCHAR" />
+    <result column="CURDATE_MANAGER_PHONE" property="curdateManagerPhone" jdbcType="VARCHAR" />
+    <result column="CURDATE_APMNG" property="curdateApmng" jdbcType="VARCHAR" />
+    <result column="CURDATE_APMNG_PHONE" property="curdateApmngPhone" jdbcType="VARCHAR" />
+    <result column="PREPARER" property="preparer" jdbcType="VARCHAR" />
+    <result column="FILLING_TIME" property="fillingTime" jdbcType="TIMESTAMP" />
+    <result column="CUTOFF_TIME" property="cutoffTime" jdbcType="TIMESTAMP" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, ED_ID, LEVEL, FACTORS_PERIOD, DESCEND_CAPACITY, CURDATE_PLANA, CURDATE_PLAND, 
+    CURTIME_PLANA, CURTIME_PLAND, EXECUTED_A, EXECUTED_D, CANCELED_A, CANCELED_D, RETURN_ALTERNATE, 
+    HOUR_PLANA, HOUR_ACTUALA, HOUR_PLAND, HOUR_ACTUALD, FREE_STAND, DELAY_RATIO, DELAY_FLNO, 
+    DCLS_RATIO, DCLS_FLNO, EXECUTIVE_CDTN, SPECIAL_PLANE, TERMINAL_ORDER, MATTERS_COORDINATED, 
+    OTHER_SPECIAL, CURDATE_MANAGER, CURDATE_MANAGER_PHONE, CURDATE_APMNG, CURDATE_APMNG_PHONE, 
+    PREPARER, FILLING_TIME, CUTOFF_TIME, REMARK, CREATE_TIME, UPDATE_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.vo.coordinatedOprt.TEdResponseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_ED_RESPONSE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_ED_RESPONSE
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_ED_RESPONSE
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.vo.coordinatedOprt.TEdResponseExample" >
+    delete from T_ED_RESPONSE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.vo.coordinatedOprt.TEdResponse" >
+    insert into T_ED_RESPONSE (ID, ED_ID, LEVEL, 
+      FACTORS_PERIOD, DESCEND_CAPACITY, CURDATE_PLANA, 
+      CURDATE_PLAND, CURTIME_PLANA, CURTIME_PLAND, 
+      EXECUTED_A, EXECUTED_D, CANCELED_A, 
+      CANCELED_D, RETURN_ALTERNATE, HOUR_PLANA, 
+      HOUR_ACTUALA, HOUR_PLAND, HOUR_ACTUALD, 
+      FREE_STAND, DELAY_RATIO, DELAY_FLNO, 
+      DCLS_RATIO, DCLS_FLNO, EXECUTIVE_CDTN, 
+      SPECIAL_PLANE, TERMINAL_ORDER, MATTERS_COORDINATED, 
+      OTHER_SPECIAL, CURDATE_MANAGER, CURDATE_MANAGER_PHONE, 
+      CURDATE_APMNG, CURDATE_APMNG_PHONE, PREPARER, 
+      FILLING_TIME, CUTOFF_TIME, REMARK, 
+      CREATE_TIME, UPDATE_TIME)
+    values (#{id,jdbcType=VARCHAR}, #{edId,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, 
+      #{factorsPeriod,jdbcType=VARCHAR}, #{descendCapacity,jdbcType=VARCHAR}, #{curdatePlana,jdbcType=VARCHAR}, 
+      #{curdatePland,jdbcType=VARCHAR}, #{curtimePlana,jdbcType=VARCHAR}, #{curtimePland,jdbcType=VARCHAR}, 
+      #{executedA,jdbcType=VARCHAR}, #{executedD,jdbcType=VARCHAR}, #{canceledA,jdbcType=VARCHAR}, 
+      #{canceledD,jdbcType=VARCHAR}, #{returnAlternate,jdbcType=VARCHAR}, #{hourPlana,jdbcType=VARCHAR}, 
+      #{hourActuala,jdbcType=VARCHAR}, #{hourPland,jdbcType=VARCHAR}, #{hourActuald,jdbcType=VARCHAR}, 
+      #{freeStand,jdbcType=VARCHAR}, #{delayRatio,jdbcType=VARCHAR}, #{delayFlno,jdbcType=VARCHAR}, 
+      #{dclsRatio,jdbcType=VARCHAR}, #{dclsFlno,jdbcType=VARCHAR}, #{executiveCdtn,jdbcType=VARCHAR}, 
+      #{specialPlane,jdbcType=VARCHAR}, #{terminalOrder,jdbcType=VARCHAR}, #{mattersCoordinated,jdbcType=VARCHAR}, 
+      #{otherSpecial,jdbcType=VARCHAR}, #{curdateManager,jdbcType=VARCHAR}, #{curdateManagerPhone,jdbcType=VARCHAR}, 
+      #{curdateApmng,jdbcType=VARCHAR}, #{curdateApmngPhone,jdbcType=VARCHAR}, #{preparer,jdbcType=VARCHAR},
+      #{fillingTime,jdbcType=TIMESTAMP}, #{cutoffTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.vo.coordinatedOprt.TEdResponse" >
+    insert into T_ED_RESPONSE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="edId != null" >
+        ED_ID,
+      </if>
+      <if test="level != null" >
+        LEVEL,
+      </if>
+      <if test="factorsPeriod != null" >
+        FACTORS_PERIOD,
+      </if>
+      <if test="descendCapacity != null" >
+        DESCEND_CAPACITY,
+      </if>
+      <if test="curdatePlana != null" >
+        CURDATE_PLANA,
+      </if>
+      <if test="curdatePland != null" >
+        CURDATE_PLAND,
+      </if>
+      <if test="curtimePlana != null" >
+        CURTIME_PLANA,
+      </if>
+      <if test="curtimePland != null" >
+        CURTIME_PLAND,
+      </if>
+      <if test="executedA != null" >
+        EXECUTED_A,
+      </if>
+      <if test="executedD != null" >
+        EXECUTED_D,
+      </if>
+      <if test="canceledA != null" >
+        CANCELED_A,
+      </if>
+      <if test="canceledD != null" >
+        CANCELED_D,
+      </if>
+      <if test="returnAlternate != null" >
+        RETURN_ALTERNATE,
+      </if>
+      <if test="hourPlana != null" >
+        HOUR_PLANA,
+      </if>
+      <if test="hourActuala != null" >
+        HOUR_ACTUALA,
+      </if>
+      <if test="hourPland != null" >
+        HOUR_PLAND,
+      </if>
+      <if test="hourActuald != null" >
+        HOUR_ACTUALD,
+      </if>
+      <if test="freeStand != null" >
+        FREE_STAND,
+      </if>
+      <if test="delayRatio != null" >
+        DELAY_RATIO,
+      </if>
+      <if test="delayFlno != null" >
+        DELAY_FLNO,
+      </if>
+      <if test="dclsRatio != null" >
+        DCLS_RATIO,
+      </if>
+      <if test="dclsFlno != null" >
+        DCLS_FLNO,
+      </if>
+      <if test="executiveCdtn != null" >
+        EXECUTIVE_CDTN,
+      </if>
+      <if test="specialPlane != null" >
+        SPECIAL_PLANE,
+      </if>
+      <if test="terminalOrder != null" >
+        TERMINAL_ORDER,
+      </if>
+      <if test="mattersCoordinated != null" >
+        MATTERS_COORDINATED,
+      </if>
+      <if test="otherSpecial != null" >
+        OTHER_SPECIAL,
+      </if>
+      <if test="curdateManager != null" >
+        CURDATE_MANAGER,
+      </if>
+      <if test="curdateManagerPhone != null" >
+        CURDATE_MANAGER_PHONE,
+      </if>
+      <if test="curdateApmng != null" >
+        CURDATE_APMNG,
+      </if>
+      <if test="curdateApmngPhone != null" >
+        CURDATE_APMNG_PHONE,
+      </if>
+      <if test="preparer != null" >
+        PREPARER,
+      </if>
+      <if test="fillingTime != null" >
+        FILLING_TIME,
+      </if>
+      <if test="cutoffTime != null" >
+        CUTOFF_TIME,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="edId != null" >
+        #{edId,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="factorsPeriod != null" >
+        #{factorsPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="descendCapacity != null" >
+        #{descendCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="curdatePlana != null" >
+        #{curdatePlana,jdbcType=VARCHAR},
+      </if>
+      <if test="curdatePland != null" >
+        #{curdatePland,jdbcType=VARCHAR},
+      </if>
+      <if test="curtimePlana != null" >
+        #{curtimePlana,jdbcType=VARCHAR},
+      </if>
+      <if test="curtimePland != null" >
+        #{curtimePland,jdbcType=VARCHAR},
+      </if>
+      <if test="executedA != null" >
+        #{executedA,jdbcType=VARCHAR},
+      </if>
+      <if test="executedD != null" >
+        #{executedD,jdbcType=VARCHAR},
+      </if>
+      <if test="canceledA != null" >
+        #{canceledA,jdbcType=VARCHAR},
+      </if>
+      <if test="canceledD != null" >
+        #{canceledD,jdbcType=VARCHAR},
+      </if>
+      <if test="returnAlternate != null" >
+        #{returnAlternate,jdbcType=VARCHAR},
+      </if>
+      <if test="hourPlana != null" >
+        #{hourPlana,jdbcType=VARCHAR},
+      </if>
+      <if test="hourActuala != null" >
+        #{hourActuala,jdbcType=VARCHAR},
+      </if>
+      <if test="hourPland != null" >
+        #{hourPland,jdbcType=VARCHAR},
+      </if>
+      <if test="hourActuald != null" >
+        #{hourActuald,jdbcType=VARCHAR},
+      </if>
+      <if test="freeStand != null" >
+        #{freeStand,jdbcType=VARCHAR},
+      </if>
+      <if test="delayRatio != null" >
+        #{delayRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="delayFlno != null" >
+        #{delayFlno,jdbcType=VARCHAR},
+      </if>
+      <if test="dclsRatio != null" >
+        #{dclsRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="dclsFlno != null" >
+        #{dclsFlno,jdbcType=VARCHAR},
+      </if>
+      <if test="executiveCdtn != null" >
+        #{executiveCdtn,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPlane != null" >
+        #{specialPlane,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalOrder != null" >
+        #{terminalOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="mattersCoordinated != null" >
+        #{mattersCoordinated,jdbcType=VARCHAR},
+      </if>
+      <if test="otherSpecial != null" >
+        #{otherSpecial,jdbcType=VARCHAR},
+      </if>
+      <if test="curdateManager != null" >
+        #{curdateManager,jdbcType=VARCHAR},
+      </if>
+      <if test="curdateManagerPhone != null" >
+        #{curdateManagerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="curdateApmng != null" >
+        #{curdateApmng,jdbcType=VARCHAR},
+      </if>
+      <if test="curdateApmngPhone != null" >
+        #{curdateApmngPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="preparer != null" >
+        #{preparer,jdbcType=VARCHAR},
+      </if>
+      <if test="fillingTime != null" >
+        #{fillingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cutoffTime != null" >
+        #{cutoffTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.vo.coordinatedOprt.TEdResponseExample" resultType="java.lang.Integer" >
+    select count(*) from T_ED_RESPONSE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_ED_RESPONSE
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.edId != null" >
+        ED_ID = #{record.edId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.level != null" >
+        LEVEL = #{record.level,jdbcType=VARCHAR},
+      </if>
+      <if test="record.factorsPeriod != null" >
+        FACTORS_PERIOD = #{record.factorsPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.descendCapacity != null" >
+        DESCEND_CAPACITY = #{record.descendCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.curdatePlana != null" >
+        CURDATE_PLANA = #{record.curdatePlana,jdbcType=VARCHAR},
+      </if>
+      <if test="record.curdatePland != null" >
+        CURDATE_PLAND = #{record.curdatePland,jdbcType=VARCHAR},
+      </if>
+      <if test="record.curtimePlana != null" >
+        CURTIME_PLANA = #{record.curtimePlana,jdbcType=VARCHAR},
+      </if>
+      <if test="record.curtimePland != null" >
+        CURTIME_PLAND = #{record.curtimePland,jdbcType=VARCHAR},
+      </if>
+      <if test="record.executedA != null" >
+        EXECUTED_A = #{record.executedA,jdbcType=VARCHAR},
+      </if>
+      <if test="record.executedD != null" >
+        EXECUTED_D = #{record.executedD,jdbcType=VARCHAR},
+      </if>
+      <if test="record.canceledA != null" >
+        CANCELED_A = #{record.canceledA,jdbcType=VARCHAR},
+      </if>
+      <if test="record.canceledD != null" >
+        CANCELED_D = #{record.canceledD,jdbcType=VARCHAR},
+      </if>
+      <if test="record.returnAlternate != null" >
+        RETURN_ALTERNATE = #{record.returnAlternate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hourPlana != null" >
+        HOUR_PLANA = #{record.hourPlana,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hourActuala != null" >
+        HOUR_ACTUALA = #{record.hourActuala,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hourPland != null" >
+        HOUR_PLAND = #{record.hourPland,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hourActuald != null" >
+        HOUR_ACTUALD = #{record.hourActuald,jdbcType=VARCHAR},
+      </if>
+      <if test="record.freeStand != null" >
+        FREE_STAND = #{record.freeStand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delayRatio != null" >
+        DELAY_RATIO = #{record.delayRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delayFlno != null" >
+        DELAY_FLNO = #{record.delayFlno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dclsRatio != null" >
+        DCLS_RATIO = #{record.dclsRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dclsFlno != null" >
+        DCLS_FLNO = #{record.dclsFlno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.executiveCdtn != null" >
+        EXECUTIVE_CDTN = #{record.executiveCdtn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specialPlane != null" >
+        SPECIAL_PLANE = #{record.specialPlane,jdbcType=VARCHAR},
+      </if>
+      <if test="record.terminalOrder != null" >
+        TERMINAL_ORDER = #{record.terminalOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mattersCoordinated != null" >
+        MATTERS_COORDINATED = #{record.mattersCoordinated,jdbcType=VARCHAR},
+      </if>
+      <if test="record.otherSpecial != null" >
+        OTHER_SPECIAL = #{record.otherSpecial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.curdateManager != null" >
+        CURDATE_MANAGER = #{record.curdateManager,jdbcType=VARCHAR},
+      </if>
+      <if test="record.curdateManagerPhone != null" >
+        CURDATE_MANAGER_PHONE = #{record.curdateManagerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.curdateApmng != null" >
+        CURDATE_APMNG = #{record.curdateApmng,jdbcType=VARCHAR},
+      </if>
+      <if test="record.curdateApmngPhone != null" >
+        CURDATE_APMNG_PHONE = #{record.curdateApmngPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.preparer != null" >
+        PREPARER = #{record.preparer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fillingTime != null" >
+        FILLING_TIME = #{record.fillingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.cutoffTime != null" >
+        CUTOFF_TIME = #{record.cutoffTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null" >
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_ED_RESPONSE
+    set ID = #{record.id,jdbcType=VARCHAR},
+      ED_ID = #{record.edId,jdbcType=VARCHAR},
+      LEVEL = #{record.level,jdbcType=VARCHAR},
+      FACTORS_PERIOD = #{record.factorsPeriod,jdbcType=VARCHAR},
+      DESCEND_CAPACITY = #{record.descendCapacity,jdbcType=VARCHAR},
+      CURDATE_PLANA = #{record.curdatePlana,jdbcType=VARCHAR},
+      CURDATE_PLAND = #{record.curdatePland,jdbcType=VARCHAR},
+      CURTIME_PLANA = #{record.curtimePlana,jdbcType=VARCHAR},
+      CURTIME_PLAND = #{record.curtimePland,jdbcType=VARCHAR},
+      EXECUTED_A = #{record.executedA,jdbcType=VARCHAR},
+      EXECUTED_D = #{record.executedD,jdbcType=VARCHAR},
+      CANCELED_A = #{record.canceledA,jdbcType=VARCHAR},
+      CANCELED_D = #{record.canceledD,jdbcType=VARCHAR},
+      RETURN_ALTERNATE = #{record.returnAlternate,jdbcType=VARCHAR},
+      HOUR_PLANA = #{record.hourPlana,jdbcType=VARCHAR},
+      HOUR_ACTUALA = #{record.hourActuala,jdbcType=VARCHAR},
+      HOUR_PLAND = #{record.hourPland,jdbcType=VARCHAR},
+      HOUR_ACTUALD = #{record.hourActuald,jdbcType=VARCHAR},
+      FREE_STAND = #{record.freeStand,jdbcType=VARCHAR},
+      DELAY_RATIO = #{record.delayRatio,jdbcType=VARCHAR},
+      DELAY_FLNO = #{record.delayFlno,jdbcType=VARCHAR},
+      DCLS_RATIO = #{record.dclsRatio,jdbcType=VARCHAR},
+      DCLS_FLNO = #{record.dclsFlno,jdbcType=VARCHAR},
+      EXECUTIVE_CDTN = #{record.executiveCdtn,jdbcType=VARCHAR},
+      SPECIAL_PLANE = #{record.specialPlane,jdbcType=VARCHAR},
+      TERMINAL_ORDER = #{record.terminalOrder,jdbcType=VARCHAR},
+      MATTERS_COORDINATED = #{record.mattersCoordinated,jdbcType=VARCHAR},
+      OTHER_SPECIAL = #{record.otherSpecial,jdbcType=VARCHAR},
+      CURDATE_MANAGER = #{record.curdateManager,jdbcType=VARCHAR},
+      CURDATE_MANAGER_PHONE = #{record.curdateManagerPhone,jdbcType=VARCHAR},
+      CURDATE_APMNG = #{record.curdateApmng,jdbcType=VARCHAR},
+      CURDATE_APMNG_PHONE = #{record.curdateApmngPhone,jdbcType=VARCHAR},
+      PREPARER = #{record.preparer,jdbcType=VARCHAR},
+      FILLING_TIME = #{record.fillingTime,jdbcType=TIMESTAMP},
+      CUTOFF_TIME = #{record.cutoffTime,jdbcType=TIMESTAMP},
+      REMARK = #{record.remark,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.vo.coordinatedOprt.TEdResponse" >
+    update T_ED_RESPONSE
+    <set >
+      <if test="edId != null" >
+        ED_ID = #{edId,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        LEVEL = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="factorsPeriod != null" >
+        FACTORS_PERIOD = #{factorsPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="descendCapacity != null" >
+        DESCEND_CAPACITY = #{descendCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="curdatePlana != null" >
+        CURDATE_PLANA = #{curdatePlana,jdbcType=VARCHAR},
+      </if>
+      <if test="curdatePland != null" >
+        CURDATE_PLAND = #{curdatePland,jdbcType=VARCHAR},
+      </if>
+      <if test="curtimePlana != null" >
+        CURTIME_PLANA = #{curtimePlana,jdbcType=VARCHAR},
+      </if>
+      <if test="curtimePland != null" >
+        CURTIME_PLAND = #{curtimePland,jdbcType=VARCHAR},
+      </if>
+      <if test="executedA != null" >
+        EXECUTED_A = #{executedA,jdbcType=VARCHAR},
+      </if>
+      <if test="executedD != null" >
+        EXECUTED_D = #{executedD,jdbcType=VARCHAR},
+      </if>
+      <if test="canceledA != null" >
+        CANCELED_A = #{canceledA,jdbcType=VARCHAR},
+      </if>
+      <if test="canceledD != null" >
+        CANCELED_D = #{canceledD,jdbcType=VARCHAR},
+      </if>
+      <if test="returnAlternate != null" >
+        RETURN_ALTERNATE = #{returnAlternate,jdbcType=VARCHAR},
+      </if>
+      <if test="hourPlana != null" >
+        HOUR_PLANA = #{hourPlana,jdbcType=VARCHAR},
+      </if>
+      <if test="hourActuala != null" >
+        HOUR_ACTUALA = #{hourActuala,jdbcType=VARCHAR},
+      </if>
+      <if test="hourPland != null" >
+        HOUR_PLAND = #{hourPland,jdbcType=VARCHAR},
+      </if>
+      <if test="hourActuald != null" >
+        HOUR_ACTUALD = #{hourActuald,jdbcType=VARCHAR},
+      </if>
+      <if test="freeStand != null" >
+        FREE_STAND = #{freeStand,jdbcType=VARCHAR},
+      </if>
+      <if test="delayRatio != null" >
+        DELAY_RATIO = #{delayRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="delayFlno != null" >
+        DELAY_FLNO = #{delayFlno,jdbcType=VARCHAR},
+      </if>
+      <if test="dclsRatio != null" >
+        DCLS_RATIO = #{dclsRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="dclsFlno != null" >
+        DCLS_FLNO = #{dclsFlno,jdbcType=VARCHAR},
+      </if>
+      <if test="executiveCdtn != null" >
+        EXECUTIVE_CDTN = #{executiveCdtn,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPlane != null" >
+        SPECIAL_PLANE = #{specialPlane,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalOrder != null" >
+        TERMINAL_ORDER = #{terminalOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="mattersCoordinated != null" >
+        MATTERS_COORDINATED = #{mattersCoordinated,jdbcType=VARCHAR},
+      </if>
+      <if test="otherSpecial != null" >
+        OTHER_SPECIAL = #{otherSpecial,jdbcType=VARCHAR},
+      </if>
+      <if test="curdateManager != null" >
+        CURDATE_MANAGER = #{curdateManager,jdbcType=VARCHAR},
+      </if>
+      <if test="curdateManagerPhone != null" >
+        CURDATE_MANAGER_PHONE = #{curdateManagerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="curdateApmng != null" >
+        CURDATE_APMNG = #{curdateApmng,jdbcType=VARCHAR},
+      </if>
+      <if test="curdateApmngPhone != null" >
+        CURDATE_APMNG_PHONE = #{curdateApmngPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="preparer != null" >
+        PREPARER = #{preparer,jdbcType=VARCHAR},
+      </if>
+      <if test="fillingTime != null" >
+        FILLING_TIME = #{fillingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cutoffTime != null" >
+        CUTOFF_TIME = #{cutoffTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.vo.coordinatedOprt.TEdResponse" >
+    update T_ED_RESPONSE
+    set ED_ID = #{edId,jdbcType=VARCHAR},
+      LEVEL = #{level,jdbcType=VARCHAR},
+      FACTORS_PERIOD = #{factorsPeriod,jdbcType=VARCHAR},
+      DESCEND_CAPACITY = #{descendCapacity,jdbcType=VARCHAR},
+      CURDATE_PLANA = #{curdatePlana,jdbcType=VARCHAR},
+      CURDATE_PLAND = #{curdatePland,jdbcType=VARCHAR},
+      CURTIME_PLANA = #{curtimePlana,jdbcType=VARCHAR},
+      CURTIME_PLAND = #{curtimePland,jdbcType=VARCHAR},
+      EXECUTED_A = #{executedA,jdbcType=VARCHAR},
+      EXECUTED_D = #{executedD,jdbcType=VARCHAR},
+      CANCELED_A = #{canceledA,jdbcType=VARCHAR},
+      CANCELED_D = #{canceledD,jdbcType=VARCHAR},
+      RETURN_ALTERNATE = #{returnAlternate,jdbcType=VARCHAR},
+      HOUR_PLANA = #{hourPlana,jdbcType=VARCHAR},
+      HOUR_ACTUALA = #{hourActuala,jdbcType=VARCHAR},
+      HOUR_PLAND = #{hourPland,jdbcType=VARCHAR},
+      HOUR_ACTUALD = #{hourActuald,jdbcType=VARCHAR},
+      FREE_STAND = #{freeStand,jdbcType=VARCHAR},
+      DELAY_RATIO = #{delayRatio,jdbcType=VARCHAR},
+      DELAY_FLNO = #{delayFlno,jdbcType=VARCHAR},
+      DCLS_RATIO = #{dclsRatio,jdbcType=VARCHAR},
+      DCLS_FLNO = #{dclsFlno,jdbcType=VARCHAR},
+      EXECUTIVE_CDTN = #{executiveCdtn,jdbcType=VARCHAR},
+      SPECIAL_PLANE = #{specialPlane,jdbcType=VARCHAR},
+      TERMINAL_ORDER = #{terminalOrder,jdbcType=VARCHAR},
+      MATTERS_COORDINATED = #{mattersCoordinated,jdbcType=VARCHAR},
+      OTHER_SPECIAL = #{otherSpecial,jdbcType=VARCHAR},
+      CURDATE_MANAGER = #{curdateManager,jdbcType=VARCHAR},
+      CURDATE_MANAGER_PHONE = #{curdateManagerPhone,jdbcType=VARCHAR},
+      CURDATE_APMNG = #{curdateApmng,jdbcType=VARCHAR},
+      CURDATE_APMNG_PHONE = #{curdateApmngPhone,jdbcType=VARCHAR},
+      PREPARER = #{preparer,jdbcType=VARCHAR},
+      FILLING_TIME = #{fillingTime,jdbcType=TIMESTAMP},
+      CUTOFF_TIME = #{cutoffTime,jdbcType=TIMESTAMP},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--扫描DAO下的接口-->
+<mapper namespace="com.hq.acdm.dao.statistics.MaintenanceMachinePositionMapper" >
+
+
+    <!--取得机位列表-->
+  <select id="getSMMStandList" resultType="java.lang.String"  >
+      <![CDATA[
+                SELECT STAND FROM (SELECT STAND FROM STAND WHERE STAND_LAYOUT='Active' UNION ALL SELECT STAND FROM STAND_ADD) ORDER BY STAND
+            ]]>
+  </select>
+
+    <!--根据机位号、航站楼 取得机位所有记录-->
+    <select id="getSMMAllRecord" resultType="com.hq.acdm.model.statistics.maintenanceMachinePosition.CameraStand"  >
+
+                SELECT
+                    STAND,
+                    TERMINAL,
+                    TYPE,
+                    STATUS_START,
+                    STATUS_END,
+                    STATUS_REASON
+                FROM
+                    (
+                        SELECT
+                            STAND,
+                            'T' || TERMINAL TERMINAL,
+                            0 TYPE,
+                            STATUS_START,
+                            STATUS_END,
+                            STATUS_REASON
+                        FROM
+                            STAND
+                        WHERE
+                            STAND_LAYOUT = 'Active'
+                        UNION ALL
+                            SELECT
+                                STAND,
+                                'T' || TERMINAL TERMINAL,
+                                TYPE,
+                                STATUS_START,
+                                STATUS_END,
+                                STATUS_REASON
+                            FROM
+                                STAND_ADD
+                    )
+                WHERE
+                    1 = 1
+                  <if test="params.standno != null and params.standno != ''">
+                        and STAND= #{params.standno}
+                  </if>
+
+                 <if test="params.terminal != null and params.terminal != ''">
+                        and TERMINAL = #{params.terminal}
+                 </if>
+                   ORDER BY STAND
+
+
+  </select>
+
+    <!--新增机位-->
+    <insert id="addStand" parameterType="com.hq.acdm.model.statistics.maintenanceMachinePosition.StandAdd" useGeneratedKeys="false" keyProperty="serialNumber" >
+        <![CDATA[
+               INSERT INTO STAND_ADD
+                    (STAND,STAND_LAYOUT,TERMINAL,TYPE)
+              values (#{STAND,jdbcType=VARCHAR}, 'Active', #{TERMINAL,jdbcType=VARCHAR}, #{TYPE,jdbcType=INTEGER} )
+      ]]>
+
+    </insert>
+
+    <!--删除机位-->
+    <delete id="delStand" parameterType="java.lang.String" >
+        <![CDATA[
+               DELETE FROM STAND_ADD WHERE STAND=#{standno}
+      ]]>
+  </delete>
+
+    <!--更新基础机位-->
+    <delete id="updateStand" parameterType="map" >
+        <![CDATA[
+              UPDATE STAND SET STATUS_REASON=#{reason,jdbcType=VARCHAR}, STATUS_START=#{begtime,jdbcType=TIMESTAMP}, STATUS_END=#{endtime,jdbcType=TIMESTAMP} WHERE STAND=#{standno,jdbcType=VARCHAR}
+      ]]>
+  </delete>
+
+    <!--更新非基础机位-->
+    <delete id="updateStandAdd" parameterType="map" >
+        <![CDATA[
+              UPDATE STAND_ADD SET TERMINAL=#{terminal,jdbcType=VARCHAR}, TYPE=#{type,jdbcType=INTEGER},STATUS_REASON=#{reason,jdbcType=VARCHAR}, STATUS_START=#{begtime,jdbcType=TIMESTAMP}, STATUS_END=#{endtime,jdbcType=TIMESTAMP}  WHERE STAND=#{standno,jdbcType=VARCHAR}
+      ]]>
+  </delete>
+
+
+
+
+
+
+
+</mapper>

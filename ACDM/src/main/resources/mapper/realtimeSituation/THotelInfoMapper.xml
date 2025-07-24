@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.THotelInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.THotelInfo" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="HOTEL_NAME" property="hotelName" jdbcType="VARCHAR" />
+    <result column="HOTEL_ADDRES" property="hotelAddres" jdbcType="VARCHAR" />
+    <result column="HOTEL_TEL" property="hotelTel" jdbcType="VARCHAR" />
+    <result column="HOTEL_ROOM_TYPE" property="hotelRoomType" jdbcType="VARCHAR" />
+    <result column="HOTEL_ROOM_NUM" property="hotelRoomNum" jdbcType="BIGINT" />
+    <result column="HOTEL_PRICE" property="hotelPrice" jdbcType="BIGINT" />
+    <result column="HOTEL_PEOPLE_NUM" property="hotelPeopleNum" jdbcType="BIGINT" />
+    <result column="HOTEL_MANAGER_TEL" property="hotelManagerTel" jdbcType="VARCHAR" />
+    <result column="RMK" property="rmk" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="TIMESTAMP" />
+    <result column="CREATE_EMP" property="createEmp" jdbcType="VARCHAR" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_EMP" property="updateEmp" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, HOTEL_NAME, HOTEL_ADDRES, HOTEL_TEL, HOTEL_ROOM_TYPE, HOTEL_ROOM_NUM, HOTEL_PRICE, 
+    HOTEL_PEOPLE_NUM, HOTEL_MANAGER_TEL, RMK, CREATE_TM, CREATE_EMP, UPDATE_TM, UPDATE_EMP
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.THotelInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_HOTEL_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_HOTEL_INFO
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_HOTEL_INFO
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.THotelInfoExample" >
+    delete from T_HOTEL_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.THotelInfo" >
+    insert into T_HOTEL_INFO (ID, HOTEL_NAME, HOTEL_ADDRES, 
+      HOTEL_TEL, HOTEL_ROOM_TYPE, HOTEL_ROOM_NUM, 
+      HOTEL_PRICE, HOTEL_PEOPLE_NUM, HOTEL_MANAGER_TEL, 
+      RMK, CREATE_TM, CREATE_EMP, 
+      UPDATE_TM, UPDATE_EMP)
+    values (#{id,jdbcType=VARCHAR}, #{hotelName,jdbcType=VARCHAR}, #{hotelAddres,jdbcType=VARCHAR}, 
+      #{hotelTel,jdbcType=VARCHAR}, #{hotelRoomType,jdbcType=VARCHAR}, #{hotelRoomNum,jdbcType=BIGINT}, 
+      #{hotelPrice,jdbcType=BIGINT}, #{hotelPeopleNum,jdbcType=BIGINT}, #{hotelManagerTel,jdbcType=VARCHAR}, 
+      #{rmk,jdbcType=VARCHAR}, #{createTm,jdbcType=TIMESTAMP}, #{createEmp,jdbcType=VARCHAR}, 
+      #{updateTm,jdbcType=TIMESTAMP}, #{updateEmp,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.THotelInfo" >
+    insert into T_HOTEL_INFO
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="hotelName != null" >
+        HOTEL_NAME,
+      </if>
+      <if test="hotelAddres != null" >
+        HOTEL_ADDRES,
+      </if>
+      <if test="hotelTel != null" >
+        HOTEL_TEL,
+      </if>
+      <if test="hotelRoomType != null" >
+        HOTEL_ROOM_TYPE,
+      </if>
+      <if test="hotelRoomNum != null" >
+        HOTEL_ROOM_NUM,
+      </if>
+      <if test="hotelPrice != null" >
+        HOTEL_PRICE,
+      </if>
+      <if test="hotelPeopleNum != null" >
+        HOTEL_PEOPLE_NUM,
+      </if>
+      <if test="hotelManagerTel != null" >
+        HOTEL_MANAGER_TEL,
+      </if>
+      <if test="rmk != null" >
+        RMK,
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM,
+      </if>
+      <if test="createEmp != null" >
+        CREATE_EMP,
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM,
+      </if>
+      <if test="updateEmp != null" >
+        UPDATE_EMP,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelName != null" >
+        #{hotelName,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelAddres != null" >
+        #{hotelAddres,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelTel != null" >
+        #{hotelTel,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelRoomType != null" >
+        #{hotelRoomType,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelRoomNum != null" >
+        #{hotelRoomNum,jdbcType=BIGINT},
+      </if>
+      <if test="hotelPrice != null" >
+        #{hotelPrice,jdbcType=BIGINT},
+      </if>
+      <if test="hotelPeopleNum != null" >
+        #{hotelPeopleNum,jdbcType=BIGINT},
+      </if>
+      <if test="hotelManagerTel != null" >
+        #{hotelManagerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="rmk != null" >
+        #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createEmp != null" >
+        #{createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTm != null" >
+        #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateEmp != null" >
+        #{updateEmp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.THotelInfoExample" resultType="java.lang.Integer" >
+    select count(*) from T_HOTEL_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_HOTEL_INFO
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hotelName != null" >
+        HOTEL_NAME = #{record.hotelName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hotelAddres != null" >
+        HOTEL_ADDRES = #{record.hotelAddres,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hotelTel != null" >
+        HOTEL_TEL = #{record.hotelTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hotelRoomType != null" >
+        HOTEL_ROOM_TYPE = #{record.hotelRoomType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hotelRoomNum != null" >
+        HOTEL_ROOM_NUM = #{record.hotelRoomNum,jdbcType=BIGINT},
+      </if>
+      <if test="record.hotelPrice != null" >
+        HOTEL_PRICE = #{record.hotelPrice,jdbcType=BIGINT},
+      </if>
+      <if test="record.hotelPeopleNum != null" >
+        HOTEL_PEOPLE_NUM = #{record.hotelPeopleNum,jdbcType=BIGINT},
+      </if>
+      <if test="record.hotelManagerTel != null" >
+        HOTEL_MANAGER_TEL = #{record.hotelManagerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rmk != null" >
+        RMK = #{record.rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTm != null" >
+        CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createEmp != null" >
+        CREATE_EMP = #{record.createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTm != null" >
+        UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateEmp != null" >
+        UPDATE_EMP = #{record.updateEmp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_HOTEL_INFO
+    set ID = #{record.id,jdbcType=VARCHAR},
+      HOTEL_NAME = #{record.hotelName,jdbcType=VARCHAR},
+      HOTEL_ADDRES = #{record.hotelAddres,jdbcType=VARCHAR},
+      HOTEL_TEL = #{record.hotelTel,jdbcType=VARCHAR},
+      HOTEL_ROOM_TYPE = #{record.hotelRoomType,jdbcType=VARCHAR},
+      HOTEL_ROOM_NUM = #{record.hotelRoomNum,jdbcType=BIGINT},
+      HOTEL_PRICE = #{record.hotelPrice,jdbcType=BIGINT},
+      HOTEL_PEOPLE_NUM = #{record.hotelPeopleNum,jdbcType=BIGINT},
+      HOTEL_MANAGER_TEL = #{record.hotelManagerTel,jdbcType=VARCHAR},
+      RMK = #{record.rmk,jdbcType=VARCHAR},
+      CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      CREATE_EMP = #{record.createEmp,jdbcType=VARCHAR},
+      UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      UPDATE_EMP = #{record.updateEmp,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.THotelInfo" >
+    update T_HOTEL_INFO
+    <set >
+      <if test="hotelName != null" >
+        HOTEL_NAME = #{hotelName,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelAddres != null" >
+        HOTEL_ADDRES = #{hotelAddres,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelTel != null" >
+        HOTEL_TEL = #{hotelTel,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelRoomType != null" >
+        HOTEL_ROOM_TYPE = #{hotelRoomType,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelRoomNum != null" >
+        HOTEL_ROOM_NUM = #{hotelRoomNum,jdbcType=BIGINT},
+      </if>
+      <if test="hotelPrice != null" >
+        HOTEL_PRICE = #{hotelPrice,jdbcType=BIGINT},
+      </if>
+      <if test="hotelPeopleNum != null" >
+        HOTEL_PEOPLE_NUM = #{hotelPeopleNum,jdbcType=BIGINT},
+      </if>
+      <if test="hotelManagerTel != null" >
+        HOTEL_MANAGER_TEL = #{hotelManagerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="rmk != null" >
+        RMK = #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createEmp != null" >
+        CREATE_EMP = #{createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateEmp != null" >
+        UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.THotelInfo" >
+    update T_HOTEL_INFO
+    set HOTEL_NAME = #{hotelName,jdbcType=VARCHAR},
+      HOTEL_ADDRES = #{hotelAddres,jdbcType=VARCHAR},
+      HOTEL_TEL = #{hotelTel,jdbcType=VARCHAR},
+      HOTEL_ROOM_TYPE = #{hotelRoomType,jdbcType=VARCHAR},
+      HOTEL_ROOM_NUM = #{hotelRoomNum,jdbcType=BIGINT},
+      HOTEL_PRICE = #{hotelPrice,jdbcType=BIGINT},
+      HOTEL_PEOPLE_NUM = #{hotelPeopleNum,jdbcType=BIGINT},
+      HOTEL_MANAGER_TEL = #{hotelManagerTel,jdbcType=VARCHAR},
+      RMK = #{rmk,jdbcType=VARCHAR},
+      CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      CREATE_EMP = #{createEmp,jdbcType=VARCHAR},
+      UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectAllTHotelInfo" resultMap="BaseResultMap" parameterType="map">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM T_HOTEL_INFO
+    WHERE 1=1
+    <if test="params.hotelName !=null and params.hotelName != ''">
+      AND HOTEL_NAME LIKE CONCAT('%',#{params.hotelName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="params.hotelAddres !=null and params.hotelAddres != ''">
+      AND HOTEL_ADDRES LIKE CONCAT('%',#{params.hotelAddres,jdbcType=VARCHAR},'%')
+    </if>
+    ORDER BY HOTEL_NAME ASC
+  </select>
+
+</mapper>

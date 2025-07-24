@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.effectAnalysis.NodeCoverageReportMapper" >
+
+  <select id="findNodeCoverageA" resultType="com.hq.acdm.vo.effectAnalysis.NodeCoverageReportVo" parameterType="map" >
+    SELECT COUNT(1) total,
+    COUNT(T.ATOT) atotA,
+    COUNT(T.ATOT)/COUNT(1) atotRateA,
+    COUNT(T.ALDT) aldt,
+    COUNT(T.ALDT)/COUNT(1) aldtRate,
+    COUNT(T.A_GRND_TSF_TM) agrndTsfTm,
+    COUNT(T.A_GRND_TSF_TM)/COUNT(1) agrndTsfTmRate,
+    COUNT(T.AIBT) aibt,
+    COUNT(T.AIBT)/COUNT(1) aibtRate,
+    COUNT(T.ARSL) arsl,
+    COUNT(T.ARSL)/COUNT(1) arslRate,
+    COUNT(T.ATDO) atdo,
+    COUNT(T.ATDO)/COUNT(1) atdoRate,
+    COUNT(T.ATFO) atfo,
+    COUNT(T.ATFO)/COUNT(1) atfoRate,
+    COUNT(T.ASCT) asct,
+    COUNT(T.ASCT)/COUNT(1) asctRate,
+    COUNT(T.AFCT) afct,
+    COUNT(T.AFCT)/COUNT(1) afctRate,
+    COUNT(T.ASR) asr,
+    COUNT(T.ASR)/COUNT(1) asrRate,
+    COUNT(T.AER) aer,
+    COUNT(T.AER)/COUNT(1) aerRate,
+    COUNT(T.`ASC`) `asc`,
+    COUNT(T.`ASC`)/COUNT(1) ascRate,
+    COUNT(T.AEC) aec,
+    COUNT(T.AEC)/COUNT(1) aecRate,
+    COUNT(T.ASBT) asbt,
+    COUNT(T.ASBT)/COUNT(1) asbtRate,
+    COUNT(T.AEBT) aebt,
+    COUNT(T.AEBT)/COUNT(1) aebtRate,
+    COUNT(T.ATDC) atdc,
+    COUNT(T.ATDC)/COUNT(1) atdcRate,
+    COUNT(T.ATFC) atfc,
+    COUNT(T.ATFC)/COUNT(1) atfcRate,
+    COUNT(T.AACT) aact,
+    COUNT(T.AACT)/COUNT(1) aactRate,
+    COUNT(T.ALSW) alsw,
+    COUNT(T.ALSW)/COUNT(1) alswRate,
+    0 aobt,
+    0 aobtRate,
+    0 dgrndTsfTm,
+    0 dgrndTsfTmRate,
+    0 atotD,
+    0 atotRateD,
+    COUNT(T.CARGO_WEIGHT) cargoWeightA,
+    COUNT(T.CARGO_WEIGHT)/COUNT(1) cargoWeightARate,
+    COUNT(T.MAIL_WEIGHT) mailWeightA,
+    COUNT(T.MAIL_WEIGHT)/COUNT(1) mailWeightARate,
+    COUNT(T.BAG_WEIGHT) bagWeightA,
+    COUNT(T.BAG_WEIGHT)/COUNT(1) bagWeightARate,
+    COUNT(T.RESERVATIONS) reservationsA,
+    COUNT(T.RESERVATIONS)/COUNT(1) reservationsARate,
+    0 cargoWeightD,
+    0 cargoWeightDRate,
+    0 mailWeightD,
+    0 mailWeightDRate,
+    0 bagWeightD,
+    0 bagWeightDRate,
+    0 reservationsD,
+    0 reservationsDRate
+    FROM (SELECT * FROM T_LOCAL_FLIGHT_INFO
+    WHERE ISDEL <![CDATA[<>]]> '1'
+    AND FLIGHT_TASK NOT IN ('A/N','N/M','R/N','U/H') AND ABNORMAL_FLIGHT_STAT_CD NOT IN ('CAN','ALT','RTN','BAK')
+    AND D_OR_A = 'A'
+    AND ASSOCIATED_FLIGHT_ID IS NULL
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'DF'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    UNION
+    SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY
+    WHERE ISDEL <![CDATA[<>]]> '1'
+    AND FLIGHT_TASK NOT IN ('A/N','N/M','R/N','U/H') AND ABNORMAL_FLIGHT_STAT_CD NOT IN ('CAN','ALT','RTN','BAK')
+    AND D_OR_A='A'
+    AND ASSOCIATED_FLIGHT_ID IS NULL
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'DF'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ) T
+  </select>
+
+
+  <select id="findNodeCoverageD" resultType="com.hq.acdm.vo.effectAnalysis.NodeCoverageReportVo" parameterType="map" >
+    SELECT COUNT(1) total,
+    0 atotA,
+    0 atotRateA,
+    0 aldt,
+    0 aldtRate,
+    0 agrndTsfTm,
+    0 agrndTsfTmRate,
+    0 aibt,
+    0 aibtRate,
+    0 arsl,
+    0 arslRate,
+    0 atdo,
+    0 atdoRate,
+    0 atfo,
+    0 atfoRate,
+    0 asct,
+    0 asctRate,
+    0 afct,
+    0 afctRate,
+    COUNT(T.ASR) asr,
+    COUNT(T.ASR)/COUNT(1) asrRate,
+    COUNT(T.AER) aer,
+    COUNT(T.AER)/COUNT(1) aerRate,
+    COUNT(T.`ASC`) `asc`,
+    COUNT(T.`ASC`)/COUNT(1) ascRate,
+    COUNT(T.AEC) aec,
+    COUNT(T.AEC)/COUNT(1) aecRate,
+    COUNT(T.ASBT) asbt,
+    COUNT(T.ASBT)/COUNT(1) asbtRate,
+    COUNT(T.AEBT) aebt,
+    COUNT(T.AEBT)/COUNT(1) aebtRate,
+    COUNT(T.ATDC) atdc,
+    COUNT(T.ATDC)/COUNT(1) atdcRate,
+    COUNT(T.ATFC) atfc,
+    COUNT(T.ATFC)/COUNT(1) atfcRate,
+    COUNT(T.AACT) aact,
+    COUNT(T.AACT)/COUNT(1) aactRate,
+    COUNT(T.ALSW) alsw,
+    COUNT(T.ALSW)/COUNT(1) alswRate,
+    COUNT(T.AOBT) aobt,
+    COUNT(T.AOBT)/COUNT(1) aobtRate,
+    COUNT(T.D_GRND_TSF_TM) dgrndTsfTm,
+    COUNT(T.D_GRND_TSF_TM)/COUNT(1) dgrndTsfTmRate,
+    COUNT(T.ATOT) atotD,
+    COUNT(T.ATOT)/COUNT(1) atotRateD,
+    0 cargoWeightA,
+    0 cargoWeightARate,
+    0 mailWeightA,
+    0 mailWeightARate,
+    0 bagWeightA,
+    0 bagWeightARate,
+    0 reservationsA,
+    0 reservationsARate,
+    COUNT(T.CARGO_WEIGHT) cargoWeightD,
+    COUNT(T.CARGO_WEIGHT)/COUNT(1) cargoWeightDRate,
+    COUNT(T.MAIL_WEIGHT) mailWeightD,
+    COUNT(T.MAIL_WEIGHT)/COUNT(1) mailWeightDRate,
+    COUNT(T.BAG_WEIGHT) bagWeightD,
+    COUNT(T.BAG_WEIGHT)/COUNT(1) bagWeightDRate,
+    COUNT(T.RESERVATIONS) reservationsD,
+    COUNT(T.RESERVATIONS)/COUNT(1) reservationsDRate
+    FROM (SELECT * FROM T_LOCAL_FLIGHT_INFO
+    WHERE ISDEL <![CDATA[<>]]> '1'
+    AND FLIGHT_TASK NOT IN ('A/N','N/M','R/N','U/H') AND ABNORMAL_FLIGHT_STAT_CD NOT IN ('CAN','ALT','RTN','BAK')
+    AND D_OR_A = 'D'
+    AND ASSOCIATED_FLIGHT_ID IS NULL
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'DF'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    UNION
+    SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY
+    WHERE ISDEL <![CDATA[<>]]> '1'
+    AND FLIGHT_TASK NOT IN ('A/N','N/M','R/N','U/H') AND ABNORMAL_FLIGHT_STAT_CD NOT IN ('CAN','ALT','RTN','BAK')
+    AND D_OR_A = 'D'
+    AND ASSOCIATED_FLIGHT_ID IS NULL
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'DF'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ) T
+  </select>
+
+
+  <select id="findNodeCoverageDandA" resultType="com.hq.acdm.vo.effectAnalysis.NodeCoverageReportVo" parameterType="map" >
+    SELECT COUNT(1) total,
+    COUNT(TB.ATOT) atotA,
+    COUNT(TB.ATOT)/COUNT(1) atotRateA,
+    COUNT(TB.ALDT) aldt,
+    COUNT(TB.ALDT)/COUNT(1) aldtRate,
+    COUNT(TB.A_GRND_TSF_TM) agrndTsfTm,
+    COUNT(TB.A_GRND_TSF_TM)/COUNT(1) agrndTsfTmRate,
+    COUNT(TB.AIBT) aibt,
+    COUNT(TB.AIBT)/COUNT(1) aibtRate,
+    COUNT(COALESCE(TB.ARSL, TA.ARSL)) arsl,
+    COUNT(COALESCE(TB.ARSL, TA.ARSL))/COUNT(1) arslRate,
+    COUNT(COALESCE(TB.ATDO, TA.ATDO)) atdo,
+    COUNT(COALESCE(TB.ATDO, TA.ATDO))/COUNT(1) atdoRate,
+    COUNT(COALESCE(TB.ATFO, TA.ATFO)) atfo,
+    COUNT(COALESCE(TB.ATFO, TA.ATFO))/COUNT(1) atfoRate,
+    COUNT(COALESCE(TA.ASCT, TB.ASCT)) asct,
+    COUNT(COALESCE(TA.ASCT, TB.ASCT))/COUNT(1) asctRate,
+    COUNT(COALESCE(TA.AFCT, TB.AFCT)) afct,
+    COUNT(COALESCE(TA.AFCT, TB.AFCT))/COUNT(1) afctRate,
+    COUNT(COALESCE(TA.ASR, TB.ASR)) asr,
+    COUNT(COALESCE(TA.ASR, TB.ASR))/COUNT(1) asrRate,
+    COUNT(COALESCE(TA.AER, TB.AER)) aer,
+    COUNT(COALESCE(TA.AER, TB.AER))/COUNT(1) aerRate,
+    COUNT(COALESCE(TA.`ASC`, TB.`ASC`)) `asc`,
+    COUNT(COALESCE(TA.`ASC`, TB.`ASC`))/COUNT(1) ascRate,
+    COUNT(COALESCE(TA.AEC, TB.AEC)) aec,
+    COUNT(COALESCE(TA.AEC, TB.AEC))/COUNT(1) aecRate,
+    COUNT(COALESCE(TA.ASBT, TB.ASBT)) asbt,
+    COUNT(COALESCE(TA.ASBT, TB.ASBT))/COUNT(1) asbtRate,
+    COUNT(COALESCE(TA.AEBT, TB.AEBT)) aebt,
+    COUNT(COALESCE(TA.AEBT, TB.AEBT))/COUNT(1) aebtRate,
+    COUNT(COALESCE(TA.ATDC, TB.ATDC)) atdc,
+    COUNT(COALESCE(TA.ATDC, TB.ATDC))/COUNT(1) atdcRate,
+    COUNT(COALESCE(TA.ATFC, TB.ATFC)) atfc,
+    COUNT(COALESCE(TA.ATFC, TB.ATFC))/COUNT(1) atfcRate,
+    COUNT(COALESCE(TA.AACT, TB.AACT)) aact,
+    COUNT(COALESCE(TA.AACT, TB.AACT))/COUNT(1) aactRate,
+    COUNT(COALESCE(TA.ALSW, TB.ALSW)) alsw,
+    COUNT(COALESCE(TA.ALSW, TB.ALSW))/COUNT(1) alswRate,
+    COUNT(TA.AOBT) aobt,
+    COUNT(TA.AOBT)/COUNT(1) aobtRate,
+    COUNT(TA.D_GRND_TSF_TM) dgrndTsfTm,
+    COUNT(TA.D_GRND_TSF_TM)/COUNT(1) dgrndTsfTmRate,
+    COUNT(TA.ATOT) atotD,
+    COUNT(TA.ATOT)/COUNT(1) atotRateD,
+    COUNT(TB.CARGO_WEIGHT) cargoWeightA,
+    COUNT(TB.CARGO_WEIGHT)/COUNT(1) cargoWeightARate,
+    COUNT(TB.MAIL_WEIGHT) mailWeightA,
+    COUNT(TB.MAIL_WEIGHT)/COUNT(1) mailWeightARate,
+    COUNT(TB.BAG_WEIGHT) bagWeightA,
+    COUNT(TB.BAG_WEIGHT)/COUNT(1) bagWeightARate,
+    COUNT(TB.RESERVATIONS) reservationsA,
+    COUNT(TB.RESERVATIONS)/COUNT(1) reservationsARate,
+    COUNT(TA.CARGO_WEIGHT) cargoWeightD,
+    COUNT(TA.CARGO_WEIGHT)/COUNT(1) cargoWeightDRate,
+    COUNT(TA.MAIL_WEIGHT) mailWeightD,
+    COUNT(TA.MAIL_WEIGHT)/COUNT(1) mailWeightDRate,
+    COUNT(TA.BAG_WEIGHT) bagWeightD,
+    COUNT(TA.BAG_WEIGHT)/COUNT(1) bagWeightDRate,
+    COUNT(TA.RESERVATIONS) reservationsD,
+    COUNT(TA.RESERVATIONS)/COUNT(1) reservationsDRate
+    FROM (SELECT * FROM T_LOCAL_FLIGHT_INFO WHERE ISDEL <![CDATA[<>]]> '1'
+    AND FLIGHT_TASK NOT IN ('A/N','N/M','R/N','U/H') AND ABNORMAL_FLIGHT_STAT_CD NOT IN ('CAN','ALT','RTN','BAK') AND D_OR_A='D'
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'DF'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    UNION
+    SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE ISDEL <![CDATA[<>]]> '1'
+    AND FLIGHT_TASK NOT IN ('A/N','N/M','R/N','U/H') AND ABNORMAL_FLIGHT_STAT_CD NOT IN ('CAN','ALT','RTN','BAK') AND D_OR_A='D'
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'DF'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ) TA
+    INNER JOIN (SELECT * FROM T_LOCAL_FLIGHT_INFO WHERE ISDEL <![CDATA[<>]]> '1'
+    AND FLIGHT_TASK NOT IN ('A/N','N/M','R/N','U/H') AND ABNORMAL_FLIGHT_STAT_CD NOT IN ('CAN','ALT','RTN','BAK')
+    AND EXEC_DATE BETWEEN DATE_SUB(#{params.startDate,jdbcType=DATE},INTERVAL 1 DAY) AND #{params.endDate,jdbcType=DATE}
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'DF'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    UNION
+    SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE ISDEL <![CDATA[<>]]> '1'
+    AND FLIGHT_TASK NOT IN ('A/N','N/M','R/N','U/H') AND ABNORMAL_FLIGHT_STAT_CD NOT IN ('CAN','ALT','RTN','BAK')
+    AND EXEC_DATE BETWEEN DATE_SUB(#{params.startDate,jdbcType=DATE},INTERVAL 1 DAY) AND #{params.endDate,jdbcType=DATE}
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'DF'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    ) TB
+    ON TA.ASSOCIATED_FLIGHT_ID = TB.FLIGHT_ID
+  </select>
+
+  <select id="findMAILCoverageD" resultType="com.hq.acdm.vo.effectAnalysis.MAILCoverageReportVo" parameterType="map" >
+    SELECT AIRLINES `name`,SUM(MAIL_WEIGHT) `value`
+
+    FROM (SELECT AIRLINES,IFNULL(MAIL_WEIGHT,0) MAIL_WEIGHT FROM T_LOCAL_FLIGHT_INFO
+    WHERE ISDEL <![CDATA[<>]]> '1'
+    AND FLIGHT_TASK NOT IN ('A/N','N/M','R/N','U/H') AND ABNORMAL_FLIGHT_STAT_CD NOT IN ('CAN','ALT','RTN','BAK')
+    AND D_OR_A = 'D'
+    AND ASSOCIATED_FLIGHT_ID IS NULL
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    UNION
+    SELECT AIRLINES `name`,IFNULL(MAIL_WEIGHT,0) `value` FROM T_LOCAL_FLIGHT_INFO_HISTORY
+    WHERE ISDEL <![CDATA[<>]]> '1'
+    AND FLIGHT_TASK NOT IN ('A/N','N/M','R/N','U/H') AND ABNORMAL_FLIGHT_STAT_CD NOT IN ('CAN','ALT','RTN','BAK')
+    AND D_OR_A = 'D'
+    AND ASSOCIATED_FLIGHT_ID IS NULL
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    ) T GROUP BY AIRLINES ORDER BY `value` DESC LIMIT 5
+
+  </select>
+
+</mapper>

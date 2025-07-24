@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.specialCase.SCWeatherMapper" >
+    <select id="getWeatherByDay" resultType="com.hq.acdm.model.specialCase.weather.WeatherModel">
+        select * from WEATHERINFO where INSERTDATE = TO_CHAR(SYSDATE,'YYYY-MM-DD')
+    </select>
+    <select id="getWeatherByAirport" parameterType="map" resultType="com.hq.acdm.model.specialCase.weather.WeatherModel">
+        SELECT
+        *
+        FROM
+        WEATHERINFO
+        WHERE
+        1 = 1
+        <if test="params.airportCode!=null and params.airportCode !=''">
+            and AIRPORTCODE = #{params.airportCode}
+        </if>
+        AND OBSERVETIME = ( SELECT max( OBSERVETIME ) FROM WEATHERINFO WHERE 1 = 1
+        <if test="params.airportCode!=null and params.airportCode !=''">
+        and AIRPORTCODE = #{params.airportCode}
+        </if>
+        AND to_char( OBSERVETIME, 'yyyy-mm-dd' ) = to_char(
+        current_date,
+        'yyyy-mm-dd')
+         )
+
+    </select>
+</mapper>

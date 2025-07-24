@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--扫描DAO下的接口-->
+<mapper namespace="com.hq.acdm.dao.statistics.ResourceSeatMonitoringManagementMapper" >
+
+
+    <!--查询实时靠桥率-->
+    <select id="queryRealTimeBridgeApproach" resultType="map" >
+      <![CDATA[
+                select "类别" category,T1,T2 from V_CURBOARDINGRATE
+            ]]>
+  </select>
+
+    <!--滞留航班延误排行-->
+    <select id="queryDelayedFlightTop" resultType="map" >
+      <![CDATA[
+                select FLIGHT_NO_IATA flightNumber,DEST_AIRPORT_IATA stop ,SOBT outTime ,PAX_NUM passengersNum,DELAY_TIME delayTime from V_FLIGHT_DELAY_DEPARTURE
+            ]]>
+  </select>
+
+    <!--滞留航线延误排行-->
+    <select id="queryDelayedFlightLineTop" resultType="map" >
+      <![CDATA[
+               select "目的地/经停站" destination,"滞留航班数" strandedFlight,"旅客数" passengers,"延误率" delayRate,"平均滞留时间" residenceTime from V_DAILY_FLIGHT_DELAY_DESC_TOP5
+            ]]>
+  </select>
+
+
+    <!--机位冲突预警-->
+    <select id="queryCollisionWarning" resultType="map" >
+      <![CDATA[
+               select "机位号" stationNumber,"预计冲突时间" estimatedTime from V_ALARM_STAND_CONFLICT
+            ]]>
+  </select>
+
+
+
+    <!--机位空闲停机位总数(不适用)-->
+    <select id="queryFreeSpaceCount" resultType="java.lang.Integer" >
+      <![CDATA[
+               select STANDS freeSpace from V_FREESTAND_TOTAL
+            ]]>
+  </select>
+
+
+    <!--机位空闲停机位 航站楼、停机位类型、停机位数量-->
+    <select id="queryFreeStandSum" resultType="map" >
+      <![CDATA[
+              select  TERMINAL,DESCRIPTION,STANDS from V_FREESTAND_SUM
+            ]]>
+  </select>
+
+
+
+    <!--机位空闲停机位类型、总数-->
+    <select id="queryFreeStandGroup" resultType="map" >
+      <![CDATA[
+              select  DESCRIPTION,STANDS from V_FREESTAND_GROUP
+            ]]>
+  </select>
+
+
+</mapper>

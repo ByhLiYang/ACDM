@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hq.acdm.dao.flight.FreeStandSumMapper">
+    <resultMap id="BaseResultMap" type="com.hq.acdm.model.flight.FreeStandSum">
+        <result column="STAND" property="stand" jdbcType="VARCHAR" />
+        <result column="STARTTIME" property="starttime" jdbcType="VARCHAR" />
+        <result column="TIMES" property="times" jdbcType="VARCHAR" />
+        <result column="TERMINAL" property="terminal" jdbcType="VARCHAR" />
+        <result column="IS_REMOTE" property="isRemote" jdbcType="VARCHAR" />
+        <result column="AIRPORTTYPE" property="airporttype" jdbcType="VARCHAR" />
+        <result column="ENDTIME" property="endtime" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        stand, starttime, times, terminal, isRemote, airporttype, endtime
+    </sql>
+
+    <select id="selecFreeStandSum" parameterType="java.util.Map"  resultMap="BaseResultMap"  >
+        <![CDATA[
+            SELECT
+                STAND,
+                TO_CHAR(STARTTIME,'HH24:MI') STARTTIME ,
+                extract(day from (ENDTIME-STARTTIME))* 24 * 60 + extract(hour from (ENDTIME-STARTTIME))*60 + extract(minute from (ENDTIME-STARTTIME)) as TIMES,
+                TERMINAL,IS_REMOTE,
+                AIRPORTTYPE,
+                TO_CHAR(CASE WHEN(ENDTIME>STATUS_START AND STATUS_START>to_date(#{endDate},'YYYY-MM-DD HH24:MI:SS')) THEN STATUS_START ELSE ENDTIME END,'HH24:MI') ENDTIME
+            FROM(
+                SELECT T1.STAND,
+                (case when(T1.TOUT<to_date(#{beginDate},'YYYY-MM-DD HH24:MI:SS')) then to_date(#{beginDate},'YYYY-MM-DD HH24:MI:SS') else T1.TOUT end) STARTTIME,
+                (case when(T2.TI>to_date(#{endDate},'YYYY-MM-DD HH24:MI:SS')) then to_date(#{endDate},'YYYY-MM-DD HH24:MI:SS') else T2.TI end) ENDTIME,
+                T3.TERMINAL, T3.IS_REMOTE, T3.DESCRIPTION AIRPORTTYPE,
+                T3.STATUS_START, T3.STATUS_END
+                FROM(
+                    SELECT COALESCE(TOUT, to_date(#{beginDate},'YYYY-MM-DD HH24:MI:SS')) TOUT, COALESCE(TI, to_date(#{beginDate},'YYYY-MM-DD HH24:MI:SS')) TI, STAND
+                        FROM(
+                          SELECT MAX(OUTTIME) TOUT, MAX(INTIME) TI, STAND
+                            FROM V_UTIL_STAND
+                          WHERE (OUTTIME <= to_date(#{beginDate},'YYYY-MM-DD HH24:MI:SS') AND INTIME IS NULL)
+                            OR (INTIME <= to_date(#{beginDate},'YYYY-MM-DD HH24:MI:SS') AND OUTTIME IS NULL)
+                            OR (INTIME IS NULL AND OUTTIME IS NULL)
+                          GROUP BY STAND )
+                    WHERE TOUT > TI OR TI IS NULL) T1,
+                    (SELECT COALESCE(TOUT, to_date(#{endDate},'YYYY-MM-DD HH24:MI:SS')) TOUT, COALESCE(TI, to_date(#{endDate},'YYYY-MM-DD HH24:MI:SS')) TI, STAND
+                        FROM(
+                          SELECT MIN(OUTTIME) TOUT, MIN(INTIME) TI, STAND
+                            FROM V_UTIL_STAND
+                          WHERE (OUTTIME >= to_date(#{beginDate},'YYYY-MM-DD HH24:MI:SS') AND INTIME IS NULL)
+                            OR (INTIME >= to_date(#{beginDate},'YYYY-MM-DD HH24:MI:SS') AND OUTTIME IS NULL)
+                            OR (INTIME IS NULL AND OUTTIME IS NULL)
+                          GROUP BY STAND )
+                          WHERE (TI >= to_date(#{endDate},'YYYY-MM-DD HH24:MI:SS') AND (TOUT > TI OR TOUT IS NULL))
+                          OR (TI IS NULL AND TOUT IS NULL)) T2,
+                    STAND T3
+                    WHERE T1.STAND = T2.STAND AND T1.STAND = T3.STAND)
+
+      ]]>
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="airporttype != null and airporttype != ''">
+                and AIRPORTTYPE = #{airporttype}
+            </if>
+            <if test="terminal != null and terminal != ''">
+                and TERMINAL = #{terminal}
+            </if>
+            <if test="isRemote != null and isRemote != ''">
+                and IS_REMOTE = #{isRemote}
+            </if>
+        </trim>
+    </select>
+
+
+
+</mapper>

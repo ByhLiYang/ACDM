@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.coordinatedOprt.GDPMapper" >
+  <select id="getGDPChat" resultType="com.hq.acdm.vo.coordinatedOprt.GDPVo" >
+      <![CDATA[
+      SELECT substring(SIBT,-8,2) TIME_H,count(1) HBS,SUM(CASE WHEN ALDT IS NOT NULL THEN 1 ELSE 0 END) YDG,
+      SUM(CASE WHEN ATOT IS NOT NULL AND ALDT IS NULL THEN 1 ELSE 0 END) YQF,
+      SUM(ATOT IS NULL AND ALDT IS NULL AND TIMESTAMPDIFF(MINUTE,SOBT,SIBT)<=120) XY2,
+      SUM(ATOT IS NULL AND ALDT IS NULL AND TIMESTAMPDIFF(MINUTE,SOBT,SIBT)>120) DY2 FROM V_UTIL_DAILY_FLIGHT
+      WHERE D_OR_A='A' AND ASSOCIATED_FLIGHT_ID IS NOT NULL GROUP BY TIME_H;
+      ]]>
+  </select>
+  <select id="getIsPostpone" parameterType="String" resultType="int" >
+    	SELECT COUNT(1) FROM T_CHECKIN_POSTPONE WHERE FLIGHT_ID=#{flightId}
+  </select>
+  <select id="getQCJH" resultType="com.hq.acdm.vo.coordinatedOprt.GDPPostponeVo" >
+    	SELECT FLIGHT_ID_A,FLIGHT_ID_D,FLNO_A,FLNO_D,ADEP_A,ADES_D,SOBT_A,SIBT,DURATION_A FROM V_UTIL_UNITE_FLIGHT WHERE FLIGHT_ID_A IS NOT NULL AND FLIGHT_ID_D IS NOT NULL AND ALDT IS NULL AND FL_STATUS <![CDATA[<>]]> 'CAN';
+  </select>
+  <select id="getQCYQF" resultType="com.hq.acdm.vo.coordinatedOprt.GDPPostponeVo" >
+    	SELECT FLIGHT_ID_A,FLIGHT_ID_D,FLNO_A,FLNO_D,ADEP_A,ADES_D,ATOT_A,ELDT,DURATION_A FROM V_UTIL_UNITE_FLIGHT WHERE FLIGHT_ID_A IS NOT NULL AND FLIGHT_ID_D IS NOT NULL AND ATOT_A IS NOT NULL AND ALDT IS NULL AND FL_STATUS <![CDATA[<>]]> 'CAN';
+  </select>
+  <select id="getZHZJ" resultType="com.hq.acdm.vo.coordinatedOprt.GDPPostponeCKVo" >
+      <![CDATA[
+    	SELECT FLIGHT_ID_A,FLIGHT_ID_D,FLNO_A,FLNO_D,EXEC_DATE_D,ETOT_A,DELAY_TIME_A,FL_STATUS_A,TB.POSTPONE_STM,TB.POSTPONE_ETM FROM V_UTIL_UNITE_FLIGHT TA LEFT JOIN T_CHECKIN_POSTPONE TB ON TA.FLIGHT_ID_D=TB.FLIGHT_ID
+    	WHERE FLIGHT_ID_A IS NOT NULL AND FLIGHT_ID_D IS NOT NULL AND ATOT IS NULL AND DELAY_TIME_A>60 AND IFNULL(TB.POSTPONE_STATUS,'')<>'1' AND TA.FL_STATUS <> 'CAN';
+        ]]>
+  </select>
+  <select id="getHFZJ" resultType="com.hq.acdm.vo.coordinatedOprt.GDPPostponeCKVo" >
+    	SELECT FLIGHT_ID_A,FLIGHT_ID_D,FLNO_A,FLNO_D,EXEC_DATE_D,ETOT_A,DELAY_TIME_A,FL_STATUS_A,TB.POSTPONE_STM,TB.POSTPONE_ETM FROM V_UTIL_UNITE_FLIGHT TA RIGHT
+        JOIN T_CHECKIN_POSTPONE TB ON TA.FLIGHT_ID_D=TB.FLIGHT_ID WHERE FLIGHT_ID_A IS NOT NULL AND FLIGHT_ID_D IS NOT NULL AND ATOT IS NULL AND TB.POSTPONE_STATUS='1' AND TA.FL_STATUS <![CDATA[<>]]> 'CAN';
+  </select>
+  <insert id="insertPostpone" parameterType="String" >
+    	INSERT INTO T_CHECKIN_POSTPONE (ID,FLIGHT_ID,POSTPONE_STM,POSTPONE_STATUS) VALUES(REPLACE(UUID(),'-',''),#{flightId},NOW(),#{optFlag})
+  </insert>
+  <update id="updatePostpone" parameterType="String" >
+    	UPDATE T_CHECKIN_POSTPONE SET POSTPONE_STATUS=#{optFlag}
+      <choose>
+          <when test="optFlag !=null and optFlag == '0'">
+              ,POSTPONE_ETM=NOW()
+          </when>
+          <otherwise>
+              ,POSTPONE_STM=NOW()
+          </otherwise>
+      </choose>
+       WHERE FLIGHT_ID=#{flightId}
+  </update>
+    <insert id="insertSPECIAL" parameterType="String" >
+    	INSERT INTO T_SPECIAL_INFO (ID,INFO_CONTENT,INFO_STARTTM,INFO_ENDTM,CREATE_TM) VALUES(REPLACE(UUID(),'-',''),#{content},NOW(),CONCAT(CURDATE(),' 23:59:59'),NOW())
+  </insert>
+</mapper>

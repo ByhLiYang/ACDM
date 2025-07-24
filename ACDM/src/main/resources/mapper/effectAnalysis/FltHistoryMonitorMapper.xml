@@ -1,0 +1,2002 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.effectAnalysis.FltHistoryMonitorMapper" >
+
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.dynamicFlight.TLocalFlightInfoVo" >
+    <result column="FLIGHT_ID_D" property="flightIdD" jdbcType="VARCHAR" />
+    <result column="FLIGHT_ID_A" property="flightIdA" jdbcType="VARCHAR" />
+    <result column="FLNO_D" property="flnoD" jdbcType="VARCHAR" />
+    <result column="FLNO_A" property="flnoA" jdbcType="VARCHAR" />
+    <result column="EXEC_DATE_D" property="execDateD" jdbcType="VARCHAR" />
+    <result column="EXEC_DATE_A" property="execDateA" jdbcType="VARCHAR" />
+    <result column="FL_STATUS" property="flStatus" jdbcType="VARCHAR" />
+    <result column="AIRLINES" property="airlines" jdbcType="VARCHAR" />
+    <result column="CRAFT_TYPE_ICAO" property="craftTypeIcao" jdbcType="VARCHAR" />
+    <result column="CLASSIFICATION" property="classification" jdbcType="VARCHAR" />
+    <result column="REGN" property="regn" jdbcType="VARCHAR" />
+    <result column="ADEP_ADES_A" property="adepAdesA" jdbcType="VARCHAR" />
+    <result column="ADEP_ADES_D" property="adepAdesD" jdbcType="VARCHAR" />
+    <result column="ADEP_D" property="adepD" jdbcType="VARCHAR" />
+    <result column="ADES_D" property="adesD" jdbcType="VARCHAR" />
+    <result column="ELDT_A_DATE" property="eldtADate" jdbcType="VARCHAR" />
+    <result column="ELDT_A_TIME" property="eldtATime" jdbcType="VARCHAR" />
+    <result column="ALDT_A_DATE" property="aldtADate" jdbcType="VARCHAR" />
+    <result column="ALDT_A_TIME" property="aldtATime" jdbcType="VARCHAR" />
+    <result column="ETOT_D_DATE" property="etotDDate" jdbcType="VARCHAR" />
+    <result column="ETOT_D_TIME" property="etotDTime" jdbcType="VARCHAR" />
+    <result column="ATOT_D_DATE" property="atotDDate" jdbcType="VARCHAR" />
+    <result column="ATOT_D_TIME" property="atotDTime" jdbcType="VARCHAR" />
+    <result column="ATOT_A_TIME" property="atotATime" jdbcType="VARCHAR" />
+    <result column="STAND_A" property="standA" jdbcType="VARCHAR" />
+    <result column="STAND_D" property="standD" jdbcType="VARCHAR" />
+    <result column="RUNWAY_A" property="runwayA" jdbcType="VARCHAR" />
+    <result column="RUNWAY_D" property="runwayD" jdbcType="VARCHAR" />
+    <result column="CHANGE_TIME_A" property="changeTimeA" jdbcType="VARCHAR" />
+    <result column="CHANGE_TIME_D" property="changeTimeD" jdbcType="VARCHAR" />
+    <result column="SIBT" property="sibt" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="COBT" property="cobt" jdbcType="VARCHAR" />
+    <result column="CTOT" property="ctot" jdbcType="VARCHAR" />
+    <result column="TOBT" property="tobt" jdbcType="VARCHAR" />
+    <result column="A_TOBT" property="aTobt" jdbcType="VARCHAR" />
+    <result column="ISCONTROL" property="iscontrol" jdbcType="VARCHAR" />
+    <result column="EIBT" property="eibt" jdbcType="VARCHAR" />
+    <result column="AIBT" property="aibt" jdbcType="VARCHAR" />
+    <result column="EOBT" property="eobt" jdbcType="VARCHAR" />
+    <result column="AOBT" property="aobt" jdbcType="VARCHAR" />
+    <result column="ETDO" property="etdo" jdbcType="VARCHAR" />
+    <result column="ETDC" property="etdc" jdbcType="VARCHAR" />
+    <result column="ATDO" property="atdo" jdbcType="VARCHAR" />
+    <result column="ATDC" property="atdc" jdbcType="VARCHAR" />
+    <result column="ATDC_STATUS" property="atdcStatus" jdbcType="VARCHAR" />
+    <result column="ETFO" property="etfo" jdbcType="VARCHAR" />
+    <result column="ETFC" property="etfc" jdbcType="VARCHAR" />
+    <result column="ATFO" property="atfo" jdbcType="VARCHAR" />
+    <result column="ATFC" property="atfc" jdbcType="VARCHAR" />
+    <result column="ESCT" property="esct" jdbcType="VARCHAR" />
+    <result column="EFCT" property="efct" jdbcType="VARCHAR" />
+    <result column="ASCT" property="asct" jdbcType="VARCHAR" />
+    <result column="ASCT_STATUS" property="asctStatus" jdbcType="VARCHAR" />
+    <result column="AFCT" property="afct" jdbcType="VARCHAR" />
+    <result column="ESC" property="esc" jdbcType="VARCHAR" />
+    <result column="EEC" property="eec" jdbcType="VARCHAR" />
+    <result column="ASC" property="asc" jdbcType="VARCHAR" />
+    <result column="ASC_STATUS" property="ascStatus" jdbcType="VARCHAR" />
+    <result column="AEC" property="aec" jdbcType="VARCHAR" />
+    <result column="ESR" property="esr" jdbcType="VARCHAR" />
+    <result column="EER" property="eer" jdbcType="VARCHAR" />
+    <result column="ASR" property="asr" jdbcType="VARCHAR" />
+    <result column="ASR_STATUS" property="asrStatus" jdbcType="VARCHAR" />
+    <result column="AER" property="aer" jdbcType="VARCHAR" />
+    <result column="ESBT" property="esbt" jdbcType="VARCHAR" />
+    <result column="EEBT" property="eebt" jdbcType="VARCHAR" />
+    <result column="ASBT" property="asbt" jdbcType="VARCHAR" />
+    <result column="ASBT_STATUS" property="asbtStatus" jdbcType="VARCHAR" />
+    <result column="AEBT" property="aebt" jdbcType="VARCHAR" />
+    <result column="ERSL" property="ersl" jdbcType="VARCHAR" />
+    <result column="ELSW" property="elsw" jdbcType="VARCHAR" />
+    <result column="ARSL" property="arsl" jdbcType="VARCHAR" />
+    <result column="ALSW" property="alsw" jdbcType="VARCHAR" />
+    <result column="A_GRND_TSF_TM" property="aGrndTsfTm" jdbcType="VARCHAR" />
+    <result column="D_GRND_TSF_TM" property="dGrndTsfTm" jdbcType="VARCHAR" />
+    <result column="AACT" property="aact" jdbcType="VARCHAR" />
+    <result column="TRDT" property="trdt" jdbcType="VARCHAR" />
+    <result column="MPBT" property="mpbt" jdbcType="VARCHAR" />
+    <result column="MPET" property="mpet" jdbcType="VARCHAR" />
+    <result column="REASON_FC" property="reasonFc" jdbcType="VARCHAR" />
+    <result column="REASON_TYPE" property="reasonType" jdbcType="VARCHAR" />
+    <result column="REASONS_FOR_DELAY" property="reasonsForFelay" jdbcType="VARCHAR" />
+    <result column="DELAY_TIME" property="delayTime" jdbcType="VARCHAR" />
+    <result column="DELAY_TIME_STATUS" property="delayTimeStatus" jdbcType="VARCHAR" />
+    <result column="FXLJ" property="fxlj" jdbcType="VARCHAR" />
+    <result column="ACDT" property="acdt" jdbcType="VARCHAR" />
+    <result column="AEDT" property="aedt" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <resultMap id="ResultMapFlightDetails" type="com.hq.acdm.vo.dynamicFlight.FlightDetailsInfoVo" >
+    <result column="FLIGHT_ID_D" property="flightIdD" jdbcType="VARCHAR" />
+    <result column="FLIGHT_ID_A" property="flightIdA" jdbcType="VARCHAR" />
+    <result column="AIRLINES" property="airlines" jdbcType="VARCHAR" />
+    <result column="FLNO_D" property="flnoD" jdbcType="VARCHAR" />
+    <result column="FLNO_A" property="flnoA" jdbcType="VARCHAR" />
+    <result column="EXEC_DATE_D" property="exec_dateD" jdbcType="VARCHAR" />
+    <result column="EXEC_DATE_A" property="exec_dateA" jdbcType="VARCHAR" />
+    <result column="FLIGHT_IDENTY_MANAGE_DATE" property="flightIdentyManageDate" jdbcType="VARCHAR" />
+    <result column="FLIGHT_TASK" property="flightTask" jdbcType="VARCHAR" />
+    <result column="ATTRIBUTE" property="attribute" jdbcType="VARCHAR" />
+    <result column="AGENCY" property="agency" jdbcType="VARCHAR" />
+    <result column="CRAFT_TYPE_ICAO" property="craftTypeIcao" jdbcType="VARCHAR" />
+    <result column="CLASSIFICATION" property="classification" jdbcType="VARCHAR" />
+    <result column="REGN" property="regn" jdbcType="VARCHAR" />
+    <result column="FL_STATUS" property="flStatus" jdbcType="VARCHAR" />
+    <result column="FL_STATUS_A" property="flStatusA" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="ETOT" property="etot" jdbcType="VARCHAR" />
+    <result column="ATOT" property="atot" jdbcType="VARCHAR" />
+    <result column="SOBT_A" property="sobtA" jdbcType="VARCHAR" />
+    <result column="ETOT_A" property="etotA" jdbcType="VARCHAR" />
+    <result column="ATOT_A" property="atotA" jdbcType="VARCHAR" />
+    <result column="SIBT" property="sibt" jdbcType="VARCHAR" />
+    <result column="ELDT" property="eldt" jdbcType="VARCHAR" />
+    <result column="ALDT" property="aldt" jdbcType="VARCHAR" />
+    <result column="SIBT_D" property="sibtD" jdbcType="VARCHAR" />
+    <result column="ELDT_D" property="eldtD" jdbcType="VARCHAR" />
+    <result column="ALDT_D" property="aldtD" jdbcType="VARCHAR" />
+    <result column="EIBT" property="eibt" jdbcType="VARCHAR" />
+    <result column="AIBT" property="aibt" jdbcType="VARCHAR" />
+    <result column="EOBT" property="eobt" jdbcType="VARCHAR" />
+    <result column="AOBT" property="aobt" jdbcType="VARCHAR" />
+    <result column="SHARE_FLNO" property="shareFlno" jdbcType="VARCHAR" />
+    <result column="ADEP_A" property="adepA" jdbcType="VARCHAR" />
+    <result column="ADES_A" property="adesA" jdbcType="VARCHAR" />
+    <result column="ADEP_D" property="adepD" jdbcType="VARCHAR" />
+    <result column="ADES_D" property="adesD" jdbcType="VARCHAR" />
+    <result column="START_STATION" property="startStation" jdbcType="VARCHAR" />
+    <result column="START_SOBT" property="startSobt" jdbcType="VARCHAR" />
+    <result column="START_SIBT" property="startSibt" jdbcType="VARCHAR" />
+    <result column="START_EOBT" property="startEobt" jdbcType="VARCHAR" />
+    <result column="START_EIBT" property="startEibt" jdbcType="VARCHAR" />
+    <result column="START_AOBT" property="startAobt" jdbcType="VARCHAR" />
+    <result column="START_AIBT" property="startAibt" jdbcType="VARCHAR" />
+    <result column="EXIT" property="exit" jdbcType="VARCHAR" />
+    <result column="EXOT" property="exot" jdbcType="VARCHAR" />
+    <result column="AXIT" property="axit" jdbcType="VARCHAR" />
+    <result column="AXOT" property="axot" jdbcType="VARCHAR" />
+    <result column="STAND_A" property="standA" jdbcType="VARCHAR" />
+    <result column="STAND_D" property="standD" jdbcType="VARCHAR" />
+    <result column="GATE" property="gate" jdbcType="VARCHAR" />
+    <result column="CHECK_START_TIME" property="checkStartTime" jdbcType="VARCHAR" />
+    <result column="CHECK_END_TIME" property="checkEndTime" jdbcType="VARCHAR" />
+    <result column="COBT" property="cobt" jdbcType="VARCHAR" />
+    <result column="CTOT" property="ctot" jdbcType="VARCHAR" />
+    <result column="TOBT" property="tobt" jdbcType="VARCHAR" />
+    <result column="TTOT" property="ttot" jdbcType="VARCHAR" />
+    <result column="A_TOBT" property="aTobt" jdbcType="VARCHAR" />
+    <result column="DOBT" property="dobt" jdbcType="VARCHAR" />
+    <result column="FCT" property="fct" jdbcType="VARCHAR" />
+    <result column="RPOT" property="rpot" jdbcType="VARCHAR" />
+    <result column="APOT" property="apot" jdbcType="VARCHAR" />
+    <result column="ASAT" property="asat" jdbcType="VARCHAR" />
+    <result column="RUNWAY_A" property="runwayA" jdbcType="VARCHAR" />
+    <result column="RUNWAY_D" property="runwayD" jdbcType="VARCHAR" />
+    <result column="ERSL" property="ersl" jdbcType="VARCHAR" />
+    <result column="ELSW" property="elsw" jdbcType="VARCHAR" />
+    <result column="ARSL" property="arsl" jdbcType="VARCHAR" />
+    <result column="ALSW" property="alsw" jdbcType="VARCHAR" />
+    <result column="ETDO" property="etdo" jdbcType="VARCHAR" />
+    <result column="ETDC" property="etdc" jdbcType="VARCHAR" />
+    <result column="ATDO" property="atdo" jdbcType="VARCHAR" />
+    <result column="ATDC" property="atdc" jdbcType="VARCHAR" />
+    <result column="ETFO" property="etfo" jdbcType="VARCHAR" />
+    <result column="ETFC" property="etfc" jdbcType="VARCHAR" />
+    <result column="ATFO" property="atfo" jdbcType="VARCHAR" />
+    <result column="ATFC" property="atfc" jdbcType="VARCHAR" />
+    <result column="ESCT" property="esct" jdbcType="VARCHAR" />
+    <result column="EFCT" property="efct" jdbcType="VARCHAR" />
+    <result column="ASCT" property="asct" jdbcType="VARCHAR" />
+    <result column="AFCT" property="afct" jdbcType="VARCHAR" />
+    <result column="ESC" property="esc" jdbcType="VARCHAR" />
+    <result column="EEC" property="eec" jdbcType="VARCHAR" />
+    <result column="ASC" property="asc" jdbcType="VARCHAR" />
+    <result column="AEC" property="aec" jdbcType="VARCHAR" />
+    <result column="ESR" property="esr" jdbcType="VARCHAR" />
+    <result column="EER" property="eer" jdbcType="VARCHAR" />
+    <result column="ASR" property="asr" jdbcType="VARCHAR" />
+    <result column="AER" property="aer" jdbcType="VARCHAR" />
+    <result column="ESBT" property="esbt" jdbcType="VARCHAR" />
+    <result column="EEBT" property="eebt" jdbcType="VARCHAR" />
+    <result column="LCBT" property="lcbt" jdbcType="VARCHAR" />
+    <result column="ASBT" property="asbt" jdbcType="VARCHAR" />
+    <result column="AEBT" property="aebt" jdbcType="VARCHAR" />
+    <result column="ECDT" property="ecdt" jdbcType="VARCHAR" />
+    <result column="ACDT" property="acdt" jdbcType="VARCHAR" />
+    <result column="EEDT" property="eedt" jdbcType="VARCHAR" />
+    <result column="AEDT" property="aedt" jdbcType="VARCHAR" />
+    <result column="AACT" property="aact" jdbcType="VARCHAR" />
+    <result column="A_GRND_TSF_TM" property="aGrndTsfTm" jdbcType="VARCHAR" />
+    <result column="D_GRND_TSF_TM" property="dGrndTsfTm" jdbcType="VARCHAR" />
+    <result column="TERMINAL" property="terminal" jdbcType="VARCHAR" />
+    <result column="BAG_COUNT" property="bagCount" jdbcType="VARCHAR" />
+    <result column="BAG_COUNT_A" property="bagCountA" jdbcType="VARCHAR" />
+    <result column="BAG_WEIGHT" property="bagWeight" jdbcType="VARCHAR" />
+    <result column="PAX_COUNT" property="paxCount" jdbcType="VARCHAR" />
+    <result column="CHECK_IN" property="checkIn" jdbcType="VARCHAR" />
+    <result column="SECURITY_CHECK" property="securityCheck" jdbcType="VARCHAR" />
+    <result column="OVER_STATION" property="overStation" jdbcType="VARCHAR" />
+    <result column="BOARDING" property="boarding" jdbcType="VARCHAR" />
+    <result column="PLAN_OVER_STAT_TM" property="planOverStatTm" jdbcType="VARCHAR" />
+    <result column="USED_TIME" property="usedTime" jdbcType="VARCHAR" />
+    <result column="REMAIN_TIME" property="remainTime" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <resultMap id="ResultMapFlightDetailsGuest" type="com.hq.acdm.vo.dynamicFlight.FlightDetailsGuestInfoVo" >
+    <result column="BAG_COUNT" property="bagCount" jdbcType="VARCHAR" />
+    <result column="CHECK_IN" property="checkIn" jdbcType="VARCHAR" />
+    <result column="SECURITY_CHECK" property="securityCheck" jdbcType="VARCHAR" />
+    <result column="OVER_STATION" property="overStation" jdbcType="VARCHAR" />
+    <result column="BOARDING" property="boarding" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <resultMap id="ControlInfoResultMap" type="com.hq.acdm.vo.dynamicFlight.TControlInfoVo" >
+    <result column="CONTROL_ID" property="controlId" jdbcType="VARCHAR" />
+    <result column="CONTROL_CONTENT" property="controlContent" jdbcType="VARCHAR" />
+    <result column="CONTROL_ALTERAT_STARTTM" property="controlAlteratStarttm" jdbcType="VARCHAR" />
+    <result column="CONTROL_REAL_STARTTM" property="controlRealStarttm" jdbcType="VARCHAR" />
+    <result column="CONTROL_ALTERAT_ENDTM" property="controlAlteratEndtm" jdbcType="VARCHAR" />
+    <result column="CONTROL_REAL_ENDTM" property="controlRealEndtm" jdbcType="VARCHAR" />
+    <result column="CONTROL_POINT" property="controlPoint" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <resultMap id="FishboneDiagramResultMap" type="com.hq.acdm.vo.dynamicFlight.FishboneDiagramVo" >
+    <result column="NODE_SEQ" property="nodeSeq" jdbcType="VARCHAR" />
+    <result column="NODE_NAME" property="nodeName" jdbcType="VARCHAR" />
+    <result column="NODE_COLUMN" property="nodeColumn" jdbcType="VARCHAR" />
+    <result column="NODE_ESTIMATE_COLUMN" property="nodeEstimateColumn" jdbcType="VARCHAR" />
+    <result column="VALUE" property="value" jdbcType="VARCHAR" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="FlightEventResultMap" type="com.hq.acdm.vo.dynamicFlight.FlightEventVo" >
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="TIME" property="time" jdbcType="VARCHAR" />
+    <result column="DATE" property="date" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <select id="getFltInfo" resultMap="ResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT T.FLIGHT_ID_D, -- 离港航班唯一ID
+    T.FLIGHT_ID_A, -- 进港航班唯一ID
+    T.FLNO_D,-- 出港航班号
+    T.FLNO_A,-- 进港航班号
+    T.EXEC_DATE_D,-- 出港日期
+    T.EXEC_DATE_A,-- 进港日期
+    B.CHINESE_NAME AS FL_STATUS,-- 出港航班状态
+    BB.CHINESE_NAME AS FL_STATUS_A,-- 进港航班状态
+    T.AIRLINES, -- 航空公司2码
+    T.CRAFT_TYPE_ICAO, -- 机型
+    E.CLASSIFICATION, -- 机型大类
+    T.REGN AS REGN, -- 机号
+    -- CONCAT(C.CHINESE_NAME,IF(IFNULL(C.CHINESE_NAME,'')='','','>'),D.CHINESE_NAME,IF(IFNULL(DD.CHINESE_NAME,'')='','','>'),DD.CHINESE_NAME) AS ADEP_ADES, -- 起落机场
+    CONCAT(T.ADEP_A,IF(IFNULL(T.ADEP_A,'')='','','>'),T.ADES_A) AS ADEP_ADES_A, -- 进港起落机场
+    CONCAT(T.ADEP_D,IF(IFNULL(T.ADEP_D,'')='','','>'),T.ADES_D) AS ADEP_ADES_D, -- 出港起落机场
+    T.ADEP_D, -- 出港起飞机场
+	T.ADES_D, -- 出港降落机场
+    DATE_FORMAT(T.ELDT,'%Y%m%d') AS ELDT_A_DATE, -- 预计落地日期
+    DATE_FORMAT(T.ELDT,'%H:%i') AS ELDT_A_TIME,-- 预计落地时间
+    DATE_FORMAT(T.ALDT,'%Y%m%d') AS ALDT_A_DATE, -- 实际落地日期
+    DATE_FORMAT(T.ALDT,'%H:%i') AS ALDT_A_TIME,-- 实际落地时间
+    T.SOBT,-- 计划起飞时间
+    T.SIBT,-- 计划落地时间
+    DATE_FORMAT(T.ETOT,'%Y%m%d') AS ETOT_D_DATE, -- 预计起飞日期
+    DATE_FORMAT(T.ETOT,'%H:%i') AS ETOT_D_TIME,-- 预计起飞时间
+    DATE_FORMAT(T.ATOT,'%Y%m%d') AS ATOT_D_DATE, -- 实际起飞日期
+    DATE_FORMAT(T.ATOT,'%H:%i') AS ATOT_D_TIME,-- 出港实际起飞时间
+    DATE_FORMAT(T.ATOT_A,'%H:%i') AS ATOT_A_TIME, -- 进港实际起飞时间
+    T.STAND_A, -- 进港机位
+    T.STAND_D, -- 离港机位
+    T.RUNWAY_A,-- 进港跑道号
+    T.RUNWAY_D,-- 离港跑道号
+    T.AXIT AS CHANGE_TIME_A, -- 可变滑入时间
+    T.AXOT AS CHANGE_TIME_D, -- 可变滑出时间
+    T.COBT,-- 离港计算撤轮档时间COBT
+    T.CTOT,-- 离港计算起飞时间CTOT
+    T.TOBT,-- 离港目标撤轮档时间TOBT
+    T.A_TOBT,-- 离港机场目标撤轮档时间A_TOBT
+    CASE T.ISCONTROL WHEN '0' THEN '否' WHEN '1' THEN '是' ELSE '否' END AS ISCONTROL, -- 是否流控
+    T.EIBT, -- 预计上轮档时间EIBT
+    T.AIBT, -- 实际上轮档时间AIBT
+    T.EOBT, -- 预计撤轮当时间EOBT
+    T.AOBT, -- 实际撤轮档时间AOBT
+    T.ETDO,-- 预计开客舱门时间ETDO
+    T.STDC AS ETDC,-- 预计关客舱门时间ETDC(取计划关客舱门时间)
+    T.ATDO,-- 实际开客舱门时间ATDO
+    T.ATDC,-- 实际关客舱门时间ATDC
+    CASE WHEN T.ATDC IS NULL AND TIMESTAMPDIFF(MINUTE,NOW(),T.STDC) > 0 AND TIMESTAMPDIFF(MINUTE,NOW(),T.STDC) <= 15 THEN 1
+    WHEN T.ATDC IS NULL AND TIMESTAMPDIFF(MINUTE,T.STDC,NOW()) >= 0 THEN 2
+    WHEN T.ATDC IS NOT NULL AND TIMESTAMPDIFF(MINUTE,T.STDC,T.ATDC) > 0 THEN 3 ELSE 0 END AS ATDC_STATUS,-- 关客舱门状态
+    T.ETFO,-- 预计开货舱门时间ETFO
+    T.ETFC,-- 预计关货舱门时间ETFC
+    T.ATFO,-- 实际开货舱门时间 ATFO
+    T.ATFC,-- 实际关货舱门时间ATFC
+    T.ESCT, -- 预计保洁开始时间ESCT
+    T.EFCT,-- 预计保洁结束时间EFCT
+    T.ASCT, -- 实际保洁开始时间ASCT
+    CASE WHEN T.ASCT IS NULL AND TIMESTAMPDIFF(MINUTE,NOW(),T.ESCT) > 0 AND TIMESTAMPDIFF(MINUTE,NOW(),T.ESCT) <= 15 THEN 1
+    WHEN T.ASCT IS NULL AND TIMESTAMPDIFF(MINUTE,T.ESCT,NOW()) >= 0 THEN 2
+    WHEN T.ASCT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,T.ESCT,T.ASCT) > 0 THEN 3 ELSE 0 END AS ASCT_STATUS,-- 保洁开始时间状态
+    T.AFCT,-- 实际保洁结束时间AFCT
+    T.ESC, -- 预计开始配餐时间ESC
+    T.EEC,-- 预计完成配餐时间EEC
+    T.`ASC`, -- 实际开始配餐时间ASC
+	CASE WHEN T.`ASC` IS NULL AND TIMESTAMPDIFF(MINUTE,NOW(),T.ESC) > 0 AND TIMESTAMPDIFF(MINUTE,NOW(),T.ESC) <= 15 THEN 1
+    WHEN T.`ASC` IS NULL AND TIMESTAMPDIFF(MINUTE,T.ESC,NOW()) >= 0 THEN 2
+    WHEN T.`ASC` IS NOT NULL AND TIMESTAMPDIFF(MINUTE,T.ESC,T.`ASC`) > 0 THEN 3 ELSE 0 END AS ASC_STATUS,-- 开始配餐时间状态
+    T.AEC,-- 实际完成配餐时间AEC
+    T.ESR, -- 预计开始供油时间ESR
+    T.EER,-- 预计完成供油时间EER
+    T.ASR, -- 实际开始供油时间ASR
+	CASE WHEN T.ASR IS NULL AND TIMESTAMPDIFF(MINUTE,NOW(),T.ESR) > 0 AND TIMESTAMPDIFF(MINUTE,NOW(),T.ESR) <= 15 THEN 1
+    WHEN T.ASR IS NULL AND TIMESTAMPDIFF(MINUTE,T.ESR,NOW()) >= 0 THEN 2
+    WHEN T.ASR IS NOT NULL AND TIMESTAMPDIFF(MINUTE,T.ESR,T.ASR) > 0 THEN 3 ELSE 0 END AS ASR_STATUS,-- 开始供油时间状态
+    T.AER,-- 实际完成供油时间AER
+    T.ESBT, -- 预计开始登机时间ESBT
+    T.EEBT,-- 预计完成登机时间EEBT
+    T.ASBT, -- 实际开始登机时间ASBT
+	CASE WHEN T.ASBT IS NULL AND TIMESTAMPDIFF(MINUTE,NOW(),T.ESBT) > 0 AND TIMESTAMPDIFF(MINUTE,NOW(),T.ESBT) <= 15 THEN 1
+    WHEN T.ASBT IS NULL AND TIMESTAMPDIFF(MINUTE,T.ESBT,NOW()) >= 0 THEN 2
+    WHEN T.ASBT IS NOT NULL AND TIMESTAMPDIFF(MINUTE,T.ESBT,T.ASBT) > 0 THEN 3 ELSE 0 END AS ASBT_STATUS,-- 开始登机时间状态
+    T.AEBT,-- 实际完成登机时间AEBT
+    T.ERSL,-- 预计靠桥时间（客梯或桥）ERSL
+    T.ELSW,-- 预计离桥时间/撤客梯车时间ELSW
+    T.ARSL,-- 实际靠桥时间（客梯或桥）ARSL
+    T.ALSW,-- 实际离桥时间/撤客梯车时间ALSW
+    T.A_GRND_TSF_TM, -- 进港地面移交时间
+    T.D_GRND_TSF_TM, -- 离港地面移交时间
+    T.ACDT,	-- 实际开始除冰时间ACDT
+    T.AEDT,	-- 实际结束除冰时间AEDT
+    T.AACT, -- 机务放行时间
+    T.TRDT, -- 牵引时间时间
+    T.MPBT, -- 下机开始时间
+    T.MPET, -- 下机结束时间
+    T.REASON_FC, -- 原因反馈单位
+	T.REASON_TYPE, -- 原因类型
+	R.CHINESE_NAME AS REASONS_FOR_DELAY, -- 延误原因
+    CASE WHEN T.FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y') AND T.FLIGHT_ID_A IS NULL THEN T.DELAY_TIME_D
+    WHEN T.FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y') AND (IFNULL(T.DELAY_TIME_D,0) - IFNULL(T.DELAY_TIME_A,0) > 0)
+    THEN (IFNULL(T.DELAY_TIME_D,0) - IFNULL(T.DELAY_TIME_A,0))
+    ELSE 0 END AS DELAY_TIME, -- 延误时长
+    CASE WHEN (CASE WHEN T.FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y') AND T.FLIGHT_ID_A IS NULL THEN T.DELAY_TIME_D
+    WHEN T.FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y') AND (IFNULL(T.DELAY_TIME_D,0) - IFNULL(T.DELAY_TIME_A,0) > 0)
+    THEN (IFNULL(T.DELAY_TIME_D,0) - IFNULL(T.DELAY_TIME_A,0))
+    ELSE 0 END) >= 60 THEN 3 WHEN ((CASE WHEN T.FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y') AND T.FLIGHT_ID_A IS NULL THEN T.DELAY_TIME_D
+    WHEN T.FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y') AND (IFNULL(T.DELAY_TIME_D,0) - IFNULL(T.DELAY_TIME_A,0) > 0)
+    THEN (IFNULL(T.DELAY_TIME_D,0) - IFNULL(T.DELAY_TIME_A,0))
+    ELSE 0 END) > 0 AND (CASE WHEN T.FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y') AND T.FLIGHT_ID_A IS NULL THEN T.DELAY_TIME_D
+    WHEN T.FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y') AND (IFNULL(T.DELAY_TIME_D,0) - IFNULL(T.DELAY_TIME_A,0) > 0)
+    THEN (IFNULL(T.DELAY_TIME_D,0) - IFNULL(T.DELAY_TIME_A,0))
+    ELSE 0 END) < 60) THEN 2 ELSE 0 END DELAY_TIME_STATUS,	-- 延误时长状态
+    CASE WHEN (T.ALDT IS NOT NULL OR T.FLIGHT_ID_A IS NULL) THEN 3 ELSE 0 END AS PAIXU
+    FROM (
+      SELECT
+        `V`.`FLIGHT_ID_D` AS `FLIGHT_ID_D`,
+        `V`.`FLIGHT_ID_A` AS `FLIGHT_ID_A`,
+        ifnull(`V`.`AIRLINES`, `V`.`AIRLINES_A`) AS `AIRLINES`,
+        `V`.`FLNO_D` AS `FLNO_D`,
+        `V`.`FLNO_A` AS `FLNO_A`,
+        ifnull(`V`.`EXEC_DATE_D`, `V`.`EXEC_DATE_A`) AS `EXEC_DATE_D`,
+        `V`.`EXEC_DATE_A` AS `EXEC_DATE_A`,
+        `V`.`FLIGHT_IDENTY_MANAGE_DATE` AS `FLIGHT_IDENTY_MANAGE_DATE`,
+        `V`.`FLIGHT_TASK` AS `FLIGHT_TASK`,
+        `V`.`FLIGHT_TASK_A` AS `FLIGHT_TASK_A`,
+        `V`.`ATTRIBUTE` AS `ATTRIBUTE`,
+        `V`.`AGENCY` AS `AGENCY`,
+        ifnull(`V`.`CRAFT_TYPE_ICAO`, `V`.`CRAFT_TYPE_ICAO_A`) AS `CRAFT_TYPE_ICAO`,
+        ifnull(`V`.`REGN`, `V`.`REGN_A`) AS `REGN`,
+        `V`.`FL_STATUS` AS `FL_STATUS`,
+        `V`.`FL_STATUS_A` AS `FL_STATUS_A`,
+        `V`.`SOBT` AS `SOBT`,
+        `V`.`ETOT` AS `ETOT`,
+        `V`.`ATOT` AS `ATOT`,
+        `V`.`SIBT` AS `SIBT`,
+        `V`.`ELDT` AS `ELDT`,
+        `V`.`ALDT` AS `ALDT`,
+        `V`.`EIBT` AS `EIBT`,
+        `V`.`AIBT` AS `AIBT`,
+        `V`.`EOBT` AS `EOBT`,
+        `V`.`AOBT` AS `AOBT`,
+        `V`.`SHARE_FLNO` AS `SHARE_FLNO`,
+        `V`.`ADEP_A` AS `ADEP_A`,
+        `V`.`ADES_A` AS `ADES_A`,
+        `V`.`ADEP_D` AS `ADEP_D`,
+        `V`.`ADES_D` AS `ADES_D`,
+        `V`.`START_STATION` AS `START_STATION`,
+        `V`.`START_SOBT` AS `START_SOBT`,
+        `V`.`START_SIBT` AS `START_SIBT`,
+        `V`.`START_EOBT` AS `START_EOBT`,
+        `V`.`START_EIBT` AS `START_EIBT`,
+        `V`.`START_AOBT` AS `START_AOBT`,
+        `V`.`START_AIBT` AS `START_AIBT`,
+        `V`.`EXIT` AS `EXIT`,
+        `V`.`EXOT` AS `EXOT`,
+        `V`.`AXIT` AS `AXIT`,
+        `V`.`AXOT` AS `AXOT`,
+        `V`.`DELAY_TIME_A` AS `DELAY_TIME_A`,
+        `V`.`DELAY_TIME_D` AS `DELAY_TIME_D`,
+        `V`.`STAND_A` AS `STAND_A`,
+        `V`.`STAND_D` AS `STAND_D`,
+        `V`.`GATE` AS `GATE`,
+        `V`.`CHECK_START_TIME` AS `CHECK_START_TIME`,
+        `V`.`CHECK_END_TIME` AS `CHECK_END_TIME`,
+        `V`.`COBT` AS `COBT`,
+        `V`.`CTOT` AS `CTOT`,
+        `V`.`TOBT` AS `TOBT`,
+        `V`.`TTOT` AS `TTOT`,
+        `V`.`A_TOBT` AS `A_TOBT`,
+        `V`.`DOBT` AS `DOBT`,
+        `V`.`FCT` AS `FCT`,
+        `V`.`RPOT` AS `RPOT`,
+        `V`.`APOT` AS `APOT`,
+        `V`.`ASAT` AS `ASAT`,
+        `V`.`RUNWAY_A` AS `RUNWAY_A`,
+        `V`.`RUNWAY_D` AS `RUNWAY_D`,
+        `V`.`ERSL` AS `ERSL`,
+        `V`.`ELSW` AS `ELSW`,
+        `V`.`ARSL` AS `ARSL`,
+        `V`.`ALSW` AS `ALSW`,
+        `V`.`ETDO` AS `ETDO`,
+        `V`.`ETDC` AS `ETDC`,
+        `V`.`STDC` AS `STDC`,
+        `V`.`ATDO` AS `ATDO`,
+        `V`.`ATDC` AS `ATDC`,
+        `V`.`ETFO` AS `ETFO`,
+        `V`.`ETFC` AS `ETFC`,
+        `V`.`ATFO` AS `ATFO`,
+        `V`.`ATFC` AS `ATFC`,
+        `V`.`ESCT` AS `ESCT`,
+        `V`.`EFCT` AS `EFCT`,
+        `V`.`ASCT` AS `ASCT`,
+        `V`.`AFCT` AS `AFCT`,
+        `V`.`ESC` AS `ESC`,
+        `V`.`EEC` AS `EEC`,
+        `V`.`ASC` AS `ASC`,
+        `V`.`AEC` AS `AEC`,
+        `V`.`ESR` AS `ESR`,
+        `V`.`EER` AS `EER`,
+        `V`.`ASR` AS `ASR`,
+        `V`.`AER` AS `AER`,
+        `V`.`ESBT` AS `ESBT`,
+        `V`.`EEBT` AS `EEBT`,
+        `V`.`LCBT` AS `LCBT`,
+        `V`.`ASBT` AS `ASBT`,
+        `V`.`AEBT` AS `AEBT`,
+        `V`.`ECDT` AS `ECDT`,
+        `V`.`ACDT` AS `ACDT`,
+        `V`.`EEDT` AS `EEDT`,
+        `V`.`AEDT` AS `AEDT`,
+        `V`.`AACT` AS `AACT`,
+        `V`.`A_GRND_TSF_TM` AS `A_GRND_TSF_TM`,
+        `V`.`D_GRND_TSF_TM` AS `D_GRND_TSF_TM`,
+        `V`.`TERMINAL` AS `TERMINAL`,
+        `V`.`BAG_COUNT` AS `BAG_COUNT`,
+        `V`.`BAG_WEIGHT` AS `BAG_WEIGHT`,
+        `V`.`PAX_COUNT` AS `PAX_COUNT`,
+        `V`.`DURATION_A` AS `DURATION_A`,
+        `V`.`DURATION_D` AS `DURATION_D`,
+        `V`.`ISCONTROL` AS `ISCONTROL`,
+        `V`.`ATOT_A` AS `ATOT_A`,
+        `V`.`SOBT_A` AS `SOBT_A`,
+        `V`.`ETOT_A` AS `ETOT_A`,
+        `V`.`SIBT_D` AS `SIBT_D`,
+        `V`.`ELDT_D` AS `ELDT_D`,
+        `V`.`ALDT_D` AS `ALDT_D`,
+        `V`.`TRDT` AS `TRDT`,
+        `V`.`TRBT` AS `TRBT`,
+        `V`.`TRET` AS `TRET`,
+        `V`.`ERBT` AS `ERBT`,
+        `V`.`ERET` AS `ERET`,
+        `V`.`MPBT` AS `MPBT`,
+        `V`.`MPET` AS `MPET`,
+        `V`.`LDBT` AS `LDBT`,
+        `V`.`LDET` AS `LDET`,
+        `V`.`REASON_FC` AS `REASON_FC`,
+        `V`.`REASON_TYPE` AS `REASON_TYPE`,
+        `V`.`REASONS_FOR_DELAY` AS `REASONS_FOR_DELAY`,
+        `V`.`ISDEICING_D` AS `ISDEICING_D`,
+        `V`.`ISDEICING_A` AS `ISDEICING_A`,
+        `V`.`ISFOCUS_D` AS `ISFOCUS_D`,
+        `V`.`ISFOCUS_A` AS `ISFOCUS_A`,
+        `V`.`ISDEICING` AS `ISDEICING`
+    FROM
+        (
+            SELECT
+                `AA`.`FLIGHT_ID` AS `FLIGHT_ID_D`,
+                `A`.`FLIGHT_ID` AS `FLIGHT_ID_A`,
+                `AA`.`AIRLINES` AS `AIRLINES`,
+                `A`.`AIRLINES` AS `AIRLINES_A`,
+                `AA`.`FLNO` AS `FLNO_D`,
+                `A`.`FLNO` AS `FLNO_A`,
+                date_format(`AA`.`EXEC_DATE`, '%Y-%m-%d') AS `EXEC_DATE_D`,
+                date_format(`A`.`EXEC_DATE`, '%Y-%m-%d') AS `EXEC_DATE_A`,
+                date_format(`AA`.`FLIGHT_IDENTY_MANAGE_DATE`, '%Y-%m-%d %H:%i') AS `FLIGHT_IDENTY_MANAGE_DATE`,
+                `AA`.`FLIGHT_TASK` AS `FLIGHT_TASK`,
+                `A`.`FLIGHT_TASK` AS `FLIGHT_TASK_A`,
+                `AA`.`ATTRIBUTE` AS `ATTRIBUTE`,
+                `AA`.`AGENCY` AS `AGENCY`,
+                `AA`.`CRAFT_TYPE_ICAO` AS `CRAFT_TYPE_ICAO`,
+                `A`.`CRAFT_TYPE_ICAO` AS `CRAFT_TYPE_ICAO_A`,
+                `AA`.`REGN` AS `REGN`,
+                `A`.`REGN` AS `REGN_A`,
+            IF ((ifnull(`AA`.`ABNORMAL_FLIGHT_STAT_CD`, '') = ''), `AA`.`NORMAL_FLIGHT_STAT_CD`, `AA`.`ABNORMAL_FLIGHT_STAT_CD`) AS `FL_STATUS`,
+            IF ((ifnull(`A`.`ABNORMAL_FLIGHT_STAT_CD`, '') = ''), `A`.`NORMAL_FLIGHT_STAT_CD`, `A`.`ABNORMAL_FLIGHT_STAT_CD`) AS `FL_STATUS_A`,
+        CONVERT (date_format(`AA`.`SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SOBT`,
+        CONVERT (date_format(`AA`.`ETOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETOT`,
+        CONVERT (date_format(`AA`.`ATOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATOT`,
+        CONVERT (date_format(`A`.`SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SIBT`,
+        CONVERT (date_format(`AA`.`SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SIBT_D`,
+        CONVERT (date_format(`A`.`ELDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELDT`,
+        CONVERT (date_format(`AA`.`ELDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELDT_D`,
+        CONVERT (date_format(`A`.`ALDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALDT`,
+        CONVERT (date_format(`AA`.`ALDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALDT_D`,
+        CONVERT (date_format(`A`.`EIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EIBT`,
+        CONVERT (date_format(`A`.`AIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AIBT`,
+        CONVERT (date_format(`AA`.`EOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EOBT`,
+        CONVERT (date_format(`AA`.`AOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AOBT`,
+        `AA`.`SHARE_FLNO` AS `SHARE_FLNO`,
+        `A`.`ADEP` AS `ADEP_A`,
+        `A`.`ADES` AS `ADES_A`,
+        `AA`.`ADEP` AS `ADEP_D`,
+        `AA`.`ADES` AS `ADES_D`,
+        `A`.`START_STATION` AS `START_STATION`,
+        CONVERT (date_format(`A`.`START_SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_SOBT`,
+        CONVERT (date_format(`A`.`START_SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_SIBT`,
+        CONVERT (date_format(`A`.`START_EOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_EOBT`,
+        CONVERT (date_format(`A`.`START_EIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_EIBT`,
+        CONVERT (date_format(`A`.`START_AOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_AOBT`,
+        CONVERT (date_format(`A`.`START_AIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_AIBT`,
+        `A`.`EXIT` AS `EXIT`,
+        `AA`.`EXOT` AS `EXOT`,
+        `A`.`AXIT` AS `AXIT`,
+        `AA`.`AXOT` AS `AXOT`,
+        `A`.`DELAY_TIME` AS `DELAY_TIME_A`,
+        `AA`.`DELAY_TIME` AS `DELAY_TIME_D`,
+        `A`.`STAND` AS `STAND_A`,
+        `AA`.`STAND` AS `STAND_D`,
+        `AA`.`GATE` AS `GATE`,
+        CONVERT (date_format(`AA`.`CHECK_START_TIME`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CHECK_START_TIME`,
+        CONVERT (date_format(`AA`.`CHECK_END_TIME`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CHECK_END_TIME`,
+        CONVERT (date_format(`AA`.`COBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `COBT`,
+        CONVERT (date_format(`AA`.`CTOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CTOT`,
+        CONVERT (date_format(`AA`.`TOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TOBT`,
+        CONVERT (date_format(`AA`.`TTOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TTOT`,
+        CONVERT (date_format(`AA`.`A_TOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `A_TOBT`,
+        CONVERT (date_format(`AA`.`DOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `DOBT`,
+        CONVERT (date_format(`AA`.`FCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `FCT`,
+        CONVERT (date_format(`AA`.`RPOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `RPOT`,
+        CONVERT (date_format(`AA`.`APOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `APOT`,
+        CONVERT (date_format(`AA`.`ASAT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASAT`,
+        `A`.`RUNWAY` AS `RUNWAY_A`,
+        `AA`.`RUNWAY` AS `RUNWAY_D`,
+        CONVERT (date_format(`A`.`ERSL`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ERSL`,
+        CONVERT (date_format(`AA`.`ELSW`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELSW`,
+        CONVERT (date_format(`A`.`ARSL`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ARSL`,
+        CONVERT (date_format(`AA`.`ALSW`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALSW`,
+        CONVERT (date_format(`A`.`ETDO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETDO`,
+        CONVERT (date_format(`AA`.`ETDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETDC`,
+        CONVERT (date_format(`AA`.`STDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `STDC`,
+        CONVERT (date_format(`A`.`ATDO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATDO`,
+        CONVERT (date_format(`AA`.`ATDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATDC`,
+        CONVERT (date_format(`A`.`ETFO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETFO`,
+        CONVERT (date_format(`AA`.`ETFC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETFC`,
+        CONVERT (date_format(`A`.`ATFO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATFO`,
+        CONVERT (date_format(`AA`.`ATFC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATFC`,
+        CONVERT (date_format(`AA`.`ESCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESCT`,
+        CONVERT (date_format(`AA`.`EFCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EFCT`,
+        CONVERT (date_format(ifnull(`AA`.`ASCT`, `A`.`ASCT`), '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASCT`,
+        CONVERT (date_format(ifnull(`AA`.`AFCT`, `A`.`AFCT`), '%Y-%m-%d %H:%i') USING utf8mb4) AS `AFCT`,
+        CONVERT (date_format(`AA`.`ESC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESC`,
+        CONVERT (date_format(`AA`.`EEC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEC`,
+        CONVERT (date_format(`AA`.`ASC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASC`,
+        CONVERT (date_format(`AA`.`AEC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEC`,
+        CONVERT (date_format(`AA`.`ESR`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESR`,
+        CONVERT (date_format(`AA`.`EER`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EER`,
+        CONVERT (date_format(`AA`.`ASR`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASR`,
+        CONVERT (date_format(`AA`.`AER`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AER`,
+        CONVERT (date_format(`AA`.`ESBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESBT`,
+        CONVERT (date_format(`AA`.`EEBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEBT`,
+        CONVERT (date_format(`AA`.`LCBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `LCBT`,
+        CONVERT (date_format(`AA`.`ASBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASBT`,
+        CONVERT (date_format(`AA`.`AEBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEBT`,
+        CONVERT (date_format(`AA`.`ECDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ECDT`,
+        CONVERT (date_format(`AA`.`ACDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ACDT`,
+        CONVERT (date_format(`AA`.`EEDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEDT`,
+        CONVERT (date_format(`AA`.`AEDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEDT`,
+        CONVERT (date_format(`AA`.`AACT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AACT`,
+        CONVERT (date_format(`A`.`A_GRND_TSF_TM`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `A_GRND_TSF_TM`,
+        CONVERT (date_format(`AA`.`D_GRND_TSF_TM`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `D_GRND_TSF_TM`,
+        `AA`.`TERMINAL` AS `TERMINAL`,
+        `AA`.`BAG_COUNT` AS `BAG_COUNT`,
+        `AA`.`BAG_WEIGHT` AS `BAG_WEIGHT`,
+        `AA`.`PAX_COUNT` AS `PAX_COUNT`,
+        timestampdiff(MINUTE, `AA`.`SOBT`, `AA`.`SIBT`) AS `DURATION_D`,
+        timestampdiff(MINUTE, `A`.`SOBT`, `A`.`SIBT`) AS `DURATION_A`,
+        `AA`.`ISCONTROL` AS `ISCONTROL`,
+        CONVERT (date_format(`A`.`ATOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATOT_A`,
+        CONVERT (date_format(`A`.`SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SOBT_A`,
+        CONVERT (date_format(`A`.`ETOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETOT_A`,
+        CONVERT (date_format(`AA`.`TRDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TRDT`,
+        CONVERT (date_format(`A`.`MPBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `MPBT`,
+        CONVERT (date_format(`A`.`MPET`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `MPET`,
+        `AA`.`TRBT` AS `TRBT`,
+        `AA`.`TRET` AS `TRET`,
+        `AA`.`ERBT` AS `ERBT`,
+        `AA`.`ERET` AS `ERET`,
+        `AA`.`LDBT` AS `LDBT`,
+        `AA`.`LDET` AS `LDET`,
+        `AA`.`REASON_FC` AS `REASON_FC`,
+        `AA`.`REASON_TYPE` AS `REASON_TYPE`,
+        `AA`.`REASONS_FOR_DELAY` AS `REASONS_FOR_DELAY`,
+        `AA`.`ISDEICING` AS `ISDEICING_D`,
+        `A`.`ISDEICING` AS `ISDEICING_A`,
+        `AA`.`ISFOCUS` AS `ISFOCUS_D`,
+        `A`.`ISFOCUS` AS `ISFOCUS_A`,
+        `AA`.`ISDEICING` AS `ISDEICING`
+    FROM
+        ((SELECT * FROM T_LOCAL_FLIGHT_INFO
+            WHERE ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+            AND ISDEL <> '1'
+            ]]>
+            AND EXEC_DATE BETWEEN #{params.startExecDate,jdbcType=VARCHAR} AND #{params.endExecDate,jdbcType=VARCHAR}
+            <![CDATA[
+            UNION
+            SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY
+            WHERE ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+            AND ISDEL <> '1'
+            ]]>
+            AND EXEC_DATE BETWEEN #{params.startExecDate,jdbcType=VARCHAR} AND #{params.endExecDate,jdbcType=VARCHAR}) `AA`
+            <![CDATA[
+            LEFT JOIN (SELECT * FROM T_LOCAL_FLIGHT_INFO
+            WHERE ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+            AND ISDEL <> '1'
+            ]]>
+            AND EXEC_DATE BETWEEN #{params.startExecDate,jdbcType=VARCHAR} AND #{params.endExecDate,jdbcType=VARCHAR}
+            <![CDATA[
+            UNION
+            SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY
+            WHERE ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+            AND ISDEL <> '1'
+            ]]>
+            AND EXEC_DATE BETWEEN #{params.startExecDate,jdbcType=VARCHAR} AND #{params.endExecDate,jdbcType=VARCHAR}) `A` ON((`AA`.`ASSOCIATED_FLIGHT_ID` = `A`.`FLIGHT_ID`)))
+    <![CDATA[
+    WHERE
+        ((`AA`.`D_OR_A` = 'D') AND(`AA`.`ISDEL` <> '1') AND(`AA`.`ABNORMAL_FLIGHT_STAT_CD` <> 'CAN'))
+    UNION
+        SELECT
+            `AA`.`FLIGHT_ID` AS `FLIGHT_ID_D`,
+            `A`.`FLIGHT_ID` AS `FLIGHT_ID_A`,
+            `AA`.`AIRLINES` AS `AIRLINES`,
+            `A`.`AIRLINES` AS `AIRLINES_A`,
+            `AA`.`FLNO` AS `FLNO_D`,
+            `A`.`FLNO` AS `FLNO_A`,
+            CONVERT (date_format(`AA`.`EXEC_DATE`, '%Y-%m-%d') USING utf8mb4) AS `EXEC_DATE_D`,
+            CONVERT (date_format(`A`.`EXEC_DATE`, '%Y-%m-%d') USING utf8mb4) AS `EXEC_DATE_A`,
+            CONVERT (date_format(`AA`.`FLIGHT_IDENTY_MANAGE_DATE`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `FLIGHT_IDENTY_MANAGE_DATE`,
+            `AA`.`FLIGHT_TASK` AS `FLIGHT_TASK`,
+            `A`.`FLIGHT_TASK` AS `FLIGHT_TASK_A`,
+            `AA`.`ATTRIBUTE` AS `ATTRIBUTE`,
+            `AA`.`AGENCY` AS `AGENCY`,
+            `AA`.`CRAFT_TYPE_ICAO` AS `CRAFT_TYPE_ICAO`,
+            `A`.`CRAFT_TYPE_ICAO` AS `CRAFT_TYPE_ICAO_A`,
+            `AA`.`REGN` AS `REGN`,
+            `A`.`REGN` AS `REGN_A`,
+        IF ((ifnull(`AA`.`ABNORMAL_FLIGHT_STAT_CD`, '') = ''), `AA`.`NORMAL_FLIGHT_STAT_CD`, `AA`.`ABNORMAL_FLIGHT_STAT_CD`) AS `FL_STATUS`,
+        IF ((ifnull(`A`.`ABNORMAL_FLIGHT_STAT_CD`, '') = ''), `A`.`NORMAL_FLIGHT_STAT_CD`, `A`.`ABNORMAL_FLIGHT_STAT_CD`) AS `FL_STATUS_A`,
+     CONVERT (date_format(`AA`.`SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SOBT`,
+     CONVERT (date_format(`AA`.`ETOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETOT`,
+     CONVERT (date_format(`AA`.`ATOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATOT`,
+     CONVERT (date_format(`A`.`SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SIBT`,
+     CONVERT (date_format(`AA`.`SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SIBT_D`,
+     CONVERT (date_format(`A`.`ELDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELDT`,
+     CONVERT (date_format(`AA`.`ELDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELDT_D`,
+     CONVERT (date_format(`A`.`ALDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALDT`,
+     CONVERT (date_format(`AA`.`ALDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALDT_D`,
+     CONVERT (date_format(`A`.`EIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EIBT`,
+     CONVERT (date_format(`A`.`AIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AIBT`,
+     CONVERT (date_format(`AA`.`EOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EOBT`,
+     CONVERT (date_format(`AA`.`AOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AOBT`,
+     `AA`.`SHARE_FLNO` AS `SHARE_FLNO`,
+     `A`.`ADEP` AS `ADEP_A`,
+     `A`.`ADES` AS `ADES_A`,
+     `AA`.`ADEP` AS `ADEP_D`,
+     `AA`.`ADES` AS `ADES_D`,
+     `A`.`START_STATION` AS `START_STATION`,
+     CONVERT (date_format(`A`.`START_SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_SOBT`,
+     CONVERT (date_format(`A`.`START_SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_SIBT`,
+     CONVERT (date_format(`A`.`START_EOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_EOBT`,
+     CONVERT (date_format(`A`.`START_EIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_EIBT`,
+     CONVERT (date_format(`A`.`START_AOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_AOBT`,
+     CONVERT (date_format(`A`.`START_AIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_AIBT`,
+     `A`.`EXIT` AS `EXIT`,
+     `AA`.`EXOT` AS `EXOT`,
+     `A`.`AXIT` AS `AXIT`,
+     `AA`.`AXOT` AS `AXOT`,
+     `A`.`DELAY_TIME` AS `DELAY_TIME_A`,
+     `AA`.`DELAY_TIME` AS `DELAY_TIME_D`,
+     `A`.`STAND` AS `STAND_A`,
+     `AA`.`STAND` AS `STAND_D`,
+     `AA`.`GATE` AS `GATE`,
+     CONVERT (date_format(`AA`.`CHECK_START_TIME`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CHECK_START_TIME`,
+     CONVERT (date_format(`AA`.`CHECK_END_TIME`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CHECK_END_TIME`,
+     CONVERT (date_format(`AA`.`COBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `COBT`,
+     CONVERT (date_format(`AA`.`CTOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CTOT`,
+     CONVERT (date_format(`AA`.`TOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TOBT`,
+     CONVERT (date_format(`AA`.`TTOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TTOT`,
+     CONVERT (date_format(`AA`.`A_TOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `A_TOBT`,
+     CONVERT (date_format(`AA`.`DOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `DOBT`,
+     CONVERT (date_format(`AA`.`FCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `FCT`,
+     CONVERT (date_format(`AA`.`RPOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `RPOT`,
+     CONVERT (date_format(`AA`.`APOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `APOT`,
+     CONVERT (date_format(`AA`.`ASAT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASAT`,
+     `A`.`RUNWAY` AS `RUNWAY_A`,
+     `AA`.`RUNWAY` AS `RUNWAY_D`,
+     CONVERT (date_format(`A`.`ERSL`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ERSL`,
+     CONVERT (date_format(`AA`.`ELSW`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELSW`,
+     CONVERT (date_format(`A`.`ARSL`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ARSL`,
+     CONVERT (date_format(`AA`.`ALSW`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALSW`,
+     CONVERT (date_format(`A`.`ETDO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETDO`,
+     CONVERT (date_format(`AA`.`STDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `STDC`,
+     CONVERT (date_format(`AA`.`ETDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETDC`,
+     CONVERT (date_format(`A`.`ATDO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATDO`,
+     CONVERT (date_format(`AA`.`ATDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATDC`,
+     CONVERT (date_format(`A`.`ETFO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETFO`,
+     CONVERT (date_format(`AA`.`ETFC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETFC`,
+     CONVERT (date_format(`A`.`ATFO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATFO`,
+     CONVERT (date_format(`AA`.`ATFC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATFC`,
+     CONVERT (date_format(`AA`.`ESCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESCT`,
+     CONVERT (date_format(`AA`.`EFCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EFCT`,
+     CONVERT (date_format(`AA`.`ASCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASCT`,
+     CONVERT (date_format(`AA`.`AFCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AFCT`,
+     CONVERT (date_format(`AA`.`ESC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESC`,
+     CONVERT (date_format(`AA`.`EEC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEC`,
+     CONVERT (date_format(`AA`.`ASC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASC`,
+     CONVERT (date_format(`AA`.`AEC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEC`,
+     CONVERT (date_format(`AA`.`ESR`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESR`,
+     CONVERT (date_format(`AA`.`EER`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EER`,
+     CONVERT (date_format(`AA`.`ASR`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASR`,
+     CONVERT (date_format(`AA`.`AER`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AER`,
+     CONVERT (date_format(`AA`.`ESBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESBT`,
+     CONVERT (date_format(`AA`.`EEBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEBT`,
+     CONVERT (date_format(`AA`.`LCBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `LCBT`,
+     CONVERT (date_format(`AA`.`ASBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASBT`,
+     CONVERT (date_format(`AA`.`AEBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEBT`,
+     CONVERT (date_format(`AA`.`ECDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ECDT`,
+     CONVERT (date_format(`AA`.`ACDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ACDT`,
+     CONVERT (date_format(`AA`.`EEDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEDT`,
+     CONVERT (date_format(`AA`.`AEDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEDT`,
+     CONVERT (date_format(`AA`.`AACT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AACT`,
+     CONVERT (date_format(`A`.`A_GRND_TSF_TM`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `A_GRND_TSF_TM`,
+     CONVERT (date_format(`AA`.`D_GRND_TSF_TM`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `D_GRND_TSF_TM`,
+     `AA`.`TERMINAL` AS `TERMINAL`,
+     `AA`.`BAG_COUNT` AS `BAG_COUNT`,
+     `AA`.`BAG_WEIGHT` AS `BAG_WEIGHT`,
+     `AA`.`PAX_COUNT` AS `PAX_COUNT`,
+     timestampdiff(MINUTE, `AA`.`SOBT`, `AA`.`SIBT`) AS `DURATION_D`,
+     timestampdiff(MINUTE, `A`.`SOBT`, `A`.`SIBT`) AS `DURATION_A`,
+     `AA`.`ISCONTROL` AS `ISCONTROL`,
+     CONVERT (date_format(`A`.`ATOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATOT_A`,
+     CONVERT (date_format(`A`.`SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SOBT_A`,
+     CONVERT (date_format(`A`.`ETOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETOT_A`,
+     CONVERT (date_format(`AA`.`TRDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TRDT`,
+     CONVERT (date_format(`A`.`MPBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `MPBT`,
+     CONVERT (date_format(`A`.`MPET`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `MPET`,
+     `AA`.`TRBT` AS `TRBT`,
+     `AA`.`TRET` AS `TRET`,
+     `AA`.`ERBT` AS `ERBT`,
+     `AA`.`ERET` AS `ERET`,
+     `AA`.`LDBT` AS `LDBT`,
+     `AA`.`LDET` AS `LDET`,
+     `AA`.`REASON_FC` AS `REASON_FC`,
+     `AA`.`REASON_TYPE` AS `REASON_TYPE`,
+     `AA`.`REASONS_FOR_DELAY` AS `REASONS_FOR_DELAY`,
+     `AA`.`ISDEICING` AS `ISDEICING_D`,
+     `A`.`ISDEICING` AS `ISDEICING_A`,
+     `AA`.`ISFOCUS` AS `ISFOCUS_D`,
+     `A`.`ISFOCUS` AS `ISFOCUS_A`,
+     `AA`.`ISDEICING` AS `ISDEICING`
+    FROM
+        ((SELECT * FROM T_LOCAL_FLIGHT_INFO
+            WHERE ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+            AND ISDEL <> '1'
+            ]]>
+            AND EXEC_DATE BETWEEN #{params.startExecDate,jdbcType=VARCHAR} AND #{params.endExecDate,jdbcType=VARCHAR}
+            <![CDATA[
+            UNION
+            SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY
+            WHERE ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+            AND ISDEL <> '1'
+            ]]>
+            AND EXEC_DATE BETWEEN #{params.startExecDate,jdbcType=VARCHAR} AND #{params.endExecDate,jdbcType=VARCHAR}) `A`
+            <![CDATA[
+        LEFT JOIN (SELECT * FROM T_LOCAL_FLIGHT_INFO
+            WHERE ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+            AND ISDEL <> '1'
+            ]]>
+            AND EXEC_DATE BETWEEN #{params.startExecDate,jdbcType=VARCHAR} AND #{params.endExecDate,jdbcType=VARCHAR}
+            <![CDATA[
+            UNION
+            SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY
+            WHERE ABNORMAL_FLIGHT_STAT_CD <> 'CAN'
+            AND ISDEL <> '1'
+            ]]>
+            AND EXEC_DATE BETWEEN #{params.startExecDate,jdbcType=VARCHAR} AND #{params.endExecDate,jdbcType=VARCHAR}) `AA` ON((`AA`.`ASSOCIATED_FLIGHT_ID` = `A`.`FLIGHT_ID`)))
+        <![CDATA[
+        WHERE
+        ((`A`.`D_OR_A` = 'A') AND isnull(`AA`.`FLIGHT_ID`) AND(`A`.`ISDEL` <> '1') AND(`A`.`ABNORMAL_FLIGHT_STAT_CD` <> 'CAN'))
+        ) `V`
+    ) T
+    LEFT JOIN T_FLIGHT_STATUS B ON T.FL_STATUS = B.`CODE`
+    LEFT JOIN T_FLIGHT_STATUS BB ON T.FL_STATUS_A = BB.`CODE`
+    LEFT JOIN T_CRAFT_TYPE E ON E.ICAO_CD = T.CRAFT_TYPE_ICAO
+    LEFT JOIN T_ABNORMAL_REASON R ON T.REASONS_FOR_DELAY = R.CODE
+    -- LEFT JOIN T_AIRPORT C ON T.ADEP_A = C.AIRPORT_IATA
+    -- LEFT JOIN T_AIRPORT D ON T.ADES_A = D.AIRPORT_IATA
+    -- LEFT JOIN T_AIRPORT DD ON T.ADES_D = DD.AIRPORT_IATA
+    WHERE (T.FL_STATUS <> 'CAN' OR T.FL_STATUS IS NULL) AND (T.FL_STATUS_A <> 'CAN' OR T.FL_STATUS_A IS NULL)
+    ]]>
+    <if test="params.startTime !=null and params.startTime != '' and params.endTime !=null and params.endTime != '' ">
+     AND ((DATE_FORMAT(T.SOBT, '%Y-%m-%d') BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR})
+     OR (DATE_FORMAT(T.SIBT, '%Y-%m-%d') BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR}))
+    </if>
+    <if test="params.flno !=null and params.flno != ''">
+      AND (T.FLNO_D LIKE CONCAT('%',#{params.flno,jdbcType=VARCHAR},'%') OR T.FLNO_A LIKE CONCAT('%',#{params.flno,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="params.airlines !=null and params.airlines != ''">
+      AND T.AIRLINES = #{params.airlines,jdbcType=VARCHAR}
+    </if>
+    <if test="params.adep !=null and params.adep != ''">
+      AND (T.ADEP_A = #{params.adep,jdbcType=VARCHAR} OR T.ADEP_D = #{params.adep,jdbcType=VARCHAR})
+    </if>
+    <if test="params.ades !=null and params.ades != ''">
+      AND (T.ADES_A = #{params.ades,jdbcType=VARCHAR} OR T.ADES_D = #{params.ades,jdbcType=VARCHAR})
+    </if>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND T.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND T.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND T.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND T.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND T.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.delay !=null and params.delay == 1">
+      <![CDATA[
+      -- AND T.FL_STATUS = 'DLY'
+      -- AND (T.FL_STATUS = 'DLY' OR T.FL_STATUS_A = 'DLY')
+
+      AND ((CASE WHEN T.FLIGHT_ID_A IS NULL THEN T.DELAY_TIME_D
+      WHEN (IFNULL(T.DELAY_TIME_D,0) - IFNULL(T.DELAY_TIME_A,0) > 0)
+      THEN (IFNULL(T.DELAY_TIME_D,0) - IFNULL(T.DELAY_TIME_A,0))
+      ELSE 0 END) > 0
+      AND T.FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y'))
+      ]]>
+    </if>
+    <if test="params.fx !=null and params.fx == 1">
+      <![CDATA[
+      -- AND T.FL_STATUS = 'DLY'
+      -- AND (T.FL_STATUS = 'DLY' OR T.FL_STATUS_A = 'DLY')
+
+      AND T.ATOT IS NOT NULL
+      AND T.FLIGHT_TASK IN ('W/Z','C/B','L/W')
+      ]]>
+    </if>
+    <if test="params.agent == null or params.agent == ''" >
+      <if test="params.agentSys !=null and params.agentSys != ''">
+        <choose>
+          <when test="params.dept !=null and params.dept == 'IGO'">
+            AND T.AIRLINES NOT IN (${params.agentSys})
+          </when>
+          <otherwise>
+            AND T.AIRLINES IN (${params.agentSys})
+          </otherwise>
+        </choose>
+      </if>
+    </if>
+    ORDER BY PAIXU DESC, T.SOBT ASC
+  </select>
+
+  <select id="findAllCompany" resultType="string"  >
+    <!--
+    SELECT DISTINCT AIRLINES FROM T_LOCAL_FLIGHT_INFO
+    WHERE SUBSTRING(SUBSTRING_INDEX(SUBSTRING_INDEX(FFID,'-',-2),'-',1),1,8) = DATE_FORMAT(CURRENT_DATE,'%Y%m%d')
+    AND AIRLINES IS NOT NULL
+    ORDER BY AIRLINES ASC
+    -->
+    SELECT DISTINCT AIRLINES FROM V_UTIL_HISTORY_DAILY_FLIGHT
+    WHERE AIRLINES IS NOT NULL
+    ORDER BY AIRLINES ASC
+  </select>
+
+  <select id="findAllAirCode" resultType="string"  >
+    SELECT DISTINCT AIRPORT_IATA from T_AIRPORT  ORDER BY AIRPORT_IATA
+  </select>
+
+  <select id="findAllControlInfo" resultMap="ControlInfoResultMap" parameterType="map" >
+    SELECT A.CONTROL_ID,A.CONTROL_CONTENT,A.CONTROL_ALTERAT_STARTTM,A.CONTROL_REAL_STARTTM,
+    A.CONTROL_ALTERAT_ENDTM,A.CONTROL_REAL_ENDTM,A.CONTROL_POINT
+    FROM T_CONTROL_INFO A
+    LEFT JOIN T_CONTROL_MAP B ON A.CONTROL_ID = B.CONTROL_ID
+    WHERE 1=1
+    AND B.FLIGHT_ID = #{params.flightId,jdbcType=BIGINT}
+
+    <!--
+    <choose>
+      <when test="params.flightIdD != null">
+        AND B.FLIGHT_ID = #{params.flightIdD,jdbcType=BIGINT}
+      </when>
+      <otherwise>
+        AND B.FLIGHT_ID = #{params.flightIdA,jdbcType=BIGINT}
+      </otherwise>
+    </choose>
+    -->
+  </select>
+
+
+  <select id="findFlightDetails" resultMap="ResultMapFlightDetails" parameterType="java.util.HashMap" >
+    SELECT T.FLIGHT_ID_D, -- 离港航班唯一ID
+    T.FLIGHT_ID_A, -- 进港航班唯一ID
+    T.AIRLINES, -- 航空公司2码
+    T.FLNO_D,-- 出港航班号
+    T.FLNO_A,-- 进港航班号
+    T.EXEC_DATE_D,-- 出港执行日期时间（根据本次的信息）
+    T.EXEC_DATE_A,-- 进港执行日期时间（根据本次的信息）
+    T.FLIGHT_IDENTY_MANAGE_DATE,-- 起飞时间的DATE
+    T.FLIGHT_TASK,-- 航班任务
+    T.ATTRIBUTE,-- 航班属性
+    T.AGENCY, -- 航班代理
+    T.CRAFT_TYPE_ICAO, -- 机型
+    E.CLASSIFICATION, -- 机型大类
+    T.REGN AS REGN, -- 机号
+    T.FL_STATUS,-- 出港航班状态
+    T.FL_STATUS_A, -- 进港航班状态
+    T.SOBT,-- 出港计划起飞时间
+    T.ETOT,-- 出港预计起飞时间
+    T.ATOT,-- 出港实际起飞时间
+    T.SOBT_A,-- 进港计划起飞时间
+    T.ETOT_A,-- 进港预计起飞时间
+    T.ATOT_A,-- 进港实际起飞时间
+    T.SIBT,-- 进港计划落地时间
+    T.ELDT,-- 进港预计落地时间
+    T.ALDT,-- 进港实际落地时间
+    T.SIBT_D,-- 出港计划落地时间
+    T.ELDT_D,-- 出港预计落地时间
+    T.ALDT_D,-- 出港实际落地时间
+    T.EIBT, -- 预计上轮档时间EIBT
+    T.AIBT, -- 实际上轮档时间AIBT
+    T.EOBT, -- 预计撤轮当时间EOBT
+    T.AOBT, -- 实际撤轮档时间AOBT
+    T.SHARE_FLNO, -- 共享航班号 多个,分隔
+    T.ADEP_A,-- 进港起飞机场
+    T.ADES_A,-- 进港落地机场
+    T.ADEP_D,-- 离港起飞机场
+    T.ADES_D,-- 离港落地机场
+    T.START_STATION, -- 航班起始站
+    T.START_SOBT,-- 起始站计划起飞时间
+    T.START_SIBT,-- 起始站计划落地时间
+    T.START_EOBT,-- 起始站预计撤轮当时间
+    T.START_EIBT,-- 起始站预计上轮当时间
+    T.START_AOBT,-- 起始站实际撤轮当时间
+    T.START_AIBT,-- 起始站实际上轮当时间
+    T.`EXIT`, -- 预计滑入时长
+    T.EXOT, -- 预计滑出时长
+    T.AXIT, -- 实际滑入时长
+    T.AXOT, -- 实际滑出时长
+    T.STAND_A, -- 进港机位
+    T.STAND_D, -- 离港机位
+    T.GATE, -- 登机门
+    T.CHECK_START_TIME, -- 开始值机时间
+    T.CHECK_END_TIME,-- 结束值机时间
+    T.COBT,-- 离港计算撤轮档时间COBT
+    T.CTOT,-- 离港计算起飞时间CTOT
+    T.TOBT,-- 离港目标撤轮档时间TOBT
+    T.TTOT,-- 离港目标起飞时间TTOT
+    T.A_TOBT,-- 离港机场目标撤轮档时间A_TOBT
+    T.DOBT,-- 离港机场协调撤轮档时间DOBT
+    T.FCT,	-- 首次联系时间
+    T.RPOT,	-- 请求推出时间
+    T.APOT,	-- 实际推出时间
+    T.ASAT,	-- 实际开车时间
+    T.RUNWAY_A,-- 进港跑道号
+    T.RUNWAY_D,-- 离港跑道号
+    T.ERSL,-- 预计靠桥时间（客梯或桥）ERSL
+    T.ELSW,-- 预计离桥时间/撤客梯车时间ELSW
+    T.ARSL,-- 实际靠桥时间（客梯或桥）ARSL
+    T.ALSW,-- 实际离桥时间/撤客梯车时间ALSW
+    T.ETDO,-- 预计开客舱门时间ETDO
+    T.ETDC,-- 预计关客舱门时间ETDC
+    T.ATDO,-- 实际开客舱门时间ATDO
+    T.ATDC,-- 实际关客舱门时间ATDC
+    T.ETFO,-- 预计开货舱门时间ETFO
+    T.ETFC,-- 预计关货舱门时间ETFC
+    T.ATFO,-- 实际开货舱门时间 ATFO
+    T.ATFC,-- 实际关货舱门时间ATFC
+    T.ESCT, -- 预计保洁开始时间ESCT
+    T.EFCT,-- 预计保洁结束时间EFCT
+    T.ASCT, -- 实际保洁开始时间ASCT
+    T.AFCT,-- 实际保洁结束时间AFCT
+    T.ESC, -- 预计开始配餐时间ESC
+    T.EEC,-- 预计完成配餐时间EEC
+    T.`ASC`, -- 实际开始配餐时间ASC
+    T.AEC,-- 实际完成配餐时间AEC
+    T.ESR, -- 预计开始供油时间ESR
+    T.EER,-- 预计完成供油时间EER
+    T.ASR, -- 实际开始供油时间ASR
+    T.AER,-- 实际完成供油时间AER
+    T.ESBT, -- 预计开始登机时间ESBT
+    T.EEBT,-- 预计完成登机时间EEBT
+    T.LCBT,-- 催促登机时间LCBT
+    T.ASBT, -- 实际开始登机时间ASBT
+    T.AEBT,-- 实际完成登机时间AEBT
+    T.ECDT,	-- 预计开始除冰时间ECDT
+    T.ACDT,	-- 实际开始除冰时间ACDT
+    T.EEDT,	-- 预计结束除冰时间EEDT
+    T.AEDT,	-- 实际结束除冰时间AEDT
+    T.AACT,	-- 机务放行时间AACT
+    T.A_GRND_TSF_TM, -- 进港地面移交时间
+    T.D_GRND_TSF_TM, -- 离港地面移交时间
+    T.TERMINAL,-- 航站楼编号
+    T.BAG_COUNT,-- 行李件数
+    T.BAG_COUNT_A,-- 进港行李件数
+    T.BAG_WEIGHT,-- 行李总重量（kg）
+    T.PAX_COUNT, -- 旅客人数
+    T.ISDEICING, -- 是否除冰
+    T.CARGO_WEIGHT_A,-- 进港货物重量（kg）
+    T.CARGO_WEIGHT_D,-- 出港货物重量（kg）
+    T.MAIL_WEIGHT_A,-- 进港邮件重量（kg）
+    T.MAIL_WEIGHT_D,-- 出港邮件重量（kg）
+    T.RESERVATIONS_A,-- 进港订座人数
+    T.RESERVATIONS_D,-- 出港订座人数
+    T.REASONS_FOR_AUTO,-- 自动分析延误原因
+    -- TIMESTAMPDIFF(MINUTE,T.SIBT,T.SOBT) AS PLAN_OVER_STAT_TM,-- 计划过站时长
+    -- CASE WHEN T.AIBT IS NOT NULL THEN TIMESTAMPDIFF(MINUTE,T.AIBT,NOW()) ELSE NULL END AS USED_TIME,-- 已用时长
+    -- CASE WHEN T.AIBT IS NOT NULL THEN ((TIMESTAMPDIFF(MINUTE,T.SIBT,T.SOBT)) - TIMESTAMPDIFF(MINUTE,T.AIBT,NOW())) ELSE NULL END AS REMAIN_TIME -- 剩余时长
+    DATE_ADD(T.SOBT,INTERVAL DELAY_TIME_A MINUTE) AS PLAN_OVER_STAT_TM,-- 延误临界
+    '' AS USED_TIME,-- 已用时长
+    CASE WHEN T.ALDT IS NOT NULL THEN TIMESTAMPDIFF(MINUTE,NOW(),DATE_ADD(T.SOBT,INTERVAL DELAY_TIME_A MINUTE)) ELSE NULL END AS REMAIN_TIME -- 剩余时长
+    FROM (SELECT
+    `R`.`FLIGHT_ID_D` AS `FLIGHT_ID_D`,
+    `R`.`FLIGHT_ID_A` AS `FLIGHT_ID_A`,
+    ifnull(`R`.`AIRLINES`, `R`.`AIRLINES_A`) AS `AIRLINES`,
+    `R`.`FLNO_D` AS `FLNO_D`,
+    `R`.`FLNO_A` AS `FLNO_A`,
+    ifnull(`R`.`EXEC_DATE_D`, `R`.`EXEC_DATE_A`) AS `EXEC_DATE_D`,
+    `R`.`EXEC_DATE_A` AS `EXEC_DATE_A`,
+    `R`.`FLIGHT_IDENTY_MANAGE_DATE` AS `FLIGHT_IDENTY_MANAGE_DATE`,
+    `R`.`FLIGHT_TASK` AS `FLIGHT_TASK`,
+    `R`.`FLIGHT_TASK_A` AS `FLIGHT_TASK_A`,
+    `R`.`ATTRIBUTE` AS `ATTRIBUTE`,
+    `R`.`AGENCY` AS `AGENCY`,
+    ifnull(`R`.`CRAFT_TYPE_ICAO`, `R`.`CRAFT_TYPE_ICAO_A`) AS `CRAFT_TYPE_ICAO`,
+    ifnull(`R`.`REGN`, `R`.`REGN_A`) AS `REGN`,
+    `R`.`FL_STATUS` AS `FL_STATUS`,
+    `R`.`FL_STATUS_A` AS `FL_STATUS_A`,
+    `R`.`SOBT` AS `SOBT`,
+    `R`.`ETOT` AS `ETOT`,
+    `R`.`ATOT` AS `ATOT`,
+    `R`.`SIBT` AS `SIBT`,
+    `R`.`ELDT` AS `ELDT`,
+    `R`.`ALDT` AS `ALDT`,
+    `R`.`EIBT` AS `EIBT`,
+    `R`.`AIBT` AS `AIBT`,
+    `R`.`EOBT` AS `EOBT`,
+    `R`.`AOBT` AS `AOBT`,
+    `R`.`SHARE_FLNO` AS `SHARE_FLNO`,
+    `R`.`ADEP_A` AS `ADEP_A`,
+    `R`.`ADES_A` AS `ADES_A`,
+    `R`.`ADEP_D` AS `ADEP_D`,
+    `R`.`ADES_D` AS `ADES_D`,
+    `R`.`START_STATION` AS `START_STATION`,
+    `R`.`START_SOBT` AS `START_SOBT`,
+    `R`.`START_SIBT` AS `START_SIBT`,
+    `R`.`START_EOBT` AS `START_EOBT`,
+    `R`.`START_EIBT` AS `START_EIBT`,
+    `R`.`START_AOBT` AS `START_AOBT`,
+    `R`.`START_AIBT` AS `START_AIBT`,
+    `R`.`EXIT` AS `EXIT`,
+    `R`.`EXOT` AS `EXOT`,
+    `R`.`AXIT` AS `AXIT`,
+    `R`.`AXOT` AS `AXOT`,
+    `R`.`DELAY_TIME_A` AS `DELAY_TIME_A`,
+    `R`.`DELAY_TIME_D` AS `DELAY_TIME_D`,
+    `R`.`STAND_A` AS `STAND_A`,
+    `R`.`STAND_D` AS `STAND_D`,
+    `R`.`GATE` AS `GATE`,
+    `R`.`CHECK_START_TIME` AS `CHECK_START_TIME`,
+    `R`.`CHECK_END_TIME` AS `CHECK_END_TIME`,
+    `R`.`COBT` AS `COBT`,
+    `R`.`CTOT` AS `CTOT`,
+    `R`.`TOBT` AS `TOBT`,
+    `R`.`TTOT` AS `TTOT`,
+    `R`.`A_TOBT` AS `A_TOBT`,
+    `R`.`DOBT` AS `DOBT`,
+    `R`.`FCT` AS `FCT`,
+    `R`.`RPOT` AS `RPOT`,
+    `R`.`APOT` AS `APOT`,
+    `R`.`ASAT` AS `ASAT`,
+    `R`.`RUNWAY_A` AS `RUNWAY_A`,
+    `R`.`RUNWAY_D` AS `RUNWAY_D`,
+    `R`.`ERSL` AS `ERSL`,
+    `R`.`ELSW` AS `ELSW`,
+    `R`.`ARSL` AS `ARSL`,
+    `R`.`ALSW` AS `ALSW`,
+    `R`.`ETDO` AS `ETDO`,
+    `R`.`ETDC` AS `ETDC`,
+    `R`.`STDC` AS `STDC`,
+    `R`.`ATDO` AS `ATDO`,
+    `R`.`ATDC` AS `ATDC`,
+    `R`.`ETFO` AS `ETFO`,
+    `R`.`ETFC` AS `ETFC`,
+    `R`.`ATFO` AS `ATFO`,
+    `R`.`ATFC` AS `ATFC`,
+    `R`.`ESCT` AS `ESCT`,
+    `R`.`EFCT` AS `EFCT`,
+    `R`.`ASCT` AS `ASCT`,
+    `R`.`AFCT` AS `AFCT`,
+    `R`.`ESC` AS `ESC`,
+    `R`.`EEC` AS `EEC`,
+    `R`.`ASC` AS `ASC`,
+    `R`.`AEC` AS `AEC`,
+    `R`.`ESR` AS `ESR`,
+    `R`.`EER` AS `EER`,
+    `R`.`ASR` AS `ASR`,
+    `R`.`AER` AS `AER`,
+    `R`.`ESBT` AS `ESBT`,
+    `R`.`EEBT` AS `EEBT`,
+    `R`.`LCBT` AS `LCBT`,
+    `R`.`ASBT` AS `ASBT`,
+    `R`.`AEBT` AS `AEBT`,
+    `R`.`ECDT` AS `ECDT`,
+    `R`.`ACDT` AS `ACDT`,
+    `R`.`EEDT` AS `EEDT`,
+    `R`.`AEDT` AS `AEDT`,
+    `R`.`AACT` AS `AACT`,
+    `R`.`A_GRND_TSF_TM` AS `A_GRND_TSF_TM`,
+    `R`.`D_GRND_TSF_TM` AS `D_GRND_TSF_TM`,
+    `R`.`TERMINAL` AS `TERMINAL`,
+    `R`.`BAG_COUNT` AS `BAG_COUNT`,
+    `R`.`BAG_COUNT_A` AS `BAG_COUNT_A`,
+    `R`.`BAG_WEIGHT` AS `BAG_WEIGHT`,
+    `R`.`BAG_WEIGHT_A` AS `BAG_WEIGHT_A`,
+    `R`.`PAX_COUNT` AS `PAX_COUNT`,
+    `R`.`DURATION_A` AS `DURATION_A`,
+    `R`.`DURATION_D` AS `DURATION_D`,
+    `R`.`ISCONTROL` AS `ISCONTROL`,
+    `R`.`ATOT_A` AS `ATOT_A`,
+    `R`.`SOBT_A` AS `SOBT_A`,
+    `R`.`ETOT_A` AS `ETOT_A`,
+    `R`.`SIBT_D` AS `SIBT_D`,
+    `R`.`ELDT_D` AS `ELDT_D`,
+    `R`.`ALDT_D` AS `ALDT_D`,
+    `R`.`TRDT` AS `TRDT`,
+    `R`.`TRBT` AS `TRBT`,
+    `R`.`TRET` AS `TRET`,
+    `R`.`ERBT` AS `ERBT`,
+    `R`.`ERET` AS `ERET`,
+    `R`.`MPBT` AS `MPBT`,
+    `R`.`MPET` AS `MPET`,
+    `R`.`LDBT` AS `LDBT`,
+    `R`.`LDET` AS `LDET`,
+    `R`.`REASON_FC` AS `REASON_FC`,
+    `R`.`REASON_TYPE` AS `REASON_TYPE`,
+    `R`.`REASONS_FOR_DELAY` AS `REASONS_FOR_DELAY`,
+    `R`.`ISDEICING_D` AS `ISDEICING_D`,
+    `R`.`ISDEICING_A` AS `ISDEICING_A`,
+    `R`.`ISFOCUS_D` AS `ISFOCUS_D`,
+    `R`.`ISFOCUS_A` AS `ISFOCUS_A`,
+    `R`.`ISDEICING` AS `ISDEICING`,
+    `R`.`CARGO_WEIGHT_A` AS `CARGO_WEIGHT_A`,
+    `R`.`CARGO_WEIGHT_D` AS `CARGO_WEIGHT_D`,
+    `R`.`MAIL_WEIGHT_A` AS `MAIL_WEIGHT_A`,
+    `R`.`MAIL_WEIGHT_D` AS `MAIL_WEIGHT_D`,
+    `R`.`RESERVATIONS_A` AS `RESERVATIONS_A`,
+    `R`.`RESERVATIONS_D` AS `RESERVATIONS_D`,
+    `R`.`REASONS_FOR_AUTO` AS `REASONS_FOR_AUTO`
+    FROM
+    (
+    SELECT
+    `AA`.`FLIGHT_ID` AS `FLIGHT_ID_D`,
+    `A`.`FLIGHT_ID` AS `FLIGHT_ID_A`,
+    `AA`.`AIRLINES` AS `AIRLINES`,
+    `A`.`AIRLINES` AS `AIRLINES_A`,
+    `AA`.`FLNO` AS `FLNO_D`,
+    `A`.`FLNO` AS `FLNO_A`,
+    date_format(`AA`.`EXEC_DATE`, '%Y-%m-%d') AS `EXEC_DATE_D`,
+    date_format(`A`.`EXEC_DATE`, '%Y-%m-%d') AS `EXEC_DATE_A`,
+    date_format(`AA`.`FLIGHT_IDENTY_MANAGE_DATE`, '%Y-%m-%d %H:%i') AS `FLIGHT_IDENTY_MANAGE_DATE`,
+    `AA`.`FLIGHT_TASK` AS `FLIGHT_TASK`,
+    `A`.`FLIGHT_TASK` AS `FLIGHT_TASK_A`,
+    `AA`.`ATTRIBUTE` AS `ATTRIBUTE`,
+    `AA`.`AGENCY` AS `AGENCY`,
+    `AA`.`CRAFT_TYPE_ICAO` AS `CRAFT_TYPE_ICAO`,
+    `A`.`CRAFT_TYPE_ICAO` AS `CRAFT_TYPE_ICAO_A`,
+    `AA`.`REGN` AS `REGN`,
+    `A`.`REGN` AS `REGN_A`,
+    (CASE WHEN(isnull(`AA`.`ABNORMAL_FLIGHT_STAT_CD`) OR(`AA`.`ABNORMAL_FLIGHT_STAT_CD` = '') OR(`AA`.`ABNORMAL_FLIGHT_STAT_CD` = 'DLY')) THEN `AA`.`NORMAL_FLIGHT_STAT_CD` ELSE `AA`.`ABNORMAL_FLIGHT_STAT_CD` END) AS `FL_STATUS`,
+    (CASE WHEN(isnull(`A`.`ABNORMAL_FLIGHT_STAT_CD`) OR(`A`.`ABNORMAL_FLIGHT_STAT_CD` = '') OR(`A`.`ABNORMAL_FLIGHT_STAT_CD` = 'DLY')) THEN `A`.`NORMAL_FLIGHT_STAT_CD` ELSE `A`.`ABNORMAL_FLIGHT_STAT_CD` END) AS `FL_STATUS_A`,
+    CONVERT (date_format(`AA`.`SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SOBT`,
+    CONVERT (date_format(`AA`.`ETOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETOT`,
+    CONVERT (date_format(`AA`.`ATOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATOT`,
+    CONVERT (date_format(`A`.`SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SIBT`,
+    CONVERT (date_format(`AA`.`SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SIBT_D`,
+    CONVERT (date_format(`A`.`ELDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELDT`,
+    CONVERT (date_format(`AA`.`ELDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELDT_D`,
+    CONVERT (date_format(`A`.`ALDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALDT`,
+    CONVERT (date_format(`AA`.`ALDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALDT_D`,
+    CONVERT (date_format(`A`.`EIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EIBT`,
+    CONVERT (date_format(`A`.`AIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AIBT`,
+    CONVERT (date_format(`AA`.`EOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EOBT`,
+    CONVERT (date_format(`AA`.`AOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AOBT`,
+    `AA`.`SHARE_FLNO` AS `SHARE_FLNO`,
+    `A`.`ADEP` AS `ADEP_A`,
+    `A`.`ADES` AS `ADES_A`,
+    `AA`.`ADEP` AS `ADEP_D`,
+    `AA`.`ADES` AS `ADES_D`,
+    `A`.`START_STATION` AS `START_STATION`,
+    CONVERT (date_format(`A`.`START_SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_SOBT`,
+    CONVERT (date_format(`A`.`START_SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_SIBT`,
+    CONVERT (date_format(`A`.`START_EOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_EOBT`,
+    CONVERT (date_format(`A`.`START_EIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_EIBT`,
+    CONVERT (date_format(`A`.`START_AOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_AOBT`,
+    CONVERT (date_format(`A`.`START_AIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_AIBT`,
+    `A`.`EXIT` AS `EXIT`,
+    `AA`.`EXOT` AS `EXOT`,
+    `A`.`AXIT` AS `AXIT`,
+    `AA`.`AXOT` AS `AXOT`,
+    `A`.`DELAY_TIME` AS `DELAY_TIME_A`,
+    `AA`.`DELAY_TIME` AS `DELAY_TIME_D`,
+    `A`.`STAND` AS `STAND_A`,
+    `AA`.`STAND` AS `STAND_D`,
+    `AA`.`GATE` AS `GATE`,
+    CONVERT (date_format(`AA`.`CHECK_START_TIME`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CHECK_START_TIME`,
+    CONVERT (date_format(`AA`.`CHECK_END_TIME`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CHECK_END_TIME`,
+    CONVERT (date_format(`AA`.`COBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `COBT`,
+    CONVERT (date_format(`AA`.`CTOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CTOT`,
+    CONVERT (date_format(`AA`.`TOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TOBT`,
+    CONVERT (date_format(`AA`.`TTOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TTOT`,
+    CONVERT (date_format(`AA`.`A_TOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `A_TOBT`,
+    CONVERT (date_format(`AA`.`DOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `DOBT`,
+    CONVERT (date_format(`AA`.`FCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `FCT`,
+    CONVERT (date_format(`AA`.`RPOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `RPOT`,
+    CONVERT (date_format(`AA`.`APOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `APOT`,
+    CONVERT (date_format(`AA`.`ASAT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASAT`,
+    `A`.`RUNWAY` AS `RUNWAY_A`,
+    `AA`.`RUNWAY` AS `RUNWAY_D`,
+    CONVERT (date_format(`A`.`ERSL`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ERSL`,
+    CONVERT (date_format(`AA`.`ELSW`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELSW`,
+    CONVERT (date_format(`A`.`ARSL`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ARSL`,
+    CONVERT (date_format(`AA`.`ALSW`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALSW`,
+    CONVERT (date_format(`A`.`ETDO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETDO`,
+    CONVERT (date_format(`AA`.`ETDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETDC`,
+    CONVERT (date_format(`AA`.`STDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `STDC`,
+    CONVERT (date_format(`A`.`ATDO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATDO`,
+    CONVERT (date_format(`AA`.`ATDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATDC`,
+    CONVERT (date_format(`A`.`ETFO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETFO`,
+    CONVERT (date_format(`AA`.`ETFC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETFC`,
+    CONVERT (date_format(`A`.`ATFO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATFO`,
+    CONVERT (date_format(`AA`.`ATFC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATFC`,
+    CONVERT (date_format(`AA`.`ESCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESCT`,
+    CONVERT (date_format(`AA`.`EFCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EFCT`,
+    CONVERT (date_format(ifnull(`AA`.`ASCT`, `A`.`ASCT`), '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASCT`,
+    CONVERT (date_format(ifnull(`AA`.`AFCT`, `A`.`AFCT`), '%Y-%m-%d %H:%i') USING utf8mb4) AS `AFCT`,
+    CONVERT (date_format(`AA`.`ESC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESC`,
+    CONVERT (date_format(`AA`.`EEC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEC`,
+    CONVERT (date_format(`AA`.`ASC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASC`,
+    CONVERT (date_format(`AA`.`AEC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEC`,
+    CONVERT (date_format(`AA`.`ESR`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESR`,
+    CONVERT (date_format(`AA`.`EER`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EER`,
+    CONVERT (date_format(`AA`.`ASR`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASR`,
+    CONVERT (date_format(`AA`.`AER`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AER`,
+    CONVERT (date_format(`AA`.`ESBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESBT`,
+    CONVERT (date_format(`AA`.`EEBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEBT`,
+    CONVERT (date_format(`AA`.`LCBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `LCBT`,
+    CONVERT (date_format(`AA`.`ASBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASBT`,
+    CONVERT (date_format(`AA`.`AEBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEBT`,
+    CONVERT (date_format(`AA`.`ECDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ECDT`,
+    CONVERT (date_format(`AA`.`ACDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ACDT`,
+    CONVERT (date_format(`AA`.`EEDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEDT`,
+    CONVERT (date_format(`AA`.`AEDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEDT`,
+    CONVERT (date_format(`AA`.`AACT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AACT`,
+    CONVERT (date_format(`A`.`A_GRND_TSF_TM`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `A_GRND_TSF_TM`,
+    CONVERT (date_format(`AA`.`D_GRND_TSF_TM`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `D_GRND_TSF_TM`,
+    `AA`.`TERMINAL` AS `TERMINAL`,
+    `AA`.`BAG_COUNT` AS `BAG_COUNT`,
+    `A`.`BAG_COUNT` AS `BAG_COUNT_A`,
+    `AA`.`BAG_WEIGHT` AS `BAG_WEIGHT`,
+    `A`.`BAG_WEIGHT` AS `BAG_WEIGHT_A`,
+    `AA`.`PAX_COUNT` AS `PAX_COUNT`,
+    timestampdiff(MINUTE, `AA`.`SOBT`, `AA`.`SIBT`) AS `DURATION_D`,
+    timestampdiff(MINUTE, `A`.`SOBT`, `A`.`SIBT`) AS `DURATION_A`,
+    `AA`.`ISCONTROL` AS `ISCONTROL`,
+    CONVERT (date_format(`A`.`ATOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATOT_A`,
+    CONVERT (date_format(`A`.`SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SOBT_A`,
+    CONVERT (date_format(`A`.`ETOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETOT_A`,
+    CONVERT (date_format(`AA`.`TRDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TRDT`,
+    CONVERT (date_format(`A`.`MPBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `MPBT`,
+    CONVERT (date_format(`A`.`MPET`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `MPET`,
+    `AA`.`TRBT` AS `TRBT`,
+    `AA`.`TRET` AS `TRET`,
+    `AA`.`ERBT` AS `ERBT`,
+    `AA`.`ERET` AS `ERET`,
+    `AA`.`LDBT` AS `LDBT`,
+    `AA`.`LDET` AS `LDET`,
+    `AA`.`REASON_FC` AS `REASON_FC`,
+    `AA`.`REASON_TYPE` AS `REASON_TYPE`,
+    `AA`.`REASONS_FOR_DELAY` AS `REASONS_FOR_DELAY`,
+    `AA`.`ISDEICING` AS `ISDEICING_D`,
+    `A`.`ISDEICING` AS `ISDEICING_A`,
+    `AA`.`ISFOCUS` AS `ISFOCUS_D`,
+    `A`.`ISFOCUS` AS `ISFOCUS_A`,
+    `AA`.`ISDEICING` AS `ISDEICING`,
+    `A`.`CARGO_WEIGHT` AS `CARGO_WEIGHT_A`,
+    `AA`.`CARGO_WEIGHT` AS `CARGO_WEIGHT_D`,
+    `A`.`MAIL_WEIGHT` AS `MAIL_WEIGHT_A`,
+    `AA`.`MAIL_WEIGHT` AS `MAIL_WEIGHT_D`,
+    `A`.`RESERVATIONS` AS `RESERVATIONS_A`,
+    `AA`.`RESERVATIONS` AS `RESERVATIONS_D`,
+    `AA`.`REASONS_FOR_AUTO` AS `REASONS_FOR_AUTO`
+    FROM
+    ((SELECT * FROM T_LOCAL_FLIGHT_INFO WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId} UNION SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId}) `AA`
+    LEFT JOIN (SELECT * FROM T_LOCAL_FLIGHT_INFO WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId} UNION SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId}) `A`
+    ON((`AA`.`ASSOCIATED_FLIGHT_ID` = `A`.`FLIGHT_ID`)))
+    WHERE
+    ((`AA`.`D_OR_A` = 'D') AND(`AA`.`ISDEL` <![CDATA[<>]]> '1') AND(`AA`.`ABNORMAL_FLIGHT_STAT_CD` <![CDATA[<>]]> 'CAN'))
+    UNION
+    SELECT
+    `AA`.`FLIGHT_ID` AS `FLIGHT_ID_D`,
+    `A`.`FLIGHT_ID` AS `FLIGHT_ID_A`,
+    `AA`.`AIRLINES` AS `AIRLINES`,
+    `A`.`AIRLINES` AS `AIRLINES_A`,
+    `AA`.`FLNO` AS `FLNO_D`,
+    `A`.`FLNO` AS `FLNO_A`,
+    CONVERT (date_format(`AA`.`EXEC_DATE`, '%Y-%m-%d') USING utf8mb4) AS `EXEC_DATE_D`,
+    CONVERT (date_format(`A`.`EXEC_DATE`, '%Y-%m-%d') USING utf8mb4) AS `EXEC_DATE_A`,
+    CONVERT (date_format(`AA`.`FLIGHT_IDENTY_MANAGE_DATE`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `FLIGHT_IDENTY_MANAGE_DATE`,
+    `AA`.`FLIGHT_TASK` AS `FLIGHT_TASK`,
+    `A`.`FLIGHT_TASK` AS `FLIGHT_TASK_A`,
+    `AA`.`ATTRIBUTE` AS `ATTRIBUTE`,
+    `AA`.`AGENCY` AS `AGENCY`,
+    `AA`.`CRAFT_TYPE_ICAO` AS `CRAFT_TYPE_ICAO`,
+    `A`.`CRAFT_TYPE_ICAO` AS `CRAFT_TYPE_ICAO_A`,
+    `AA`.`REGN` AS `REGN`,
+    `A`.`REGN` AS `REGN_A`,
+    (CASE WHEN(isnull(`AA`.`ABNORMAL_FLIGHT_STAT_CD`) OR(`AA`.`ABNORMAL_FLIGHT_STAT_CD` = '') OR(`AA`.`ABNORMAL_FLIGHT_STAT_CD` = 'DLY')) THEN `AA`.`NORMAL_FLIGHT_STAT_CD` ELSE `AA`.`ABNORMAL_FLIGHT_STAT_CD` END) AS `FL_STATUS`,
+    (CASE WHEN(isnull(`A`.`ABNORMAL_FLIGHT_STAT_CD`) OR(`A`.`ABNORMAL_FLIGHT_STAT_CD` = '') OR(`A`.`ABNORMAL_FLIGHT_STAT_CD` = 'DLY')) THEN `A`.`NORMAL_FLIGHT_STAT_CD` ELSE `A`.`ABNORMAL_FLIGHT_STAT_CD` END) AS `FL_STATUS_A`,
+    CONVERT (date_format(`AA`.`SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SOBT`,
+    CONVERT (date_format(`AA`.`ETOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETOT`,
+    CONVERT (date_format(`AA`.`ATOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATOT`,
+    CONVERT (date_format(`A`.`SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SIBT`,
+    CONVERT (date_format(`AA`.`SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SIBT_D`,
+    CONVERT (date_format(`A`.`ELDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELDT`,
+    CONVERT (date_format(`AA`.`ELDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELDT_D`,
+    CONVERT (date_format(`A`.`ALDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALDT`,
+    CONVERT (date_format(`AA`.`ALDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALDT_D`,
+    CONVERT (date_format(`A`.`EIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EIBT`,
+    CONVERT (date_format(`A`.`AIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AIBT`,
+    CONVERT (date_format(`AA`.`EOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EOBT`,
+    CONVERT (date_format(`AA`.`AOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AOBT`,
+    `AA`.`SHARE_FLNO` AS `SHARE_FLNO`,
+    `A`.`ADEP` AS `ADEP_A`,
+    `A`.`ADES` AS `ADES_A`,
+    `AA`.`ADEP` AS `ADEP_D`,
+    `AA`.`ADES` AS `ADES_D`,
+    `A`.`START_STATION` AS `START_STATION`,
+    CONVERT (date_format(`A`.`START_SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_SOBT`,
+    CONVERT (date_format(`A`.`START_SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_SIBT`,
+    CONVERT (date_format(`A`.`START_EOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_EOBT`,
+    CONVERT (date_format(`A`.`START_EIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_EIBT`,
+    CONVERT (date_format(`A`.`START_AOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_AOBT`,
+    CONVERT (date_format(`A`.`START_AIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_AIBT`,
+    `A`.`EXIT` AS `EXIT`,
+    `AA`.`EXOT` AS `EXOT`,
+    `A`.`AXIT` AS `AXIT`,
+    `AA`.`AXOT` AS `AXOT`,
+    `A`.`DELAY_TIME` AS `DELAY_TIME_A`,
+    `AA`.`DELAY_TIME` AS `DELAY_TIME_D`,
+    `A`.`STAND` AS `STAND_A`,
+    `AA`.`STAND` AS `STAND_D`,
+    `AA`.`GATE` AS `GATE`,
+    CONVERT (date_format(`AA`.`CHECK_START_TIME`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CHECK_START_TIME`,
+    CONVERT (date_format(`AA`.`CHECK_END_TIME`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CHECK_END_TIME`,
+    CONVERT (date_format(`AA`.`COBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `COBT`,
+    CONVERT (date_format(`AA`.`CTOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CTOT`,
+    CONVERT (date_format(`AA`.`TOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TOBT`,
+    CONVERT (date_format(`AA`.`TTOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TTOT`,
+    CONVERT (date_format(`AA`.`A_TOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `A_TOBT`,
+    CONVERT (date_format(`AA`.`DOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `DOBT`,
+    CONVERT (date_format(`AA`.`FCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `FCT`,
+    CONVERT (date_format(`AA`.`RPOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `RPOT`,
+    CONVERT (date_format(`AA`.`APOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `APOT`,
+    CONVERT (date_format(`AA`.`ASAT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASAT`,
+    `A`.`RUNWAY` AS `RUNWAY_A`,
+    `AA`.`RUNWAY` AS `RUNWAY_D`,
+    CONVERT (date_format(`A`.`ERSL`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ERSL`,
+    CONVERT (date_format(`AA`.`ELSW`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELSW`,
+    CONVERT (date_format(`A`.`ARSL`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ARSL`,
+    CONVERT (date_format(`AA`.`ALSW`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALSW`,
+    CONVERT (date_format(`A`.`ETDO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETDO`,
+    CONVERT (date_format(`AA`.`STDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `STDC`,
+    CONVERT (date_format(`AA`.`ETDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETDC`,
+    CONVERT (date_format(`A`.`ATDO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATDO`,
+    CONVERT (date_format(`AA`.`ATDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATDC`,
+    CONVERT (date_format(`A`.`ETFO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETFO`,
+    CONVERT (date_format(`AA`.`ETFC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETFC`,
+    CONVERT (date_format(`A`.`ATFO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATFO`,
+    CONVERT (date_format(`AA`.`ATFC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATFC`,
+    CONVERT (date_format(`AA`.`ESCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESCT`,
+    CONVERT (date_format(`AA`.`EFCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EFCT`,
+    CONVERT (date_format(`AA`.`ASCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASCT`,
+    CONVERT (date_format(`AA`.`AFCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AFCT`,
+    CONVERT (date_format(`AA`.`ESC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESC`,
+    CONVERT (date_format(`AA`.`EEC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEC`,
+    CONVERT (date_format(`AA`.`ASC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASC`,
+    CONVERT (date_format(`AA`.`AEC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEC`,
+    CONVERT (date_format(`AA`.`ESR`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESR`,
+    CONVERT (date_format(`AA`.`EER`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EER`,
+    CONVERT (date_format(`AA`.`ASR`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASR`,
+    CONVERT (date_format(`AA`.`AER`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AER`,
+    CONVERT (date_format(`AA`.`ESBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESBT`,
+    CONVERT (date_format(`AA`.`EEBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEBT`,
+    CONVERT (date_format(`AA`.`LCBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `LCBT`,
+    CONVERT (date_format(`AA`.`ASBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASBT`,
+    CONVERT (date_format(`AA`.`AEBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEBT`,
+    CONVERT (date_format(`AA`.`ECDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ECDT`,
+    CONVERT (date_format(`AA`.`ACDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ACDT`,
+    CONVERT (date_format(`AA`.`EEDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEDT`,
+    CONVERT (date_format(`AA`.`AEDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEDT`,
+    CONVERT (date_format(`AA`.`AACT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AACT`,
+    CONVERT (date_format(`A`.`A_GRND_TSF_TM`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `A_GRND_TSF_TM`,
+    CONVERT (date_format(`AA`.`D_GRND_TSF_TM`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `D_GRND_TSF_TM`,
+    `AA`.`TERMINAL` AS `TERMINAL`,
+    `AA`.`BAG_COUNT` AS `BAG_COUNT`,
+    `A`.`BAG_COUNT` AS `BAG_COUNT_A`,
+    `AA`.`BAG_WEIGHT` AS `BAG_WEIGHT`,
+    `A`.`BAG_WEIGHT` AS `BAG_WEIGHT_A`,
+    `AA`.`PAX_COUNT` AS `PAX_COUNT`,
+    timestampdiff(MINUTE, `AA`.`SOBT`, `AA`.`SIBT`) AS `DURATION_D`,
+    timestampdiff(MINUTE, `A`.`SOBT`, `A`.`SIBT`) AS `DURATION_A`,
+    `AA`.`ISCONTROL` AS `ISCONTROL`,
+    CONVERT (date_format(`A`.`ATOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATOT_A`,
+    CONVERT (date_format(`A`.`SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SOBT_A`,
+    CONVERT (date_format(`A`.`ETOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETOT_A`,
+    CONVERT (date_format(`AA`.`TRDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TRDT`,
+    CONVERT (date_format(`A`.`MPBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `MPBT`,
+    CONVERT (date_format(`A`.`MPET`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `MPET`,
+    `AA`.`TRBT` AS `TRBT`,
+    `AA`.`TRET` AS `TRET`,
+    `AA`.`ERBT` AS `ERBT`,
+    `AA`.`ERET` AS `ERET`,
+    `AA`.`LDBT` AS `LDBT`,
+    `AA`.`LDET` AS `LDET`,
+    `AA`.`REASON_FC` AS `REASON_FC`,
+    `AA`.`REASON_TYPE` AS `REASON_TYPE`,
+    `AA`.`REASONS_FOR_DELAY` AS `REASONS_FOR_DELAY`,
+    `AA`.`ISDEICING` AS `ISDEICING_D`,
+    `A`.`ISDEICING` AS `ISDEICING_A`,
+    `AA`.`ISFOCUS` AS `ISFOCUS_D`,
+    `A`.`ISFOCUS` AS `ISFOCUS_A`,
+    `AA`.`ISDEICING` AS `ISDEICING`,
+    `A`.`CARGO_WEIGHT` AS `CARGO_WEIGHT_A`,
+    `AA`.`CARGO_WEIGHT` AS `CARGO_WEIGHT_D`,
+    `A`.`MAIL_WEIGHT` AS `MAIL_WEIGHT_A`,
+    `AA`.`MAIL_WEIGHT` AS `MAIL_WEIGHT_D`,
+    `A`.`RESERVATIONS` AS `RESERVATIONS_A`,
+    `AA`.`RESERVATIONS` AS `RESERVATIONS_D`,
+    `AA`.`REASONS_FOR_AUTO` AS `REASONS_FOR_AUTO`
+    FROM
+    ((SELECT * FROM T_LOCAL_FLIGHT_INFO WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId} UNION SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId}) `A`
+    LEFT JOIN (SELECT * FROM T_LOCAL_FLIGHT_INFO WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId} UNION SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId}) `AA`
+    ON((`AA`.`ASSOCIATED_FLIGHT_ID` = `A`.`FLIGHT_ID`)))
+    WHERE
+    ((`A`.`D_OR_A` = 'A') AND isnull(`AA`.`FLIGHT_ID`) AND(`A`.`ISDEL` <![CDATA[<>]]> '1') AND(`A`.`ABNORMAL_FLIGHT_STAT_CD` <![CDATA[<>]]> 'CAN'))
+    ) `R`) T
+    LEFT JOIN T_CRAFT_TYPE E ON E.ICAO_CD = T.CRAFT_TYPE_ICAO
+    <!--
+    WHERE (T.FLIGHT_ID_D = #{params.flightId,jdbcType=BIGINT} OR T.FLIGHT_ID_A = #{params.flightId,jdbcType=BIGINT})
+    <choose>
+      <when test="params.flightIdD != null">
+        AND T.FLIGHT_ID_D = #{params.flightIdD,jdbcType=BIGINT}
+      </when>
+      <otherwise>
+        AND T.FLIGHT_ID_A = #{params.flightIdA,jdbcType=BIGINT}
+      </otherwise>
+    </choose>
+    -->
+  </select>
+
+
+  <select id="findFlightPassenger" resultMap="ResultMapFlightDetailsGuest" parameterType="map" >
+    <!--
+    SELECT SUM(dpsrBagCount) BAG_COUNT,
+    SUM(CASE WHEN BB.dpsrCheckinTime IS NOT NULL AND BB.stsPscTime IS NULL AND BB.stsBoardTime IS NULL THEN 1 ELSE 0 END) CHECK_IN,
+    SUM(CASE WHEN BB.dpsrCheckinTime IS NOT NULL AND BB.stsPscTime IS NOT NULL AND BB.stsBoardTime IS NULL THEN 1 ELSE 0 END) SECURITY_CHECK,
+    SUM(CASE WHEN BB.dpsrCheckinTime IS NOT NULL AND BB.stsBoardTime IS NOT NULL THEN 1 ELSE 0 END) BOARDING
+    FROM T_PASSENGER_INFO BB
+    WHERE BB.flightId = #{params.flightId,jdbcType=BIGINT}
+    -->
+    SELECT SUM(BB.dpsrBagCount) BAG_COUNT,
+    SUM(CASE WHEN BB.stsBoardTime IS NOT NULL AND BB.stsPscIsPass = 2 THEN 1 ELSE 0 END) OVER_STATION,
+    SUM(CASE WHEN BB.dpsrCheckinTime IS NOT NULL THEN 1 ELSE 0 END) CHECK_IN,
+    SUM(CASE WHEN BB.stsPscTime IS NOT NULL THEN 1 ELSE 0 END) SECURITY_CHECK,
+    SUM(CASE WHEN BB.stsBoardTime IS NOT NULL THEN 1 ELSE 0 END) BOARDING
+    FROM (SELECT * FROM T_PASSENGER_INFO WHERE flightId = #{params.flightId,jdbcType=BIGINT}
+    UNION SELECT * FROM T_PASSENGER_INFO_HISTORY WHERE flightId = #{params.flightId,jdbcType=BIGINT}) BB
+  </select>
+
+
+  <select id="findNodeConfigColumnInfo" resultMap="FishboneDiagramResultMap">
+    SELECT NODE_SEQ,NODE_NAME,NODE_COLUMN,NODE_ESTIMATE_COLUMN,'' AS `VALUE`,'' AS ESTIMATE_VALUE,'' AS STATE
+    FROM T_NODE_CONFIG_INFO
+    WHERE ISAVAILABL = 1
+    ORDER BY NODE_SEQ ASC
+  </select>
+
+  <select id="findFishboneDiagramInfo" resultType="java.util.HashMap" parameterType="map" statementType="STATEMENT">
+    SELECT
+      T.${params.nodeColumn}
+    <choose>
+      <when test="params.nodeEstimateColumn !=null and params.nodeEstimateColumn != ''">
+        ,T.${params.nodeEstimateColumn}
+      </when>
+      <otherwise>
+        ,'' AS NODE_ESTIMATE_COLUMN
+      </otherwise>
+    </choose>
+    FROM
+    (SELECT
+    `R`.`FLIGHT_ID_D` AS `FLIGHT_ID_D`,
+    `R`.`FLIGHT_ID_A` AS `FLIGHT_ID_A`,
+    ifnull(`R`.`AIRLINES`, `R`.`AIRLINES_A`) AS `AIRLINES`,
+    `R`.`FLNO_D` AS `FLNO_D`,
+    `R`.`FLNO_A` AS `FLNO_A`,
+    ifnull(`R`.`EXEC_DATE_D`, `R`.`EXEC_DATE_A`) AS `EXEC_DATE_D`,
+    `R`.`EXEC_DATE_A` AS `EXEC_DATE_A`,
+    `R`.`FLIGHT_IDENTY_MANAGE_DATE` AS `FLIGHT_IDENTY_MANAGE_DATE`,
+    `R`.`FLIGHT_TASK` AS `FLIGHT_TASK`,
+    `R`.`FLIGHT_TASK_A` AS `FLIGHT_TASK_A`,
+    `R`.`ATTRIBUTE` AS `ATTRIBUTE`,
+    `R`.`AGENCY` AS `AGENCY`,
+    ifnull(`R`.`CRAFT_TYPE_ICAO`, `R`.`CRAFT_TYPE_ICAO_A`) AS `CRAFT_TYPE_ICAO`,
+    ifnull(`R`.`REGN`, `R`.`REGN_A`) AS `REGN`,
+    `R`.`FL_STATUS` AS `FL_STATUS`,
+    `R`.`FL_STATUS_A` AS `FL_STATUS_A`,
+    `R`.`SOBT` AS `SOBT`,
+    `R`.`ETOT` AS `ETOT`,
+    `R`.`ATOT` AS `ATOT`,
+    `R`.`SIBT` AS `SIBT`,
+    `R`.`ELDT` AS `ELDT`,
+    `R`.`ALDT` AS `ALDT`,
+    `R`.`EIBT` AS `EIBT`,
+    `R`.`AIBT` AS `AIBT`,
+    `R`.`EOBT` AS `EOBT`,
+    `R`.`AOBT` AS `AOBT`,
+    `R`.`SHARE_FLNO` AS `SHARE_FLNO`,
+    `R`.`ADEP_A` AS `ADEP_A`,
+    `R`.`ADES_A` AS `ADES_A`,
+    `R`.`ADEP_D` AS `ADEP_D`,
+    `R`.`ADES_D` AS `ADES_D`,
+    `R`.`START_STATION` AS `START_STATION`,
+    `R`.`START_SOBT` AS `START_SOBT`,
+    `R`.`START_SIBT` AS `START_SIBT`,
+    `R`.`START_EOBT` AS `START_EOBT`,
+    `R`.`START_EIBT` AS `START_EIBT`,
+    `R`.`START_AOBT` AS `START_AOBT`,
+    `R`.`START_AIBT` AS `START_AIBT`,
+    `R`.`EXIT` AS `EXIT`,
+    `R`.`EXOT` AS `EXOT`,
+    `R`.`AXIT` AS `AXIT`,
+    `R`.`AXOT` AS `AXOT`,
+    `R`.`DELAY_TIME_A` AS `DELAY_TIME_A`,
+    `R`.`DELAY_TIME_D` AS `DELAY_TIME_D`,
+    `R`.`STAND_A` AS `STAND_A`,
+    `R`.`STAND_D` AS `STAND_D`,
+    `R`.`GATE` AS `GATE`,
+    `R`.`CHECK_START_TIME` AS `CHECK_START_TIME`,
+    `R`.`CHECK_END_TIME` AS `CHECK_END_TIME`,
+    `R`.`COBT` AS `COBT`,
+    `R`.`CTOT` AS `CTOT`,
+    `R`.`TOBT` AS `TOBT`,
+    `R`.`TTOT` AS `TTOT`,
+    `R`.`A_TOBT` AS `A_TOBT`,
+    `R`.`DOBT` AS `DOBT`,
+    `R`.`FCT` AS `FCT`,
+    `R`.`RPOT` AS `RPOT`,
+    `R`.`APOT` AS `APOT`,
+    `R`.`ASAT` AS `ASAT`,
+    `R`.`RUNWAY_A` AS `RUNWAY_A`,
+    `R`.`RUNWAY_D` AS `RUNWAY_D`,
+    `R`.`ERSL` AS `ERSL`,
+    `R`.`ELSW` AS `ELSW`,
+    `R`.`ARSL` AS `ARSL`,
+    `R`.`ALSW` AS `ALSW`,
+    `R`.`ETDO` AS `ETDO`,
+    `R`.`ETDC` AS `ETDC`,
+    `R`.`STDC` AS `STDC`,
+    `R`.`ATDO` AS `ATDO`,
+    `R`.`ATDC` AS `ATDC`,
+    `R`.`ETFO` AS `ETFO`,
+    `R`.`ETFC` AS `ETFC`,
+    `R`.`ATFO` AS `ATFO`,
+    `R`.`ATFC` AS `ATFC`,
+    `R`.`ESCT` AS `ESCT`,
+    `R`.`EFCT` AS `EFCT`,
+    `R`.`ASCT` AS `ASCT`,
+    `R`.`AFCT` AS `AFCT`,
+    `R`.`ESC` AS `ESC`,
+    `R`.`EEC` AS `EEC`,
+    `R`.`ASC` AS `ASC`,
+    `R`.`AEC` AS `AEC`,
+    `R`.`ESR` AS `ESR`,
+    `R`.`EER` AS `EER`,
+    `R`.`ASR` AS `ASR`,
+    `R`.`AER` AS `AER`,
+    `R`.`ESBT` AS `ESBT`,
+    `R`.`EEBT` AS `EEBT`,
+    `R`.`LCBT` AS `LCBT`,
+    `R`.`ASBT` AS `ASBT`,
+    `R`.`AEBT` AS `AEBT`,
+    `R`.`ECDT` AS `ECDT`,
+    `R`.`ACDT` AS `ACDT`,
+    `R`.`EEDT` AS `EEDT`,
+    `R`.`AEDT` AS `AEDT`,
+    `R`.`AACT` AS `AACT`,
+    `R`.`A_GRND_TSF_TM` AS `A_GRND_TSF_TM`,
+    `R`.`D_GRND_TSF_TM` AS `D_GRND_TSF_TM`,
+    `R`.`TERMINAL` AS `TERMINAL`,
+    `R`.`BAG_COUNT` AS `BAG_COUNT`,
+    `R`.`BAG_WEIGHT` AS `BAG_WEIGHT`,
+    `R`.`BAG_WEIGHT_A` AS `BAG_WEIGHT_A`,
+    `R`.`PAX_COUNT` AS `PAX_COUNT`,
+    `R`.`DURATION_A` AS `DURATION_A`,
+    `R`.`DURATION_D` AS `DURATION_D`,
+    `R`.`ISCONTROL` AS `ISCONTROL`,
+    `R`.`ATOT_A` AS `ATOT_A`,
+    `R`.`SOBT_A` AS `SOBT_A`,
+    `R`.`ETOT_A` AS `ETOT_A`,
+    `R`.`SIBT_D` AS `SIBT_D`,
+    `R`.`ELDT_D` AS `ELDT_D`,
+    `R`.`ALDT_D` AS `ALDT_D`,
+    `R`.`TRDT` AS `TRDT`,
+    `R`.`TRBT` AS `TRBT`,
+    `R`.`TRET` AS `TRET`,
+    `R`.`ERBT` AS `ERBT`,
+    `R`.`ERET` AS `ERET`,
+    `R`.`MPBT` AS `MPBT`,
+    `R`.`MPET` AS `MPET`,
+    `R`.`LDBT` AS `LDBT`,
+    `R`.`LDET` AS `LDET`,
+    `R`.`REASON_FC` AS `REASON_FC`,
+    `R`.`REASON_TYPE` AS `REASON_TYPE`,
+    `R`.`REASONS_FOR_DELAY` AS `REASONS_FOR_DELAY`,
+    `R`.`ISDEICING_D` AS `ISDEICING_D`,
+    `R`.`ISDEICING_A` AS `ISDEICING_A`,
+    `R`.`ISFOCUS_D` AS `ISFOCUS_D`,
+    `R`.`ISFOCUS_A` AS `ISFOCUS_A`,
+    `R`.`ISDEICING` AS `ISDEICING`,
+    `R`.`CARGO_WEIGHT_A` AS `CARGO_WEIGHT_A`,
+    `R`.`CARGO_WEIGHT_D` AS `CARGO_WEIGHT_D`,
+    `R`.`MAIL_WEIGHT_A` AS `MAIL_WEIGHT_A`,
+    `R`.`MAIL_WEIGHT_D` AS `MAIL_WEIGHT_D`,
+    `R`.`RESERVATIONS_A` AS `RESERVATIONS_A`,
+    `R`.`RESERVATIONS_D` AS `RESERVATIONS_D`,
+    `R`.`REASONS_FOR_AUTO` AS `REASONS_FOR_AUTO`
+    FROM
+    (
+    SELECT
+    `AA`.`FLIGHT_ID` AS `FLIGHT_ID_D`,
+    `A`.`FLIGHT_ID` AS `FLIGHT_ID_A`,
+    `AA`.`AIRLINES` AS `AIRLINES`,
+    `A`.`AIRLINES` AS `AIRLINES_A`,
+    `AA`.`FLNO` AS `FLNO_D`,
+    `A`.`FLNO` AS `FLNO_A`,
+    date_format(`AA`.`EXEC_DATE`, '%Y-%m-%d') AS `EXEC_DATE_D`,
+    date_format(`A`.`EXEC_DATE`, '%Y-%m-%d') AS `EXEC_DATE_A`,
+    date_format(`AA`.`FLIGHT_IDENTY_MANAGE_DATE`, '%Y-%m-%d %H:%i') AS `FLIGHT_IDENTY_MANAGE_DATE`,
+    `AA`.`FLIGHT_TASK` AS `FLIGHT_TASK`,
+    `A`.`FLIGHT_TASK` AS `FLIGHT_TASK_A`,
+    `AA`.`ATTRIBUTE` AS `ATTRIBUTE`,
+    `AA`.`AGENCY` AS `AGENCY`,
+    `AA`.`CRAFT_TYPE_ICAO` AS `CRAFT_TYPE_ICAO`,
+    `A`.`CRAFT_TYPE_ICAO` AS `CRAFT_TYPE_ICAO_A`,
+    `AA`.`REGN` AS `REGN`,
+    `A`.`REGN` AS `REGN_A`,
+    (CASE WHEN(isnull(`AA`.`ABNORMAL_FLIGHT_STAT_CD`) OR(`AA`.`ABNORMAL_FLIGHT_STAT_CD` = '') OR(`AA`.`ABNORMAL_FLIGHT_STAT_CD` = 'DLY')) THEN `AA`.`NORMAL_FLIGHT_STAT_CD` ELSE `AA`.`ABNORMAL_FLIGHT_STAT_CD` END) AS `FL_STATUS`,
+    (CASE WHEN(isnull(`A`.`ABNORMAL_FLIGHT_STAT_CD`) OR(`A`.`ABNORMAL_FLIGHT_STAT_CD` = '') OR(`A`.`ABNORMAL_FLIGHT_STAT_CD` = 'DLY')) THEN `A`.`NORMAL_FLIGHT_STAT_CD` ELSE `A`.`ABNORMAL_FLIGHT_STAT_CD` END) AS `FL_STATUS_A`,
+    CONVERT (date_format(`AA`.`SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SOBT`,
+    CONVERT (date_format(`AA`.`ETOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETOT`,
+    CONVERT (date_format(`AA`.`ATOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATOT`,
+    CONVERT (date_format(`A`.`SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SIBT`,
+    CONVERT (date_format(`AA`.`SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SIBT_D`,
+    CONVERT (date_format(`A`.`ELDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELDT`,
+    CONVERT (date_format(`AA`.`ELDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELDT_D`,
+    CONVERT (date_format(`A`.`ALDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALDT`,
+    CONVERT (date_format(`AA`.`ALDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALDT_D`,
+    CONVERT (date_format(`A`.`EIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EIBT`,
+    CONVERT (date_format(`A`.`AIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AIBT`,
+    CONVERT (date_format(`AA`.`EOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EOBT`,
+    CONVERT (date_format(`AA`.`AOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AOBT`,
+    `AA`.`SHARE_FLNO` AS `SHARE_FLNO`,
+    `A`.`ADEP` AS `ADEP_A`,
+    `A`.`ADES` AS `ADES_A`,
+    `AA`.`ADEP` AS `ADEP_D`,
+    `AA`.`ADES` AS `ADES_D`,
+    `A`.`START_STATION` AS `START_STATION`,
+    CONVERT (date_format(`A`.`START_SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_SOBT`,
+    CONVERT (date_format(`A`.`START_SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_SIBT`,
+    CONVERT (date_format(`A`.`START_EOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_EOBT`,
+    CONVERT (date_format(`A`.`START_EIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_EIBT`,
+    CONVERT (date_format(`A`.`START_AOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_AOBT`,
+    CONVERT (date_format(`A`.`START_AIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_AIBT`,
+    `A`.`EXIT` AS `EXIT`,
+    `AA`.`EXOT` AS `EXOT`,
+    `A`.`AXIT` AS `AXIT`,
+    `AA`.`AXOT` AS `AXOT`,
+    `A`.`DELAY_TIME` AS `DELAY_TIME_A`,
+    `AA`.`DELAY_TIME` AS `DELAY_TIME_D`,
+    `A`.`STAND` AS `STAND_A`,
+    `AA`.`STAND` AS `STAND_D`,
+    `AA`.`GATE` AS `GATE`,
+    CONVERT (date_format(`AA`.`CHECK_START_TIME`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CHECK_START_TIME`,
+    CONVERT (date_format(`AA`.`CHECK_END_TIME`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CHECK_END_TIME`,
+    CONVERT (date_format(`AA`.`COBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `COBT`,
+    CONVERT (date_format(`AA`.`CTOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CTOT`,
+    CONVERT (date_format(`AA`.`TOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TOBT`,
+    CONVERT (date_format(`AA`.`TTOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TTOT`,
+    CONVERT (date_format(`AA`.`A_TOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `A_TOBT`,
+    CONVERT (date_format(`AA`.`DOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `DOBT`,
+    CONVERT (date_format(`AA`.`FCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `FCT`,
+    CONVERT (date_format(`AA`.`RPOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `RPOT`,
+    CONVERT (date_format(`AA`.`APOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `APOT`,
+    CONVERT (date_format(`AA`.`ASAT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASAT`,
+    `A`.`RUNWAY` AS `RUNWAY_A`,
+    `AA`.`RUNWAY` AS `RUNWAY_D`,
+    CONVERT (date_format(`A`.`ERSL`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ERSL`,
+    CONVERT (date_format(`AA`.`ELSW`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELSW`,
+    CONVERT (date_format(`A`.`ARSL`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ARSL`,
+    CONVERT (date_format(`AA`.`ALSW`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALSW`,
+    CONVERT (date_format(`A`.`ETDO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETDO`,
+    CONVERT (date_format(`AA`.`ETDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETDC`,
+    CONVERT (date_format(`AA`.`STDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `STDC`,
+    CONVERT (date_format(`A`.`ATDO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATDO`,
+    CONVERT (date_format(`AA`.`ATDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATDC`,
+    CONVERT (date_format(`A`.`ETFO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETFO`,
+    CONVERT (date_format(`AA`.`ETFC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETFC`,
+    CONVERT (date_format(`A`.`ATFO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATFO`,
+    CONVERT (date_format(`AA`.`ATFC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATFC`,
+    CONVERT (date_format(`AA`.`ESCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESCT`,
+    CONVERT (date_format(`AA`.`EFCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EFCT`,
+    CONVERT (date_format(ifnull(`AA`.`ASCT`, `A`.`ASCT`), '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASCT`,
+    CONVERT (date_format(ifnull(`AA`.`AFCT`, `A`.`AFCT`), '%Y-%m-%d %H:%i') USING utf8mb4) AS `AFCT`,
+    CONVERT (date_format(`AA`.`ESC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESC`,
+    CONVERT (date_format(`AA`.`EEC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEC`,
+    CONVERT (date_format(`AA`.`ASC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASC`,
+    CONVERT (date_format(`AA`.`AEC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEC`,
+    CONVERT (date_format(`AA`.`ESR`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESR`,
+    CONVERT (date_format(`AA`.`EER`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EER`,
+    CONVERT (date_format(`AA`.`ASR`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASR`,
+    CONVERT (date_format(`AA`.`AER`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AER`,
+    CONVERT (date_format(`AA`.`ESBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESBT`,
+    CONVERT (date_format(`AA`.`EEBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEBT`,
+    CONVERT (date_format(`AA`.`LCBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `LCBT`,
+    CONVERT (date_format(`AA`.`ASBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASBT`,
+    CONVERT (date_format(`AA`.`AEBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEBT`,
+    CONVERT (date_format(`AA`.`ECDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ECDT`,
+    CONVERT (date_format(`AA`.`ACDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ACDT`,
+    CONVERT (date_format(`AA`.`EEDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEDT`,
+    CONVERT (date_format(`AA`.`AEDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEDT`,
+    CONVERT (date_format(`AA`.`AACT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AACT`,
+    CONVERT (date_format(`A`.`A_GRND_TSF_TM`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `A_GRND_TSF_TM`,
+    CONVERT (date_format(`AA`.`D_GRND_TSF_TM`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `D_GRND_TSF_TM`,
+    `AA`.`TERMINAL` AS `TERMINAL`,
+    `AA`.`BAG_COUNT` AS `BAG_COUNT`,
+    `AA`.`BAG_WEIGHT` AS `BAG_WEIGHT`,
+    `A`.`BAG_WEIGHT` AS `BAG_WEIGHT_A`,
+    `AA`.`PAX_COUNT` AS `PAX_COUNT`,
+    timestampdiff(MINUTE, `AA`.`SOBT`, `AA`.`SIBT`) AS `DURATION_D`,
+    timestampdiff(MINUTE, `A`.`SOBT`, `A`.`SIBT`) AS `DURATION_A`,
+    `AA`.`ISCONTROL` AS `ISCONTROL`,
+    CONVERT (date_format(`A`.`ATOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATOT_A`,
+    CONVERT (date_format(`A`.`SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SOBT_A`,
+    CONVERT (date_format(`A`.`ETOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETOT_A`,
+    CONVERT (date_format(`AA`.`TRDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TRDT`,
+    CONVERT (date_format(`A`.`MPBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `MPBT`,
+    CONVERT (date_format(`A`.`MPET`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `MPET`,
+    `AA`.`TRBT` AS `TRBT`,
+    `AA`.`TRET` AS `TRET`,
+    `AA`.`ERBT` AS `ERBT`,
+    `AA`.`ERET` AS `ERET`,
+    `AA`.`LDBT` AS `LDBT`,
+    `AA`.`LDET` AS `LDET`,
+    `AA`.`REASON_FC` AS `REASON_FC`,
+    `AA`.`REASON_TYPE` AS `REASON_TYPE`,
+    `AA`.`REASONS_FOR_DELAY` AS `REASONS_FOR_DELAY`,
+    `AA`.`ISDEICING` AS `ISDEICING_D`,
+    `A`.`ISDEICING` AS `ISDEICING_A`,
+    `AA`.`ISFOCUS` AS `ISFOCUS_D`,
+    `A`.`ISFOCUS` AS `ISFOCUS_A`,
+    `AA`.`ISDEICING` AS `ISDEICING`,
+    `A`.`CARGO_WEIGHT` AS `CARGO_WEIGHT_A`,
+    `AA`.`CARGO_WEIGHT` AS `CARGO_WEIGHT_D`,
+    `A`.`MAIL_WEIGHT` AS `MAIL_WEIGHT_A`,
+    `AA`.`MAIL_WEIGHT` AS `MAIL_WEIGHT_D`,
+    `A`.`RESERVATIONS` AS `RESERVATIONS_A`,
+    `AA`.`RESERVATIONS` AS `RESERVATIONS_D`,
+    `AA`.`REASONS_FOR_AUTO` AS `REASONS_FOR_AUTO`
+    FROM
+    ((SELECT * FROM T_LOCAL_FLIGHT_INFO WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId} UNION SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId}) `AA`
+    LEFT JOIN (SELECT * FROM T_LOCAL_FLIGHT_INFO WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId} UNION SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId}) `A`
+    ON((`AA`.`ASSOCIATED_FLIGHT_ID` = `A`.`FLIGHT_ID`)))
+    WHERE
+    ((`AA`.`D_OR_A` = 'D') AND(`AA`.`ISDEL` <![CDATA[<>]]> '1') AND(`AA`.`ABNORMAL_FLIGHT_STAT_CD` <![CDATA[<>]]> 'CAN'))
+    UNION
+    SELECT
+    `AA`.`FLIGHT_ID` AS `FLIGHT_ID_D`,
+    `A`.`FLIGHT_ID` AS `FLIGHT_ID_A`,
+    `AA`.`AIRLINES` AS `AIRLINES`,
+    `A`.`AIRLINES` AS `AIRLINES_A`,
+    `AA`.`FLNO` AS `FLNO_D`,
+    `A`.`FLNO` AS `FLNO_A`,
+    CONVERT (date_format(`AA`.`EXEC_DATE`, '%Y-%m-%d') USING utf8mb4) AS `EXEC_DATE_D`,
+    CONVERT (date_format(`A`.`EXEC_DATE`, '%Y-%m-%d') USING utf8mb4) AS `EXEC_DATE_A`,
+    CONVERT (date_format(`AA`.`FLIGHT_IDENTY_MANAGE_DATE`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `FLIGHT_IDENTY_MANAGE_DATE`,
+    `AA`.`FLIGHT_TASK` AS `FLIGHT_TASK`,
+    `A`.`FLIGHT_TASK` AS `FLIGHT_TASK_A`,
+    `AA`.`ATTRIBUTE` AS `ATTRIBUTE`,
+    `AA`.`AGENCY` AS `AGENCY`,
+    `AA`.`CRAFT_TYPE_ICAO` AS `CRAFT_TYPE_ICAO`,
+    `A`.`CRAFT_TYPE_ICAO` AS `CRAFT_TYPE_ICAO_A`,
+    `AA`.`REGN` AS `REGN`,
+    `A`.`REGN` AS `REGN_A`,
+    (CASE WHEN(isnull(`AA`.`ABNORMAL_FLIGHT_STAT_CD`) OR(`AA`.`ABNORMAL_FLIGHT_STAT_CD` = '') OR(`AA`.`ABNORMAL_FLIGHT_STAT_CD` = 'DLY')) THEN `AA`.`NORMAL_FLIGHT_STAT_CD` ELSE `AA`.`ABNORMAL_FLIGHT_STAT_CD` END) AS `FL_STATUS`,
+    (CASE WHEN(isnull(`A`.`ABNORMAL_FLIGHT_STAT_CD`) OR(`A`.`ABNORMAL_FLIGHT_STAT_CD` = '') OR(`A`.`ABNORMAL_FLIGHT_STAT_CD` = 'DLY')) THEN `A`.`NORMAL_FLIGHT_STAT_CD` ELSE `A`.`ABNORMAL_FLIGHT_STAT_CD` END) AS `FL_STATUS_A`,
+    CONVERT (date_format(`AA`.`SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SOBT`,
+    CONVERT (date_format(`AA`.`ETOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETOT`,
+    CONVERT (date_format(`AA`.`ATOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATOT`,
+    CONVERT (date_format(`A`.`SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SIBT`,
+    CONVERT (date_format(`AA`.`SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SIBT_D`,
+    CONVERT (date_format(`A`.`ELDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELDT`,
+    CONVERT (date_format(`AA`.`ELDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELDT_D`,
+    CONVERT (date_format(`A`.`ALDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALDT`,
+    CONVERT (date_format(`AA`.`ALDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALDT_D`,
+    CONVERT (date_format(`A`.`EIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EIBT`,
+    CONVERT (date_format(`A`.`AIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AIBT`,
+    CONVERT (date_format(`AA`.`EOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EOBT`,
+    CONVERT (date_format(`AA`.`AOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AOBT`,
+    `AA`.`SHARE_FLNO` AS `SHARE_FLNO`,
+    `A`.`ADEP` AS `ADEP_A`,
+    `A`.`ADES` AS `ADES_A`,
+    `AA`.`ADEP` AS `ADEP_D`,
+    `AA`.`ADES` AS `ADES_D`,
+    `A`.`START_STATION` AS `START_STATION`,
+    CONVERT (date_format(`A`.`START_SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_SOBT`,
+    CONVERT (date_format(`A`.`START_SIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_SIBT`,
+    CONVERT (date_format(`A`.`START_EOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_EOBT`,
+    CONVERT (date_format(`A`.`START_EIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_EIBT`,
+    CONVERT (date_format(`A`.`START_AOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_AOBT`,
+    CONVERT (date_format(`A`.`START_AIBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `START_AIBT`,
+    `A`.`EXIT` AS `EXIT`,
+    `AA`.`EXOT` AS `EXOT`,
+    `A`.`AXIT` AS `AXIT`,
+    `AA`.`AXOT` AS `AXOT`,
+    `A`.`DELAY_TIME` AS `DELAY_TIME_A`,
+    `AA`.`DELAY_TIME` AS `DELAY_TIME_D`,
+    `A`.`STAND` AS `STAND_A`,
+    `AA`.`STAND` AS `STAND_D`,
+    `AA`.`GATE` AS `GATE`,
+    CONVERT (date_format(`AA`.`CHECK_START_TIME`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CHECK_START_TIME`,
+    CONVERT (date_format(`AA`.`CHECK_END_TIME`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CHECK_END_TIME`,
+    CONVERT (date_format(`AA`.`COBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `COBT`,
+    CONVERT (date_format(`AA`.`CTOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `CTOT`,
+    CONVERT (date_format(`AA`.`TOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TOBT`,
+    CONVERT (date_format(`AA`.`TTOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TTOT`,
+    CONVERT (date_format(`AA`.`A_TOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `A_TOBT`,
+    CONVERT (date_format(`AA`.`DOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `DOBT`,
+    CONVERT (date_format(`AA`.`FCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `FCT`,
+    CONVERT (date_format(`AA`.`RPOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `RPOT`,
+    CONVERT (date_format(`AA`.`APOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `APOT`,
+    CONVERT (date_format(`AA`.`ASAT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASAT`,
+    `A`.`RUNWAY` AS `RUNWAY_A`,
+    `AA`.`RUNWAY` AS `RUNWAY_D`,
+    CONVERT (date_format(`A`.`ERSL`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ERSL`,
+    CONVERT (date_format(`AA`.`ELSW`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ELSW`,
+    CONVERT (date_format(`A`.`ARSL`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ARSL`,
+    CONVERT (date_format(`AA`.`ALSW`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ALSW`,
+    CONVERT (date_format(`A`.`ETDO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETDO`,
+    CONVERT (date_format(`AA`.`STDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `STDC`,
+    CONVERT (date_format(`AA`.`ETDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETDC`,
+    CONVERT (date_format(`A`.`ATDO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATDO`,
+    CONVERT (date_format(`AA`.`ATDC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATDC`,
+    CONVERT (date_format(`A`.`ETFO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETFO`,
+    CONVERT (date_format(`AA`.`ETFC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETFC`,
+    CONVERT (date_format(`A`.`ATFO`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATFO`,
+    CONVERT (date_format(`AA`.`ATFC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATFC`,
+    CONVERT (date_format(`AA`.`ESCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESCT`,
+    CONVERT (date_format(`AA`.`EFCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EFCT`,
+    CONVERT (date_format(`AA`.`ASCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASCT`,
+    CONVERT (date_format(`AA`.`AFCT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AFCT`,
+    CONVERT (date_format(`AA`.`ESC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESC`,
+    CONVERT (date_format(`AA`.`EEC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEC`,
+    CONVERT (date_format(`AA`.`ASC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASC`,
+    CONVERT (date_format(`AA`.`AEC`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEC`,
+    CONVERT (date_format(`AA`.`ESR`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESR`,
+    CONVERT (date_format(`AA`.`EER`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EER`,
+    CONVERT (date_format(`AA`.`ASR`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASR`,
+    CONVERT (date_format(`AA`.`AER`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AER`,
+    CONVERT (date_format(`AA`.`ESBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ESBT`,
+    CONVERT (date_format(`AA`.`EEBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEBT`,
+    CONVERT (date_format(`AA`.`LCBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `LCBT`,
+    CONVERT (date_format(`AA`.`ASBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ASBT`,
+    CONVERT (date_format(`AA`.`AEBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEBT`,
+    CONVERT (date_format(`AA`.`ECDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ECDT`,
+    CONVERT (date_format(`AA`.`ACDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ACDT`,
+    CONVERT (date_format(`AA`.`EEDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `EEDT`,
+    CONVERT (date_format(`AA`.`AEDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AEDT`,
+    CONVERT (date_format(`AA`.`AACT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `AACT`,
+    CONVERT (date_format(`A`.`A_GRND_TSF_TM`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `A_GRND_TSF_TM`,
+    CONVERT (date_format(`AA`.`D_GRND_TSF_TM`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `D_GRND_TSF_TM`,
+    `AA`.`TERMINAL` AS `TERMINAL`,
+    `AA`.`BAG_COUNT` AS `BAG_COUNT`,
+    `AA`.`BAG_WEIGHT` AS `BAG_WEIGHT`,
+    `A`.`BAG_WEIGHT` AS `BAG_WEIGHT_A`,
+    `AA`.`PAX_COUNT` AS `PAX_COUNT`,
+    timestampdiff(MINUTE, `AA`.`SOBT`, `AA`.`SIBT`) AS `DURATION_D`,
+    timestampdiff(MINUTE, `A`.`SOBT`, `A`.`SIBT`) AS `DURATION_A`,
+    `AA`.`ISCONTROL` AS `ISCONTROL`,
+    CONVERT (date_format(`A`.`ATOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ATOT_A`,
+    CONVERT (date_format(`A`.`SOBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `SOBT_A`,
+    CONVERT (date_format(`A`.`ETOT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `ETOT_A`,
+    CONVERT (date_format(`AA`.`TRDT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `TRDT`,
+    CONVERT (date_format(`A`.`MPBT`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `MPBT`,
+    CONVERT (date_format(`A`.`MPET`, '%Y-%m-%d %H:%i') USING utf8mb4) AS `MPET`,
+    `AA`.`TRBT` AS `TRBT`,
+    `AA`.`TRET` AS `TRET`,
+    `AA`.`ERBT` AS `ERBT`,
+    `AA`.`ERET` AS `ERET`,
+    `AA`.`LDBT` AS `LDBT`,
+    `AA`.`LDET` AS `LDET`,
+    `AA`.`REASON_FC` AS `REASON_FC`,
+    `AA`.`REASON_TYPE` AS `REASON_TYPE`,
+    `AA`.`REASONS_FOR_DELAY` AS `REASONS_FOR_DELAY`,
+    `AA`.`ISDEICING` AS `ISDEICING_D`,
+    `A`.`ISDEICING` AS `ISDEICING_A`,
+    `AA`.`ISFOCUS` AS `ISFOCUS_D`,
+    `A`.`ISFOCUS` AS `ISFOCUS_A`,
+    `AA`.`ISDEICING` AS `ISDEICING`,
+    `A`.`CARGO_WEIGHT` AS `CARGO_WEIGHT_A`,
+    `AA`.`CARGO_WEIGHT` AS `CARGO_WEIGHT_D`,
+    `A`.`MAIL_WEIGHT` AS `MAIL_WEIGHT_A`,
+    `AA`.`MAIL_WEIGHT` AS `MAIL_WEIGHT_D`,
+    `A`.`RESERVATIONS` AS `RESERVATIONS_A`,
+    `AA`.`RESERVATIONS` AS `RESERVATIONS_D`,
+    `AA`.`REASONS_FOR_AUTO` AS `REASONS_FOR_AUTO`
+    FROM
+    ((SELECT * FROM T_LOCAL_FLIGHT_INFO WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId} UNION SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId}) `A`
+    LEFT JOIN (SELECT * FROM T_LOCAL_FLIGHT_INFO WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId} UNION SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY WHERE FLIGHT_ID = ${params.flightId} OR ASSOCIATED_FLIGHT_ID = ${params.flightId}) `AA`
+    ON((`AA`.`ASSOCIATED_FLIGHT_ID` = `A`.`FLIGHT_ID`)))
+    WHERE
+    ((`A`.`D_OR_A` = 'A') AND isnull(`AA`.`FLIGHT_ID`) AND(`A`.`ISDEL` <![CDATA[<>]]> '1') AND(`A`.`ABNORMAL_FLIGHT_STAT_CD` <![CDATA[<>]]> 'CAN'))
+    ) `R`) T
+
+
+    <!--
+    <choose>
+      <when test="params.flightIdD != null">
+        AND T.FLIGHT_ID_D = ${params.flightIdD}
+      </when>
+      <otherwise>
+        AND T.FLIGHT_ID_A = ${params.flightIdA}
+      </otherwise>
+    </choose>
+    -->
+  </select>
+
+  <select id="findFlightEvent" resultMap="FlightEventResultMap" parameterType="map" >
+    SELECT `NAME`,DATE_FORMAT(`TIME`,'%H:%i') AS TIME,DATE_FORMAT(`TIME`,'%Y-%m-%d') AS DATE,DESCRIPTION
+    FROM T_FLIGHT_EVENT
+    WHERE 1=1
+    <if test="params.flightIdD !=null and params.flightIdD != '' and params.flightIdA !=null and params.flightIdA != ''">
+      AND (FLIGHT_ID = #{params.flightIdD,jdbcType=BIGINT} OR FLIGHT_ID = #{params.flightIdA,jdbcType=BIGINT})
+    </if>
+    ORDER BY `TIME` DESC
+  </select>
+
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.Video.VideoMapper" >
+
+    <select id="queryByCondition" resultType="com.hq.acdm.model.Video.Video" parameterType="map">
+        select * from videoinfo where
+        1=1
+        <if test="params.videoCode !=null and params.videoCode!=''">
+            AND VIDEONO = #{params.videoCode}
+        </if>
+
+    </select>
+
+    <select id="queryByStand" resultType="com.hq.acdm.model.Video.Video" parameterType="map">
+        select * from videoinfo where
+        1=1
+        <if test="params.STAND !=null and params.STAND!=''">
+            AND STAND = #{params.STAND}
+        </if>
+
+    </select>
+</mapper>

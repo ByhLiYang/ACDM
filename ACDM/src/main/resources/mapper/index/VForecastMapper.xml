@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.index.VForecastMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.index.VForecast" >
+    <result column="HOUR" property="hour" jdbcType="DECIMAL" />
+    <result column="T_HOUR" property="tHour" jdbcType="DECIMAL" />
+    <result column="SCH_NUM" property="schNum" jdbcType="DECIMAL" />
+    <result column="REAL_NUM" property="realNum" jdbcType="DECIMAL" />
+    <result column="A_OR_D" property="aOrD" jdbcType="CHAR" />
+    <result column="S_HOUR" property="sHour" jdbcType="DECIMAL" />
+    <result column="OPERATIONAL_DATE" property="operationalDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insert" parameterType="com.hq.acdm.model.index.VForecast" >
+    insert into V_FORECAST (HOUR, T_HOUR, SCH_NUM, 
+      REAL_NUM, A_OR_D, S_HOUR, 
+      OPERATIONAL_DATE)
+    values (#{hour,jdbcType=DECIMAL}, #{tHour,jdbcType=DECIMAL}, #{schNum,jdbcType=DECIMAL}, 
+      #{realNum,jdbcType=DECIMAL}, #{aOrD,jdbcType=CHAR}, #{sHour,jdbcType=DECIMAL}, 
+      #{operationalDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.index.VForecast" >
+    insert into V_FORECAST
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hour != null" >
+        HOUR,
+      </if>
+      <if test="tHour != null" >
+        T_HOUR,
+      </if>
+      <if test="schNum != null" >
+        SCH_NUM,
+      </if>
+      <if test="realNum != null" >
+        REAL_NUM,
+      </if>
+      <if test="aOrD != null" >
+        A_OR_D,
+      </if>
+      <if test="sHour != null" >
+        S_HOUR,
+      </if>
+      <if test="operationalDate != null" >
+        OPERATIONAL_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hour != null" >
+        #{hour,jdbcType=DECIMAL},
+      </if>
+      <if test="tHour != null" >
+        #{tHour,jdbcType=DECIMAL},
+      </if>
+      <if test="schNum != null" >
+        #{schNum,jdbcType=DECIMAL},
+      </if>
+      <if test="realNum != null" >
+        #{realNum,jdbcType=DECIMAL},
+      </if>
+      <if test="aOrD != null" >
+        #{aOrD,jdbcType=CHAR},
+      </if>
+      <if test="sHour != null" >
+        #{sHour,jdbcType=DECIMAL},
+      </if>
+      <if test="operationalDate != null" >
+        #{operationalDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getFlightNum" parameterType="map" resultMap="BaseResultMap">
+    select sum(SCH_NUM) SCH_NUM,
+    sum(REAL_NUM) REAL_NUM from V_FORECAST
+    <where>
+      A_OR_D = #{flag }
+    </where>
+    group by HOUR
+    order by HOUR
+  </select>
+
+  <select id="getplanFlightNum" resultType="com.hq.acdm.vo.realtimeSituation.HBSPerHour"  parameterType="map" >
+       SELECT substring(tp.dpsrCheckinTime,-8,2) time_H,SUM(1) hBS
+       FROM V_UTIL_DAILY_FLIGHT ta
+       LEFT JOIN T_PASSENGER_INFO tp on ta.FLIGHT_ID=tp.flightId
+       WHERE
+       ta.D_OR_A= #{flag }
+         GROUP BY time_H  ORDER BY time_H
+    </select>
+  <select id="getactualFlightNum" resultType="com.hq.acdm.vo.realtimeSituation.HBSPerHour"   parameterType="map">
+       SELECT substring(tp.stsBoardTime,-8,2) time_H,SUM(1) hBS
+       FROM V_UTIL_DAILY_FLIGHT ta
+       LEFT JOIN T_PASSENGER_INFO tp on ta.FLIGHT_ID=tp.flightId
+       WHERE
+       ta.D_OR_A= #{flag }
+         GROUP BY time_H  ORDER BY time_H
+    </select>
+  <select id="getquarantineNum"  resultType="com.hq.acdm.vo.realtimeSituation.HBSPerHour"    parameterType="map">
+       SELECT substring(tp.stsPscTime,-8,2) time_H,SUM(1) hBS
+       FROM V_UTIL_DAILY_FLIGHT ta
+       LEFT JOIN T_PASSENGER_INFO tp on ta.FLIGHT_ID=tp.flightId
+       WHERE
+       ta.D_OR_A= #{flag }
+         GROUP BY time_H  ORDER BY time_H
+    </select>
+</mapper>

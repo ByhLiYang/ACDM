@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TSpecialInfoMapper" >
+
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TSpecialInfo" >
+  <id column="ID" property="id" jdbcType="VARCHAR" />
+  <result column="INFO_TYPE" property="infoType" jdbcType="VARCHAR" />
+  <result column="INFO_CONTENT" property="infoContent" jdbcType="VARCHAR" />
+  <result column="INFO_STARTTM" property="infoStarttm" jdbcType="TIMESTAMP" />
+  <result column="INFO_ENDTM" property="infoEndtm" jdbcType="TIMESTAMP" />
+  <result column="CREATE_TM" property="createTm" jdbcType="TIMESTAMP" />
+  <result column="UPDATE_TM" property="updateTm" jdbcType="TIMESTAMP" />
+  <result column="CREATE_USR" property="createUsr" jdbcType="VARCHAR" />
+  <result column="UPDATE_USR" property="updateUsr" jdbcType="VARCHAR" />
+</resultMap>
+
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.realtimeSituation.SpecialSituationVo" >
+    <result column="INFO_TM" property="infoTm" jdbcType="VARCHAR" />
+    <result column="INFO_CONTENT" property="infoContent" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, INFO_TYPE, INFO_CONTENT, INFO_STARTTM, INFO_ENDTM, CREATE_TM, UPDATE_TM, CREATE_USR, 
+    UPDATE_USR
+  </sql>
+
+  <select id="findAllTSpecialInfo" resultMap="BaseResultMap" parameterType="map" >
+    SELECT * FROM T_SPECIAL_INFO WHERE 1=1
+    <if test="params.start_date !=null and params.start_date != '' and params.end_date !=null and params.end_date != '' ">
+      <![CDATA[
+      AND ((INFO_STARTTM >= #{params.start_date,jdbcType=VARCHAR} AND INFO_ENDTM <= #{params.end_date,jdbcType=VARCHAR})
+      OR (INFO_STARTTM <= #{params.start_date,jdbcType=VARCHAR} AND INFO_STARTTM >= #{params.start_date,jdbcType=VARCHAR} AND INFO_ENDTM <= #{params.end_date,jdbcType=VARCHAR})
+      OR (INFO_STARTTM >= #{params.start_date,jdbcType=VARCHAR} AND INFO_STARTTM <= #{params.end_date,jdbcType=VARCHAR} AND INFO_ENDTM >= #{params.end_date,jdbcType=VARCHAR})
+      OR (INFO_STARTTM <= #{params.start_date,jdbcType=VARCHAR} AND INFO_ENDTM >= #{params.end_date,jdbcType=VARCHAR}))
+      ]]>
+    </if>
+    <if test="params.tiaojian !=null and params.tiaojian != ''">
+      AND INFO_CONTENT LIKE CONCAT('%',#{params.tiaojian},'%')
+    </if>
+
+  </select>
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TSpecialInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_SPECIAL_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_SPECIAL_INFO
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_SPECIAL_INFO
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TSpecialInfoExample" >
+    delete from T_SPECIAL_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TSpecialInfo" >
+    insert into T_SPECIAL_INFO (ID, INFO_TYPE, INFO_CONTENT, 
+      INFO_STARTTM, INFO_ENDTM, CREATE_TM, 
+      UPDATE_TM, CREATE_USR, UPDATE_USR
+      )
+    values (#{id,jdbcType=VARCHAR}, #{infoType,jdbcType=VARCHAR}, #{infoContent,jdbcType=VARCHAR},
+      #{infoStarttm,jdbcType=TIMESTAMP}, #{infoEndtm,jdbcType=TIMESTAMP}, #{createTm,jdbcType=TIMESTAMP}, 
+      #{updateTm,jdbcType=TIMESTAMP}, #{createUsr,jdbcType=VARCHAR}, #{updateUsr,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TSpecialInfo" >
+    insert into T_SPECIAL_INFO
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="infoType != null" >
+        INFO_TYPE,
+      </if>
+      <if test="infoContent != null" >
+        INFO_CONTENT,
+      </if>
+      <if test="infoStarttm != null" >
+        INFO_STARTTM,
+      </if>
+      <if test="infoEndtm != null" >
+        INFO_ENDTM,
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM,
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM,
+      </if>
+      <if test="createUsr != null" >
+        CREATE_USR,
+      </if>
+      <if test="updateUsr != null" >
+        UPDATE_USR,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="infoType != null" >
+        #{infoType,jdbcType=VARCHAR},
+      </if>
+      <if test="infoContent != null" >
+        #{infoContent,jdbcType=VARCHAR},
+      </if>
+      <if test="infoStarttm != null" >
+        #{infoStarttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="infoEndtm != null" >
+        #{infoEndtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTm != null" >
+        #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUsr != null" >
+        #{createUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUsr != null" >
+        #{updateUsr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TSpecialInfoExample" resultType="java.lang.Integer" >
+    select count(*) from T_SPECIAL_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_SPECIAL_INFO
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.infoType != null" >
+        INFO_TYPE = #{record.infoType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.infoContent != null" >
+        INFO_CONTENT = #{record.infoContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.infoStarttm != null" >
+        INFO_STARTTM = #{record.infoStarttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.infoEndtm != null" >
+        INFO_ENDTM = #{record.infoEndtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTm != null" >
+        CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTm != null" >
+        UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUsr != null" >
+        CREATE_USR = #{record.createUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateUsr != null" >
+        UPDATE_USR = #{record.updateUsr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_SPECIAL_INFO
+    set ID = #{record.id,jdbcType=VARCHAR},
+      INFO_TYPE = #{record.infoType,jdbcType=VARCHAR},
+      INFO_CONTENT = #{record.infoContent,jdbcType=VARCHAR},
+      INFO_STARTTM = #{record.infoStarttm,jdbcType=TIMESTAMP},
+      INFO_ENDTM = #{record.infoEndtm,jdbcType=TIMESTAMP},
+      CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      CREATE_USR = #{record.createUsr,jdbcType=VARCHAR},
+      UPDATE_USR = #{record.updateUsr,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TSpecialInfo" >
+    update T_SPECIAL_INFO
+    <set >
+      <if test="infoType != null" >
+        INFO_TYPE = #{infoType,jdbcType=VARCHAR},
+      </if>
+      <if test="infoContent != null" >
+        INFO_CONTENT = #{infoContent,jdbcType=VARCHAR},
+      </if>
+      <if test="infoStarttm != null" >
+        INFO_STARTTM = #{infoStarttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="infoEndtm != null" >
+        INFO_ENDTM = #{infoEndtm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUsr != null" >
+        CREATE_USR = #{createUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUsr != null" >
+        UPDATE_USR = #{updateUsr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TSpecialInfo" >
+    update T_SPECIAL_INFO
+    set INFO_TYPE = #{infoType,jdbcType=VARCHAR},
+      INFO_CONTENT = #{infoContent,jdbcType=VARCHAR},
+      INFO_STARTTM = #{infoStarttm,jdbcType=TIMESTAMP},
+      INFO_ENDTM = #{infoEndtm,jdbcType=TIMESTAMP},
+      CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      CREATE_USR = #{createUsr,jdbcType=VARCHAR},
+      UPDATE_USR = #{updateUsr,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="findByTSpecialInfo" resultMap="ResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT CONCAT(DATE_FORMAT(INFO_STARTTM, '%H:%i'),'至',
+    DATE_FORMAT(INFO_ENDTM, '%H:%i')) AS INFO_TM, CONCAT('机场信息:', INFO_CONTENT) INFO_CONTENT
+    FROM T_SPECIAL_INFO
+    WHERE ((INFO_STARTTM >= NOW() AND INFO_ENDTM <= NOW())
+    OR (INFO_STARTTM <= NOW() AND INFO_STARTTM >= NOW() AND INFO_ENDTM <= NOW())
+    OR (INFO_STARTTM >= NOW() AND INFO_STARTTM <= NOW() AND INFO_ENDTM >= NOW())
+    OR (INFO_STARTTM <= NOW() AND INFO_ENDTM >= NOW()))
+    ]]>
+  </select>
+
+  <select id="findByTNoticeOfConstructionInfo" resultMap="ResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT CONCAT(DATE_FORMAT(CONS_START_TIME, '%H:%i'),'至',
+    DATE_FORMAT(CONS_END_TIME, '%H:%i')) AS INFO_TM, CONCAT('机场信息:',CONS_CONTENT) INFO_CONTENT
+    FROM T_NOTICE_OF_CONSTRUCTION
+    WHERE ((CONS_START_TIME >= NOW() AND CONS_END_TIME <= NOW())
+    OR (CONS_START_TIME <= NOW() AND CONS_START_TIME >= NOW() AND CONS_END_TIME <= NOW())
+    OR (CONS_START_TIME >= NOW() AND CONS_START_TIME <= NOW() AND CONS_END_TIME >= NOW())
+    OR (CONS_START_TIME <= NOW() AND CONS_END_TIME >= NOW()))
+    ]]>
+  </select>
+
+  <select id="findByTNoticeOfGroundingInfo" resultMap="ResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT CONCAT(DATE_FORMAT(STOP_DATE_START, '%H:%i'),'至',
+    DATE_FORMAT(STOP_DATE_END, '%H:%i')) AS INFO_TM, CONCAT('机场信息:',NOTICE_CONTENT) INFO_CONTENT
+    FROM T_NOTICE_OF_GROUNDING
+    WHERE ((STOP_DATE_START >= NOW() AND STOP_DATE_END <= NOW())
+    OR (STOP_DATE_START <= NOW() AND STOP_DATE_START >= NOW() AND STOP_DATE_END <= NOW())
+    OR (STOP_DATE_START >= NOW() AND STOP_DATE_START <= NOW() AND STOP_DATE_END >= NOW())
+    OR (STOP_DATE_START <= NOW() AND STOP_DATE_END >= NOW()))
+    ]]>
+  </select>
+
+  <select id="findByTMdrsInfo" resultMap="ResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT CONCAT(DATE_FORMAT(TIMESCOPE_START, '%H:%i'),'至',
+    DATE_FORMAT(TIMESCOPE_END, '%H:%i')) AS INFO_TM, CONCAT('MDRS信息 ',AREA,':',REASON,'-',EXPECTINFLUENCE) INFO_CONTENT
+    FROM T_MDRS
+    WHERE ((TIMESCOPE_START >= NOW())
+	OR (TIMESCOPE_START >= NOW() AND TIMESCOPE_END <= NOW())
+    OR (TIMESCOPE_START <= NOW() AND TIMESCOPE_START >= NOW() AND TIMESCOPE_END <= NOW())
+    OR (TIMESCOPE_START >= NOW() AND TIMESCOPE_START <= NOW() AND TIMESCOPE_END >= NOW())
+    OR (TIMESCOPE_START <= NOW() AND TIMESCOPE_END >= NOW()))
+    ]]>
+  </select>
+
+  <select id="findByTControlInfoInfo" resultMap="ResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT CONCAT(DATE_FORMAT(CONTROL_REAL_STARTTM, '%Y-%m-%d %H:%i:%s'),'至',
+    DATE_FORMAT(CONTROL_ALTERAT_ENDTM, '%Y-%m-%d %H:%i:%s')) AS INFO_TM, CONCAT('流控信息:',CONTROL_CONTENT) AS INFO_CONTENT
+    FROM T_CONTROL_INFO
+    WHERE ISAVAILABLE = 1
+    AND DATE_FORMAT(PUBTIME,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
+
+    ]]>
+  </select>
+
+</mapper>

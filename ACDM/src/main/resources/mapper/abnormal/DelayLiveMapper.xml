@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.abnormal.DelayLiveMapper" >
+
+    <!--
+    <select id="getTableData1" resultType="com.hq.acdm.vo.abnormal.FiveD"  >
+        select flight_no_iata || '/' || to_char(operational_date,'yyyy-MM-dd')  d0,dest_airport_iata d1, to_char(sobt,'HH24:MI') d2, delay_time d3, pax_num d4
+          from V_FLIGHT_DELAY_DEPARTURE_TOP7
+    </select>
+    -->
+
+    <select id="getTableData1" resultType="com.hq.acdm.vo.abnormal.FiveD" parameterType="map" >
+        <![CDATA[
+        SELECT V.FLIGHT_ID flightId,CONCAT(V.FLNO, '/', V.EXEC_DATE) d0,V.ADES d1,DATE_FORMAT(V.SOBT,'%H:%i') AS d2,V.DELAY_TIME d3,COUNT(P.dpsrId) d4
+        FROM V_UTIL_DAILY_FLIGHT V
+        LEFT JOIN T_PASSENGER_INFO P ON V.FLIGHT_ID = P.flightId
+        WHERE V.D_OR_A = 'D' AND V.DELAY_TIME > 0 AND V.ATOT IS NULL
+        AND P.dpsrCheckinTime IS NOT NULL
+        ]]>
+        <if test="params.agent !=null and params.agent != ''">
+            <choose>
+                <when test="params.dept !=null and params.dept == 'IGO'">
+                    AND V.AIRLINES NOT IN (${params.agent})
+                </when>
+                <otherwise>
+                    AND V.AIRLINES IN (${params.agent})
+                </otherwise>
+            </choose>
+        </if>
+        GROUP BY V.FLIGHT_ID
+        ORDER BY V.DELAY_TIME DESC
+    </select>
+
+    <select id="getTableData2" resultType="com.hq.acdm.vo.abnormal.FiveD"  >
+        select description d0, "滞留航班数" d1, "旅客数" d2, "延误率" d3, "平均滞留时间" d4
+          from V_DAILY_FLIGHT_DELAY_DESC_TOP7
+    </select>
+
+    <!--
+    <select id="getRecentInbound" resultType="com.hq.acdm.vo.abnormal.FiveD"  >
+        select flight_no_iata d0, max_aldt d1 from V_DELAYANALYSIS_LASTALDT
+    </select>
+
+    <select id="getRecentOutbound" resultType="com.hq.acdm.vo.abnormal.FiveD"  >
+        select flight_no_iata d0, max_atot d1 from V_DELAYANALYSIS_LASTATOT
+    </select>
+    -->
+
+    <select id="getRecentInbound" resultType="com.hq.acdm.vo.abnormal.FiveD"  >
+        SELECT FLNO d0,DATE_FORMAT(ALDT, '%Y-%m-%d %H:%i') d1 FROM V_UTIL_DAILY_FLIGHT
+        WHERE D_OR_A = 'A' AND ALDT IS NOT NULL
+        ORDER BY ALDT DESC
+        LIMIT 1
+    </select>
+
+    <select id="getRecentOutbound" resultType="com.hq.acdm.vo.abnormal.FiveD"  >
+        SELECT FLNO d0,DATE_FORMAT(ATOT, '%Y-%m-%d %H:%i') d1 FROM V_UTIL_DAILY_FLIGHT
+        WHERE D_OR_A = 'D' AND ATOT IS NOT NULL
+        ORDER BY ATOT DESC
+        LIMIT 1
+    </select>
+
+
+    <select id="getDelayInfoByMobile" resultType="map" parameterType="map" >
+        <![CDATA[
+        SELECT
+        SUM(CASE WHEN TA.ATOT IS NULL AND TA.DELAY_TIME > 0 AND TA.DELAY_TIME < 60  THEN 1 ELSE 0 END) COUNT0N,
+        SUM(CASE WHEN TA.ATOT IS NOT NULL AND TA.DELAY_TIME > 0 AND TA.DELAY_TIME < 60  THEN 1 ELSE 0 END) COUNT0Y,
+        SUM(CASE WHEN TA.ATOT IS NULL AND TA.DELAY_TIME >= 60 AND TA.DELAY_TIME < 120  THEN 1 ELSE 0 END) COUNT60N,
+        SUM(CASE WHEN TA.ATOT IS NOT NULL AND TA.DELAY_TIME >= 60 AND TA.DELAY_TIME < 120  THEN 1 ELSE 0 END) COUNT60Y,
+        SUM(CASE WHEN TA.ATOT IS NULL AND TA.DELAY_TIME>=120 AND TA.DELAY_TIME < 180   THEN 1 ELSE 0 END) COUNT120N,
+        SUM(CASE WHEN TA.ATOT IS NOT NULL AND TA.DELAY_TIME>=120 AND TA.DELAY_TIME < 180   THEN 1 ELSE 0 END) COUNT120Y,
+        SUM(CASE WHEN TA.ATOT IS NULL AND TA.DELAY_TIME>=180 AND TA.DELAY_TIME < 240   THEN 1 ELSE 0 END) COUNT180N,
+        SUM(CASE WHEN TA.ATOT IS NOT NULL AND TA.DELAY_TIME>=180 AND TA.DELAY_TIME < 240   THEN 1 ELSE 0 END) COUNT180Y,
+        SUM(CASE WHEN TA.ATOT IS NULL AND TA.DELAY_TIME>=240  THEN 1 ELSE 0 END) COUNT240N,
+        SUM(CASE WHEN TA.ATOT IS NOT NULL AND TA.DELAY_TIME>=240  THEN 1 ELSE 0 END) COUNT240Y
+        FROM V_UTIL_DAILY_FLIGHT TA
+        LEFT JOIN V_UTIL_DAILY_FLIGHT TB ON TA.FLIGHT_ID = TB.ASSOCIATED_FLIGHT_ID
+        WHERE  TA.D_OR_A = 'D'  AND TA.`ISDEL`  <>  '1'
+        ]]>
+        <if test="params.agent !=null and params.agent != ''">
+            <choose>
+                <when test="params.dept !=null and params.dept == 'IGO'">
+                    AND TA.AIRLINES NOT IN (${params.agent})
+                </when>
+                <otherwise>
+                    AND TA.AIRLINES IN (${params.agent})
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
+</mapper>

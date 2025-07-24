@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TSkFareDetailedMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TSkFareDetailed" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="FARE_TYPE" property="fareType" jdbcType="VARCHAR" />
+    <result column="ADEP" property="adep" jdbcType="VARCHAR" />
+    <result column="ADES" property="ades" jdbcType="VARCHAR" />
+    <result column="FARE" property="fare" jdbcType="DOUBLE" />
+    <result column="RMK" property="rmk" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="TIMESTAMP" />
+    <result column="CREATE_EMP" property="createEmp" jdbcType="VARCHAR" />
+    <result column="UPDATE_EMP" property="updateEmp" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, FARE_TYPE, ADEP, ADES, FARE, RMK, CREATE_TM, UPDATE_TM, CREATE_EMP, UPDATE_EMP
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TSkFareDetailedExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_SK_FARE_DETAILED
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_SK_FARE_DETAILED
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_SK_FARE_DETAILED
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TSkFareDetailedExample" >
+    delete from T_SK_FARE_DETAILED
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TSkFareDetailed" >
+    insert into T_SK_FARE_DETAILED (ID, FARE_TYPE, ADEP, 
+      ADES, FARE, RMK, CREATE_TM, 
+      UPDATE_TM, CREATE_EMP, UPDATE_EMP
+      )
+    values (#{id,jdbcType=VARCHAR}, #{fareType,jdbcType=VARCHAR}, #{adep,jdbcType=VARCHAR}, 
+      #{ades,jdbcType=VARCHAR}, #{fare,jdbcType=DOUBLE}, #{rmk,jdbcType=VARCHAR}, #{createTm,jdbcType=TIMESTAMP}, 
+      #{updateTm,jdbcType=TIMESTAMP}, #{createEmp,jdbcType=VARCHAR}, #{updateEmp,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TSkFareDetailed" >
+    insert into T_SK_FARE_DETAILED
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="fareType != null" >
+        FARE_TYPE,
+      </if>
+      <if test="adep != null" >
+        ADEP,
+      </if>
+      <if test="ades != null" >
+        ADES,
+      </if>
+      <if test="fare != null" >
+        FARE,
+      </if>
+      <if test="rmk != null" >
+        RMK,
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM,
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM,
+      </if>
+      <if test="createEmp != null" >
+        CREATE_EMP,
+      </if>
+      <if test="updateEmp != null" >
+        UPDATE_EMP,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="fareType != null" >
+        #{fareType,jdbcType=VARCHAR},
+      </if>
+      <if test="adep != null" >
+        #{adep,jdbcType=VARCHAR},
+      </if>
+      <if test="ades != null" >
+        #{ades,jdbcType=VARCHAR},
+      </if>
+      <if test="fare != null" >
+        #{fare,jdbcType=DOUBLE},
+      </if>
+      <if test="rmk != null" >
+        #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createEmp != null" >
+        #{createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="updateEmp != null" >
+        #{updateEmp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TSkFareDetailedExample" resultType="java.lang.Integer" >
+    select count(*) from T_SK_FARE_DETAILED
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_SK_FARE_DETAILED
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fareType != null" >
+        FARE_TYPE = #{record.fareType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adep != null" >
+        ADEP = #{record.adep,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ades != null" >
+        ADES = #{record.ades,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fare != null" >
+        FARE = #{record.fare,jdbcType=DOUBLE},
+      </if>
+      <if test="record.rmk != null" >
+        RMK = #{record.rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTm != null" >
+        CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTm != null" >
+        UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createEmp != null" >
+        CREATE_EMP = #{record.createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateEmp != null" >
+        UPDATE_EMP = #{record.updateEmp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_SK_FARE_DETAILED
+    set ID = #{record.id,jdbcType=VARCHAR},
+      FARE_TYPE = #{record.fareType,jdbcType=VARCHAR},
+      ADEP = #{record.adep,jdbcType=VARCHAR},
+      ADES = #{record.ades,jdbcType=VARCHAR},
+      FARE = #{record.fare,jdbcType=DOUBLE},
+      RMK = #{record.rmk,jdbcType=VARCHAR},
+      CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      CREATE_EMP = #{record.createEmp,jdbcType=VARCHAR},
+      UPDATE_EMP = #{record.updateEmp,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TSkFareDetailed" >
+    update T_SK_FARE_DETAILED
+    <set >
+      <if test="fareType != null" >
+        FARE_TYPE = #{fareType,jdbcType=VARCHAR},
+      </if>
+      <if test="adep != null" >
+        ADEP = #{adep,jdbcType=VARCHAR},
+      </if>
+      <if test="ades != null" >
+        ADES = #{ades,jdbcType=VARCHAR},
+      </if>
+      <if test="fare != null" >
+        FARE = #{fare,jdbcType=DOUBLE},
+      </if>
+      <if test="rmk != null" >
+        RMK = #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createEmp != null" >
+        CREATE_EMP = #{createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="updateEmp != null" >
+        UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TSkFareDetailed" >
+    update T_SK_FARE_DETAILED
+    set FARE_TYPE = #{fareType,jdbcType=VARCHAR},
+      ADEP = #{adep,jdbcType=VARCHAR},
+      ADES = #{ades,jdbcType=VARCHAR},
+      FARE = #{fare,jdbcType=DOUBLE},
+      RMK = #{rmk,jdbcType=VARCHAR},
+      UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="findAllTSpecialInfo" resultMap="BaseResultMap" parameterType="map" >
+    SELECT * FROM T_SK_FARE_DETAILED WHERE 1=1
+
+    <if test="params.tiaojian !=null and params.tiaojian != ''">
+      AND ADES LIKE CONCAT('%',#{params.tiaojian},'%')
+    </if>
+    <if test="params.fareType !=null and params.fareType != ''">
+      AND FARE_TYPE = #{params.fareType}
+    </if>
+
+  </select>
+</mapper>

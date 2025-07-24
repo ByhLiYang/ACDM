@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.timer.Anjian.AnjianMapper" >
+<select id="queryPax_num" resultType="com.hq.acdm.mysql.AreaPeopleNumber">
+    select * from pax_num where updatetime = (SELECT MAX(updatetime) from pax_num)
+</select>
+    <select id="queryHistoricalPax_num" resultType="com.hq.acdm.mysql.AreaPeopleNumber">
+        select * from pax_num where updatetime &lt; (SYSDATE-5)
+    </select>
+    <insert id="insertHistoricalPax_num" parameterType="map">
+        INSERT INTO historical_pax_num SELECT * FROM pax_num
+        WHERE
+        1=1
+        <if test="params.TERMINAL !=null and params.TERMINAL !=''">
+        AND    TERMINAL = #{params.TERMINAL}
+        </if>
+        <if test="params.UPDATETIME !=null and params.UPDATETIME !=''">
+            AND    to_char(UPDATETIME,'YYYY-MM-DD HH24:MI:SS') = #{params.UPDATETIME}
+        </if>
+        <if test="params.AREA !=null and params.AREA !=''">
+            AND    AREA = #{params.AREA}
+        </if>
+    </insert>
+    <delete id="deleteHistoricalPax_num" parameterType="map">
+        DELETE FROM pax_num
+        WHERE
+        1=1
+        <if test="params.TERMINAL !=null and params.TERMINAL !=''">
+            AND    TERMINAL = #{params.TERMINAL}
+        </if>
+        <if test="params.UPDATETIME !=null and params.UPDATETIME !=''">
+            AND    to_char(UPDATETIME,'YYYY-MM-DD HH24:MI:SS') = #{params.UPDATETIME}
+        </if>
+        <if test="params.AREA !=null and params.AREA !=''">
+            AND    AREA = #{params.AREA}
+        </if>
+    </delete>
+    <select id="queryByCondition" parameterType="map" resultType="com.hq.acdm.mysql.AreaPeopleNumber">
+        SELECT  * from historical_pax_num
+        WHERE
+        1=1
+        <if test="params.TERMINAL !=null and params.TERMINAL !=''">
+            AND    TERMINAL = #{params.TERMINAL}
+        </if>
+        <if test="params.UPDATETIME !=null and params.UPDATETIME !=''">
+            AND    to_char(UPDATETIME,'YYYY-MM-DD HH24:MI:SS') = #{params.UPDATETIME}
+        </if>
+        <if test="params.AREA !=null and params.AREA !=''">
+            AND    AREA = #{params.AREA}
+        </if>
+    </select>
+    <delete id="deleteDuplicateDate" parameterType="map">
+        DELETE FROM historical_pax_num
+        WHERE
+        1=1
+        <if test="params.TERMINAL !=null and params.TERMINAL !=''">
+            AND    TERMINAL = #{params.TERMINAL}
+        </if>
+        <if test="params.UPDATETIME !=null and params.UPDATETIME !=''">
+            AND    to_char(UPDATETIME,'YYYY-MM-DD HH24:MI:SS') = #{params.UPDATETIME}
+        </if>
+        <if test="params.AREA !=null and params.AREA !=''">
+            AND    AREA = #{params.AREA}
+        </if>
+    </delete>
+</mapper>

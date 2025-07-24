@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.effectAnalysis.SmallDelayAnalysisMapper" >
+
+  <select id="findSmallDelayInfo" resultType="com.hq.acdm.vo.effectAnalysis.SmallDelayAnalysisVo" parameterType="map" >
+    <![CDATA[
+    SELECT T.EXEC_DATE execDate,
+    SUM(CASE WHEN T.TIME>0 AND T.TIME<=5 THEN 1 ELSE 0 END) total,
+    SUM(CASE WHEN T.TIME>0 AND T.TIME<=1 THEN 1 ELSE 0 END) delayTime1,
+    SUM(CASE WHEN T.TIME>1 AND T.TIME<=2 THEN 1 ELSE 0 END) delayTime2,
+    SUM(CASE WHEN T.TIME>2 AND T.TIME<=3 THEN 1 ELSE 0 END) delayTime3,
+    SUM(CASE WHEN T.TIME>3 AND T.TIME<=4 THEN 1 ELSE 0 END) delayTime4,
+    SUM(CASE WHEN T.TIME>4 AND T.TIME<=5 THEN 1 ELSE 0 END) delayTime5
+    FROM (SELECT V.EXEC_DATE,
+    TIMESTAMPDIFF(MINUTE,DATE_ADD(V.STDC,INTERVAL 25 MINUTE),V.ATOT) TIME
+    ]]>
+    FROM (SELECT EXEC_DATE,ATOT,STDC FROM T_LOCAL_FLIGHT_INFO
+    WHERE ISDEL <![CDATA[<>]]> '1' AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    UNION
+    SELECT EXEC_DATE,ATOT,STDC FROM T_LOCAL_FLIGHT_INFO_HISTORY
+    WHERE ISDEL <![CDATA[<>]]> '1' AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    ) V) T
+    GROUP BY T.EXEC_DATE
+    ORDER BY T.EXEC_DATE
+  </select>
+
+
+  <select id="findSmallDelaySum" resultType="com.hq.acdm.vo.effectAnalysis.SmallDelaySumVo" parameterType="map" >
+    SELECT V.EXEC_DATE execDate,COUNT(1) total
+    FROM (SELECT EXEC_DATE,ATOT,STDC FROM T_LOCAL_FLIGHT_INFO
+    WHERE ISDEL <![CDATA[<>]]> '1' AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    UNION
+    SELECT EXEC_DATE,ATOT,STDC FROM T_LOCAL_FLIGHT_INFO_HISTORY
+    WHERE ISDEL <![CDATA[<>]]> '1' AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    ) V
+    GROUP BY V.EXEC_DATE
+    ORDER BY V.EXEC_DATE
+  </select>
+
+
+  <select id="findSmallDelayInfoByAdes" resultType="com.hq.acdm.vo.effectAnalysis.SmallDelaySumVo" parameterType="map" >
+    SELECT T.EXEC_DATE execDate,
+    SUM(CASE WHEN T.TIME>0 AND T.TIME <![CDATA[<=]]> 5 THEN 1 ELSE 0 END) total
+    FROM (SELECT V.EXEC_DATE,
+    TIMESTAMPDIFF(MINUTE,DATE_ADD(V.STDC,INTERVAL 25 MINUTE),V.ATOT) TIME
+    FROM (SELECT EXEC_DATE,ATOT,STDC FROM T_LOCAL_FLIGHT_INFO
+    WHERE ISDEL <![CDATA[<>]]> '1' AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    AND ADES = #{params.ades,jdbcType=VARCHAR}
+    UNION
+    SELECT EXEC_DATE,ATOT,STDC FROM T_LOCAL_FLIGHT_INFO_HISTORY
+    WHERE ISDEL <![CDATA[<>]]> '1' AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    AND ADES = #{params.ades,jdbcType=VARCHAR}
+    ) V) T
+    GROUP BY T.EXEC_DATE
+    ORDER BY T.EXEC_DATE
+  </select>
+
+
+  <select id="findSmallDelayInfoByCraftTypeIcao" resultType="com.hq.acdm.vo.effectAnalysis.SmallDelayNameValueVo" parameterType="map" >
+    SELECT R.CRAFT_TYPE_ICAO `name`,R.TOTAL `value`
+    FROM (SELECT T.CRAFT_TYPE_ICAO,
+    SUM(CASE WHEN T.TIME>0 AND T.TIME<![CDATA[<=]]>5 THEN 1 ELSE 0 END) total
+    FROM (SELECT V.EXEC_DATE,V.CRAFT_TYPE_ICAO,
+    TIMESTAMPDIFF(MINUTE,DATE_ADD(V.STDC,INTERVAL 25 MINUTE),V.ATOT) TIME
+    FROM (SELECT EXEC_DATE,ATOT,STDC,CRAFT_TYPE_ICAO FROM T_LOCAL_FLIGHT_INFO
+    WHERE ISDEL <![CDATA[<>]]> '1' AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    UNION
+    SELECT EXEC_DATE,ATOT,STDC,CRAFT_TYPE_ICAO FROM T_LOCAL_FLIGHT_INFO_HISTORY
+    WHERE ISDEL <![CDATA[<>]]> '1' AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    ) V) T
+    GROUP BY T.CRAFT_TYPE_ICAO) R
+    WHERE R.TOTAL > 0
+    ORDER BY R.TOTAL DESC
+  </select>
+
+
+  <select id="findSmallDelayInfoByAirlines" resultType="com.hq.acdm.vo.effectAnalysis.SmallDelayNameValueVo" parameterType="map" >
+    SELECT R.AIRLINES `name`,R.TOTAL `value`
+    FROM (SELECT T.AIRLINES,
+    SUM(CASE WHEN T.TIME>0 AND T.TIME<![CDATA[<=]]>5 THEN 1 ELSE 0 END) total
+    FROM (SELECT V.EXEC_DATE,V.AIRLINES,
+    TIMESTAMPDIFF(MINUTE,DATE_ADD(V.STDC,INTERVAL 25 MINUTE),V.ATOT) TIME
+    FROM (SELECT EXEC_DATE,ATOT,STDC,AIRLINES FROM T_LOCAL_FLIGHT_INFO
+    WHERE ISDEL <![CDATA[<>]]> '1' AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    UNION
+    SELECT EXEC_DATE,ATOT,STDC,AIRLINES FROM T_LOCAL_FLIGHT_INFO_HISTORY
+    WHERE ISDEL <![CDATA[<>]]> '1' AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    ) V) T
+    GROUP BY T.AIRLINES) R
+    WHERE R.TOTAL > 0
+    ORDER BY R.TOTAL DESC
+  </select>
+
+  <select id="findSmallDelayInfoByTimeSegment" resultType="com.hq.acdm.vo.effectAnalysis.SmallDelayAnalysisVo" parameterType="map" >
+    <![CDATA[
+    SELECT
+    SUM(CASE WHEN T.TIME>0 AND T.TIME<=1 THEN 1 ELSE 0 END) delayTime1,
+    SUM(CASE WHEN T.TIME>1 AND T.TIME<=2 THEN 1 ELSE 0 END) delayTime2,
+    SUM(CASE WHEN T.TIME>2 AND T.TIME<=3 THEN 1 ELSE 0 END) delayTime3,
+    SUM(CASE WHEN T.TIME>3 AND T.TIME<=4 THEN 1 ELSE 0 END) delayTime4,
+    SUM(CASE WHEN T.TIME>4 AND T.TIME<=5 THEN 1 ELSE 0 END) delayTime5
+    FROM (SELECT TIMESTAMPDIFF(MINUTE,DATE_ADD(V.STDC,INTERVAL 25 MINUTE),V.ATOT) TIME
+    ]]>
+    FROM (SELECT ATOT,STDC FROM T_LOCAL_FLIGHT_INFO
+    WHERE ISDEL <![CDATA[<>]]> '1' AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    UNION
+    SELECT ATOT,STDC FROM T_LOCAL_FLIGHT_INFO_HISTORY
+    WHERE ISDEL <![CDATA[<>]]> '1' AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    ) V) T
+  </select>
+
+  <select id="findSmallDelayAdes" resultType="com.hq.acdm.vo.effectAnalysis.SmallDelayAdesVo" parameterType="map" >
+    SELECT R.ADES hx
+    FROM (SELECT T.ADES,
+    SUM(CASE WHEN T.TIME>0 AND T.TIME<![CDATA[<=]]>5 THEN 1 ELSE 0 END) total
+    FROM (SELECT V.EXEC_DATE,V.ADES,
+    TIMESTAMPDIFF(MINUTE,DATE_ADD(V.STDC,INTERVAL 25 MINUTE),V.ATOT) TIME
+    FROM (SELECT EXEC_DATE,ATOT,STDC,ADES FROM T_LOCAL_FLIGHT_INFO
+    WHERE ISDEL <![CDATA[<>]]> '1' AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    UNION
+    SELECT EXEC_DATE,ATOT,STDC,ADES FROM T_LOCAL_FLIGHT_INFO_HISTORY
+    WHERE ISDEL <![CDATA[<>]]> '1' AND D_OR_A = 'D' AND ATOT IS NOT NULL
+    AND ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND FLIGHT_TASK IN ('W/Z','H/Z','C/B','H/G','H/Y','L/W')
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=DATE} AND #{params.endDate,jdbcType=DATE}
+    ) V) T
+    GROUP BY T.ADES) R
+    WHERE R.TOTAL > 0
+    ORDER BY R.TOTAL DESC
+  </select>
+
+</mapper>

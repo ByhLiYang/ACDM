@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.SpecialSafeguardMapper" >
+
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.realtimeSituation.SpecialSafeguardVo" >
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="ADES" property="ades" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="COBT" property="cobt" jdbcType="VARCHAR" />
+    <result column="FLIGHT_TASK" property="flightTask" jdbcType="VARCHAR" />
+    <result column="FLIGHT_STATUS" property="flightStatus" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="findSpecialFltInfo" resultMap="ResultMap" parameterType="map" >
+    SELECT A.FLNO,C.CHINESE_NAME AS ADES,
+    IFNULL(DATE_FORMAT(SOBT, '%H:%i'),'-') AS SOBT,
+    IFNULL(DATE_FORMAT(COBT, '%H:%i'),'-') AS COBT,
+    D.CHINESE_NAME AS FLIGHT_TASK,
+    B.CHINESE_NAME AS FLIGHT_STATUS
+    FROM T_LOCAL_FLIGHT_INFO A
+    LEFT JOIN T_FLIGHT_STATUS B ON A.NORMAL_FLIGHT_STAT_CD = B.`CODE`
+    LEFT JOIN T_AIRPORT C ON A.ADES = C.AIRPORT_IATA
+    LEFT JOIN T_FLIGHT_TASK D ON A.FLIGHT_TASK = D.`CODE`
+    WHERE A.ATOT IS NULL
+    AND A.EXEC_DATE = DATE_FORMAT(NOW(),'%Y-%m-%d')
+    AND	(A.ISFOCUS = 1 OR A.FLIGHT_TASK = 'B/W')
+    <if test="params.agent !=null and params.agent != ''">
+      AND A.AIRLINES IN (#{params.agent,jdbcType=VARCHAR})
+    </if>
+  </select>
+
+
+  <select id="findFlightCaveatInfo" resultType="String" parameterType="map" >
+
+  </select>
+
+
+</mapper>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.effectAnalysis.InsufficientTTTMapper" >
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.effectAnalysis.InsufficientTTTVo" >
+    <result column="FLIGHT_ID" property="flightId" jdbcType="VARCHAR" />
+    <result column="FLNO" property="flnod" jdbcType="VARCHAR" />
+    <result column="CRAFT_TYPE_ICAO" property="craftTypeIcao" jdbcType="VARCHAR" />
+    <result column="CHINESE_NAME" property="chineseName" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="SIBT" property="sibt" jdbcType="VARCHAR" />
+    <result column="AIRLINES" property="airlines" jdbcType="VARCHAR" />
+    <result column="DURATION" property="duration" jdbcType="VARCHAR" />
+    <result column="PASSING_TIME" property="passingTime" jdbcType="VARCHAR" />
+
+  </resultMap>
+  <select id="selectGZBZ" resultMap="ResultMap" parameterType="map"  >
+    SELECT D.FLIGHT_ID,D.FLNO ,D.AIRLINES,D.CRAFT_TYPE_ICAO,CONCAT_WS( '-' , C.CHINESE_NAME, DD.CHINESE_NAME) as CHINESE_NAME,D.SOBT,A.SIBT,
+    TIMESTAMPDIFF(MINUTE,STR_TO_DATE(A.SIBT,'%Y-%m-%d %H:%i'), STR_TO_DATE(D.SOBT,'%Y-%m-%d %H:%i')) DURATION,B.PASSING_TIME
+    from T_LOCAL_FLIGHT_INFO D INNER JOIN T_LOCAL_FLIGHT_INFO A
+    ON D.ASSOCIATED_FLIGHT_ID=A.FLIGHT_ID
+    LEFT JOIN
+    T_MTTT B
+    ON D.CRAFT_TYPE_ICAO=B.CRAFT_TYPE_ICAO
+    LEFT JOIN
+    T_AIRPORT C
+    ON D.ADEP=C.AIRPORT_IATA
+    LEFT JOIN
+    T_AIRPORT DD
+    ON D.ADES=DD.AIRPORT_IATA
+    WHERE
+    TIMESTAMPDIFF(MINUTE,STR_TO_DATE(A.SIBT,'%Y-%m-%d %H:%i'), STR_TO_DATE(D.SOBT,'%Y-%m-%d %H:%i')) <![CDATA[<]]>  B.PASSING_TIME
+    AND D.D_OR_A='D'
+    <choose>
+      <when test="params.execDate != null  and params.execDate != ''">
+        AND D.EXEC_DATE= ${params.execDate}
+      </when>
+    </choose>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND D.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND D.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND D.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND D.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND D.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8')
+    </if>
+    ORDER BY DURATION DESC
+
+
+  </select>
+  <select id="selectGZBZHis" resultMap="ResultMap" parameterType="map"  >
+    SELECT D.FLIGHT_ID,D.FLNO ,D.AIRLINES,D.CRAFT_TYPE_ICAO,CONCAT_WS( '-' , C.CHINESE_NAME, DD.CHINESE_NAME) as CHINESE_NAME,D.SOBT,A.SIBT,
+    TIMESTAMPDIFF(MINUTE,STR_TO_DATE(A.SIBT,'%Y-%m-%d %H:%i'), STR_TO_DATE(D.SOBT,'%Y-%m-%d %H:%i')) DURATION,B.PASSING_TIME
+    from T_LOCAL_FLIGHT_INFO_HISTORY D INNER JOIN T_LOCAL_FLIGHT_INFO_HISTORY A
+    ON D.ASSOCIATED_FLIGHT_ID=A.FLIGHT_ID
+    LEFT JOIN
+    T_MTTT B
+    ON D.CRAFT_TYPE_ICAO=B.CRAFT_TYPE_ICAO
+    LEFT JOIN
+    T_AIRPORT C
+    ON D.ADEP=C.AIRPORT_IATA
+    LEFT JOIN
+    T_AIRPORT DD
+    ON D.ADES=DD.AIRPORT_IATA
+    WHERE
+    TIMESTAMPDIFF(MINUTE,STR_TO_DATE(A.SIBT,'%Y-%m-%d %H:%i'), STR_TO_DATE(D.SOBT,'%Y-%m-%d %H:%i')) <![CDATA[<]]>  B.PASSING_TIME
+    AND D.D_OR_A='D'
+    <choose>
+      <when test="params.execDate != null  and params.execDate != ''">
+        AND D.EXEC_DATE= ${params.execDate}
+      </when>
+    </choose>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND D.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND D.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND D.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND D.AIRLINES IN ('UW','O3','CF','OZ','Y8')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND D.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8')
+    </if>
+
+    ORDER BY DURATION DESC
+
+
+  </select>
+
+  <select id="getFltNormIdxByD" resultType="double" parameterType="map">
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ATOT<=DATE_ADD(TA.SOBT,INTERVAL 25 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN'
+    AND TA.D_OR_A = 'D' AND TA.ATOT IS NOT NULL AND TA.EXEC_DATE=CURRENT_DATE AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W')
+    AND TA.ASSOCIATED_FLIGHT_ID is not null
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND TA.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND TA.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getFltNormIdxByA" resultType="double" parameterType="map">
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN TA.ALDT<=DATE_ADD(TA.SIBT,INTERVAL 15 MINUTE) THEN 1 ELSE 0 END)/COUNT(1),1) ZCL
+    FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_AIRLINE TB ON TA.AIRLINES=TB.TWO_CHAR_CD WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN'
+    AND TA.D_OR_A = 'A' AND TA.ALDT IS NOT NULL AND TA.EXEC_DATE=CURRENT_DATE AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W')
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND TA.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND TA.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <!--  放行延误-延误时长 -->
+  <select id="selectYWYWSC" resultType="int" >
+        <![CDATA[
+	SELECT IFNULL(AVG(CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)),0) ywywsc FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL AND TA.EXEC_DATE=CURRENT_DATE
+    AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0;
+        ]]>
+    </select>
+  <!--  放行延误-15分钟以内 -->
+  <select id="selectYW015" resultType="int" >
+        <![CDATA[
+         SELECT count(1) yw015 FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL AND TA.EXEC_DATE=CURRENT_DATE
+    AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>0 AND CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)<15;
+        ]]>
+    </select>
+  <!--  放行延误-15到30分钟 -->
+  <select id="selectYW1530" resultType="int" >
+        <![CDATA[
+         SELECT count(1) yw1530 FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL AND TA.EXEC_DATE=CURRENT_DATE
+    AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>=15 AND CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)<30;
+        ]]>
+    </select>
+  <!--  放行延误-30到60分钟 -->
+  <select id="selectYW3060" resultType="int" >
+        <![CDATA[
+         SELECT count(1) yw3060 FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL AND TA.EXEC_DATE=CURRENT_DATE
+    AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>=30 AND CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)<60;
+        ]]>
+    </select>
+  <!--  放行延误-60到120分钟 -->
+  <select id="selectYW60120" resultType="int" >
+        <![CDATA[
+    SELECT count(1) yw60120 FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL AND TA.EXEC_DATE=CURRENT_DATE
+    AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>=60 AND CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)<120;
+        ]]>
+    </select>
+  <!--  放行延误-大于120分钟 -->
+  <select id="selectYW120" resultType="int" >
+        <![CDATA[
+         SELECT count(1) yw120 FROM T_LOCAL_FLIGHT_INFO TA LEFT JOIN T_LOCAL_FLIGHT_INFO TB ON TA.ASSOCIATED_FLIGHT_ID=TB.FLIGHT_ID
+    WHERE TA.ISDEL<>'1' AND TA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND TA.D_OR_A='D' AND TA.ATOT IS NOT NULL AND TA.EXEC_DATE=CURRENT_DATE
+    AND TA.FLIGHT_TASK IN ('W/Z','C/B','L/W') AND CAST(TA.DELAY_TIME as signed)-CAST(IFNULL(TB.DELAY_TIME,0) as signed)>=120;
+        ]]>
+    </select>
+
+  <!--  放行延误类型 -->
+  <select id="selectYWType" resultType="com.hq.acdm.vo.effectAnalysis.FltDelayTypeVo" >
+        <![CDATA[
+         SELECT reasonsForAuto AS `name`,COUNT(reasonsForAuto) AS `VALUE` FROM
+          (
+          select   IF(IF(EE.CHINESE_NAME<>'',EE.CHINESE_NAME,D.REASONS_FOR_AUTO)<>'',IF(EE.CHINESE_NAME<>'',EE.CHINESE_NAME,D.REASONS_FOR_AUTO),'其它类型') reasonsForAuto
+              from T_LOCAL_FLIGHT_INFO D
+              LEFT JOIN
+              T_LOCAL_FLIGHT_INFO A
+              ON D.ASSOCIATED_FLIGHT_ID=A.FLIGHT_ID
+              LEFT JOIN
+              T_ABNORMAL_REASON EE
+              ON D.REASON_TYPE=EE.`CODE`
+              WHERE D.D_OR_A='D'
+              and D.ABNORMAL_FLIGHT_STAT_CD!='CAN'  AND D.ISDEL!='1'
+              AND ( (D.ASSOCIATED_FLIGHT_ID IS NULL AND D.DELAY_TIME >0)OR (D.ASSOCIATED_FLIGHT_ID IS NOT NULL AND CAST(D.DELAY_TIME as signed)-CAST(A.DELAY_TIME as signed) >0))
+
+              AND D.EXEC_DATE = CURDATE()
+          ) R GROUP BY R.reasonsForAuto
+        ]]>
+    </select>
+
+  <resultMap id="ResultMapBackD" type="com.hq.acdm.vo.realtimeSituation.FlightBackVo" >
+    <result column="TIME_H" property="flightId" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="ATOT" property="atot" jdbcType="VARCHAR" />
+    <result column="DELAY_TIME" property="delayTime" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="getAllFlightD" resultMap="ResultMapBackD">
+       SELECT FLIGHT_ID,date_format(SOBT,'%Y%m%d%H%i%s') SOBT,date_format(ATOT,'%Y%m%d%H%i%s') ATOT,DELAY_TIME FROM T_LOCAL_FLIGHT_INFO
+       WHERE <![CDATA[ ISDEL<>'1' AND ABNORMAL_FLIGHT_STAT_CD<>'CAN' ]]>
+    AND D_OR_A='D' AND SOBT IS NOT NULL
+    <if test="params.startTime !=null and params.startTime != '' and params.endTime !=null and params.endTime != '' ">
+      AND SOBT BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR}
+    </if>
+       ORDER BY SOBT
+    </select>
+
+  <resultMap id="ResultMapBackA" type="com.hq.acdm.vo.realtimeSituation.FlightBackAVo" >
+    <result column="TIME_H" property="flightId" jdbcType="VARCHAR" />
+    <result column="SIBT" property="sibt" jdbcType="VARCHAR" />
+    <result column="ALDT" property="aldt" jdbcType="VARCHAR" />
+    <result column="DELAY_TIME" property="delayTime" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="getAllFlightA" resultMap="ResultMapBackA">
+       SELECT FLIGHT_ID,date_format(SIBT,'%Y%m%d%H%i%s') SIBT,date_format(ALDT,'%Y%m%d%H%i%s') ALDT,DELAY_TIME FROM T_LOCAL_FLIGHT_INFO
+       WHERE <![CDATA[ ISDEL<>'1' AND ABNORMAL_FLIGHT_STAT_CD<>'CAN' ]]>
+    AND D_OR_A='A' AND SIBT IS NOT NULL
+    <if test="params.startTime !=null and params.startTime != '' and params.endTime !=null and params.endTime != '' ">
+      AND SIBT BETWEEN #{params.startTime,jdbcType=VARCHAR} AND #{params.endTime,jdbcType=VARCHAR}
+    </if>
+        ORDER BY SIBT
+    </select>
+
+</mapper>

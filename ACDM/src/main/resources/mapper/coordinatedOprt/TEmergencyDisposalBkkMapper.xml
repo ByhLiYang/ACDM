@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.coordinatedOprt.TEmergencyDisposalBkkMapper" >
+
+  <select id="findTEmergencyDisposalBkk" resultType="com.hq.acdm.vo.coordinatedOprt.TEmergencyDisposalBkkVo" parameterType="map">
+    SELECT
+    ID id,
+    `LEVEL` `level`,
+    DATE_FORMAT(START_TIME, '%Y-%m-%d %H:%i:%s') startTime,
+    DATE_FORMAT(END_TIME, '%Y-%m-%d %H:%i:%s') endTime,
+    REASON reason,
+    REMARK remark,
+    upgradetime upgradetime,
+    `upgrade` `upgrade`
+    FROM T_EMERGENCY_DISPOSAL_BKK
+    WHERE 1=1
+    <if test="params.startDate != null and params.startDate != '' and params.endDate != null and params.endDate != '' ">
+    <![CDATA[
+     AND ((START_TIME >= #{params.startDate,jdbcType=VARCHAR} AND END_TIME <= #{params.endDate,jdbcType=VARCHAR})
+      OR (START_TIME <= #{params.startDate,jdbcType=VARCHAR} AND START_TIME >= #{params.startDate,jdbcType=VARCHAR} AND END_TIME <= #{params.endDate,jdbcType=VARCHAR})
+      OR (START_TIME >= #{params.startDate,jdbcType=VARCHAR} AND START_TIME <= #{params.startDate,jdbcType=VARCHAR} AND END_TIME >= #{params.endDate,jdbcType=VARCHAR})
+      OR (START_TIME <= #{params.startDate,jdbcType=VARCHAR} AND END_TIME >= #{params.endDate,jdbcType=VARCHAR}))
+    ]]>
+    </if>
+    ORDER BY upgradetime ASC
+  </select>
+
+
+
+
+
+
+</mapper>

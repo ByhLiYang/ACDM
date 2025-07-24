@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.monitioring.BroadingPortMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.monitoring.broadingPort.BroadingPortDetail" >
+
+    <result column="bridge_rate" property="bridge_rate" jdbcType="VARCHAR" />
+
+  </resultMap>
+  <select id="queryDetail" parameterType="map" resultType="com.hq.acdm.model.monitoring.broadingPort.BroadingPortDetail"  >
+    select airline_code_iata,gate,sum(USEDTIME) USEDTIME,count(airline_code_iata) times ,operational_date  from V_GATE_USED2
+    where 1=1
+    <if test="params.startDate !=null and params.startDate != ''">
+      and  sobt >=to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')
+    </if>
+    <if test="params.endDate !=null and params.endDate != ''">
+      and  sobt &lt;=to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')
+    </if>
+    <if test="params.airCompany !=null and params.airCompany != ''">
+      and airline_code_iata=#{params.airCompany,jdbcType=VARCHAR}
+    </if>
+    <if test="params.gate !=null and params.gate != ''">
+      and gate=#{params.gate,jdbcType=VARCHAR}
+    </if>
+    group by gate,airline_code_iata,operational_date order by airline_code_iata,gate
+
+  </select>
+  <select id="querySummary" parameterType="map" resultType="com.hq.acdm.model.monitoring.broadingPort.BroadingPortDetail"  >
+    select airline_code_iata,sum(USEDTIME) USEDTIME,count(airline_code_iata) times ,operational_date  from V_GATE_USED2
+    where 1=1
+    <if test="params.startDate !=null and params.startDate != ''">
+      and  sobt >=to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')
+    </if>
+    <if test="params.endDate !=null and params.endDate != ''">
+      and  sobt &lt;=to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')
+    </if>
+    <if test="params.airCompany !=null and params.airCompany != ''">
+      and airline_code_iata=#{params.airCompany,jdbcType=VARCHAR}
+    </if>
+    <if test="params.gate !=null and params.gate != ''">
+      and gate=#{params.gate,jdbcType=VARCHAR}
+    </if>
+    group by airline_code_iata,operational_date order by airline_code_iata
+
+  </select><!--查询靠桥率-->
+  <select id="queryBridgeRate" parameterType="map" resultType="com.hq.acdm.model.monitoring.broadingPort.BroadingPortDetail"  >
+    select Round((select count(*) from daily_flight_master T1, daily_flight_add_details T2, stand T3
+    where T1.FLIGHT_NO_IATA=T2.FLIGHT_NO_IATA and T1.OPERATIONAL_DATE=T2.OPERATIONAL_DATE and T1.A_OR_D=T2.A_OR_D and T1.FLIGHT_REPEAT_COUNT=T2.FLIGHT_REPEAT_COUNT
+    and T1.STAND=T3.STAND
+    and nvl(T2.CODE_SHARE_STATUS,' ')&lt;>'SF' and  nvl(T2.FLIGHT_CANCEL_CODE,' ')&lt;>'C' and T2.FLIGHT_CLASS_CODE in ('W/Z','C/B','Z/P','J/B')
+    and TO_CHAR(T1.OPERATIONAL_DATE,'YYYY-MM-DD')=TO_CHAR(sysdate,'YYYY-MM-DD') and T1.ATOT is not null and T3.IS_REMOTE ='N')*100 /
+    (select count(*) from daily_flight_master T1, daily_flight_add_details T2
+    where T1.FLIGHT_NO_IATA=T2.FLIGHT_NO_IATA and T1.OPERATIONAL_DATE=T2.OPERATIONAL_DATE and T1.A_OR_D=T2.A_OR_D and T1.FLIGHT_REPEAT_COUNT=T2.FLIGHT_REPEAT_COUNT
+    and nvl(T2.CODE_SHARE_STATUS,' ')&lt;>'SF' and  nvl(T2.FLIGHT_CANCEL_CODE,' ')&lt;>'C' and T2.FLIGHT_CLASS_CODE in ('W/Z','C/B','Z/P','J/B')
+    and TO_CHAR(T1.OPERATIONAL_DATE,'YYYY-MM-DD')=TO_CHAR(sysdate,'YYYY-MM-DD') and T1.ATOT is not null),2) || '%' bridge_rate from dual
+  </select>
+</mapper>

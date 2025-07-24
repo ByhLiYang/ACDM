@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.FlightIndexMapper" >
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.realtimeSituation.FltDetailIdxVo" >
+    <result column="ATTRIBUTE" property="attribute" jdbcType="VARCHAR" />
+    <result column="PLAN" property="plan" jdbcType="INTEGER" />
+    <result column="ACTUAL" property="actual" jdbcType="INTEGER" />
+    <result column="DELAY" property="delay" jdbcType="INTEGER" />
+    <result column="CANCEL" property="cancel" jdbcType="INTEGER" />
+  </resultMap>
+
+  <resultMap id="HandTerminalResultMap" type="com.hq.acdm.vo.realtimeSituation.FlightHandTerminalVo" >
+    <result column="ZHBS" property="zhbs" jdbcType="INTEGER" />
+    <result column="YJGS" property="yjgs" jdbcType="INTEGER" />
+    <result column="ZJGS" property="zjgs" jdbcType="INTEGER" />
+    <result column="YCGS" property="ycgs" jdbcType="INTEGER" />
+    <result column="ZCGS" property="zcgs" jdbcType="INTEGER" />
+    <result column="GJHBS" property="gjhbs" jdbcType="INTEGER" />
+    <result column="DQHBS" property="dqhbs" jdbcType="INTEGER" />
+    <result column="GNHBS" property="gnhbs" jdbcType="INTEGER" />
+    <result column="HHHBS" property="hhhbs" jdbcType="INTEGER" />
+    <result column="ZCS" property="zcs" jdbcType="INTEGER" />
+    <result column="YWS" property="yws" jdbcType="INTEGER" />
+    <result column="QXS" property="qxs" jdbcType="INTEGER" />
+    <result column="FHS" property="fhs" jdbcType="INTEGER" />
+    <result column="BJS" property="bjs" jdbcType="INTEGER" />
+    <result column="ZCL" property="zcl" jdbcType="DOUBLE" />
+    <result column="FXL" property="fxl" jdbcType="DOUBLE" />
+  </resultMap>
+
+  <select id="getZCS" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) ZCS FROM V_UTIL_DAILY_FLIGHT WHERE ((D_OR_A='A' AND ALDT IS NOT NULL) OR (D_OR_A='D' AND ATOT IS NOT NULL))
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>  
+  </select>
+
+  <select id="getZCSA" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) ZCS FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='A' AND ALDT IS NOT NULL
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getZCSD" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) ZCS FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='D' AND ATOT IS NOT NULL
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getFHSA" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) FHSA FROM V_UTIL_DAILY_FLIGHT WHERE ABNORMAL_FLIGHT_STAT_CD='RTN' AND D_OR_A='A'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getBJSA" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) BJSA FROM V_UTIL_DAILY_FLIGHT WHERE ABNORMAL_FLIGHT_STAT_CD='ALT' AND D_OR_A='A'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getFHSD" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) FHSD FROM V_UTIL_DAILY_FLIGHT WHERE ABNORMAL_FLIGHT_STAT_CD='RTN' AND D_OR_A='D'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getBJSD" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) BJSD FROM V_UTIL_DAILY_FLIGHT WHERE ABNORMAL_FLIGHT_STAT_CD='ALT' AND D_OR_A='D'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getYWS" resultType="int" parameterType="map">
+    <![CDATA[
+   SELECT count(1) YWS FROM V_UTIL_DAILY_FLIGHT WHERE DELAY_TIME>0 AND D_OR_A='D' AND FLIGHT_TASK IN ('W/Z','C/B','L/W') AND ATOT IS NOT NULL
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getYWSA" resultType="int" parameterType="map">
+    <![CDATA[
+   SELECT count(1) YWS FROM V_UTIL_DAILY_FLIGHT WHERE DELAY_TIME>0 AND D_OR_A='A' AND FLIGHT_TASK IN ('W/Z','C/B','L/W') AND ALDT IS NOT NULL
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getFXYWS" resultType="int" parameterType="map">
+    <![CDATA[
+   SELECT COUNT(1) FROM V_UTIL_UNITE_FLIGHT WHERE CAST(DELAY_TIME_D as signed)-CAST(IFNULL(DELAY_TIME_A,0) as signed)>0 AND EXEC_DATE_D = CURRENT_DATE AND FLIGHT_TASK IN ('W/Z','C/B','L/W') AND ATOT IS NOT NULL AND FL_STATUS <> 'CAN'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getQXS" resultType="int" parameterType="map">
+  <![CDATA[
+    SELECT count(1) QXS FROM V_UTIL_DAILY_FLIGHT WHERE ABNORMAL_FLIGHT_STAT_CD='CAN'
+    ]]>
+  <if test="params.agent !=null and params.agent != ''">
+    <choose>
+      <when test="params.dept !=null and params.dept == 'IGO'">
+        AND AIRLINES NOT IN (${params.agent})
+      </when>
+      <otherwise>
+        AND AIRLINES IN (${params.agent})
+      </otherwise>
+    </choose>
+  </if>
+</select>
+
+  <select id="getQXSA" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) QXS FROM V_UTIL_DAILY_FLIGHT WHERE ABNORMAL_FLIGHT_STAT_CD='CAN' AND D_OR_A='A'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getQXSD" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) QXS FROM V_UTIL_DAILY_FLIGHT WHERE ABNORMAL_FLIGHT_STAT_CD='CAN' AND D_OR_A='D'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getETA30" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) ETA30 FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='A' AND TIMESTAMPDIFF(MINUTE,CURRENT_TIMESTAMP(),ELDT)<30 AND ALDT IS NULL
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getLDHX" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) FROM V_UTIL_UNITE_FLIGHT WHERE ALDT IS NOT NULL AND AIBT IS NULL AND ASBT IS NULL AND EXEC_DATE_A= CURRENT_DATE AND (FL_STATUS <> 'CAN' OR FL_STATUS IS NULL) AND NOW()<DATE_ADD(ALDT,INTERVAL 1 HOUR)
+     ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getDMBZ" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) FROM V_UTIL_UNITE_FLIGHT WHERE (AIBT IS NOT NULL OR ATDO IS NOT NULL OR ARSL IS NOT NULL) AND AOBT IS NULL AND ATOT IS NULL AND FLIGHT_ID_D IS NOT NULL AND FL_STATUS <> 'CAN'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getZBJX" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) ZBJX FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='D' AND ATDC IS NOT NULL AND AOBT IS NULL
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getLGHX" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) LGHX FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='D' AND AOBT IS NOT NULL AND ATOT IS NULL
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getZYJW" resultType="int" parameterType="map">
+  <![CDATA[
+    SELECT SUM(CASE WHEN TA.D_OR_A='A' THEN 1 ELSE 0 END) FROM V_UTIL_STAND TA WHERE TA.ACT_TIME IS NOT NULL AND (SELECT count(1) FROM V_UTIL_STAND TB
+    WHERE TB.STAND = TA.STAND AND TB.ACT_TIME>=TA.ACT_TIME)<=1
+    ORDER BY TA.STAND,TA.ACT_TIME DESC
+    ]]>
+  </select>
+
+  <select id="getJWZS" resultType="int" parameterType="map">
+    SELECT count(*) KYJWZS FROM T_CRAFT_SITE WHERE IS_DELETE='0' AND STATUS='O'
+  </select>
+
+  <select id="getGMZDL" resultType="String" parameterType="map">
+    <![CDATA[
+    SELECT SUM(CASE WHEN ATDC IS NOT NULL AND ATDC<=STDC THEN 1 ELSE 0 END)/
+    SUM(CASE WHEN ATDC IS NOT NULL OR (ATDC IS NULL AND NOW()>STDC) THEN 1 ELSE 0 END) GMZDL
+    FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='D'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getKQL" resultType="double" parameterType="map">
+    <![CDATA[
+    SELECT IFNULL(SUM(CASE WHEN BB.IS_REMOTE = 'N' THEN 1 ELSE 0 END)/count(1),0) KQL FROM V_UTIL_DAILY_FLIGHT AA INNER JOIN T_CRAFT_SITE BB ON AA.STAND=BB.CODE WHERE (D_OR_A='A' AND ALDT IS NOT NULL) OR (D_OR_A='D' AND ATOT IS NOT NULL)
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getZHB" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT count(1) ZHB FROM V_UTIL_DAILY_FLIGHT WHERE 1=1
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getLK" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT COUNT(1) LK FROM V_UTIL_DAILY_FLIGHT AA INNER JOIN T_PASSENGER_INFO BB ON AA.FLIGHT_ID=BB.flightId WHERE BB.dpsrFltDate=CURRENT_DATE() AND AA.ATOT IS NOT NULL
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AA.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AA.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getXL" resultType="int" parameterType="map">
+    <![CDATA[
+    SELECT IFNULL(SUM(BB.dpsrBagCount),0) dpsrBagCount FROM V_UTIL_DAILY_FLIGHT AA INNER JOIN T_PASSENGER_INFO BB ON AA.FLIGHT_ID=BB.flightId WHERE BB.dpsrFltDate=CURRENT_DATE()
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AA.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AA.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getJGZXL" resultType="double" parameterType="map">
+    <![CDATA[
+    SELECT (COUNT(ALDT)/COUNT(1)) JGZXL FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='A'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getCGZXL" resultType="double" parameterType="map">
+    <![CDATA[
+    SELECT (COUNT(ATOT)/COUNT(1)) CGZXL FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='D'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getAGNDetails" resultMap="ResultMap" parameterType="map">
+    <![CDATA[
+   SELECT COUNT(1) PLAN,COUNT(ALDT) ACTUAL,SUM(CASE WHEN DELAY_TIME>0 THEN 1 ELSE 0 END) DELAY,SUM(CASE WHEN ABNORMAL_FLIGHT_STAT_CD = 'CAN' THEN 1 ELSE 0 END) CANCEL FROM V_UTIL_DAILY_FLIGHT WHERE ATTRIBUTE='2403' AND D_OR_A='A'
+   ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getAGJDetails" resultMap="ResultMap" parameterType="map">
+    <![CDATA[
+    SELECT COUNT(1) PLAN,COUNT(ALDT) ACTUAL,SUM(CASE WHEN DELAY_TIME>0 THEN 1 ELSE 0 END) DELAY,SUM(CASE WHEN ABNORMAL_FLIGHT_STAT_CD = 'CAN' THEN 1 ELSE 0 END) CANCEL FROM V_UTIL_DAILY_FLIGHT WHERE ATTRIBUTE='2401' AND D_OR_A='A'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getADQDetails" resultMap="ResultMap" parameterType="map">
+    <![CDATA[
+    SELECT COUNT(1) PLAN,COUNT(ALDT) ACTUAL,SUM(CASE WHEN DELAY_TIME>0 THEN 1 ELSE 0 END) DELAY,SUM(CASE WHEN ABNORMAL_FLIGHT_STAT_CD = 'CAN' THEN 1 ELSE 0 END) CANCEL FROM V_UTIL_DAILY_FLIGHT WHERE ATTRIBUTE='2402' AND D_OR_A='A'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getAHHDetails" resultMap="ResultMap" parameterType="map">
+    <![CDATA[
+    SELECT COUNT(1) PLAN,COUNT(ALDT) ACTUAL,SUM(CASE WHEN DELAY_TIME>0 THEN 1 ELSE 0 END) DELAY,SUM(CASE WHEN ABNORMAL_FLIGHT_STAT_CD = 'CAN' THEN 1 ELSE 0 END) CANCEL FROM V_UTIL_DAILY_FLIGHT WHERE ATTRIBUTE='2404' AND D_OR_A='A'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getAHJDetails" resultMap="ResultMap" parameterType="map">
+    <![CDATA[
+    SELECT COUNT(1) PLAN,COUNT(ALDT) ACTUAL,SUM(CASE WHEN DELAY_TIME>0 THEN 1 ELSE 0 END) DELAY,SUM(CASE WHEN ABNORMAL_FLIGHT_STAT_CD = 'CAN' THEN 1 ELSE 0 END) CANCEL FROM V_UTIL_DAILY_FLIGHT WHERE ATTRIBUTE IN ('2401','2402','2403','2404') AND D_OR_A='A'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getDGNDetails" resultMap="ResultMap" parameterType="map">
+    <![CDATA[
+    SELECT COUNT(1) PLAN,COUNT(ATOT) ACTUAL,SUM(CASE WHEN DELAY_TIME>0 THEN 1 ELSE 0 END) DELAY,SUM(CASE WHEN ABNORMAL_FLIGHT_STAT_CD = 'CAN' THEN 1 ELSE 0 END) CANCEL FROM V_UTIL_DAILY_FLIGHT WHERE ATTRIBUTE='2403' AND D_OR_A='D'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getDGJDetails" resultMap="ResultMap" parameterType="map">
+    <![CDATA[
+    SELECT COUNT(1) PLAN,COUNT(ATOT) ACTUAL,SUM(CASE WHEN DELAY_TIME>0 THEN 1 ELSE 0 END) DELAY,SUM(CASE WHEN ABNORMAL_FLIGHT_STAT_CD = 'CAN' THEN 1 ELSE 0 END) CANCEL FROM V_UTIL_DAILY_FLIGHT WHERE ATTRIBUTE='2401' AND D_OR_A='D'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getDDQDetails" resultMap="ResultMap" parameterType="map">
+    <![CDATA[
+    SELECT COUNT(1) PLAN,COUNT(ATOT) ACTUAL,SUM(CASE WHEN DELAY_TIME>0 THEN 1 ELSE 0 END) DELAY,SUM(CASE WHEN ABNORMAL_FLIGHT_STAT_CD = 'CAN' THEN 1 ELSE 0 END) CANCEL FROM V_UTIL_DAILY_FLIGHT WHERE ATTRIBUTE='2402' AND D_OR_A='D'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getDHHDetails" resultMap="ResultMap" parameterType="map">
+    <![CDATA[
+    SELECT COUNT(1) PLAN,COUNT(ATOT) ACTUAL,SUM(CASE WHEN DELAY_TIME>0 THEN 1 ELSE 0 END) DELAY,SUM(CASE WHEN ABNORMAL_FLIGHT_STAT_CD = 'CAN' THEN 1 ELSE 0 END) CANCEL FROM V_UTIL_DAILY_FLIGHT WHERE ATTRIBUTE='2404' AND D_OR_A='D'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="getDHJDetails" resultMap="ResultMap" parameterType="map">
+    <![CDATA[
+    SELECT COUNT(1) PLAN,COUNT(ATOT) ACTUAL,SUM(CASE WHEN DELAY_TIME>0 THEN 1 ELSE 0 END) DELAY,SUM(CASE WHEN ABNORMAL_FLIGHT_STAT_CD = 'CAN' THEN 1 ELSE 0 END) CANCEL FROM V_UTIL_DAILY_FLIGHT WHERE ATTRIBUTE IN ('2401','2402','2403','2404') AND D_OR_A='D'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="findFltJGS" resultMap="HandTerminalResultMap" parameterType="map">
+    <![CDATA[
+    SELECT COUNT(ALDT) AS YJGS, COUNT(1) AS ZJGS  FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='A'
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="findFltCGS" resultMap="HandTerminalResultMap" parameterType="map">
+    <![CDATA[
+    SELECT COUNT(ATOT) AS YCGS, COUNT(1) AS ZCGS  FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A='D'
+        ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+  <select id="findFltCountByAttribute" resultMap="HandTerminalResultMap" parameterType="map">
+    <![CDATA[
+    SELECT SUM(CASE WHEN ATTRIBUTE = '2401' THEN 1 ELSE 0 END) AS GJHBS,
+    SUM(CASE WHEN ATTRIBUTE = '2402' THEN 1 ELSE 0 END) AS DQHBS,
+    SUM(CASE WHEN ATTRIBUTE = '2403' THEN 1 ELSE 0 END) AS GNHBS,
+    SUM(CASE WHEN ATTRIBUTE = '2404' THEN 1 ELSE 0 END) AS HHHBS
+    FROM V_UTIL_DAILY_FLIGHT
+    WHERE 1=1
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+
+</mapper>

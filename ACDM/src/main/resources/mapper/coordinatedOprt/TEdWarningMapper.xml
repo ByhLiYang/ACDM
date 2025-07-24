@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.coordinatedOprt.TEdWarningMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.vo.coordinatedOprt.TEdWarning" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="ED_ID" property="edId" jdbcType="VARCHAR" />
+    <result column="LEVEL" property="level" jdbcType="VARCHAR" />
+    <result column="FACTORS_PERIOD" property="factorsPeriod" jdbcType="VARCHAR" />
+    <result column="DESCEND_CAPACITY" property="descendCapacity" jdbcType="VARCHAR" />
+    <result column="IS_COORDINATED" property="isCoordinated" jdbcType="VARCHAR" />
+    <result column="IS_SCHEDULE_ADJUSTMNET" property="isScheduleAdjustmnet" jdbcType="VARCHAR" />
+    <result column="ADJUST_PERIOD" property="adjustPeriod" jdbcType="VARCHAR" />
+    <result column="ADJUST_RATIO" property="adjustRatio" jdbcType="VARCHAR" />
+    <result column="ORIGINAL_PLAN_GS" property="originalPlanGs" jdbcType="VARCHAR" />
+    <result column="ORIGINAL_PLAN_MU" property="originalPlanMu" jdbcType="VARCHAR" />
+    <result column="ORIGINAL_PLAN_CZ" property="originalPlanCz" jdbcType="VARCHAR" />
+    <result column="ORIGINAL_PLAN_CA" property="originalPlanCa" jdbcType="VARCHAR" />
+    <result column="ORIGINAL_PLAN_BK" property="originalPlanBk" jdbcType="VARCHAR" />
+    <result column="ORIGINAL_PLAN_HJ" property="originalPlanHj" jdbcType="VARCHAR" />
+    <result column="ADJUST_PLAN_GS" property="adjustPlanGs" jdbcType="VARCHAR" />
+    <result column="ADJUST_PLAN_MU" property="adjustPlanMu" jdbcType="VARCHAR" />
+    <result column="ADJUST_PLAN_CZ" property="adjustPlanCz" jdbcType="VARCHAR" />
+    <result column="ADJUST_PLAN_CA" property="adjustPlanCa" jdbcType="VARCHAR" />
+    <result column="ADJUST_PLAN_BK" property="adjustPlanBk" jdbcType="VARCHAR" />
+    <result column="ADJUST_PLAN_HJ" property="adjustPlanHj" jdbcType="VARCHAR" />
+    <result column="ADJUSTED_GS" property="adjustedGs" jdbcType="VARCHAR" />
+    <result column="ADJUSTED_MU" property="adjustedMu" jdbcType="VARCHAR" />
+    <result column="ADJUSTED_CZ" property="adjustedCz" jdbcType="VARCHAR" />
+    <result column="ADJUSTED_CA" property="adjustedCa" jdbcType="VARCHAR" />
+    <result column="ADJUSTED_BK" property="adjustedBk" jdbcType="VARCHAR" />
+    <result column="ADJUSTED_HJ" property="adjustedHj" jdbcType="VARCHAR" />
+    <result column="ADJUSTED_PLAN_SUM" property="adjustedPlanSum" jdbcType="VARCHAR" />
+    <result column="ADJUSTED_PLAND_SUM" property="adjustedPlandSum" jdbcType="VARCHAR" />
+    <result column="ADJUSTED_PLANA_SUM" property="adjustedPlanaSum" jdbcType="VARCHAR" />
+    <result column="SPECIAL_PLANE" property="specialPlane" jdbcType="VARCHAR" />
+    <result column="MATTERS_COORDINATED" property="mattersCoordinated" jdbcType="VARCHAR" />
+    <result column="OTHER_SPECIAL" property="otherSpecial" jdbcType="VARCHAR" />
+    <result column="ND_MANAGER" property="ndManager" jdbcType="VARCHAR" />
+    <result column="ND_MANAGER_PHONE" property="ndManagerPhone" jdbcType="VARCHAR" />
+    <result column="ND_APMNG" property="ndApmng" jdbcType="VARCHAR" />
+    <result column="ND_APMNG_PHONE" property="ndApmngPhone" jdbcType="VARCHAR" />
+    <result column="PREPARER" property="preparer" jdbcType="VARCHAR" />
+    <result column="FILLING_TIME" property="fillingTime" jdbcType="TIMESTAMP" />
+    <result column="CUTOFF_TIME" property="cutoffTime" jdbcType="TIMESTAMP" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, ED_ID, LEVEL, FACTORS_PERIOD, DESCEND_CAPACITY, IS_COORDINATED, IS_SCHEDULE_ADJUSTMNET, 
+    ADJUST_PERIOD, ADJUST_RATIO, ORIGINAL_PLAN_GS, ORIGINAL_PLAN_MU, ORIGINAL_PLAN_CZ, 
+    ORIGINAL_PLAN_CA, ORIGINAL_PLAN_BK, ORIGINAL_PLAN_HJ, ADJUST_PLAN_GS, ADJUST_PLAN_MU, 
+    ADJUST_PLAN_CZ, ADJUST_PLAN_CA, ADJUST_PLAN_BK, ADJUST_PLAN_HJ, ADJUSTED_GS, ADJUSTED_MU, 
+    ADJUSTED_CZ, ADJUSTED_CA, ADJUSTED_BK, ADJUSTED_HJ, ADJUSTED_PLAN_SUM, ADJUSTED_PLAND_SUM, 
+    ADJUSTED_PLANA_SUM, SPECIAL_PLANE, MATTERS_COORDINATED, OTHER_SPECIAL, ND_MANAGER, 
+    ND_MANAGER_PHONE, ND_APMNG, ND_APMNG_PHONE, PREPARER, FILLING_TIME, CUTOFF_TIME, 
+    REMARK, CREATE_TIME, UPDATE_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.vo.coordinatedOprt.TEdWarningExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_ED_WARNING
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_ED_WARNING
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_ED_WARNING
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.vo.coordinatedOprt.TEdWarningExample" >
+    delete from T_ED_WARNING
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.vo.coordinatedOprt.TEdWarning" >
+    insert into T_ED_WARNING (ID, ED_ID, LEVEL, 
+      FACTORS_PERIOD, DESCEND_CAPACITY, IS_COORDINATED, 
+      IS_SCHEDULE_ADJUSTMNET, ADJUST_PERIOD, ADJUST_RATIO, 
+      ORIGINAL_PLAN_GS, ORIGINAL_PLAN_MU, ORIGINAL_PLAN_CZ, 
+      ORIGINAL_PLAN_CA, ORIGINAL_PLAN_BK, ORIGINAL_PLAN_HJ, 
+      ADJUST_PLAN_GS, ADJUST_PLAN_MU, ADJUST_PLAN_CZ, 
+      ADJUST_PLAN_CA, ADJUST_PLAN_BK, ADJUST_PLAN_HJ, 
+      ADJUSTED_GS, ADJUSTED_MU, ADJUSTED_CZ, 
+      ADJUSTED_CA, ADJUSTED_BK, ADJUSTED_HJ, 
+      ADJUSTED_PLAN_SUM, ADJUSTED_PLAND_SUM, ADJUSTED_PLANA_SUM, 
+      SPECIAL_PLANE, MATTERS_COORDINATED, OTHER_SPECIAL, 
+      ND_MANAGER, ND_MANAGER_PHONE, ND_APMNG, 
+      ND_APMNG_PHONE, PREPARER, FILLING_TIME, 
+      CUTOFF_TIME, REMARK, CREATE_TIME, 
+      UPDATE_TIME)
+    values (#{id,jdbcType=VARCHAR}, #{edId,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, 
+      #{factorsPeriod,jdbcType=VARCHAR}, #{descendCapacity,jdbcType=VARCHAR}, #{isCoordinated,jdbcType=VARCHAR}, 
+      #{isScheduleAdjustmnet,jdbcType=VARCHAR}, #{adjustPeriod,jdbcType=VARCHAR}, #{adjustRatio,jdbcType=VARCHAR}, 
+      #{originalPlanGs,jdbcType=VARCHAR}, #{originalPlanMu,jdbcType=VARCHAR}, #{originalPlanCz,jdbcType=VARCHAR}, 
+      #{originalPlanCa,jdbcType=VARCHAR}, #{originalPlanBk,jdbcType=VARCHAR}, #{originalPlanHj,jdbcType=VARCHAR}, 
+      #{adjustPlanGs,jdbcType=VARCHAR}, #{adjustPlanMu,jdbcType=VARCHAR}, #{adjustPlanCz,jdbcType=VARCHAR}, 
+      #{adjustPlanCa,jdbcType=VARCHAR}, #{adjustPlanBk,jdbcType=VARCHAR}, #{adjustPlanHj,jdbcType=VARCHAR}, 
+      #{adjustedGs,jdbcType=VARCHAR}, #{adjustedMu,jdbcType=VARCHAR}, #{adjustedCz,jdbcType=VARCHAR}, 
+      #{adjustedCa,jdbcType=VARCHAR}, #{adjustedBk,jdbcType=VARCHAR}, #{adjustedHj,jdbcType=VARCHAR}, 
+      #{adjustedPlanSum,jdbcType=VARCHAR}, #{adjustedPlandSum,jdbcType=VARCHAR}, #{adjustedPlanaSum,jdbcType=VARCHAR}, 
+      #{specialPlane,jdbcType=VARCHAR}, #{mattersCoordinated,jdbcType=VARCHAR}, #{otherSpecial,jdbcType=VARCHAR}, 
+      #{ndManager,jdbcType=VARCHAR}, #{ndManagerPhone,jdbcType=VARCHAR}, #{ndApmng,jdbcType=VARCHAR}, 
+      #{ndApmngPhone,jdbcType=VARCHAR}, #{preparer,jdbcType=VARCHAR}, #{fillingTime,jdbcType=TIMESTAMP}, 
+      #{cutoffTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.vo.coordinatedOprt.TEdWarning" >
+    insert into T_ED_WARNING
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="edId != null" >
+        ED_ID,
+      </if>
+      <if test="level != null" >
+        LEVEL,
+      </if>
+      <if test="factorsPeriod != null" >
+        FACTORS_PERIOD,
+      </if>
+      <if test="descendCapacity != null" >
+        DESCEND_CAPACITY,
+      </if>
+      <if test="isCoordinated != null" >
+        IS_COORDINATED,
+      </if>
+      <if test="isScheduleAdjustmnet != null" >
+        IS_SCHEDULE_ADJUSTMNET,
+      </if>
+      <if test="adjustPeriod != null" >
+        ADJUST_PERIOD,
+      </if>
+      <if test="adjustRatio != null" >
+        ADJUST_RATIO,
+      </if>
+      <if test="originalPlanGs != null" >
+        ORIGINAL_PLAN_GS,
+      </if>
+      <if test="originalPlanMu != null" >
+        ORIGINAL_PLAN_MU,
+      </if>
+      <if test="originalPlanCz != null" >
+        ORIGINAL_PLAN_CZ,
+      </if>
+      <if test="originalPlanCa != null" >
+        ORIGINAL_PLAN_CA,
+      </if>
+      <if test="originalPlanBk != null" >
+        ORIGINAL_PLAN_BK,
+      </if>
+      <if test="originalPlanHj != null" >
+        ORIGINAL_PLAN_HJ,
+      </if>
+      <if test="adjustPlanGs != null" >
+        ADJUST_PLAN_GS,
+      </if>
+      <if test="adjustPlanMu != null" >
+        ADJUST_PLAN_MU,
+      </if>
+      <if test="adjustPlanCz != null" >
+        ADJUST_PLAN_CZ,
+      </if>
+      <if test="adjustPlanCa != null" >
+        ADJUST_PLAN_CA,
+      </if>
+      <if test="adjustPlanBk != null" >
+        ADJUST_PLAN_BK,
+      </if>
+      <if test="adjustPlanHj != null" >
+        ADJUST_PLAN_HJ,
+      </if>
+      <if test="adjustedGs != null" >
+        ADJUSTED_GS,
+      </if>
+      <if test="adjustedMu != null" >
+        ADJUSTED_MU,
+      </if>
+      <if test="adjustedCz != null" >
+        ADJUSTED_CZ,
+      </if>
+      <if test="adjustedCa != null" >
+        ADJUSTED_CA,
+      </if>
+      <if test="adjustedBk != null" >
+        ADJUSTED_BK,
+      </if>
+      <if test="adjustedHj != null" >
+        ADJUSTED_HJ,
+      </if>
+      <if test="adjustedPlanSum != null" >
+        ADJUSTED_PLAN_SUM,
+      </if>
+      <if test="adjustedPlandSum != null" >
+        ADJUSTED_PLAND_SUM,
+      </if>
+      <if test="adjustedPlanaSum != null" >
+        ADJUSTED_PLANA_SUM,
+      </if>
+      <if test="specialPlane != null" >
+        SPECIAL_PLANE,
+      </if>
+      <if test="mattersCoordinated != null" >
+        MATTERS_COORDINATED,
+      </if>
+      <if test="otherSpecial != null" >
+        OTHER_SPECIAL,
+      </if>
+      <if test="ndManager != null" >
+        ND_MANAGER,
+      </if>
+      <if test="ndManagerPhone != null" >
+        ND_MANAGER_PHONE,
+      </if>
+      <if test="ndApmng != null" >
+        ND_APMNG,
+      </if>
+      <if test="ndApmngPhone != null" >
+        ND_APMNG_PHONE,
+      </if>
+      <if test="preparer != null" >
+        PREPARER,
+      </if>
+      <if test="fillingTime != null" >
+        FILLING_TIME,
+      </if>
+      <if test="cutoffTime != null" >
+        CUTOFF_TIME,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="edId != null" >
+        #{edId,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="factorsPeriod != null" >
+        #{factorsPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="descendCapacity != null" >
+        #{descendCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="isCoordinated != null" >
+        #{isCoordinated,jdbcType=VARCHAR},
+      </if>
+      <if test="isScheduleAdjustmnet != null" >
+        #{isScheduleAdjustmnet,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustPeriod != null" >
+        #{adjustPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustRatio != null" >
+        #{adjustRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPlanGs != null" >
+        #{originalPlanGs,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPlanMu != null" >
+        #{originalPlanMu,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPlanCz != null" >
+        #{originalPlanCz,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPlanCa != null" >
+        #{originalPlanCa,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPlanBk != null" >
+        #{originalPlanBk,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPlanHj != null" >
+        #{originalPlanHj,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustPlanGs != null" >
+        #{adjustPlanGs,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustPlanMu != null" >
+        #{adjustPlanMu,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustPlanCz != null" >
+        #{adjustPlanCz,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustPlanCa != null" >
+        #{adjustPlanCa,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustPlanBk != null" >
+        #{adjustPlanBk,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustPlanHj != null" >
+        #{adjustPlanHj,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedGs != null" >
+        #{adjustedGs,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedMu != null" >
+        #{adjustedMu,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedCz != null" >
+        #{adjustedCz,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedCa != null" >
+        #{adjustedCa,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedBk != null" >
+        #{adjustedBk,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedHj != null" >
+        #{adjustedHj,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedPlanSum != null" >
+        #{adjustedPlanSum,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedPlandSum != null" >
+        #{adjustedPlandSum,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedPlanaSum != null" >
+        #{adjustedPlanaSum,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPlane != null" >
+        #{specialPlane,jdbcType=VARCHAR},
+      </if>
+      <if test="mattersCoordinated != null" >
+        #{mattersCoordinated,jdbcType=VARCHAR},
+      </if>
+      <if test="otherSpecial != null" >
+        #{otherSpecial,jdbcType=VARCHAR},
+      </if>
+      <if test="ndManager != null" >
+        #{ndManager,jdbcType=VARCHAR},
+      </if>
+      <if test="ndManagerPhone != null" >
+        #{ndManagerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="ndApmng != null" >
+        #{ndApmng,jdbcType=VARCHAR},
+      </if>
+      <if test="ndApmngPhone != null" >
+        #{ndApmngPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="preparer != null" >
+        #{preparer,jdbcType=VARCHAR},
+      </if>
+      <if test="fillingTime != null" >
+        #{fillingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cutoffTime != null" >
+        #{cutoffTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.vo.coordinatedOprt.TEdWarningExample" resultType="java.lang.Integer" >
+    select count(*) from T_ED_WARNING
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_ED_WARNING
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.edId != null" >
+        ED_ID = #{record.edId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.level != null" >
+        LEVEL = #{record.level,jdbcType=VARCHAR},
+      </if>
+      <if test="record.factorsPeriod != null" >
+        FACTORS_PERIOD = #{record.factorsPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.descendCapacity != null" >
+        DESCEND_CAPACITY = #{record.descendCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isCoordinated != null" >
+        IS_COORDINATED = #{record.isCoordinated,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isScheduleAdjustmnet != null" >
+        IS_SCHEDULE_ADJUSTMNET = #{record.isScheduleAdjustmnet,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustPeriod != null" >
+        ADJUST_PERIOD = #{record.adjustPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustRatio != null" >
+        ADJUST_RATIO = #{record.adjustRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="record.originalPlanGs != null" >
+        ORIGINAL_PLAN_GS = #{record.originalPlanGs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.originalPlanMu != null" >
+        ORIGINAL_PLAN_MU = #{record.originalPlanMu,jdbcType=VARCHAR},
+      </if>
+      <if test="record.originalPlanCz != null" >
+        ORIGINAL_PLAN_CZ = #{record.originalPlanCz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.originalPlanCa != null" >
+        ORIGINAL_PLAN_CA = #{record.originalPlanCa,jdbcType=VARCHAR},
+      </if>
+      <if test="record.originalPlanBk != null" >
+        ORIGINAL_PLAN_BK = #{record.originalPlanBk,jdbcType=VARCHAR},
+      </if>
+      <if test="record.originalPlanHj != null" >
+        ORIGINAL_PLAN_HJ = #{record.originalPlanHj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustPlanGs != null" >
+        ADJUST_PLAN_GS = #{record.adjustPlanGs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustPlanMu != null" >
+        ADJUST_PLAN_MU = #{record.adjustPlanMu,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustPlanCz != null" >
+        ADJUST_PLAN_CZ = #{record.adjustPlanCz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustPlanCa != null" >
+        ADJUST_PLAN_CA = #{record.adjustPlanCa,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustPlanBk != null" >
+        ADJUST_PLAN_BK = #{record.adjustPlanBk,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustPlanHj != null" >
+        ADJUST_PLAN_HJ = #{record.adjustPlanHj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustedGs != null" >
+        ADJUSTED_GS = #{record.adjustedGs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustedMu != null" >
+        ADJUSTED_MU = #{record.adjustedMu,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustedCz != null" >
+        ADJUSTED_CZ = #{record.adjustedCz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustedCa != null" >
+        ADJUSTED_CA = #{record.adjustedCa,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustedBk != null" >
+        ADJUSTED_BK = #{record.adjustedBk,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustedHj != null" >
+        ADJUSTED_HJ = #{record.adjustedHj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustedPlanSum != null" >
+        ADJUSTED_PLAN_SUM = #{record.adjustedPlanSum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustedPlandSum != null" >
+        ADJUSTED_PLAND_SUM = #{record.adjustedPlandSum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adjustedPlanaSum != null" >
+        ADJUSTED_PLANA_SUM = #{record.adjustedPlanaSum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specialPlane != null" >
+        SPECIAL_PLANE = #{record.specialPlane,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mattersCoordinated != null" >
+        MATTERS_COORDINATED = #{record.mattersCoordinated,jdbcType=VARCHAR},
+      </if>
+      <if test="record.otherSpecial != null" >
+        OTHER_SPECIAL = #{record.otherSpecial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ndManager != null" >
+        ND_MANAGER = #{record.ndManager,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ndManagerPhone != null" >
+        ND_MANAGER_PHONE = #{record.ndManagerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ndApmng != null" >
+        ND_APMNG = #{record.ndApmng,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ndApmngPhone != null" >
+        ND_APMNG_PHONE = #{record.ndApmngPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.preparer != null" >
+        PREPARER = #{record.preparer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fillingTime != null" >
+        FILLING_TIME = #{record.fillingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.cutoffTime != null" >
+        CUTOFF_TIME = #{record.cutoffTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null" >
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_ED_WARNING
+    set ID = #{record.id,jdbcType=VARCHAR},
+      ED_ID = #{record.edId,jdbcType=VARCHAR},
+      LEVEL = #{record.level,jdbcType=VARCHAR},
+      FACTORS_PERIOD = #{record.factorsPeriod,jdbcType=VARCHAR},
+      DESCEND_CAPACITY = #{record.descendCapacity,jdbcType=VARCHAR},
+      IS_COORDINATED = #{record.isCoordinated,jdbcType=VARCHAR},
+      IS_SCHEDULE_ADJUSTMNET = #{record.isScheduleAdjustmnet,jdbcType=VARCHAR},
+      ADJUST_PERIOD = #{record.adjustPeriod,jdbcType=VARCHAR},
+      ADJUST_RATIO = #{record.adjustRatio,jdbcType=VARCHAR},
+      ORIGINAL_PLAN_GS = #{record.originalPlanGs,jdbcType=VARCHAR},
+      ORIGINAL_PLAN_MU = #{record.originalPlanMu,jdbcType=VARCHAR},
+      ORIGINAL_PLAN_CZ = #{record.originalPlanCz,jdbcType=VARCHAR},
+      ORIGINAL_PLAN_CA = #{record.originalPlanCa,jdbcType=VARCHAR},
+      ORIGINAL_PLAN_BK = #{record.originalPlanBk,jdbcType=VARCHAR},
+      ORIGINAL_PLAN_HJ = #{record.originalPlanHj,jdbcType=VARCHAR},
+      ADJUST_PLAN_GS = #{record.adjustPlanGs,jdbcType=VARCHAR},
+      ADJUST_PLAN_MU = #{record.adjustPlanMu,jdbcType=VARCHAR},
+      ADJUST_PLAN_CZ = #{record.adjustPlanCz,jdbcType=VARCHAR},
+      ADJUST_PLAN_CA = #{record.adjustPlanCa,jdbcType=VARCHAR},
+      ADJUST_PLAN_BK = #{record.adjustPlanBk,jdbcType=VARCHAR},
+      ADJUST_PLAN_HJ = #{record.adjustPlanHj,jdbcType=VARCHAR},
+      ADJUSTED_GS = #{record.adjustedGs,jdbcType=VARCHAR},
+      ADJUSTED_MU = #{record.adjustedMu,jdbcType=VARCHAR},
+      ADJUSTED_CZ = #{record.adjustedCz,jdbcType=VARCHAR},
+      ADJUSTED_CA = #{record.adjustedCa,jdbcType=VARCHAR},
+      ADJUSTED_BK = #{record.adjustedBk,jdbcType=VARCHAR},
+      ADJUSTED_HJ = #{record.adjustedHj,jdbcType=VARCHAR},
+      ADJUSTED_PLAN_SUM = #{record.adjustedPlanSum,jdbcType=VARCHAR},
+      ADJUSTED_PLAND_SUM = #{record.adjustedPlandSum,jdbcType=VARCHAR},
+      ADJUSTED_PLANA_SUM = #{record.adjustedPlanaSum,jdbcType=VARCHAR},
+      SPECIAL_PLANE = #{record.specialPlane,jdbcType=VARCHAR},
+      MATTERS_COORDINATED = #{record.mattersCoordinated,jdbcType=VARCHAR},
+      OTHER_SPECIAL = #{record.otherSpecial,jdbcType=VARCHAR},
+      ND_MANAGER = #{record.ndManager,jdbcType=VARCHAR},
+      ND_MANAGER_PHONE = #{record.ndManagerPhone,jdbcType=VARCHAR},
+      ND_APMNG = #{record.ndApmng,jdbcType=VARCHAR},
+      ND_APMNG_PHONE = #{record.ndApmngPhone,jdbcType=VARCHAR},
+      PREPARER = #{record.preparer,jdbcType=VARCHAR},
+      FILLING_TIME = #{record.fillingTime,jdbcType=TIMESTAMP},
+      CUTOFF_TIME = #{record.cutoffTime,jdbcType=TIMESTAMP},
+      REMARK = #{record.remark,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.vo.coordinatedOprt.TEdWarning" >
+    update T_ED_WARNING
+    <set >
+      <if test="edId != null" >
+        ED_ID = #{edId,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        LEVEL = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="factorsPeriod != null" >
+        FACTORS_PERIOD = #{factorsPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="descendCapacity != null" >
+        DESCEND_CAPACITY = #{descendCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="isCoordinated != null" >
+        IS_COORDINATED = #{isCoordinated,jdbcType=VARCHAR},
+      </if>
+      <if test="isScheduleAdjustmnet != null" >
+        IS_SCHEDULE_ADJUSTMNET = #{isScheduleAdjustmnet,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustPeriod != null" >
+        ADJUST_PERIOD = #{adjustPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustRatio != null" >
+        ADJUST_RATIO = #{adjustRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPlanGs != null" >
+        ORIGINAL_PLAN_GS = #{originalPlanGs,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPlanMu != null" >
+        ORIGINAL_PLAN_MU = #{originalPlanMu,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPlanCz != null" >
+        ORIGINAL_PLAN_CZ = #{originalPlanCz,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPlanCa != null" >
+        ORIGINAL_PLAN_CA = #{originalPlanCa,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPlanBk != null" >
+        ORIGINAL_PLAN_BK = #{originalPlanBk,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPlanHj != null" >
+        ORIGINAL_PLAN_HJ = #{originalPlanHj,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustPlanGs != null" >
+        ADJUST_PLAN_GS = #{adjustPlanGs,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustPlanMu != null" >
+        ADJUST_PLAN_MU = #{adjustPlanMu,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustPlanCz != null" >
+        ADJUST_PLAN_CZ = #{adjustPlanCz,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustPlanCa != null" >
+        ADJUST_PLAN_CA = #{adjustPlanCa,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustPlanBk != null" >
+        ADJUST_PLAN_BK = #{adjustPlanBk,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustPlanHj != null" >
+        ADJUST_PLAN_HJ = #{adjustPlanHj,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedGs != null" >
+        ADJUSTED_GS = #{adjustedGs,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedMu != null" >
+        ADJUSTED_MU = #{adjustedMu,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedCz != null" >
+        ADJUSTED_CZ = #{adjustedCz,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedCa != null" >
+        ADJUSTED_CA = #{adjustedCa,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedBk != null" >
+        ADJUSTED_BK = #{adjustedBk,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedHj != null" >
+        ADJUSTED_HJ = #{adjustedHj,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedPlanSum != null" >
+        ADJUSTED_PLAN_SUM = #{adjustedPlanSum,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedPlandSum != null" >
+        ADJUSTED_PLAND_SUM = #{adjustedPlandSum,jdbcType=VARCHAR},
+      </if>
+      <if test="adjustedPlanaSum != null" >
+        ADJUSTED_PLANA_SUM = #{adjustedPlanaSum,jdbcType=VARCHAR},
+      </if>
+      <if test="specialPlane != null" >
+        SPECIAL_PLANE = #{specialPlane,jdbcType=VARCHAR},
+      </if>
+      <if test="mattersCoordinated != null" >
+        MATTERS_COORDINATED = #{mattersCoordinated,jdbcType=VARCHAR},
+      </if>
+      <if test="otherSpecial != null" >
+        OTHER_SPECIAL = #{otherSpecial,jdbcType=VARCHAR},
+      </if>
+      <if test="ndManager != null" >
+        ND_MANAGER = #{ndManager,jdbcType=VARCHAR},
+      </if>
+      <if test="ndManagerPhone != null" >
+        ND_MANAGER_PHONE = #{ndManagerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="ndApmng != null" >
+        ND_APMNG = #{ndApmng,jdbcType=VARCHAR},
+      </if>
+      <if test="ndApmngPhone != null" >
+        ND_APMNG_PHONE = #{ndApmngPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="preparer != null" >
+        PREPARER = #{preparer,jdbcType=VARCHAR},
+      </if>
+      <if test="fillingTime != null" >
+        FILLING_TIME = #{fillingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cutoffTime != null" >
+        CUTOFF_TIME = #{cutoffTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.vo.coordinatedOprt.TEdWarning" >
+    update T_ED_WARNING
+    set ED_ID = #{edId,jdbcType=VARCHAR},
+      LEVEL = #{level,jdbcType=VARCHAR},
+      FACTORS_PERIOD = #{factorsPeriod,jdbcType=VARCHAR},
+      DESCEND_CAPACITY = #{descendCapacity,jdbcType=VARCHAR},
+      IS_COORDINATED = #{isCoordinated,jdbcType=VARCHAR},
+      IS_SCHEDULE_ADJUSTMNET = #{isScheduleAdjustmnet,jdbcType=VARCHAR},
+      ADJUST_PERIOD = #{adjustPeriod,jdbcType=VARCHAR},
+      ADJUST_RATIO = #{adjustRatio,jdbcType=VARCHAR},
+      ORIGINAL_PLAN_GS = #{originalPlanGs,jdbcType=VARCHAR},
+      ORIGINAL_PLAN_MU = #{originalPlanMu,jdbcType=VARCHAR},
+      ORIGINAL_PLAN_CZ = #{originalPlanCz,jdbcType=VARCHAR},
+      ORIGINAL_PLAN_CA = #{originalPlanCa,jdbcType=VARCHAR},
+      ORIGINAL_PLAN_BK = #{originalPlanBk,jdbcType=VARCHAR},
+      ORIGINAL_PLAN_HJ = #{originalPlanHj,jdbcType=VARCHAR},
+      ADJUST_PLAN_GS = #{adjustPlanGs,jdbcType=VARCHAR},
+      ADJUST_PLAN_MU = #{adjustPlanMu,jdbcType=VARCHAR},
+      ADJUST_PLAN_CZ = #{adjustPlanCz,jdbcType=VARCHAR},
+      ADJUST_PLAN_CA = #{adjustPlanCa,jdbcType=VARCHAR},
+      ADJUST_PLAN_BK = #{adjustPlanBk,jdbcType=VARCHAR},
+      ADJUST_PLAN_HJ = #{adjustPlanHj,jdbcType=VARCHAR},
+      ADJUSTED_GS = #{adjustedGs,jdbcType=VARCHAR},
+      ADJUSTED_MU = #{adjustedMu,jdbcType=VARCHAR},
+      ADJUSTED_CZ = #{adjustedCz,jdbcType=VARCHAR},
+      ADJUSTED_CA = #{adjustedCa,jdbcType=VARCHAR},
+      ADJUSTED_BK = #{adjustedBk,jdbcType=VARCHAR},
+      ADJUSTED_HJ = #{adjustedHj,jdbcType=VARCHAR},
+      ADJUSTED_PLAN_SUM = #{adjustedPlanSum,jdbcType=VARCHAR},
+      ADJUSTED_PLAND_SUM = #{adjustedPlandSum,jdbcType=VARCHAR},
+      ADJUSTED_PLANA_SUM = #{adjustedPlanaSum,jdbcType=VARCHAR},
+      SPECIAL_PLANE = #{specialPlane,jdbcType=VARCHAR},
+      MATTERS_COORDINATED = #{mattersCoordinated,jdbcType=VARCHAR},
+      OTHER_SPECIAL = #{otherSpecial,jdbcType=VARCHAR},
+      ND_MANAGER = #{ndManager,jdbcType=VARCHAR},
+      ND_MANAGER_PHONE = #{ndManagerPhone,jdbcType=VARCHAR},
+      ND_APMNG = #{ndApmng,jdbcType=VARCHAR},
+      ND_APMNG_PHONE = #{ndApmngPhone,jdbcType=VARCHAR},
+      PREPARER = #{preparer,jdbcType=VARCHAR},
+      FILLING_TIME = #{fillingTime,jdbcType=TIMESTAMP},
+      CUTOFF_TIME = #{cutoffTime,jdbcType=TIMESTAMP},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

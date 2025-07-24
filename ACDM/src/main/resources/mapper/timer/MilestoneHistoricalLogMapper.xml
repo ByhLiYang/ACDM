@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.timer.MilestoneHistoricalLog.MilestoneHistoricalLogMapper" >
+    <select id="countMDL" resultType="com.hq.acdm.model.timer.MilestoneHistoricalLog.MilestoneHistoricalLog">
+        select count(*) as countNumber from MILESTONE_DAILY_LOG where operational_date &lt; (SYSDATE-5)
+    </select>
+    <select id="queryMDL" resultType="com.hq.acdm.model.timer.MilestoneHistoricalLog.MilestoneHistoricalLog">
+        select * from MILESTONE_DAILY_LOG where operational_date &lt; (SYSDATE-5)
+    </select>
+    <select id="queryMHLByCondition" parameterType="map" resultType="com.hq.acdm.model.timer.MilestoneHistoricalLog.MilestoneHistoricalLog">
+        select * from MILESTONE_HISTORICAL_LOG where
+        1=1
+        <if test="params.operational_date!=null and params.operational_date!=''">
+            AND to_char(operational_date) = #{params.operational_date}
+        </if>
+        <if test="params.flight_no_iata != null and params.flight_no_iata != ''">
+            AND flight_no_iata = #{params.flight_no_iata}
+        </if>
+        <if test="params.a_or_d != null and params.a_or_d != ''">
+            AND a_or_d = #{params.a_or_d}
+        </if>
+        <if test="params.flight_repeat_count !=null and params.flight_repeat_count !=''">
+            AND flight_repeat_count = #{params.flight_repeat_count}
+        </if>
+        <if test="params.milestone_id !=null and params.milestone_id !=''">
+            AND milestone_id = #{params.milestone_id}
+        </if>
+        <if test="params.ds_id !=null and params.ds_id !=''">
+            AND ds_id = #{params.ds_id}
+        </if>
+        <if test="params.messagetime !=null and params.messagetime !=''">
+            AND to_char(messagetime,'YYYY-MM-DD HH24:MI:SS') = #{params.messagetime}
+        </if>
+    </select>
+    <delete id="deleteMHL" parameterType="map">
+        DELETE FROM MILESTONE_HISTORICAL_LOG WHERE
+        1=1
+        <if test="params.operational_date!=null and params.operational_date!=''">
+            AND to_char(operational_date) = #{params.operational_date}
+        </if>
+        <if test="params.flight_no_iata != null and params.flight_no_iata != ''">
+            AND flight_no_iata = #{params.flight_no_iata}
+        </if>
+        <if test="params.a_or_d != null and params.a_or_d != ''">
+            AND a_or_d = #{params.a_or_d}
+        </if>
+        <if test="params.flight_repeat_count !=null and params.flight_repeat_count !=''">
+            AND flight_repeat_count = #{params.flight_repeat_count}
+        </if>
+        <if test="params.milestone_id !=null and params.milestone_id !=''">
+            AND milestone_id = #{params.milestone_id}
+        </if>
+        <if test="params.ds_id !=null and params.ds_id !=''">
+            AND ds_id = #{params.ds_id}
+        </if>
+        <if test="params.messagetime !=null and params.messagetime !=''">
+            AND to_char(messagetime,'YYYY-MM-DD HH24:MI:SS') = #{params.messagetime}
+        </if>
+    </delete>
+    <delete id="deleteMDL" parameterType="map">
+        DELETE from MILESTONE_DAILY_LOG WHERE
+        1=1
+        <if test="params.operational_date!=null and params.operational_date!=''">
+            AND to_char(operational_date) = #{params.operational_date}
+        </if>
+        <if test="params.flight_no_iata != null and params.flight_no_iata != ''">
+            AND flight_no_iata = #{params.flight_no_iata}
+        </if>
+        <if test="params.a_or_d != null and params.a_or_d != ''">
+            AND a_or_d = #{params.a_or_d}
+        </if>
+        <if test="params.flight_repeat_count !=null and params.flight_repeat_count !=''">
+            AND flight_repeat_count = #{params.flight_repeat_count}
+        </if>
+        <if test="params.milestone_id !=null and params.milestone_id !=''">
+            AND milestone_id = #{params.milestone_id}
+        </if>
+        <if test="params.ds_id !=null and params.ds_id !=''">
+            AND ds_id = #{params.ds_id}
+        </if>
+        <if test="params.messagetime !=null and params.messagetime !=''">
+            AND to_char(messagetime,'YYYY-MM-DD HH24:MI:SS') = #{params.messagetime}
+        </if>
+    </delete>
+    <insert id="insertMHL" parameterType="map">
+        insert into MILESTONE_HISTORICAL_LOG select * from MILESTONE_DAILY_LOG
+        WHERE
+        1=1
+        <if test="params.operational_date!=null and params.operational_date!=''">
+            AND to_char(operational_date) = #{params.operational_date}
+        </if>
+        <if test="params.flight_no_iata != null and params.flight_no_iata != ''">
+            AND flight_no_iata = #{params.flight_no_iata}
+        </if>
+        <if test="params.a_or_d != null and params.a_or_d != ''">
+            AND a_or_d = #{params.a_or_d}
+        </if>
+        <if test="params.flight_repeat_count !=null and params.flight_repeat_count !=''">
+            AND flight_repeat_count = #{params.flight_repeat_count}
+        </if>
+        <if test="params.milestone_id !=null and params.milestone_id !=''">
+            AND milestone_id = #{params.milestone_id}
+        </if>
+        <if test="params.ds_id !=null and params.ds_id !=''">
+            AND ds_id = #{params.ds_id}
+        </if>
+        <if test="params.messagetime !=null and params.messagetime !=''">
+            AND to_char(messagetime,'YYYY-MM-DD HH24:MI:SS') = #{params.messagetime}
+        </if>
+    </insert>
+
+</mapper>

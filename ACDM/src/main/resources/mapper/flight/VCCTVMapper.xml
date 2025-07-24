@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.flight.VCCTVMapper" >
+    <resultMap id="BaseResultMap" type="com.hq.acdm.model.flight.VCCTV" >
+        <result column="MATCHED_FNO" property="matchedFno" jdbcType="VARCHAR" />
+        <result column="STAND" property="stand" jdbcType="VARCHAR" />
+        <result column="MATCHED_FLIGHT_OPDATE" property="matchedFlightOpdate" jdbcType="TIMESTAMP" />
+        <result column="MILE_DATE" property="mileDate" jdbcType="VARCHAR" />
+        <result column="MILESTONE_DATETIME" property="milestoneDatetime" jdbcType="VARCHAR" />
+        <result column="DIRECTION" property="direction" jdbcType="VARCHAR" />
+        <result column="AGS" property="ags" jdbcType="VARCHAR" />
+        <result column="SDT" property="sdt" jdbcType="VARCHAR" />
+        <result column="EDT" property="edt" jdbcType="VARCHAR" />
+        <result column="COBT" property="cobt" jdbcType="VARCHAR" />
+        <result column="ALT" property="alt" jdbcType="VARCHAR" />
+        <result column="ATO" property="ato" jdbcType="VARCHAR" />
+        <result column="MILESTONE_ID" property="milestoneId" jdbcType="VARCHAR" />
+        <result column="DS_CODE" property="dsCode" jdbcType="CHAR" />
+        <result column="SENT_DATETIME" property="sentDatetime" jdbcType="TIMESTAMP" />
+        <result column="VEDIO_LOCATION" property="vedioLocation" jdbcType="VARCHAR" />
+        <result column="PICTURE_LOCATION" property="pictureLocation" jdbcType="VARCHAR" />
+        <result column="COMMENTS" property="comments" jdbcType="VARCHAR" />
+        <result column="CORRECTED_MILESTONE_DATETIME" property="correctedMilestoneDatetime" jdbcType="TIMESTAMP" />
+        <result column="CONFIRM_YN" property="confirmYn" jdbcType="DECIMAL" />
+        <result column="MATCHED_YN" property="matchedYn" jdbcType="DECIMAL" />
+        <result column="MATCHED_FLIGHT_REPEATNO" property="matchedFlightRepeatno" jdbcType="VARCHAR" />
+        <result column="IS_IGNORE" property="isIgnore" jdbcType="CHAR" />
+        <result column="OPERATIONAL_DATE" property="operationalDate" jdbcType="TIMESTAMP" />
+        <result column="AOBT_1" property="aobt1" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <select id="queryList" parameterType="map" resultType="com.hq.acdm.model.flight.VCCTV"  >
+        select *  from V_CCTV
+        where 1=1
+        <if test="params.startDate !=null and params.startDate != ''">
+            and  sobt >=to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')
+        </if>
+        <if test="params.endDate !=null and params.endDate != ''">
+            and  sobt &lt;=to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')
+        </if>
+        <if test="params.matchedFno !=null and params.matchedFno != ''">
+            and matchedFno=#{params.matchedFno,jdbcType=VARCHAR}
+        </if>
+        <if test="params.stand !=null and params.stand != ''">
+            and stand=#{params.gate,jdbcType=VARCHAR}
+        </if>
+
+
+    </select>
+</mapper>

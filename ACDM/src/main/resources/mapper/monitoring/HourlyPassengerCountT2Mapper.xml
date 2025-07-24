@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.passengerFlowSupervision.HourlyPassengerCountT2Mapper" >
+  <select id="queryTerminal2" resultType="com.hq.acdm.model.passengerFlowSupervision.HourlyPassengerCountT2">
+    SELECT
+    pax_count_hour24h,
+    count_checked_in,
+    pax_count_date,
+    count_insecurityzone,
+    count_onflights,
+    terminal,
+    paramvalue
+    FROM V_HOURLY_PASSENGER_COUNT where to_char(pax_count_date,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') and terminal =2 order by pax_count_hour24h
+  </select>
+
+</mapper>

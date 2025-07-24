@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.BridgeRateMapper" >
+    <resultMap id="BaseResultMapT1" type="com.hq.acdm.model.statistics.bridgeRate.BridgeRateT1" >
+        <result column="close" property="close" jdbcType="TIMESTAMP" />
+        <result column="AIRLINE_CODE_IATA" property="AIRLINE_CODE_IATA" jdbcType="VARCHAR" />
+        <result column="actual_close" property="actual_close" jdbcType="VARCHAR" />
+        <result column="close_rate" property="close_rate" jdbcType="INTEGER" />
+    </resultMap>
+    <resultMap id="BaseResultMapT2" type="com.hq.acdm.model.statistics.bridgeRate.BridgeRateT2" >
+        <result column="close" property="close" jdbcType="TIMESTAMP" />
+        <result column="AIRLINE_CODE_IATA" property="AIRLINE_CODE_IATA" jdbcType="VARCHAR" />
+        <result column="actual_close" property="actual_close" jdbcType="VARCHAR" />
+        <result column="close_rate" property="close_rate" jdbcType="INTEGER" />
+        <result column="big_close_rate" property="big_close_rate" jdbcType="INTEGER" />
+    </resultMap>
+    <select id="queryT2Init" resultType="com.hq.acdm.model.statistics.bridgeRate.BridgeRateT2"  >
+        with inittable as (
+        SELECT *
+        FROM(
+        SELECT TM.FLIGHT_NO_IATA,TM.AIRLINE_CODE_IATA, TM.SOBT, TM.AOBT,TM.ATOT, TA.FLIGHT_NATURE_CODE,TM.ALDT,
+        TA.AIRCRAFT_TERMINAL_CODE, TM.TYPE,TM.STAND,
+        TA.LNK_CARRIER_CODE||TA.LNK_FLIGHT_NO||COALESCE(TA.LNK_FLIGHT_SUFFIX,'') LINK_FLIGHT_NO,
+        TM.OPERATIONAL_DATE,TA.LNK_SCHEDULE_DATE
+        FROM DAILY_FLIGHT_MASTER TM
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS TA
+        ON TA.FLIGHT_NO_IATA=TM.FLIGHT_NO_IATA AND TA.A_OR_D=TM.A_OR_D AND TA.FLIGHT_REPEAT_COUNT =TM.FLIGHT_REPEAT_COUNT AND TA.OPERATIONAL_DATE=TM.OPERATIONAL_DATE
+        WHERE
+        trunc(to_number(to_char(TM.SOBT,'hh24'))) &lt; '11' AND TM.A_OR_D ='D' AND TA.LNK_SCHEDULE_DATE <![CDATA[ <> ]]>TM.OPERATIONAL_DATE
+        AND nvl(TA.CODE_SHARE_STATUS,' ') <![CDATA[ <> ]]>'SF' AND TA.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND nvl(TA.FLIGHT_CANCEL_CODE,' ')<![CDATA[ <> ]]>'C'
+        ) T1
+        WHERE to_char(T1.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char((CURRENT_DATE-1),'YYYY-MM-DD')
+
+        AND T1.FLIGHT_NATURE_CODE='PAX'
+        and    T1.AIRCRAFT_TERMINAL_CODE='2'
+        and    T1.TYPE not IN ('CRJ2','CRJ7','E145','E190','AJ27')
+        and  T1.STAND not in('238','239','240','258','259')
+        )
+
+        select kk.AIRLINE_CODE_IATA,kk.k,sk.s,DXJ.S DS
+        from
+        (select 	AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) k
+        from 	inittable
+        GROUP BY AIRLINE_CODE_IATA) kk
+        full join
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) s
+        from 	inittable
+        where  STAND in('221','222','223','224','225','226','227','228','229','230','231','232','233','234','235','236','237',
+        '241','242','243','244','245','246','247','248','249','250','251','252','253','254','255','256','257','260','261','262','263',
+        '264','265','266','267','268','269','270','271','272','273','274','275','238A','239A','240A','258A','259A')
+        GROUP BY AIRLINE_CODE_IATA) sk
+        on kk.AIRLINE_CODE_IATA=sk.AIRLINE_CODE_IATA
+        LEFT JOIN
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) S
+        from inittable
+        where STAND in('221','222','223','224','225','226','227','228','229','230','231','232','233','234','235','236','237',
+        '241','242','243','244','245','246','247','248','249','250','251','252','253','254','255','256','257','260','261','262','263',
+        '264','265','266','267','268','269','270','271','272','273','274','275','238A','239A','240A','258A','259A')
+        AND  TYPE IN (
+        'A300'
+        ,'A306'
+        ,'A330'
+        ,'A332'
+        ,'A333'
+        ,'A343'
+        ,'A346'
+        ,'B744'
+        ,'B748'
+        ,'B772'
+        ,'B773'
+        ,'B777'
+        ,'B77W'
+        ,'B778'
+        )
+        GROUP BY AIRLINE_CODE_IATA
+        ) DXJ
+        ON SK.AIRLINE_CODE_IATA=DXJ.AIRLINE_CODE_IATA
+    </select>
+    <select id="queryT2OverD" resultType="com.hq.acdm.model.statistics.bridgeRate.BridgeRateT2"  >
+        with table_a as (
+        select D1.FLIGHT_NO_IATA FLIGHT_NO_IATA_A,D1.OPERATIONAL_DATE OPERATIONAL_DATE_A,D1.FLIGHT_REPEAT_COUNT,ALDT,SIBT,D2.FLIGHT_SECTOR_CODE A_SECTOR_CODE
+        from DAILY_FLIGHT_MASTER D1 left join
+        DAILY_FLIGHT_ADD_DETAILS D2 on D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+        AND to_char(D1.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(D2.OPERATIONAL_DATE,'YYYY-MM-DD') AND D1.A_OR_D = D2.A_OR_D  AND
+        D1.FLIGHT_NO_IATA=D2.FLIGHT_NO_IATA
+        where d1.a_or_d='A' and nvl(d2.CODE_SHARE_STATUS,' ')<![CDATA[ <> ]]>'SF'
+        ),table_b as (
+        select D1.FLIGHT_NO_IATA FLIGHT_NO_IATA_D,D1.OPERATIONAL_DATE OPERATIONAL_DATE_D,
+        LNK_CARRIER_CODE,LNK_FLIGHT_NO,LNK_FLIGHT_SUFFIX,LNK_FLIGHT_REPEAT_COUNT,LNK_SCHEDULE_DATE,COBT,D2.FLIGHT_SECTOR_CODE D_SECTOR_CODE
+        ,d2.FLIGHT_CANCEL_CODE,d2.FLIGHT_CLASS_CODE,AIRLINE_CODE_IATA,D2.FLIGHT_NATURE_CODE,D2.AIRCRAFT_TERMINAL_CODE,
+        D1.TYPE,D1.STAND,SOBT,ATOT
+        from  DAILY_FLIGHT_MASTER D1 left join  DAILY_FLIGHT_ADD_DETAILS D2
+        on D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT  AND to_char(D1.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(D2.OPERATIONAL_DATE,'YYYY-MM-DD')
+        AND D1.A_OR_D = D2.A_OR_D  AND D1.FLIGHT_NO_IATA=D2.FLIGHT_NO_IATA
+        where d1.a_or_d='D' and nvl(d2.CODE_SHARE_STATUS,' ')<![CDATA[ <> ]]>'SF'
+        ),
+        table_c as(
+        select * from
+        (select *
+        from table_a t1 full join table_b t2 on T2.LNK_CARRIER_CODE||T2.LNK_FLIGHT_NO||nvl(t2.LNK_FLIGHT_SUFFIX,'') = T1.FLIGHT_NO_IATA_A
+        AND T2.LNK_FLIGHT_REPEAT_COUNT=T1.FLIGHT_REPEAT_COUNT
+        and to_char(t1.OPERATIONAL_DATE_A,'YYYY-MM-DD')=to_char(t2.LNK_SCHEDULE_DATE,'YYYY-MM-DD')
+        where nvl(FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C' AND nvl(FLIGHT_CLASS_CODE,' ') <![CDATA[ <> ]]> 'U/H'
+        )
+        where   to_char(OPERATIONAL_DATE_D,'YYYY-MM-DD') =to_char((CURRENT_DATE-1),'YYYY-MM-DD')
+        and    FLIGHT_NATURE_CODE='PAX'
+        and    AIRCRAFT_TERMINAL_CODE='2'
+        and    TYPE not IN ('CRJ2','CRJ7','E145','E190','AJ27')
+        and to_char(ATOT,'YYYY-MM-DD')=to_char(ALDT,'YYYY-MM-DD') and to_char(ALDT,'YYYY-MM-DD')=to_char(SOBT,'YYYY-MM-DD')
+
+        and  STAND not in('238','239','240','258','259')
+        and CEIL((TO_DATE(to_char(SOBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60)&lt;'240'
+        AND ((A_SECTOR_CODE='I' AND D_SECTOR_CODE!='D') or (A_SECTOR_CODE='R' AND D_SECTOR_CODE!='D') OR (A_SECTOR_CODE='D' AND D_SECTOR_CODE not IN ('I','R')))
+        )
+
+        SELECT KK.AIRLINE_CODE_IATA,SK.S,KK.K,DXJ.S DS
+        FROM
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) K
+        from table_c GROUP BY AIRLINE_CODE_IATA
+        )  KK FULL JOIN
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) S
+        from table_c
+        where STAND in('221','222','223','224','225','226','227','228','229','230','231','232','233','234','235','236','237',
+        '241','242','243','244','245','246','247','248','249','250','251','252','253','254','255','256','257','260','261','262','263',
+        '264','265','266','267','268','269','270','271','272','273','274','275','238A','239A','240A','258A','259A')
+
+        GROUP BY AIRLINE_CODE_IATA
+        )  SK
+        ON  SK.AIRLINE_CODE_IATA=KK.AIRLINE_CODE_IATA
+        LEFT JOIN
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) S
+        from table_c
+        where STAND in('221','222','223','224','225','226','227','228','229','230','231','232','233','234','235','236','237',
+        '241','242','243','244','245','246','247','248','249','250','251','252','253','254','255','256','257','260','261','262','263',
+        '264','265','266','267','268','269','270','271','272','273','274','275','238A','239A','240A','258A','259A')
+        AND  TYPE IN (
+        'A300'
+        ,'A306'
+        ,'A330'
+        ,'A332'
+        ,'A333'
+        ,'A343'
+        ,'A346'
+        ,'B744'
+        ,'B748'
+        ,'B772'
+        ,'B773'
+        ,'B777'
+        ,'B77W'
+        ,'B778'
+        )
+        GROUP BY AIRLINE_CODE_IATA
+        )  DXJ
+        ON SK.AIRLINE_CODE_IATA=DXJ.AIRLINE_CODE_IATA
+    </select>
+    <select id="queryT2OverA" resultType="com.hq.acdm.model.statistics.bridgeRate.BridgeRateT2"  >
+        with table_a as (
+        select D1.FLIGHT_NO_IATA FLIGHT_NO_IATA_A,D1.OPERATIONAL_DATE OPERATIONAL_DATE_A,D1.FLIGHT_REPEAT_COUNT,ALDT,SIBT,D2.AIRCRAFT_TERMINAL_CODE,D2.FLIGHT_SECTOR_CODE A_SECTOR_CODE,
+        D2.FLIGHT_NATURE_CODE,D1.TYPE,AIRLINE_CODE_IATA, D1.STAND
+        ,d2.FLIGHT_CANCEL_CODE,d2.FLIGHT_CLASS_CODE
+        ,SOBT,ATOT,D1.A_OR_D
+        from DAILY_FLIGHT_MASTER D1 left join
+        DAILY_FLIGHT_ADD_DETAILS D2 on D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+        AND to_char(D1.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(D2.OPERATIONAL_DATE,'YYYY-MM-DD') AND D1.A_OR_D = D2.A_OR_D  AND
+        D1.FLIGHT_NO_IATA=D2.FLIGHT_NO_IATA
+        where d1.a_or_d='A' and nvl(d2.CODE_SHARE_STATUS,' ')<![CDATA[ <> ]]>'SF'
+        ),
+        table_b as (
+        select LNK_CARRIER_CODE,LNK_FLIGHT_NO,LNK_FLIGHT_SUFFIX,LNK_FLIGHT_REPEAT_COUNT,LNK_SCHEDULE_DATE,
+        D2.FLIGHT_SECTOR_CODE D_SECTOR_CODE
+        from  DAILY_FLIGHT_MASTER D1 left join  DAILY_FLIGHT_ADD_DETAILS D2
+        on D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT  AND to_char(D1.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(D2.OPERATIONAL_DATE,'YYYY-MM-DD')
+        AND D1.A_OR_D = D2.A_OR_D  AND D1.FLIGHT_NO_IATA=D2.FLIGHT_NO_IATA
+        where d1.a_or_d='D' and nvl(d2.CODE_SHARE_STATUS,' ')<![CDATA[ <> ]]>'SF'
+        ),
+        table_c as(
+        select * from
+        (select *
+        from table_a t1 full join table_b t2 on T2.LNK_CARRIER_CODE||T2.LNK_FLIGHT_NO||NVL(t2.LNK_FLIGHT_SUFFIX,'') = T1.FLIGHT_NO_IATA_A
+        AND T2.LNK_FLIGHT_REPEAT_COUNT=T1.FLIGHT_REPEAT_COUNT
+        and to_char(t1.OPERATIONAL_DATE_A,'YYYY-MM-DD')=to_char(t2.LNK_SCHEDULE_DATE,'YYYY-MM-DD')
+        where nvl(FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C' AND  nvl(FLIGHT_CLASS_CODE,' ') <![CDATA[ <> ]]> 'U/H'
+        )
+        where   to_char(OPERATIONAL_DATE_A,'YYYY-MM-DD') =to_char((CURRENT_DATE-1),'YYYY-MM-DD')
+        and    FLIGHT_NATURE_CODE='PAX'
+        and    AIRCRAFT_TERMINAL_CODE='2'
+        and    TYPE not IN ('CRJ2','CRJ7','E145','E190','AJ27')
+        and to_char(ATOT,'YYYY-MM-DD')=to_char(ALDT,'YYYY-MM-DD') and to_char(ALDT,'YYYY-MM-DD')=to_char(SOBT,'YYYY-MM-DD')
+
+        and  STAND not in('238','239','240','258','259')
+        and CEIL((TO_DATE(to_char(SOBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60)&lt;'240'
+        AND ((A_SECTOR_CODE='I' AND D_SECTOR_CODE!='D') or (A_SECTOR_CODE='R' AND D_SECTOR_CODE!='D') OR (A_SECTOR_CODE='D' AND D_SECTOR_CODE not IN ('I','R')))
+        )
+
+        SELECT KK.AIRLINE_CODE_IATA,SK.S,KK.K,DXJ.S DS
+        FROM
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) K
+        from table_c GROUP BY AIRLINE_CODE_IATA
+        ) KK full join
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) S
+        from table_c
+        where STAND in('221','222','223','224','225','226','227','228','229','230','231','232','233','234','235','236','237',
+        '241','242','243','244','245','246','247','248','249','250','251','252','253','254','255','256','257','260','261','262','263',
+        '264','265','266','267','268','269','270','271','272','273','274','275','238A','239A','240A','258A','259A')
+
+        GROUP BY AIRLINE_CODE_IATA
+        )  SK
+        on SK.AIRLINE_CODE_IATA=KK.AIRLINE_CODE_IATA
+        left join
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) S
+        from table_c
+        where STAND in('221','222','223','224','225','226','227','228','229','230','231','232','233','234','235','236','237',
+        '241','242','243','244','245','246','247','248','249','250','251','252','253','254','255','256','257','260','261','262','263',
+        '264','265','266','267','268','269','270','271','272','273','274','275','238A','239A','240A','258A','259A')
+        AND  TYPE IN (
+        'A300'
+        ,'A306'
+        ,'A330'
+        ,'A332'
+        ,'A333'
+        ,'A343'
+        ,'A346'
+        ,'B744'
+        ,'B748'
+        ,'B772'
+        ,'B773'
+        ,'B777'
+        ,'B77W'
+        ,'B778'
+        )
+        GROUP BY AIRLINE_CODE_IATA
+        )  DXJ
+        ON SK.AIRLINE_CODE_IATA=DXJ.AIRLINE_CODE_IATA
+    </select>
+    <select id="queryT1Init" resultType="com.hq.acdm.model.statistics.bridgeRate.BridgeRateT1"  >
+        with inittable as (
+        SELECT *
+        FROM(
+        SELECT TM.FLIGHT_NO_IATA,TM.AIRLINE_CODE_IATA, TM.SOBT, TM.AOBT,TM.ATOT, TA.FLIGHT_NATURE_CODE,TM.ALDT,
+        TA.AIRCRAFT_TERMINAL_CODE, TM.TYPE,TM.STAND,
+        TA.LNK_CARRIER_CODE||TA.LNK_FLIGHT_NO||COALESCE(TA.LNK_FLIGHT_SUFFIX,'') LINK_FLIGHT_NO,
+        TM.OPERATIONAL_DATE,TA.LNK_SCHEDULE_DATE
+        FROM DAILY_FLIGHT_MASTER TM
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS TA
+        ON TA.FLIGHT_NO_IATA=TM.FLIGHT_NO_IATA AND TA.A_OR_D=TM.A_OR_D AND TA.FLIGHT_REPEAT_COUNT =TM.FLIGHT_REPEAT_COUNT AND to_char(TA.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(TM.OPERATIONAL_DATE,'YYYY-MM-DD')
+        WHERE
+        trunc(to_number(to_char(TM.SOBT,'hh24'))) &lt; '11' AND TM.A_OR_D ='D' AND to_char(TA.LNK_SCHEDULE_DATE,'YYYY-MM-DD') <![CDATA[ <> ]]>to_char(TM.OPERATIONAL_DATE,'YYYY-MM-DD')
+        AND nvl(TA.CODE_SHARE_STATUS,' ') <![CDATA[ <> ]]>'SF' AND TA.FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND nvl(TA.FLIGHT_CANCEL_CODE,' ')<![CDATA[ <> ]]>'C'
+        ) T1
+        WHERE to_char(T1.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char((CURRENT_DATE-1),'YYYY-MM-DD')
+
+        AND T1.FLIGHT_NATURE_CODE='PAX'
+        and    T1.AIRCRAFT_TERMINAL_CODE='1'
+        and    T1.TYPE not IN ('CRJ2','CRJ7','E145','E190','AJ27')
+        and  T1.STAND not in('238','239','240','258','259')
+        )
+
+        select kk.AIRLINE_CODE_IATA,kk.k,sk.s,DXJ.S DS
+        from
+        (select 	AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) k
+        from 	inittable
+        GROUP BY AIRLINE_CODE_IATA) kk
+        full join
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) s
+        from 	inittable
+        where STAND in('11','12','14','15','16')
+        GROUP BY AIRLINE_CODE_IATA) sk
+        on kk.AIRLINE_CODE_IATA=sk.AIRLINE_CODE_IATA
+
+        LEFT JOIN
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) S
+        from inittable
+        where STAND in('11','12','14','15','16')
+        AND  TYPE IN (
+        'A300'
+        ,'A306'
+        ,'A330'
+        ,'A332'
+        ,'A333'
+        ,'A343'
+        ,'A346'
+        ,'B744'
+        ,'B748'
+        ,'B772'
+        ,'B773'
+        ,'B777'
+        ,'B77W'
+        ,'B778'
+        )
+        GROUP BY AIRLINE_CODE_IATA
+        )  DXJ
+        ON SK.AIRLINE_CODE_IATA=DXJ.AIRLINE_CODE_IATA
+    </select>
+    <select id="queryT1OverA" resultType="com.hq.acdm.model.statistics.bridgeRate.BridgeRateT1"  >
+        with table_a as (
+        select D1.FLIGHT_NO_IATA FLIGHT_NO_IATA_A,D1.OPERATIONAL_DATE OPERATIONAL_DATE_A,D1.FLIGHT_REPEAT_COUNT,ALDT,SIBT,D2.AIRCRAFT_TERMINAL_CODE,D2.FLIGHT_SECTOR_CODE A_SECTOR_CODE,
+        D2.FLIGHT_NATURE_CODE,D1.TYPE,AIRLINE_CODE_IATA, D1.STAND
+        ,d2.FLIGHT_CANCEL_CODE,d2.FLIGHT_CLASS_CODE
+        ,SOBT,ATOT,D1.A_OR_D
+        from DAILY_FLIGHT_MASTER D1 left join
+        DAILY_FLIGHT_ADD_DETAILS D2 on D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+        AND D1.OPERATIONAL_DATE=D2.OPERATIONAL_DATE AND D1.A_OR_D = D2.A_OR_D  AND
+        D1.FLIGHT_NO_IATA=D2.FLIGHT_NO_IATA
+        where d1.a_or_d='A' and nvl(d2.CODE_SHARE_STATUS,' ')<![CDATA[ <> ]]>'SF'
+        ),
+        table_b as (
+        select LNK_CARRIER_CODE,LNK_FLIGHT_NO,LNK_FLIGHT_SUFFIX,LNK_FLIGHT_REPEAT_COUNT,LNK_SCHEDULE_DATE,
+        D2.FLIGHT_SECTOR_CODE D_SECTOR_CODE
+        from  DAILY_FLIGHT_MASTER D1 left join  DAILY_FLIGHT_ADD_DETAILS D2
+        on D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT  AND D1.OPERATIONAL_DATE=D2.OPERATIONAL_DATE
+        AND D1.A_OR_D = D2.A_OR_D  AND D1.FLIGHT_NO_IATA=D2.FLIGHT_NO_IATA
+        where d1.a_or_d='D' and nvl(d2.CODE_SHARE_STATUS,' ')<![CDATA[ <> ]]>'SF'
+        ),
+        table_c as(
+        select * from
+        (select *
+        from table_a t1 full join table_b t2 on T2.LNK_CARRIER_CODE||T2.LNK_FLIGHT_NO||NVL(t2.LNK_FLIGHT_SUFFIX,'') = T1.FLIGHT_NO_IATA_A
+        AND T2.LNK_FLIGHT_REPEAT_COUNT=T1.FLIGHT_REPEAT_COUNT
+        and to_char(t1.OPERATIONAL_DATE_A,'YYYY-MM-DD')=to_char(t2.LNK_SCHEDULE_DATE,'YYYY-MM-DD')
+        where nvl(FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C' AND nvl(FLIGHT_CLASS_CODE,' ') <![CDATA[ <> ]]> 'U/H'
+        )
+        where   to_char(OPERATIONAL_DATE_A,'YYYY-MM-DD') =to_char((CURRENT_DATE-1),'YYYY-MM-DD')
+        and    FLIGHT_NATURE_CODE='PAX'
+        and    AIRCRAFT_TERMINAL_CODE='1'
+        and    TYPE not IN ('CRJ2','CRJ7','E145','E190','AJ27')
+        and to_char(ATOT,'YYYY-MM-DD')=to_char(ALDT,'YYYY-MM-DD') and to_char(ALDT,'YYYY-MM-DD')=to_char(SOBT,'YYYY-MM-DD')
+
+        and  STAND not in('238','239','240','258','259')
+        and CEIL((TO_DATE(to_char(SOBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60)&lt;'240'
+        AND ((A_SECTOR_CODE='I' AND D_SECTOR_CODE!='D') or (A_SECTOR_CODE='R' AND D_SECTOR_CODE!='D') OR (A_SECTOR_CODE='D' AND D_SECTOR_CODE not IN ('I','R')))
+        )
+
+        SELECT KK.AIRLINE_CODE_IATA,SK.S,KK.K,DXJ.S DS
+        FROM
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) K
+        from table_c GROUP BY AIRLINE_CODE_IATA
+        )  KK full join
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) S
+        from table_c
+        where STAND in('11','12','14','15','16')
+
+        GROUP BY AIRLINE_CODE_IATA
+        )  SK
+        on SK.AIRLINE_CODE_IATA=KK.AIRLINE_CODE_IATA
+        left join
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) S
+        from table_c
+        where STAND in('11','12','14','15','16')
+        AND  TYPE IN (
+        'A300'
+        ,'A306'
+        ,'A330'
+        ,'A332'
+        ,'A333'
+        ,'A343'
+        ,'A346'
+        ,'B744'
+        ,'B748'
+        ,'B772'
+        ,'B773'
+        ,'B777'
+        ,'B77W'
+        ,'B778'
+        )
+        GROUP BY AIRLINE_CODE_IATA
+        )   DXJ
+        ON SK.AIRLINE_CODE_IATA=DXJ.AIRLINE_CODE_IATA
+    </select>
+    <select id="queryT1OverD" resultType="com.hq.acdm.model.statistics.bridgeRate.BridgeRateT1"  >
+        with table_a as (
+        select D1.FLIGHT_NO_IATA FLIGHT_NO_IATA_A,D1.OPERATIONAL_DATE OPERATIONAL_DATE_A,D1.FLIGHT_REPEAT_COUNT,ALDT,SIBT,D2.FLIGHT_SECTOR_CODE A_SECTOR_CODE
+        from DAILY_FLIGHT_MASTER D1 left join
+        DAILY_FLIGHT_ADD_DETAILS D2 on D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+        AND to_char(D1.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(D2.OPERATIONAL_DATE,'YYYY-MM-DD') AND D1.A_OR_D = D2.A_OR_D  AND
+        D1.FLIGHT_NO_IATA=D2.FLIGHT_NO_IATA
+        where d1.a_or_d='A' and nvl(d2.CODE_SHARE_STATUS,' ')<![CDATA[ <> ]]>'SF'
+        ),table_b as (
+        select D1.FLIGHT_NO_IATA FLIGHT_NO_IATA_D,D1.OPERATIONAL_DATE OPERATIONAL_DATE_D,
+        LNK_CARRIER_CODE,LNK_FLIGHT_NO,LNK_FLIGHT_SUFFIX,LNK_FLIGHT_REPEAT_COUNT,LNK_SCHEDULE_DATE,COBT,D2.FLIGHT_SECTOR_CODE D_SECTOR_CODE
+        ,d2.FLIGHT_CANCEL_CODE,d2.FLIGHT_CLASS_CODE,AIRLINE_CODE_IATA,D2.FLIGHT_NATURE_CODE,D2.AIRCRAFT_TERMINAL_CODE,
+        D1.TYPE,D1.STAND,SOBT,ATOT
+        from  DAILY_FLIGHT_MASTER D1 left join  DAILY_FLIGHT_ADD_DETAILS D2
+        on D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT  AND to_char(D1.OPERATIONAL_DATE,'YYYY-MM-DD')=to_char(D2.OPERATIONAL_DATE,'YYYY-MM-DD')
+        AND D1.A_OR_D = D2.A_OR_D  AND D1.FLIGHT_NO_IATA=D2.FLIGHT_NO_IATA
+        where d1.a_or_d='D' and nvl(d2.CODE_SHARE_STATUS,' ')<![CDATA[ <> ]]>'SF'
+        ),
+        table_c as(
+        select * from
+        (select *
+        from table_a t1 full join table_b t2 on T2.LNK_CARRIER_CODE||T2.LNK_FLIGHT_NO||NVL(t2.LNK_FLIGHT_SUFFIX,'') = T1.FLIGHT_NO_IATA_A
+        AND T2.LNK_FLIGHT_REPEAT_COUNT=T1.FLIGHT_REPEAT_COUNT
+        and to_char(t1.OPERATIONAL_DATE_A,'YYYY-MM-DD')=to_char(t2.LNK_SCHEDULE_DATE,'YYYY-MM-DD')
+        where nvl(FLIGHT_CANCEL_CODE,' ') <![CDATA[ <> ]]> 'C' AND nvl(FLIGHT_CLASS_CODE,' ') <![CDATA[ <> ]]> 'U/H'
+        )
+        where   to_char(OPERATIONAL_DATE_D,'YYYY-MM-DD') =to_char((CURRENT_DATE-1),'YYYY-MM-DD')
+        and    FLIGHT_NATURE_CODE='PAX'
+        and    AIRCRAFT_TERMINAL_CODE='1'
+        and    TYPE not IN ('CRJ2','CRJ7','E145','E190','AJ27')
+        and to_char(ATOT,'YYYY-MM-DD')=to_char(ALDT,'YYYY-MM-DD') and to_char(ALDT,'YYYY-MM-DD')=to_char(SOBT,'YYYY-MM-DD')
+
+        and  STAND not in('238','239','240','258','259')
+        and CEIL((TO_DATE(to_char(SOBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60)&lt;'240'
+        AND ((A_SECTOR_CODE='I' AND D_SECTOR_CODE!='D') or (A_SECTOR_CODE='R' AND D_SECTOR_CODE!='D') OR (A_SECTOR_CODE='D' AND D_SECTOR_CODE not IN ('I','R')))
+        )
+
+        SELECT KK.AIRLINE_CODE_IATA,SK.S,KK.K,DXJ.S DS
+        FROM
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) K
+        from table_c GROUP BY AIRLINE_CODE_IATA
+        ) KK FULL JOIN
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) S
+        from table_c
+        where STAND in('11','12','14','15','16')
+
+        GROUP BY AIRLINE_CODE_IATA
+        )  SK
+        ON  SK.AIRLINE_CODE_IATA=KK.AIRLINE_CODE_IATA
+        LEFT JOIN
+        (select AIRLINE_CODE_IATA,COUNT(AIRLINE_CODE_IATA) S
+        from table_c
+        where STAND in('11','12','14','15','16')
+        AND  TYPE IN (
+        'A300'
+        ,'A306'
+        ,'A330'
+        ,'A332'
+        ,'A333'
+        ,'A343'
+        ,'A346'
+        ,'B744'
+        ,'B748'
+        ,'B772'
+        ,'B773'
+        ,'B777'
+        ,'B77W'
+        ,'B778'
+        )
+        GROUP BY AIRLINE_CODE_IATA
+        ) DXJ
+        ON SK.AIRLINE_CODE_IATA=DXJ.AIRLINE_CODE_IATA
+    </select>
+</mapper>

@@ -1,0 +1,2198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TLocalFlightInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TLocalFlightInfo" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="FLIGHT_ID" property="flightId" jdbcType="INTEGER" />
+    <result column="ASSOCIATED_FLIGHT_ID" property="associatedFlightId" jdbcType="INTEGER" />
+    <result column="FFID" property="ffid" jdbcType="VARCHAR" />
+    <result column="AIRLINES" property="airlines" jdbcType="VARCHAR" />
+    <result column="PLAN_TIME" property="planTime" jdbcType="TIMESTAMP" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="EXEC_DATE" property="execDate" jdbcType="DATE" />
+    <result column="FLIGHT_IDENTY_MANAGE_DATE" property="flightIdentyManageDate" jdbcType="DATE" />
+    <result column="D_OR_A" property="dOrA" jdbcType="VARCHAR" />
+    <result column="FLIGHT_TASK" property="flightTask" jdbcType="VARCHAR" />
+    <result column="ATTRIBUTE" property="attribute" jdbcType="VARCHAR" />
+    <result column="TAKEOFF_LANDIN_COUNT" property="takeoffLandinCount" jdbcType="INTEGER" />
+    <result column="AGENCY" property="agency" jdbcType="VARCHAR" />
+    <result column="CRAFT_TYPE_ICAO" property="craftTypeIcao" jdbcType="VARCHAR" />
+    <result column="REGN" property="regn" jdbcType="VARCHAR" />
+    <result column="NORMAL_FLIGHT_STAT_CD" property="normalFlightStatCd" jdbcType="VARCHAR" />
+    <result column="ABNORMAL_FLIGHT_STAT_CD" property="abnormalFlightStatCd" jdbcType="VARCHAR" />
+    <result column="IS_VIP" property="isVip" jdbcType="VARCHAR" />
+    <result column="VIP_NUMBER" property="vipNumber" jdbcType="INTEGER" />
+    <result column="SOBT" property="sobt" jdbcType="TIMESTAMP" />
+    <result column="SIBT" property="sibt" jdbcType="TIMESTAMP" />
+    <result column="EOBT" property="eobt" jdbcType="TIMESTAMP" />
+    <result column="EIBT" property="eibt" jdbcType="TIMESTAMP" />
+    <result column="AOBT" property="aobt" jdbcType="TIMESTAMP" />
+    <result column="AIBT" property="aibt" jdbcType="TIMESTAMP" />
+    <result column="ELDT" property="eldt" jdbcType="TIMESTAMP" />
+    <result column="ETOT" property="etot" jdbcType="TIMESTAMP" />
+    <result column="ALDT" property="aldt" jdbcType="TIMESTAMP" />
+    <result column="ATOT" property="atot" jdbcType="TIMESTAMP" />
+    <result column="SHARE_FLNO" property="shareFlno" jdbcType="VARCHAR" />
+    <result column="ADEP" property="adep" jdbcType="VARCHAR" />
+    <result column="ADES" property="ades" jdbcType="VARCHAR" />
+    <result column="START_STATION" property="startStation" jdbcType="VARCHAR" />
+    <result column="START_SOBT" property="startSobt" jdbcType="TIMESTAMP" />
+    <result column="START_SIBT" property="startSibt" jdbcType="TIMESTAMP" />
+    <result column="START_EOBT" property="startEobt" jdbcType="TIMESTAMP" />
+    <result column="START_EIBT" property="startEibt" jdbcType="TIMESTAMP" />
+    <result column="START_AOBT" property="startAobt" jdbcType="TIMESTAMP" />
+    <result column="START_AIBT" property="startAibt" jdbcType="TIMESTAMP" />
+    <result column="BCK_OR_ALT" property="bckOrAlt" jdbcType="VARCHAR" />
+    <result column="ALT_ADES" property="altAdes" jdbcType="VARCHAR" />
+    <result column="ALT_SIBT" property="altSibt" jdbcType="TIMESTAMP" />
+    <result column="ALT_ELDT" property="altEldt" jdbcType="TIMESTAMP" />
+    <result column="ALT_ALDT" property="altAldt" jdbcType="TIMESTAMP" />
+    <result column="EXIT" property="exit" jdbcType="INTEGER" />
+    <result column="EXOT" property="exot" jdbcType="INTEGER" />
+    <result column="AXIT" property="axit" jdbcType="INTEGER" />
+    <result column="AXOT" property="axot" jdbcType="INTEGER" />
+    <result column="DELAY_TIME" property="delayTime" jdbcType="INTEGER" />
+    <result column="STAND" property="stand" jdbcType="VARCHAR" />
+    <result column="GATE" property="gate" jdbcType="VARCHAR" />
+    <result column="CHECK_START_TIME" property="checkStartTime" jdbcType="TIMESTAMP" />
+    <result column="CHECK_END_TIME" property="checkEndTime" jdbcType="TIMESTAMP" />
+    <result column="COBT" property="cobt" jdbcType="TIMESTAMP" />
+    <result column="CTOT" property="ctot" jdbcType="TIMESTAMP" />
+    <result column="TOBT" property="tobt" jdbcType="TIMESTAMP" />
+    <result column="TTOT" property="ttot" jdbcType="TIMESTAMP" />
+    <result column="A_TOBT" property="aTobt" jdbcType="TIMESTAMP" />
+    <result column="DOBT" property="dobt" jdbcType="TIMESTAMP" />
+    <result column="FCT" property="fct" jdbcType="TIMESTAMP" />
+    <result column="RPOT" property="rpot" jdbcType="TIMESTAMP" />
+    <result column="APOT" property="apot" jdbcType="TIMESTAMP" />
+    <result column="ASAT" property="asat" jdbcType="TIMESTAMP" />
+    <result column="RUNWAY" property="runway" jdbcType="VARCHAR" />
+    <result column="ERSL" property="ersl" jdbcType="TIMESTAMP" />
+    <result column="ARSL" property="arsl" jdbcType="TIMESTAMP" />
+    <result column="ELSW" property="elsw" jdbcType="TIMESTAMP" />
+    <result column="ALSW" property="alsw" jdbcType="TIMESTAMP" />
+    <result column="STDC" property="stdc" jdbcType="TIMESTAMP" />
+    <result column="ETDO" property="etdo" jdbcType="TIMESTAMP" />
+    <result column="ATDO" property="atdo" jdbcType="TIMESTAMP" />
+    <result column="ETDC" property="etdc" jdbcType="TIMESTAMP" />
+    <result column="ATDC" property="atdc" jdbcType="TIMESTAMP" />
+    <result column="ETFO" property="etfo" jdbcType="TIMESTAMP" />
+    <result column="ATFO" property="atfo" jdbcType="TIMESTAMP" />
+    <result column="ETFC" property="etfc" jdbcType="TIMESTAMP" />
+    <result column="ATFC" property="atfc" jdbcType="TIMESTAMP" />
+    <result column="ESR" property="esr" jdbcType="TIMESTAMP" />
+    <result column="ASR" property="asr" jdbcType="TIMESTAMP" />
+    <result column="EER" property="eer" jdbcType="TIMESTAMP" />
+    <result column="AER" property="aer" jdbcType="TIMESTAMP" />
+    <result column="ESC" property="esc" jdbcType="TIMESTAMP" />
+    <result column="ASC" property="asc" jdbcType="TIMESTAMP" />
+    <result column="EEC" property="eec" jdbcType="TIMESTAMP" />
+    <result column="AEC" property="aec" jdbcType="TIMESTAMP" />
+    <result column="ESCT" property="esct" jdbcType="TIMESTAMP" />
+    <result column="ASCT" property="asct" jdbcType="TIMESTAMP" />
+    <result column="EFCT" property="efct" jdbcType="TIMESTAMP" />
+    <result column="AFCT" property="afct" jdbcType="TIMESTAMP" />
+    <result column="ESBT" property="esbt" jdbcType="TIMESTAMP" />
+    <result column="ASBT" property="asbt" jdbcType="TIMESTAMP" />
+    <result column="LCBT" property="lcbt" jdbcType="TIMESTAMP" />
+    <result column="EEBT" property="eebt" jdbcType="TIMESTAMP" />
+    <result column="AEBT" property="aebt" jdbcType="TIMESTAMP" />
+    <result column="ECDT" property="ecdt" jdbcType="TIMESTAMP" />
+    <result column="ACDT" property="acdt" jdbcType="TIMESTAMP" />
+    <result column="EEDT" property="eedt" jdbcType="TIMESTAMP" />
+    <result column="AEDT" property="aedt" jdbcType="TIMESTAMP" />
+    <result column="AACT" property="aact" jdbcType="TIMESTAMP" />
+    <result column="A_GRND_TSF_TM" property="aGrndTsfTm" jdbcType="TIMESTAMP" />
+    <result column="D_GRND_TSF_TM" property="dGrndTsfTm" jdbcType="TIMESTAMP" />
+    <result column="MPBT" property="mpbt" jdbcType="TIMESTAMP" />
+    <result column="MPET" property="mpet" jdbcType="TIMESTAMP" />
+    <result column="LDBT" property="ldbt" jdbcType="TIMESTAMP" />
+    <result column="LDET" property="ldet" jdbcType="TIMESTAMP" />
+    <result column="TRDT" property="trdt" jdbcType="TIMESTAMP" />
+    <result column="CDPT" property="cdpt" jdbcType="TIMESTAMP" />
+    <result column="TERMINAL" property="terminal" jdbcType="VARCHAR" />
+    <result column="BAG_COUNT" property="bagCount" jdbcType="INTEGER" />
+    <result column="BAG_WEIGHT" property="bagWeight" jdbcType="INTEGER" />
+    <result column="PAX_COUNT" property="paxCount" jdbcType="INTEGER" />
+    <result column="ISDEL" property="isdel" jdbcType="VARCHAR" />
+    <result column="ISSPECIAL" property="isspecial" jdbcType="INTEGER" />
+    <result column="ISMANUALID" property="ismanualid" jdbcType="INTEGER" />
+    <result column="ISCONTROL" property="iscontrol" jdbcType="INTEGER" />
+    <result column="ISFOCUS" property="isfocus" jdbcType="INTEGER" />
+    <result column="RMK" property="rmk" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="TIMESTAMP" />
+    <result column="CREATE_USR" property="createUsr" jdbcType="VARCHAR" />
+    <result column="UPDATE_USR" property="updateUsr" jdbcType="VARCHAR" />
+    <result column="NODE_1" property="node1" jdbcType="TIMESTAMP" />
+    <result column="NODE_2" property="node2" jdbcType="TIMESTAMP" />
+    <result column="NODE_3" property="node3" jdbcType="TIMESTAMP" />
+    <result column="NODE_4" property="node4" jdbcType="TIMESTAMP" />
+    <result column="NODE_5" property="node5" jdbcType="TIMESTAMP" />
+    <result column="NODE_6" property="node6" jdbcType="TIMESTAMP" />
+    <result column="NODE_7" property="node7" jdbcType="TIMESTAMP" />
+    <result column="NODE_8" property="node8" jdbcType="TIMESTAMP" />
+    <result column="NODE_9" property="node9" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, FLIGHT_ID, ASSOCIATED_FLIGHT_ID, FFID, AIRLINES, PLAN_TIME, FLNO, EXEC_DATE, 
+    FLIGHT_IDENTY_MANAGE_DATE, D_OR_A, FLIGHT_TASK, ATTRIBUTE, TAKEOFF_LANDIN_COUNT, 
+    AGENCY, CRAFT_TYPE_ICAO, REGN, NORMAL_FLIGHT_STAT_CD, ABNORMAL_FLIGHT_STAT_CD, IS_VIP, 
+    VIP_NUMBER, SOBT, SIBT, EOBT, EIBT, AOBT, AIBT, ELDT, ETOT, ALDT, ATOT, SHARE_FLNO, 
+    ADEP, ADES, START_STATION, START_SOBT, START_SIBT, START_EOBT, START_EIBT, START_AOBT, 
+    START_AIBT, BCK_OR_ALT, ALT_ADES, ALT_SIBT, ALT_ELDT, ALT_ALDT, EXIT, EXOT, AXIT, 
+    AXOT, DELAY_TIME, STAND, GATE, CHECK_START_TIME, CHECK_END_TIME, COBT, CTOT, TOBT, 
+    TTOT, A_TOBT, DOBT, FCT, RPOT, APOT, ASAT, RUNWAY, ERSL, ARSL, ELSW, ALSW, STDC, 
+    ETDO, ATDO, ETDC, ATDC, ETFO, ATFO, ETFC, ATFC, ESR, ASR, EER, AER, ESC, ASC, EEC, 
+    AEC, ESCT, ASCT, EFCT, AFCT, ESBT, ASBT, LCBT, EEBT, AEBT, ECDT, ACDT, EEDT, AEDT, 
+    AACT, A_GRND_TSF_TM, D_GRND_TSF_TM, MPBT, MPET, LDBT, LDET, TRDT, CDPT, TERMINAL, 
+    BAG_COUNT, BAG_WEIGHT, PAX_COUNT, ISDEL, ISSPECIAL, ISMANUALID, ISCONTROL, ISFOCUS, 
+    RMK, CREATE_TM, UPDATE_TM, CREATE_USR, UPDATE_USR, NODE_1, NODE_2, NODE_3, NODE_4, 
+    NODE_5, NODE_6, NODE_7, NODE_8, NODE_9
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TLocalFlightInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_LOCAL_FLIGHT_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_LOCAL_FLIGHT_INFO
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_LOCAL_FLIGHT_INFO
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TLocalFlightInfoExample" >
+    delete from T_LOCAL_FLIGHT_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TLocalFlightInfo" >
+    insert into T_LOCAL_FLIGHT_INFO (ID, FLIGHT_ID, ASSOCIATED_FLIGHT_ID, 
+      FFID, AIRLINES, PLAN_TIME, 
+      FLNO, EXEC_DATE, FLIGHT_IDENTY_MANAGE_DATE, 
+      D_OR_A, FLIGHT_TASK, ATTRIBUTE, 
+      TAKEOFF_LANDIN_COUNT, AGENCY, CRAFT_TYPE_ICAO, 
+      REGN, NORMAL_FLIGHT_STAT_CD, ABNORMAL_FLIGHT_STAT_CD, 
+      IS_VIP, VIP_NUMBER, SOBT, 
+      SIBT, EOBT, EIBT, 
+      AOBT, AIBT, ELDT, 
+      ETOT, ALDT, ATOT, 
+      SHARE_FLNO, ADEP, ADES, 
+      START_STATION, START_SOBT, START_SIBT, 
+      START_EOBT, START_EIBT, START_AOBT, 
+      START_AIBT, BCK_OR_ALT, ALT_ADES, 
+      ALT_SIBT, ALT_ELDT, ALT_ALDT, 
+      EXIT, EXOT, AXIT, AXOT, 
+      DELAY_TIME, STAND, GATE, 
+      CHECK_START_TIME, CHECK_END_TIME, COBT, 
+      CTOT, TOBT, TTOT, 
+      A_TOBT, DOBT, FCT, 
+      RPOT, APOT, ASAT, 
+      RUNWAY, ERSL, ARSL, 
+      ELSW, ALSW, STDC, 
+      ETDO, ATDO, ETDC, 
+      ATDC, ETFO, ATFO, 
+      ETFC, ATFC, ESR, 
+      ASR, EER, AER, 
+      ESC, ASC, EEC, 
+      AEC, ESCT, ASCT, 
+      EFCT, AFCT, ESBT, 
+      ASBT, LCBT, EEBT, 
+      AEBT, ECDT, ACDT, 
+      EEDT, AEDT, AACT, 
+      A_GRND_TSF_TM, D_GRND_TSF_TM, MPBT, 
+      MPET, LDBT, LDET, 
+      TRDT, CDPT, TERMINAL, 
+      BAG_COUNT, BAG_WEIGHT, PAX_COUNT, 
+      ISDEL, ISSPECIAL, ISMANUALID, 
+      ISCONTROL, ISFOCUS, RMK, 
+      CREATE_TM, UPDATE_TM, CREATE_USR, 
+      UPDATE_USR, NODE_1, NODE_2, 
+      NODE_3, NODE_4, NODE_5, 
+      NODE_6, NODE_7, NODE_8, 
+      NODE_9)
+    values (#{id,jdbcType=VARCHAR}, #{flightId,jdbcType=INTEGER}, #{associatedFlightId,jdbcType=INTEGER}, 
+      #{ffid,jdbcType=VARCHAR}, #{airlines,jdbcType=VARCHAR}, #{planTime,jdbcType=TIMESTAMP}, 
+      #{flno,jdbcType=VARCHAR}, #{execDate,jdbcType=DATE}, #{flightIdentyManageDate,jdbcType=DATE}, 
+      #{dOrA,jdbcType=VARCHAR}, #{flightTask,jdbcType=VARCHAR}, #{attribute,jdbcType=VARCHAR}, 
+      #{takeoffLandinCount,jdbcType=INTEGER}, #{agency,jdbcType=VARCHAR}, #{craftTypeIcao,jdbcType=VARCHAR}, 
+      #{regn,jdbcType=VARCHAR}, #{normalFlightStatCd,jdbcType=VARCHAR}, #{abnormalFlightStatCd,jdbcType=VARCHAR}, 
+      #{isVip,jdbcType=VARCHAR}, #{vipNumber,jdbcType=INTEGER}, #{sobt,jdbcType=TIMESTAMP}, 
+      #{sibt,jdbcType=TIMESTAMP}, #{eobt,jdbcType=TIMESTAMP}, #{eibt,jdbcType=TIMESTAMP}, 
+      #{aobt,jdbcType=TIMESTAMP}, #{aibt,jdbcType=TIMESTAMP}, #{eldt,jdbcType=TIMESTAMP}, 
+      #{etot,jdbcType=TIMESTAMP}, #{aldt,jdbcType=TIMESTAMP}, #{atot,jdbcType=TIMESTAMP}, 
+      #{shareFlno,jdbcType=VARCHAR}, #{adep,jdbcType=VARCHAR}, #{ades,jdbcType=VARCHAR}, 
+      #{startStation,jdbcType=VARCHAR}, #{startSobt,jdbcType=TIMESTAMP}, #{startSibt,jdbcType=TIMESTAMP}, 
+      #{startEobt,jdbcType=TIMESTAMP}, #{startEibt,jdbcType=TIMESTAMP}, #{startAobt,jdbcType=TIMESTAMP}, 
+      #{startAibt,jdbcType=TIMESTAMP}, #{bckOrAlt,jdbcType=VARCHAR}, #{altAdes,jdbcType=VARCHAR}, 
+      #{altSibt,jdbcType=TIMESTAMP}, #{altEldt,jdbcType=TIMESTAMP}, #{altAldt,jdbcType=TIMESTAMP}, 
+      #{exit,jdbcType=INTEGER}, #{exot,jdbcType=INTEGER}, #{axit,jdbcType=INTEGER}, #{axot,jdbcType=INTEGER}, 
+      #{delayTime,jdbcType=INTEGER}, #{stand,jdbcType=VARCHAR}, #{gate,jdbcType=VARCHAR}, 
+      #{checkStartTime,jdbcType=TIMESTAMP}, #{checkEndTime,jdbcType=TIMESTAMP}, #{cobt,jdbcType=TIMESTAMP}, 
+      #{ctot,jdbcType=TIMESTAMP}, #{tobt,jdbcType=TIMESTAMP}, #{ttot,jdbcType=TIMESTAMP}, 
+      #{aTobt,jdbcType=TIMESTAMP}, #{dobt,jdbcType=TIMESTAMP}, #{fct,jdbcType=TIMESTAMP}, 
+      #{rpot,jdbcType=TIMESTAMP}, #{apot,jdbcType=TIMESTAMP}, #{asat,jdbcType=TIMESTAMP}, 
+      #{runway,jdbcType=VARCHAR}, #{ersl,jdbcType=TIMESTAMP}, #{arsl,jdbcType=TIMESTAMP}, 
+      #{elsw,jdbcType=TIMESTAMP}, #{alsw,jdbcType=TIMESTAMP}, #{stdc,jdbcType=TIMESTAMP}, 
+      #{etdo,jdbcType=TIMESTAMP}, #{atdo,jdbcType=TIMESTAMP}, #{etdc,jdbcType=TIMESTAMP}, 
+      #{atdc,jdbcType=TIMESTAMP}, #{etfo,jdbcType=TIMESTAMP}, #{atfo,jdbcType=TIMESTAMP}, 
+      #{etfc,jdbcType=TIMESTAMP}, #{atfc,jdbcType=TIMESTAMP}, #{esr,jdbcType=TIMESTAMP}, 
+      #{asr,jdbcType=TIMESTAMP}, #{eer,jdbcType=TIMESTAMP}, #{aer,jdbcType=TIMESTAMP}, 
+      #{esc,jdbcType=TIMESTAMP}, #{asc,jdbcType=TIMESTAMP}, #{eec,jdbcType=TIMESTAMP}, 
+      #{aec,jdbcType=TIMESTAMP}, #{esct,jdbcType=TIMESTAMP}, #{asct,jdbcType=TIMESTAMP}, 
+      #{efct,jdbcType=TIMESTAMP}, #{afct,jdbcType=TIMESTAMP}, #{esbt,jdbcType=TIMESTAMP}, 
+      #{asbt,jdbcType=TIMESTAMP}, #{lcbt,jdbcType=TIMESTAMP}, #{eebt,jdbcType=TIMESTAMP}, 
+      #{aebt,jdbcType=TIMESTAMP}, #{ecdt,jdbcType=TIMESTAMP}, #{acdt,jdbcType=TIMESTAMP}, 
+      #{eedt,jdbcType=TIMESTAMP}, #{aedt,jdbcType=TIMESTAMP}, #{aact,jdbcType=TIMESTAMP}, 
+      #{aGrndTsfTm,jdbcType=TIMESTAMP}, #{dGrndTsfTm,jdbcType=TIMESTAMP}, #{mpbt,jdbcType=TIMESTAMP}, 
+      #{mpet,jdbcType=TIMESTAMP}, #{ldbt,jdbcType=TIMESTAMP}, #{ldet,jdbcType=TIMESTAMP}, 
+      #{trdt,jdbcType=TIMESTAMP}, #{cdpt,jdbcType=TIMESTAMP}, #{terminal,jdbcType=VARCHAR}, 
+      #{bagCount,jdbcType=INTEGER}, #{bagWeight,jdbcType=INTEGER}, #{paxCount,jdbcType=INTEGER}, 
+      #{isdel,jdbcType=VARCHAR}, #{isspecial,jdbcType=INTEGER}, #{ismanualid,jdbcType=INTEGER}, 
+      #{iscontrol,jdbcType=INTEGER}, #{isfocus,jdbcType=INTEGER}, #{rmk,jdbcType=VARCHAR}, 
+      #{createTm,jdbcType=TIMESTAMP}, #{updateTm,jdbcType=TIMESTAMP}, #{createUsr,jdbcType=VARCHAR}, 
+      #{updateUsr,jdbcType=VARCHAR}, #{node1,jdbcType=TIMESTAMP}, #{node2,jdbcType=TIMESTAMP}, 
+      #{node3,jdbcType=TIMESTAMP}, #{node4,jdbcType=TIMESTAMP}, #{node5,jdbcType=TIMESTAMP}, 
+      #{node6,jdbcType=TIMESTAMP}, #{node7,jdbcType=TIMESTAMP}, #{node8,jdbcType=TIMESTAMP}, 
+      #{node9,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TLocalFlightInfo" >
+    insert into T_LOCAL_FLIGHT_INFO
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="flightId != null" >
+        FLIGHT_ID,
+      </if>
+      <if test="associatedFlightId != null" >
+        ASSOCIATED_FLIGHT_ID,
+      </if>
+      <if test="ffid != null" >
+        FFID,
+      </if>
+      <if test="airlines != null" >
+        AIRLINES,
+      </if>
+      <if test="planTime != null" >
+        PLAN_TIME,
+      </if>
+      <if test="flno != null" >
+        FLNO,
+      </if>
+      <if test="execDate != null" >
+        EXEC_DATE,
+      </if>
+      <if test="flightIdentyManageDate != null" >
+        FLIGHT_IDENTY_MANAGE_DATE,
+      </if>
+      <if test="dOrA != null" >
+        D_OR_A,
+      </if>
+      <if test="flightTask != null" >
+        FLIGHT_TASK,
+      </if>
+      <if test="attribute != null" >
+        ATTRIBUTE,
+      </if>
+      <if test="takeoffLandinCount != null" >
+        TAKEOFF_LANDIN_COUNT,
+      </if>
+      <if test="agency != null" >
+        AGENCY,
+      </if>
+      <if test="craftTypeIcao != null" >
+        CRAFT_TYPE_ICAO,
+      </if>
+      <if test="regn != null" >
+        REGN,
+      </if>
+      <if test="normalFlightStatCd != null" >
+        NORMAL_FLIGHT_STAT_CD,
+      </if>
+      <if test="abnormalFlightStatCd != null" >
+        ABNORMAL_FLIGHT_STAT_CD,
+      </if>
+      <if test="isVip != null" >
+        IS_VIP,
+      </if>
+      <if test="vipNumber != null" >
+        VIP_NUMBER,
+      </if>
+      <if test="sobt != null" >
+        SOBT,
+      </if>
+      <if test="sibt != null" >
+        SIBT,
+      </if>
+      <if test="eobt != null" >
+        EOBT,
+      </if>
+      <if test="eibt != null" >
+        EIBT,
+      </if>
+      <if test="aobt != null" >
+        AOBT,
+      </if>
+      <if test="aibt != null" >
+        AIBT,
+      </if>
+      <if test="eldt != null" >
+        ELDT,
+      </if>
+      <if test="etot != null" >
+        ETOT,
+      </if>
+      <if test="aldt != null" >
+        ALDT,
+      </if>
+      <if test="atot != null" >
+        ATOT,
+      </if>
+      <if test="shareFlno != null" >
+        SHARE_FLNO,
+      </if>
+      <if test="adep != null" >
+        ADEP,
+      </if>
+      <if test="ades != null" >
+        ADES,
+      </if>
+      <if test="startStation != null" >
+        START_STATION,
+      </if>
+      <if test="startSobt != null" >
+        START_SOBT,
+      </if>
+      <if test="startSibt != null" >
+        START_SIBT,
+      </if>
+      <if test="startEobt != null" >
+        START_EOBT,
+      </if>
+      <if test="startEibt != null" >
+        START_EIBT,
+      </if>
+      <if test="startAobt != null" >
+        START_AOBT,
+      </if>
+      <if test="startAibt != null" >
+        START_AIBT,
+      </if>
+      <if test="bckOrAlt != null" >
+        BCK_OR_ALT,
+      </if>
+      <if test="altAdes != null" >
+        ALT_ADES,
+      </if>
+      <if test="altSibt != null" >
+        ALT_SIBT,
+      </if>
+      <if test="altEldt != null" >
+        ALT_ELDT,
+      </if>
+      <if test="altAldt != null" >
+        ALT_ALDT,
+      </if>
+      <if test="exit != null" >
+        EXIT,
+      </if>
+      <if test="exot != null" >
+        EXOT,
+      </if>
+      <if test="axit != null" >
+        AXIT,
+      </if>
+      <if test="axot != null" >
+        AXOT,
+      </if>
+      <if test="delayTime != null" >
+        DELAY_TIME,
+      </if>
+      <if test="stand != null" >
+        STAND,
+      </if>
+      <if test="gate != null" >
+        GATE,
+      </if>
+      <if test="checkStartTime != null" >
+        CHECK_START_TIME,
+      </if>
+      <if test="checkEndTime != null" >
+        CHECK_END_TIME,
+      </if>
+      <if test="cobt != null" >
+        COBT,
+      </if>
+      <if test="ctot != null" >
+        CTOT,
+      </if>
+      <if test="tobt != null" >
+        TOBT,
+      </if>
+      <if test="ttot != null" >
+        TTOT,
+      </if>
+      <if test="aTobt != null" >
+        A_TOBT,
+      </if>
+      <if test="dobt != null" >
+        DOBT,
+      </if>
+      <if test="fct != null" >
+        FCT,
+      </if>
+      <if test="rpot != null" >
+        RPOT,
+      </if>
+      <if test="apot != null" >
+        APOT,
+      </if>
+      <if test="asat != null" >
+        ASAT,
+      </if>
+      <if test="runway != null" >
+        RUNWAY,
+      </if>
+      <if test="ersl != null" >
+        ERSL,
+      </if>
+      <if test="arsl != null" >
+        ARSL,
+      </if>
+      <if test="elsw != null" >
+        ELSW,
+      </if>
+      <if test="alsw != null" >
+        ALSW,
+      </if>
+      <if test="stdc != null" >
+        STDC,
+      </if>
+      <if test="etdo != null" >
+        ETDO,
+      </if>
+      <if test="atdo != null" >
+        ATDO,
+      </if>
+      <if test="etdc != null" >
+        ETDC,
+      </if>
+      <if test="atdc != null" >
+        ATDC,
+      </if>
+      <if test="etfo != null" >
+        ETFO,
+      </if>
+      <if test="atfo != null" >
+        ATFO,
+      </if>
+      <if test="etfc != null" >
+        ETFC,
+      </if>
+      <if test="atfc != null" >
+        ATFC,
+      </if>
+      <if test="esr != null" >
+        ESR,
+      </if>
+      <if test="asr != null" >
+        ASR,
+      </if>
+      <if test="eer != null" >
+        EER,
+      </if>
+      <if test="aer != null" >
+        AER,
+      </if>
+      <if test="esc != null" >
+        ESC,
+      </if>
+      <if test="asc != null" >
+        ASC,
+      </if>
+      <if test="eec != null" >
+        EEC,
+      </if>
+      <if test="aec != null" >
+        AEC,
+      </if>
+      <if test="esct != null" >
+        ESCT,
+      </if>
+      <if test="asct != null" >
+        ASCT,
+      </if>
+      <if test="efct != null" >
+        EFCT,
+      </if>
+      <if test="afct != null" >
+        AFCT,
+      </if>
+      <if test="esbt != null" >
+        ESBT,
+      </if>
+      <if test="asbt != null" >
+        ASBT,
+      </if>
+      <if test="lcbt != null" >
+        LCBT,
+      </if>
+      <if test="eebt != null" >
+        EEBT,
+      </if>
+      <if test="aebt != null" >
+        AEBT,
+      </if>
+      <if test="ecdt != null" >
+        ECDT,
+      </if>
+      <if test="acdt != null" >
+        ACDT,
+      </if>
+      <if test="eedt != null" >
+        EEDT,
+      </if>
+      <if test="aedt != null" >
+        AEDT,
+      </if>
+      <if test="aact != null" >
+        AACT,
+      </if>
+      <if test="aGrndTsfTm != null" >
+        A_GRND_TSF_TM,
+      </if>
+      <if test="dGrndTsfTm != null" >
+        D_GRND_TSF_TM,
+      </if>
+      <if test="mpbt != null" >
+        MPBT,
+      </if>
+      <if test="mpet != null" >
+        MPET,
+      </if>
+      <if test="ldbt != null" >
+        LDBT,
+      </if>
+      <if test="ldet != null" >
+        LDET,
+      </if>
+      <if test="trdt != null" >
+        TRDT,
+      </if>
+      <if test="cdpt != null" >
+        CDPT,
+      </if>
+      <if test="terminal != null" >
+        TERMINAL,
+      </if>
+      <if test="bagCount != null" >
+        BAG_COUNT,
+      </if>
+      <if test="bagWeight != null" >
+        BAG_WEIGHT,
+      </if>
+      <if test="paxCount != null" >
+        PAX_COUNT,
+      </if>
+      <if test="isdel != null" >
+        ISDEL,
+      </if>
+      <if test="isspecial != null" >
+        ISSPECIAL,
+      </if>
+      <if test="ismanualid != null" >
+        ISMANUALID,
+      </if>
+      <if test="iscontrol != null" >
+        ISCONTROL,
+      </if>
+      <if test="isfocus != null" >
+        ISFOCUS,
+      </if>
+      <if test="rmk != null" >
+        RMK,
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM,
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM,
+      </if>
+      <if test="createUsr != null" >
+        CREATE_USR,
+      </if>
+      <if test="updateUsr != null" >
+        UPDATE_USR,
+      </if>
+      <if test="node1 != null" >
+        NODE_1,
+      </if>
+      <if test="node2 != null" >
+        NODE_2,
+      </if>
+      <if test="node3 != null" >
+        NODE_3,
+      </if>
+      <if test="node4 != null" >
+        NODE_4,
+      </if>
+      <if test="node5 != null" >
+        NODE_5,
+      </if>
+      <if test="node6 != null" >
+        NODE_6,
+      </if>
+      <if test="node7 != null" >
+        NODE_7,
+      </if>
+      <if test="node8 != null" >
+        NODE_8,
+      </if>
+      <if test="node9 != null" >
+        NODE_9,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="flightId != null" >
+        #{flightId,jdbcType=INTEGER},
+      </if>
+      <if test="associatedFlightId != null" >
+        #{associatedFlightId,jdbcType=INTEGER},
+      </if>
+      <if test="ffid != null" >
+        #{ffid,jdbcType=VARCHAR},
+      </if>
+      <if test="airlines != null" >
+        #{airlines,jdbcType=VARCHAR},
+      </if>
+      <if test="planTime != null" >
+        #{planTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flno != null" >
+        #{flno,jdbcType=VARCHAR},
+      </if>
+      <if test="execDate != null" >
+        #{execDate,jdbcType=DATE},
+      </if>
+      <if test="flightIdentyManageDate != null" >
+        #{flightIdentyManageDate,jdbcType=DATE},
+      </if>
+      <if test="dOrA != null" >
+        #{dOrA,jdbcType=VARCHAR},
+      </if>
+      <if test="flightTask != null" >
+        #{flightTask,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute != null" >
+        #{attribute,jdbcType=VARCHAR},
+      </if>
+      <if test="takeoffLandinCount != null" >
+        #{takeoffLandinCount,jdbcType=INTEGER},
+      </if>
+      <if test="agency != null" >
+        #{agency,jdbcType=VARCHAR},
+      </if>
+      <if test="craftTypeIcao != null" >
+        #{craftTypeIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="regn != null" >
+        #{regn,jdbcType=VARCHAR},
+      </if>
+      <if test="normalFlightStatCd != null" >
+        #{normalFlightStatCd,jdbcType=VARCHAR},
+      </if>
+      <if test="abnormalFlightStatCd != null" >
+        #{abnormalFlightStatCd,jdbcType=VARCHAR},
+      </if>
+      <if test="isVip != null" >
+        #{isVip,jdbcType=VARCHAR},
+      </if>
+      <if test="vipNumber != null" >
+        #{vipNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sobt != null" >
+        #{sobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sibt != null" >
+        #{sibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eobt != null" >
+        #{eobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eibt != null" >
+        #{eibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aobt != null" >
+        #{aobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aibt != null" >
+        #{aibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eldt != null" >
+        #{eldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etot != null" >
+        #{etot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aldt != null" >
+        #{aldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atot != null" >
+        #{atot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shareFlno != null" >
+        #{shareFlno,jdbcType=VARCHAR},
+      </if>
+      <if test="adep != null" >
+        #{adep,jdbcType=VARCHAR},
+      </if>
+      <if test="ades != null" >
+        #{ades,jdbcType=VARCHAR},
+      </if>
+      <if test="startStation != null" >
+        #{startStation,jdbcType=VARCHAR},
+      </if>
+      <if test="startSobt != null" >
+        #{startSobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startSibt != null" >
+        #{startSibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startEobt != null" >
+        #{startEobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startEibt != null" >
+        #{startEibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startAobt != null" >
+        #{startAobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startAibt != null" >
+        #{startAibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bckOrAlt != null" >
+        #{bckOrAlt,jdbcType=VARCHAR},
+      </if>
+      <if test="altAdes != null" >
+        #{altAdes,jdbcType=VARCHAR},
+      </if>
+      <if test="altSibt != null" >
+        #{altSibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="altEldt != null" >
+        #{altEldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="altAldt != null" >
+        #{altAldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exit != null" >
+        #{exit,jdbcType=INTEGER},
+      </if>
+      <if test="exot != null" >
+        #{exot,jdbcType=INTEGER},
+      </if>
+      <if test="axit != null" >
+        #{axit,jdbcType=INTEGER},
+      </if>
+      <if test="axot != null" >
+        #{axot,jdbcType=INTEGER},
+      </if>
+      <if test="delayTime != null" >
+        #{delayTime,jdbcType=INTEGER},
+      </if>
+      <if test="stand != null" >
+        #{stand,jdbcType=VARCHAR},
+      </if>
+      <if test="gate != null" >
+        #{gate,jdbcType=VARCHAR},
+      </if>
+      <if test="checkStartTime != null" >
+        #{checkStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkEndTime != null" >
+        #{checkEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cobt != null" >
+        #{cobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctot != null" >
+        #{ctot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tobt != null" >
+        #{tobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ttot != null" >
+        #{ttot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aTobt != null" >
+        #{aTobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dobt != null" >
+        #{dobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fct != null" >
+        #{fct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rpot != null" >
+        #{rpot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="apot != null" >
+        #{apot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asat != null" >
+        #{asat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="runway != null" >
+        #{runway,jdbcType=VARCHAR},
+      </if>
+      <if test="ersl != null" >
+        #{ersl,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arsl != null" >
+        #{arsl,jdbcType=TIMESTAMP},
+      </if>
+      <if test="elsw != null" >
+        #{elsw,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alsw != null" >
+        #{alsw,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stdc != null" >
+        #{stdc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etdo != null" >
+        #{etdo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atdo != null" >
+        #{atdo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etdc != null" >
+        #{etdc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atdc != null" >
+        #{atdc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etfo != null" >
+        #{etfo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atfo != null" >
+        #{atfo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etfc != null" >
+        #{etfc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atfc != null" >
+        #{atfc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="esr != null" >
+        #{esr,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asr != null" >
+        #{asr,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eer != null" >
+        #{eer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aer != null" >
+        #{aer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="esc != null" >
+        #{esc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asc != null" >
+        #{asc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eec != null" >
+        #{eec,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aec != null" >
+        #{aec,jdbcType=TIMESTAMP},
+      </if>
+      <if test="esct != null" >
+        #{esct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asct != null" >
+        #{asct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="efct != null" >
+        #{efct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="afct != null" >
+        #{afct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="esbt != null" >
+        #{esbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asbt != null" >
+        #{asbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lcbt != null" >
+        #{lcbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eebt != null" >
+        #{eebt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aebt != null" >
+        #{aebt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ecdt != null" >
+        #{ecdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="acdt != null" >
+        #{acdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eedt != null" >
+        #{eedt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aedt != null" >
+        #{aedt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aact != null" >
+        #{aact,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aGrndTsfTm != null" >
+        #{aGrndTsfTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dGrndTsfTm != null" >
+        #{dGrndTsfTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mpbt != null" >
+        #{mpbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mpet != null" >
+        #{mpet,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ldbt != null" >
+        #{ldbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ldet != null" >
+        #{ldet,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trdt != null" >
+        #{trdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cdpt != null" >
+        #{cdpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="terminal != null" >
+        #{terminal,jdbcType=VARCHAR},
+      </if>
+      <if test="bagCount != null" >
+        #{bagCount,jdbcType=INTEGER},
+      </if>
+      <if test="bagWeight != null" >
+        #{bagWeight,jdbcType=INTEGER},
+      </if>
+      <if test="paxCount != null" >
+        #{paxCount,jdbcType=INTEGER},
+      </if>
+      <if test="isdel != null" >
+        #{isdel,jdbcType=VARCHAR},
+      </if>
+      <if test="isspecial != null" >
+        #{isspecial,jdbcType=INTEGER},
+      </if>
+      <if test="ismanualid != null" >
+        #{ismanualid,jdbcType=INTEGER},
+      </if>
+      <if test="iscontrol != null" >
+        #{iscontrol,jdbcType=INTEGER},
+      </if>
+      <if test="isfocus != null" >
+        #{isfocus,jdbcType=INTEGER},
+      </if>
+      <if test="rmk != null" >
+        #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUsr != null" >
+        #{createUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUsr != null" >
+        #{updateUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="node1 != null" >
+        #{node1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node2 != null" >
+        #{node2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node3 != null" >
+        #{node3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node4 != null" >
+        #{node4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node5 != null" >
+        #{node5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node6 != null" >
+        #{node6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node7 != null" >
+        #{node7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node8 != null" >
+        #{node8,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node9 != null" >
+        #{node9,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TLocalFlightInfoExample" resultType="java.lang.Integer" >
+    select count(*) from T_LOCAL_FLIGHT_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_LOCAL_FLIGHT_INFO
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flightId != null" >
+        FLIGHT_ID = #{record.flightId,jdbcType=INTEGER},
+      </if>
+      <if test="record.associatedFlightId != null" >
+        ASSOCIATED_FLIGHT_ID = #{record.associatedFlightId,jdbcType=INTEGER},
+      </if>
+      <if test="record.ffid != null" >
+        FFID = #{record.ffid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.airlines != null" >
+        AIRLINES = #{record.airlines,jdbcType=VARCHAR},
+      </if>
+      <if test="record.planTime != null" >
+        PLAN_TIME = #{record.planTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.flno != null" >
+        FLNO = #{record.flno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.execDate != null" >
+        EXEC_DATE = #{record.execDate,jdbcType=DATE},
+      </if>
+      <if test="record.flightIdentyManageDate != null" >
+        FLIGHT_IDENTY_MANAGE_DATE = #{record.flightIdentyManageDate,jdbcType=DATE},
+      </if>
+      <if test="record.dOrA != null" >
+        D_OR_A = #{record.dOrA,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flightTask != null" >
+        FLIGHT_TASK = #{record.flightTask,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attribute != null" >
+        ATTRIBUTE = #{record.attribute,jdbcType=VARCHAR},
+      </if>
+      <if test="record.takeoffLandinCount != null" >
+        TAKEOFF_LANDIN_COUNT = #{record.takeoffLandinCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.agency != null" >
+        AGENCY = #{record.agency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.craftTypeIcao != null" >
+        CRAFT_TYPE_ICAO = #{record.craftTypeIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="record.regn != null" >
+        REGN = #{record.regn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.normalFlightStatCd != null" >
+        NORMAL_FLIGHT_STAT_CD = #{record.normalFlightStatCd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.abnormalFlightStatCd != null" >
+        ABNORMAL_FLIGHT_STAT_CD = #{record.abnormalFlightStatCd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isVip != null" >
+        IS_VIP = #{record.isVip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vipNumber != null" >
+        VIP_NUMBER = #{record.vipNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.sobt != null" >
+        SOBT = #{record.sobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sibt != null" >
+        SIBT = #{record.sibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.eobt != null" >
+        EOBT = #{record.eobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.eibt != null" >
+        EIBT = #{record.eibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.aobt != null" >
+        AOBT = #{record.aobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.aibt != null" >
+        AIBT = #{record.aibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.eldt != null" >
+        ELDT = #{record.eldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.etot != null" >
+        ETOT = #{record.etot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.aldt != null" >
+        ALDT = #{record.aldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.atot != null" >
+        ATOT = #{record.atot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.shareFlno != null" >
+        SHARE_FLNO = #{record.shareFlno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adep != null" >
+        ADEP = #{record.adep,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ades != null" >
+        ADES = #{record.ades,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startStation != null" >
+        START_STATION = #{record.startStation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startSobt != null" >
+        START_SOBT = #{record.startSobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.startSibt != null" >
+        START_SIBT = #{record.startSibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.startEobt != null" >
+        START_EOBT = #{record.startEobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.startEibt != null" >
+        START_EIBT = #{record.startEibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.startAobt != null" >
+        START_AOBT = #{record.startAobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.startAibt != null" >
+        START_AIBT = #{record.startAibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.bckOrAlt != null" >
+        BCK_OR_ALT = #{record.bckOrAlt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.altAdes != null" >
+        ALT_ADES = #{record.altAdes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.altSibt != null" >
+        ALT_SIBT = #{record.altSibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.altEldt != null" >
+        ALT_ELDT = #{record.altEldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.altAldt != null" >
+        ALT_ALDT = #{record.altAldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.exit != null" >
+        EXIT = #{record.exit,jdbcType=INTEGER},
+      </if>
+      <if test="record.exot != null" >
+        EXOT = #{record.exot,jdbcType=INTEGER},
+      </if>
+      <if test="record.axit != null" >
+        AXIT = #{record.axit,jdbcType=INTEGER},
+      </if>
+      <if test="record.axot != null" >
+        AXOT = #{record.axot,jdbcType=INTEGER},
+      </if>
+      <if test="record.delayTime != null" >
+        DELAY_TIME = #{record.delayTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.stand != null" >
+        STAND = #{record.stand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gate != null" >
+        GATE = #{record.gate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkStartTime != null" >
+        CHECK_START_TIME = #{record.checkStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.checkEndTime != null" >
+        CHECK_END_TIME = #{record.checkEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.cobt != null" >
+        COBT = #{record.cobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ctot != null" >
+        CTOT = #{record.ctot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.tobt != null" >
+        TOBT = #{record.tobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ttot != null" >
+        TTOT = #{record.ttot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.aTobt != null" >
+        A_TOBT = #{record.aTobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dobt != null" >
+        DOBT = #{record.dobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.fct != null" >
+        FCT = #{record.fct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rpot != null" >
+        RPOT = #{record.rpot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.apot != null" >
+        APOT = #{record.apot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.asat != null" >
+        ASAT = #{record.asat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.runway != null" >
+        RUNWAY = #{record.runway,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ersl != null" >
+        ERSL = #{record.ersl,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.arsl != null" >
+        ARSL = #{record.arsl,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.elsw != null" >
+        ELSW = #{record.elsw,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.alsw != null" >
+        ALSW = #{record.alsw,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.stdc != null" >
+        STDC = #{record.stdc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.etdo != null" >
+        ETDO = #{record.etdo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.atdo != null" >
+        ATDO = #{record.atdo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.etdc != null" >
+        ETDC = #{record.etdc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.atdc != null" >
+        ATDC = #{record.atdc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.etfo != null" >
+        ETFO = #{record.etfo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.atfo != null" >
+        ATFO = #{record.atfo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.etfc != null" >
+        ETFC = #{record.etfc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.atfc != null" >
+        ATFC = #{record.atfc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.esr != null" >
+        ESR = #{record.esr,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.asr != null" >
+        ASR = #{record.asr,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.eer != null" >
+        EER = #{record.eer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.aer != null" >
+        AER = #{record.aer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.esc != null" >
+        ESC = #{record.esc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.asc != null" >
+        ASC = #{record.asc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.eec != null" >
+        EEC = #{record.eec,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.aec != null" >
+        AEC = #{record.aec,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.esct != null" >
+        ESCT = #{record.esct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.asct != null" >
+        ASCT = #{record.asct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.efct != null" >
+        EFCT = #{record.efct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.afct != null" >
+        AFCT = #{record.afct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.esbt != null" >
+        ESBT = #{record.esbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.asbt != null" >
+        ASBT = #{record.asbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lcbt != null" >
+        LCBT = #{record.lcbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.eebt != null" >
+        EEBT = #{record.eebt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.aebt != null" >
+        AEBT = #{record.aebt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ecdt != null" >
+        ECDT = #{record.ecdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.acdt != null" >
+        ACDT = #{record.acdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.eedt != null" >
+        EEDT = #{record.eedt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.aedt != null" >
+        AEDT = #{record.aedt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.aact != null" >
+        AACT = #{record.aact,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.aGrndTsfTm != null" >
+        A_GRND_TSF_TM = #{record.aGrndTsfTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dGrndTsfTm != null" >
+        D_GRND_TSF_TM = #{record.dGrndTsfTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.mpbt != null" >
+        MPBT = #{record.mpbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.mpet != null" >
+        MPET = #{record.mpet,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ldbt != null" >
+        LDBT = #{record.ldbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ldet != null" >
+        LDET = #{record.ldet,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.trdt != null" >
+        TRDT = #{record.trdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.cdpt != null" >
+        CDPT = #{record.cdpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.terminal != null" >
+        TERMINAL = #{record.terminal,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bagCount != null" >
+        BAG_COUNT = #{record.bagCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.bagWeight != null" >
+        BAG_WEIGHT = #{record.bagWeight,jdbcType=INTEGER},
+      </if>
+      <if test="record.paxCount != null" >
+        PAX_COUNT = #{record.paxCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.isdel != null" >
+        ISDEL = #{record.isdel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isspecial != null" >
+        ISSPECIAL = #{record.isspecial,jdbcType=INTEGER},
+      </if>
+      <if test="record.ismanualid != null" >
+        ISMANUALID = #{record.ismanualid,jdbcType=INTEGER},
+      </if>
+      <if test="record.iscontrol != null" >
+        ISCONTROL = #{record.iscontrol,jdbcType=INTEGER},
+      </if>
+      <if test="record.isfocus != null" >
+        ISFOCUS = #{record.isfocus,jdbcType=INTEGER},
+      </if>
+      <if test="record.rmk != null" >
+        RMK = #{record.rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTm != null" >
+        CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTm != null" >
+        UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUsr != null" >
+        CREATE_USR = #{record.createUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateUsr != null" >
+        UPDATE_USR = #{record.updateUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.node1 != null" >
+        NODE_1 = #{record.node1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.node2 != null" >
+        NODE_2 = #{record.node2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.node3 != null" >
+        NODE_3 = #{record.node3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.node4 != null" >
+        NODE_4 = #{record.node4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.node5 != null" >
+        NODE_5 = #{record.node5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.node6 != null" >
+        NODE_6 = #{record.node6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.node7 != null" >
+        NODE_7 = #{record.node7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.node8 != null" >
+        NODE_8 = #{record.node8,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.node9 != null" >
+        NODE_9 = #{record.node9,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_LOCAL_FLIGHT_INFO
+    set ID = #{record.id,jdbcType=VARCHAR},
+      FLIGHT_ID = #{record.flightId,jdbcType=INTEGER},
+      ASSOCIATED_FLIGHT_ID = #{record.associatedFlightId,jdbcType=INTEGER},
+      FFID = #{record.ffid,jdbcType=VARCHAR},
+      AIRLINES = #{record.airlines,jdbcType=VARCHAR},
+      PLAN_TIME = #{record.planTime,jdbcType=TIMESTAMP},
+      FLNO = #{record.flno,jdbcType=VARCHAR},
+      EXEC_DATE = #{record.execDate,jdbcType=DATE},
+      FLIGHT_IDENTY_MANAGE_DATE = #{record.flightIdentyManageDate,jdbcType=DATE},
+      D_OR_A = #{record.dOrA,jdbcType=VARCHAR},
+      FLIGHT_TASK = #{record.flightTask,jdbcType=VARCHAR},
+      ATTRIBUTE = #{record.attribute,jdbcType=VARCHAR},
+      TAKEOFF_LANDIN_COUNT = #{record.takeoffLandinCount,jdbcType=INTEGER},
+      AGENCY = #{record.agency,jdbcType=VARCHAR},
+      CRAFT_TYPE_ICAO = #{record.craftTypeIcao,jdbcType=VARCHAR},
+      REGN = #{record.regn,jdbcType=VARCHAR},
+      NORMAL_FLIGHT_STAT_CD = #{record.normalFlightStatCd,jdbcType=VARCHAR},
+      ABNORMAL_FLIGHT_STAT_CD = #{record.abnormalFlightStatCd,jdbcType=VARCHAR},
+      IS_VIP = #{record.isVip,jdbcType=VARCHAR},
+      VIP_NUMBER = #{record.vipNumber,jdbcType=INTEGER},
+      SOBT = #{record.sobt,jdbcType=TIMESTAMP},
+      SIBT = #{record.sibt,jdbcType=TIMESTAMP},
+      EOBT = #{record.eobt,jdbcType=TIMESTAMP},
+      EIBT = #{record.eibt,jdbcType=TIMESTAMP},
+      AOBT = #{record.aobt,jdbcType=TIMESTAMP},
+      AIBT = #{record.aibt,jdbcType=TIMESTAMP},
+      ELDT = #{record.eldt,jdbcType=TIMESTAMP},
+      ETOT = #{record.etot,jdbcType=TIMESTAMP},
+      ALDT = #{record.aldt,jdbcType=TIMESTAMP},
+      ATOT = #{record.atot,jdbcType=TIMESTAMP},
+      SHARE_FLNO = #{record.shareFlno,jdbcType=VARCHAR},
+      ADEP = #{record.adep,jdbcType=VARCHAR},
+      ADES = #{record.ades,jdbcType=VARCHAR},
+      START_STATION = #{record.startStation,jdbcType=VARCHAR},
+      START_SOBT = #{record.startSobt,jdbcType=TIMESTAMP},
+      START_SIBT = #{record.startSibt,jdbcType=TIMESTAMP},
+      START_EOBT = #{record.startEobt,jdbcType=TIMESTAMP},
+      START_EIBT = #{record.startEibt,jdbcType=TIMESTAMP},
+      START_AOBT = #{record.startAobt,jdbcType=TIMESTAMP},
+      START_AIBT = #{record.startAibt,jdbcType=TIMESTAMP},
+      BCK_OR_ALT = #{record.bckOrAlt,jdbcType=VARCHAR},
+      ALT_ADES = #{record.altAdes,jdbcType=VARCHAR},
+      ALT_SIBT = #{record.altSibt,jdbcType=TIMESTAMP},
+      ALT_ELDT = #{record.altEldt,jdbcType=TIMESTAMP},
+      ALT_ALDT = #{record.altAldt,jdbcType=TIMESTAMP},
+      EXIT = #{record.exit,jdbcType=INTEGER},
+      EXOT = #{record.exot,jdbcType=INTEGER},
+      AXIT = #{record.axit,jdbcType=INTEGER},
+      AXOT = #{record.axot,jdbcType=INTEGER},
+      DELAY_TIME = #{record.delayTime,jdbcType=INTEGER},
+      STAND = #{record.stand,jdbcType=VARCHAR},
+      GATE = #{record.gate,jdbcType=VARCHAR},
+      CHECK_START_TIME = #{record.checkStartTime,jdbcType=TIMESTAMP},
+      CHECK_END_TIME = #{record.checkEndTime,jdbcType=TIMESTAMP},
+      COBT = #{record.cobt,jdbcType=TIMESTAMP},
+      CTOT = #{record.ctot,jdbcType=TIMESTAMP},
+      TOBT = #{record.tobt,jdbcType=TIMESTAMP},
+      TTOT = #{record.ttot,jdbcType=TIMESTAMP},
+      A_TOBT = #{record.aTobt,jdbcType=TIMESTAMP},
+      DOBT = #{record.dobt,jdbcType=TIMESTAMP},
+      FCT = #{record.fct,jdbcType=TIMESTAMP},
+      RPOT = #{record.rpot,jdbcType=TIMESTAMP},
+      APOT = #{record.apot,jdbcType=TIMESTAMP},
+      ASAT = #{record.asat,jdbcType=TIMESTAMP},
+      RUNWAY = #{record.runway,jdbcType=VARCHAR},
+      ERSL = #{record.ersl,jdbcType=TIMESTAMP},
+      ARSL = #{record.arsl,jdbcType=TIMESTAMP},
+      ELSW = #{record.elsw,jdbcType=TIMESTAMP},
+      ALSW = #{record.alsw,jdbcType=TIMESTAMP},
+      STDC = #{record.stdc,jdbcType=TIMESTAMP},
+      ETDO = #{record.etdo,jdbcType=TIMESTAMP},
+      ATDO = #{record.atdo,jdbcType=TIMESTAMP},
+      ETDC = #{record.etdc,jdbcType=TIMESTAMP},
+      ATDC = #{record.atdc,jdbcType=TIMESTAMP},
+      ETFO = #{record.etfo,jdbcType=TIMESTAMP},
+      ATFO = #{record.atfo,jdbcType=TIMESTAMP},
+      ETFC = #{record.etfc,jdbcType=TIMESTAMP},
+      ATFC = #{record.atfc,jdbcType=TIMESTAMP},
+      ESR = #{record.esr,jdbcType=TIMESTAMP},
+      ASR = #{record.asr,jdbcType=TIMESTAMP},
+      EER = #{record.eer,jdbcType=TIMESTAMP},
+      AER = #{record.aer,jdbcType=TIMESTAMP},
+      ESC = #{record.esc,jdbcType=TIMESTAMP},
+      ASC = #{record.asc,jdbcType=TIMESTAMP},
+      EEC = #{record.eec,jdbcType=TIMESTAMP},
+      AEC = #{record.aec,jdbcType=TIMESTAMP},
+      ESCT = #{record.esct,jdbcType=TIMESTAMP},
+      ASCT = #{record.asct,jdbcType=TIMESTAMP},
+      EFCT = #{record.efct,jdbcType=TIMESTAMP},
+      AFCT = #{record.afct,jdbcType=TIMESTAMP},
+      ESBT = #{record.esbt,jdbcType=TIMESTAMP},
+      ASBT = #{record.asbt,jdbcType=TIMESTAMP},
+      LCBT = #{record.lcbt,jdbcType=TIMESTAMP},
+      EEBT = #{record.eebt,jdbcType=TIMESTAMP},
+      AEBT = #{record.aebt,jdbcType=TIMESTAMP},
+      ECDT = #{record.ecdt,jdbcType=TIMESTAMP},
+      ACDT = #{record.acdt,jdbcType=TIMESTAMP},
+      EEDT = #{record.eedt,jdbcType=TIMESTAMP},
+      AEDT = #{record.aedt,jdbcType=TIMESTAMP},
+      AACT = #{record.aact,jdbcType=TIMESTAMP},
+      A_GRND_TSF_TM = #{record.aGrndTsfTm,jdbcType=TIMESTAMP},
+      D_GRND_TSF_TM = #{record.dGrndTsfTm,jdbcType=TIMESTAMP},
+      MPBT = #{record.mpbt,jdbcType=TIMESTAMP},
+      MPET = #{record.mpet,jdbcType=TIMESTAMP},
+      LDBT = #{record.ldbt,jdbcType=TIMESTAMP},
+      LDET = #{record.ldet,jdbcType=TIMESTAMP},
+      TRDT = #{record.trdt,jdbcType=TIMESTAMP},
+      CDPT = #{record.cdpt,jdbcType=TIMESTAMP},
+      TERMINAL = #{record.terminal,jdbcType=VARCHAR},
+      BAG_COUNT = #{record.bagCount,jdbcType=INTEGER},
+      BAG_WEIGHT = #{record.bagWeight,jdbcType=INTEGER},
+      PAX_COUNT = #{record.paxCount,jdbcType=INTEGER},
+      ISDEL = #{record.isdel,jdbcType=VARCHAR},
+      ISSPECIAL = #{record.isspecial,jdbcType=INTEGER},
+      ISMANUALID = #{record.ismanualid,jdbcType=INTEGER},
+      ISCONTROL = #{record.iscontrol,jdbcType=INTEGER},
+      ISFOCUS = #{record.isfocus,jdbcType=INTEGER},
+      RMK = #{record.rmk,jdbcType=VARCHAR},
+      CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      CREATE_USR = #{record.createUsr,jdbcType=VARCHAR},
+      UPDATE_USR = #{record.updateUsr,jdbcType=VARCHAR},
+      NODE_1 = #{record.node1,jdbcType=TIMESTAMP},
+      NODE_2 = #{record.node2,jdbcType=TIMESTAMP},
+      NODE_3 = #{record.node3,jdbcType=TIMESTAMP},
+      NODE_4 = #{record.node4,jdbcType=TIMESTAMP},
+      NODE_5 = #{record.node5,jdbcType=TIMESTAMP},
+      NODE_6 = #{record.node6,jdbcType=TIMESTAMP},
+      NODE_7 = #{record.node7,jdbcType=TIMESTAMP},
+      NODE_8 = #{record.node8,jdbcType=TIMESTAMP},
+      NODE_9 = #{record.node9,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TLocalFlightInfo" >
+    update T_LOCAL_FLIGHT_INFO
+    <set >
+      <if test="flightId != null" >
+        FLIGHT_ID = #{flightId,jdbcType=INTEGER},
+      </if>
+      <if test="associatedFlightId != null" >
+        ASSOCIATED_FLIGHT_ID = #{associatedFlightId,jdbcType=INTEGER},
+      </if>
+      <if test="ffid != null" >
+        FFID = #{ffid,jdbcType=VARCHAR},
+      </if>
+      <if test="airlines != null" >
+        AIRLINES = #{airlines,jdbcType=VARCHAR},
+      </if>
+      <if test="planTime != null" >
+        PLAN_TIME = #{planTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flno != null" >
+        FLNO = #{flno,jdbcType=VARCHAR},
+      </if>
+      <if test="execDate != null" >
+        EXEC_DATE = #{execDate,jdbcType=DATE},
+      </if>
+      <if test="flightIdentyManageDate != null" >
+        FLIGHT_IDENTY_MANAGE_DATE = #{flightIdentyManageDate,jdbcType=DATE},
+      </if>
+      <if test="dOrA != null" >
+        D_OR_A = #{dOrA,jdbcType=VARCHAR},
+      </if>
+      <if test="flightTask != null" >
+        FLIGHT_TASK = #{flightTask,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute != null" >
+        ATTRIBUTE = #{attribute,jdbcType=VARCHAR},
+      </if>
+      <if test="takeoffLandinCount != null" >
+        TAKEOFF_LANDIN_COUNT = #{takeoffLandinCount,jdbcType=INTEGER},
+      </if>
+      <if test="agency != null" >
+        AGENCY = #{agency,jdbcType=VARCHAR},
+      </if>
+      <if test="craftTypeIcao != null" >
+        CRAFT_TYPE_ICAO = #{craftTypeIcao,jdbcType=VARCHAR},
+      </if>
+      <if test="regn != null" >
+        REGN = #{regn,jdbcType=VARCHAR},
+      </if>
+      <if test="normalFlightStatCd != null" >
+        NORMAL_FLIGHT_STAT_CD = #{normalFlightStatCd,jdbcType=VARCHAR},
+      </if>
+      <if test="abnormalFlightStatCd != null" >
+        ABNORMAL_FLIGHT_STAT_CD = #{abnormalFlightStatCd,jdbcType=VARCHAR},
+      </if>
+      <if test="isVip != null" >
+        IS_VIP = #{isVip,jdbcType=VARCHAR},
+      </if>
+      <if test="vipNumber != null" >
+        VIP_NUMBER = #{vipNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sobt != null" >
+        SOBT = #{sobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sibt != null" >
+        SIBT = #{sibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eobt != null" >
+        EOBT = #{eobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eibt != null" >
+        EIBT = #{eibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aobt != null" >
+        AOBT = #{aobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aibt != null" >
+        AIBT = #{aibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eldt != null" >
+        ELDT = #{eldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etot != null" >
+        ETOT = #{etot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aldt != null" >
+        ALDT = #{aldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atot != null" >
+        ATOT = #{atot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shareFlno != null" >
+        SHARE_FLNO = #{shareFlno,jdbcType=VARCHAR},
+      </if>
+      <if test="adep != null" >
+        ADEP = #{adep,jdbcType=VARCHAR},
+      </if>
+      <if test="ades != null" >
+        ADES = #{ades,jdbcType=VARCHAR},
+      </if>
+      <if test="startStation != null" >
+        START_STATION = #{startStation,jdbcType=VARCHAR},
+      </if>
+      <if test="startSobt != null" >
+        START_SOBT = #{startSobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startSibt != null" >
+        START_SIBT = #{startSibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startEobt != null" >
+        START_EOBT = #{startEobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startEibt != null" >
+        START_EIBT = #{startEibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startAobt != null" >
+        START_AOBT = #{startAobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startAibt != null" >
+        START_AIBT = #{startAibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bckOrAlt != null" >
+        BCK_OR_ALT = #{bckOrAlt,jdbcType=VARCHAR},
+      </if>
+      <if test="altAdes != null" >
+        ALT_ADES = #{altAdes,jdbcType=VARCHAR},
+      </if>
+      <if test="altSibt != null" >
+        ALT_SIBT = #{altSibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="altEldt != null" >
+        ALT_ELDT = #{altEldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="altAldt != null" >
+        ALT_ALDT = #{altAldt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exit != null" >
+        EXIT = #{exit,jdbcType=INTEGER},
+      </if>
+      <if test="exot != null" >
+        EXOT = #{exot,jdbcType=INTEGER},
+      </if>
+      <if test="axit != null" >
+        AXIT = #{axit,jdbcType=INTEGER},
+      </if>
+      <if test="axot != null" >
+        AXOT = #{axot,jdbcType=INTEGER},
+      </if>
+      <if test="delayTime != null" >
+        DELAY_TIME = #{delayTime,jdbcType=INTEGER},
+      </if>
+      <if test="stand != null" >
+        STAND = #{stand,jdbcType=VARCHAR},
+      </if>
+      <if test="gate != null" >
+        GATE = #{gate,jdbcType=VARCHAR},
+      </if>
+      <if test="checkStartTime != null" >
+        CHECK_START_TIME = #{checkStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkEndTime != null" >
+        CHECK_END_TIME = #{checkEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cobt != null" >
+        COBT = #{cobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctot != null" >
+        CTOT = #{ctot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tobt != null" >
+        TOBT = #{tobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ttot != null" >
+        TTOT = #{ttot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aTobt != null" >
+        A_TOBT = #{aTobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dobt != null" >
+        DOBT = #{dobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fct != null" >
+        FCT = #{fct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rpot != null" >
+        RPOT = #{rpot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="apot != null" >
+        APOT = #{apot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asat != null" >
+        ASAT = #{asat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="runway != null" >
+        RUNWAY = #{runway,jdbcType=VARCHAR},
+      </if>
+      <if test="ersl != null" >
+        ERSL = #{ersl,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arsl != null" >
+        ARSL = #{arsl,jdbcType=TIMESTAMP},
+      </if>
+      <if test="elsw != null" >
+        ELSW = #{elsw,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alsw != null" >
+        ALSW = #{alsw,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stdc != null" >
+        STDC = #{stdc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etdo != null" >
+        ETDO = #{etdo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atdo != null" >
+        ATDO = #{atdo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etdc != null" >
+        ETDC = #{etdc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atdc != null" >
+        ATDC = #{atdc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etfo != null" >
+        ETFO = #{etfo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atfo != null" >
+        ATFO = #{atfo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etfc != null" >
+        ETFC = #{etfc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atfc != null" >
+        ATFC = #{atfc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="esr != null" >
+        ESR = #{esr,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asr != null" >
+        ASR = #{asr,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eer != null" >
+        EER = #{eer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aer != null" >
+        AER = #{aer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="esc != null" >
+        ESC = #{esc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asc != null" >
+        ASC = #{asc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eec != null" >
+        EEC = #{eec,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aec != null" >
+        AEC = #{aec,jdbcType=TIMESTAMP},
+      </if>
+      <if test="esct != null" >
+        ESCT = #{esct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asct != null" >
+        ASCT = #{asct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="efct != null" >
+        EFCT = #{efct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="afct != null" >
+        AFCT = #{afct,jdbcType=TIMESTAMP},
+      </if>
+      <if test="esbt != null" >
+        ESBT = #{esbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asbt != null" >
+        ASBT = #{asbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lcbt != null" >
+        LCBT = #{lcbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eebt != null" >
+        EEBT = #{eebt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aebt != null" >
+        AEBT = #{aebt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ecdt != null" >
+        ECDT = #{ecdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="acdt != null" >
+        ACDT = #{acdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eedt != null" >
+        EEDT = #{eedt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aedt != null" >
+        AEDT = #{aedt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aact != null" >
+        AACT = #{aact,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aGrndTsfTm != null" >
+        A_GRND_TSF_TM = #{aGrndTsfTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dGrndTsfTm != null" >
+        D_GRND_TSF_TM = #{dGrndTsfTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mpbt != null" >
+        MPBT = #{mpbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mpet != null" >
+        MPET = #{mpet,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ldbt != null" >
+        LDBT = #{ldbt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ldet != null" >
+        LDET = #{ldet,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trdt != null" >
+        TRDT = #{trdt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cdpt != null" >
+        CDPT = #{cdpt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="terminal != null" >
+        TERMINAL = #{terminal,jdbcType=VARCHAR},
+      </if>
+      <if test="bagCount != null" >
+        BAG_COUNT = #{bagCount,jdbcType=INTEGER},
+      </if>
+      <if test="bagWeight != null" >
+        BAG_WEIGHT = #{bagWeight,jdbcType=INTEGER},
+      </if>
+      <if test="paxCount != null" >
+        PAX_COUNT = #{paxCount,jdbcType=INTEGER},
+      </if>
+      <if test="isdel != null" >
+        ISDEL = #{isdel,jdbcType=VARCHAR},
+      </if>
+      <if test="isspecial != null" >
+        ISSPECIAL = #{isspecial,jdbcType=INTEGER},
+      </if>
+      <if test="ismanualid != null" >
+        ISMANUALID = #{ismanualid,jdbcType=INTEGER},
+      </if>
+      <if test="iscontrol != null" >
+        ISCONTROL = #{iscontrol,jdbcType=INTEGER},
+      </if>
+      <if test="isfocus != null" >
+        ISFOCUS = #{isfocus,jdbcType=INTEGER},
+      </if>
+      <if test="rmk != null" >
+        RMK = #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUsr != null" >
+        CREATE_USR = #{createUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUsr != null" >
+        UPDATE_USR = #{updateUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="node1 != null" >
+        NODE_1 = #{node1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node2 != null" >
+        NODE_2 = #{node2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node3 != null" >
+        NODE_3 = #{node3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node4 != null" >
+        NODE_4 = #{node4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node5 != null" >
+        NODE_5 = #{node5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node6 != null" >
+        NODE_6 = #{node6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node7 != null" >
+        NODE_7 = #{node7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node8 != null" >
+        NODE_8 = #{node8,jdbcType=TIMESTAMP},
+      </if>
+      <if test="node9 != null" >
+        NODE_9 = #{node9,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TLocalFlightInfo" >
+    update T_LOCAL_FLIGHT_INFO
+    set FLIGHT_ID = #{flightId,jdbcType=INTEGER},
+      ASSOCIATED_FLIGHT_ID = #{associatedFlightId,jdbcType=INTEGER},
+      FFID = #{ffid,jdbcType=VARCHAR},
+      AIRLINES = #{airlines,jdbcType=VARCHAR},
+      PLAN_TIME = #{planTime,jdbcType=TIMESTAMP},
+      FLNO = #{flno,jdbcType=VARCHAR},
+      EXEC_DATE = #{execDate,jdbcType=DATE},
+      FLIGHT_IDENTY_MANAGE_DATE = #{flightIdentyManageDate,jdbcType=DATE},
+      D_OR_A = #{dOrA,jdbcType=VARCHAR},
+      FLIGHT_TASK = #{flightTask,jdbcType=VARCHAR},
+      ATTRIBUTE = #{attribute,jdbcType=VARCHAR},
+      TAKEOFF_LANDIN_COUNT = #{takeoffLandinCount,jdbcType=INTEGER},
+      AGENCY = #{agency,jdbcType=VARCHAR},
+      CRAFT_TYPE_ICAO = #{craftTypeIcao,jdbcType=VARCHAR},
+      REGN = #{regn,jdbcType=VARCHAR},
+      NORMAL_FLIGHT_STAT_CD = #{normalFlightStatCd,jdbcType=VARCHAR},
+      ABNORMAL_FLIGHT_STAT_CD = #{abnormalFlightStatCd,jdbcType=VARCHAR},
+      IS_VIP = #{isVip,jdbcType=VARCHAR},
+      VIP_NUMBER = #{vipNumber,jdbcType=INTEGER},
+      SOBT = #{sobt,jdbcType=TIMESTAMP},
+      SIBT = #{sibt,jdbcType=TIMESTAMP},
+      EOBT = #{eobt,jdbcType=TIMESTAMP},
+      EIBT = #{eibt,jdbcType=TIMESTAMP},
+      AOBT = #{aobt,jdbcType=TIMESTAMP},
+      AIBT = #{aibt,jdbcType=TIMESTAMP},
+      ELDT = #{eldt,jdbcType=TIMESTAMP},
+      ETOT = #{etot,jdbcType=TIMESTAMP},
+      ALDT = #{aldt,jdbcType=TIMESTAMP},
+      ATOT = #{atot,jdbcType=TIMESTAMP},
+      SHARE_FLNO = #{shareFlno,jdbcType=VARCHAR},
+      ADEP = #{adep,jdbcType=VARCHAR},
+      ADES = #{ades,jdbcType=VARCHAR},
+      START_STATION = #{startStation,jdbcType=VARCHAR},
+      START_SOBT = #{startSobt,jdbcType=TIMESTAMP},
+      START_SIBT = #{startSibt,jdbcType=TIMESTAMP},
+      START_EOBT = #{startEobt,jdbcType=TIMESTAMP},
+      START_EIBT = #{startEibt,jdbcType=TIMESTAMP},
+      START_AOBT = #{startAobt,jdbcType=TIMESTAMP},
+      START_AIBT = #{startAibt,jdbcType=TIMESTAMP},
+      BCK_OR_ALT = #{bckOrAlt,jdbcType=VARCHAR},
+      ALT_ADES = #{altAdes,jdbcType=VARCHAR},
+      ALT_SIBT = #{altSibt,jdbcType=TIMESTAMP},
+      ALT_ELDT = #{altEldt,jdbcType=TIMESTAMP},
+      ALT_ALDT = #{altAldt,jdbcType=TIMESTAMP},
+      EXIT = #{exit,jdbcType=INTEGER},
+      EXOT = #{exot,jdbcType=INTEGER},
+      AXIT = #{axit,jdbcType=INTEGER},
+      AXOT = #{axot,jdbcType=INTEGER},
+      DELAY_TIME = #{delayTime,jdbcType=INTEGER},
+      STAND = #{stand,jdbcType=VARCHAR},
+      GATE = #{gate,jdbcType=VARCHAR},
+      CHECK_START_TIME = #{checkStartTime,jdbcType=TIMESTAMP},
+      CHECK_END_TIME = #{checkEndTime,jdbcType=TIMESTAMP},
+      COBT = #{cobt,jdbcType=TIMESTAMP},
+      CTOT = #{ctot,jdbcType=TIMESTAMP},
+      TOBT = #{tobt,jdbcType=TIMESTAMP},
+      TTOT = #{ttot,jdbcType=TIMESTAMP},
+      A_TOBT = #{aTobt,jdbcType=TIMESTAMP},
+      DOBT = #{dobt,jdbcType=TIMESTAMP},
+      FCT = #{fct,jdbcType=TIMESTAMP},
+      RPOT = #{rpot,jdbcType=TIMESTAMP},
+      APOT = #{apot,jdbcType=TIMESTAMP},
+      ASAT = #{asat,jdbcType=TIMESTAMP},
+      RUNWAY = #{runway,jdbcType=VARCHAR},
+      ERSL = #{ersl,jdbcType=TIMESTAMP},
+      ARSL = #{arsl,jdbcType=TIMESTAMP},
+      ELSW = #{elsw,jdbcType=TIMESTAMP},
+      ALSW = #{alsw,jdbcType=TIMESTAMP},
+      STDC = #{stdc,jdbcType=TIMESTAMP},
+      ETDO = #{etdo,jdbcType=TIMESTAMP},
+      ATDO = #{atdo,jdbcType=TIMESTAMP},
+      ETDC = #{etdc,jdbcType=TIMESTAMP},
+      ATDC = #{atdc,jdbcType=TIMESTAMP},
+      ETFO = #{etfo,jdbcType=TIMESTAMP},
+      ATFO = #{atfo,jdbcType=TIMESTAMP},
+      ETFC = #{etfc,jdbcType=TIMESTAMP},
+      ATFC = #{atfc,jdbcType=TIMESTAMP},
+      ESR = #{esr,jdbcType=TIMESTAMP},
+      ASR = #{asr,jdbcType=TIMESTAMP},
+      EER = #{eer,jdbcType=TIMESTAMP},
+      AER = #{aer,jdbcType=TIMESTAMP},
+      ESC = #{esc,jdbcType=TIMESTAMP},
+      ASC = #{asc,jdbcType=TIMESTAMP},
+      EEC = #{eec,jdbcType=TIMESTAMP},
+      AEC = #{aec,jdbcType=TIMESTAMP},
+      ESCT = #{esct,jdbcType=TIMESTAMP},
+      ASCT = #{asct,jdbcType=TIMESTAMP},
+      EFCT = #{efct,jdbcType=TIMESTAMP},
+      AFCT = #{afct,jdbcType=TIMESTAMP},
+      ESBT = #{esbt,jdbcType=TIMESTAMP},
+      ASBT = #{asbt,jdbcType=TIMESTAMP},
+      LCBT = #{lcbt,jdbcType=TIMESTAMP},
+      EEBT = #{eebt,jdbcType=TIMESTAMP},
+      AEBT = #{aebt,jdbcType=TIMESTAMP},
+      ECDT = #{ecdt,jdbcType=TIMESTAMP},
+      ACDT = #{acdt,jdbcType=TIMESTAMP},
+      EEDT = #{eedt,jdbcType=TIMESTAMP},
+      AEDT = #{aedt,jdbcType=TIMESTAMP},
+      AACT = #{aact,jdbcType=TIMESTAMP},
+      A_GRND_TSF_TM = #{aGrndTsfTm,jdbcType=TIMESTAMP},
+      D_GRND_TSF_TM = #{dGrndTsfTm,jdbcType=TIMESTAMP},
+      MPBT = #{mpbt,jdbcType=TIMESTAMP},
+      MPET = #{mpet,jdbcType=TIMESTAMP},
+      LDBT = #{ldbt,jdbcType=TIMESTAMP},
+      LDET = #{ldet,jdbcType=TIMESTAMP},
+      TRDT = #{trdt,jdbcType=TIMESTAMP},
+      CDPT = #{cdpt,jdbcType=TIMESTAMP},
+      TERMINAL = #{terminal,jdbcType=VARCHAR},
+      BAG_COUNT = #{bagCount,jdbcType=INTEGER},
+      BAG_WEIGHT = #{bagWeight,jdbcType=INTEGER},
+      PAX_COUNT = #{paxCount,jdbcType=INTEGER},
+      ISDEL = #{isdel,jdbcType=VARCHAR},
+      ISSPECIAL = #{isspecial,jdbcType=INTEGER},
+      ISMANUALID = #{ismanualid,jdbcType=INTEGER},
+      ISCONTROL = #{iscontrol,jdbcType=INTEGER},
+      ISFOCUS = #{isfocus,jdbcType=INTEGER},
+      RMK = #{rmk,jdbcType=VARCHAR},
+      CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      CREATE_USR = #{createUsr,jdbcType=VARCHAR},
+      UPDATE_USR = #{updateUsr,jdbcType=VARCHAR},
+      NODE_1 = #{node1,jdbcType=TIMESTAMP},
+      NODE_2 = #{node2,jdbcType=TIMESTAMP},
+      NODE_3 = #{node3,jdbcType=TIMESTAMP},
+      NODE_4 = #{node4,jdbcType=TIMESTAMP},
+      NODE_5 = #{node5,jdbcType=TIMESTAMP},
+      NODE_6 = #{node6,jdbcType=TIMESTAMP},
+      NODE_7 = #{node7,jdbcType=TIMESTAMP},
+      NODE_8 = #{node8,jdbcType=TIMESTAMP},
+      NODE_9 = #{node9,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

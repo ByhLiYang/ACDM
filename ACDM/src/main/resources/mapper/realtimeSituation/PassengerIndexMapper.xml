@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.PassengerIndexMapper" >
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.realtimeSituation.PassengerAreaVo" >
+    <result column="ZRS" property="zRS" jdbcType="INTEGER" />
+    <result column="AJQRS" property="aJQRS" jdbcType="INTEGER" />
+    <result column="HJQRS" property="hJQRS" jdbcType="INTEGER" />
+    <result column="JSRS" property="jSRS" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="getPassengerArea" resultMap="ResultMap" parameterType="map">
+    <![CDATA[
+    SELECT COUNT(1) ZRS,SUM(CASE WHEN BB.dpsrCheckinTime IS NOT NULL AND BB.stsPscTime IS NULL AND BB.stsBoardTime IS NULL THEN 1 ELSE 0 END) AJQRS,
+    SUM(CASE WHEN BB.dpsrCheckinTime IS NOT NULL AND BB.stsPscTime IS NOT NULL AND BB.stsBoardTime IS NULL THEN 1 ELSE 0 END) HJQRS,
+    SUM(CASE WHEN BB.dpsrCheckinTime IS NOT NULL AND BB.stsBoardTime IS NOT NULL THEN 1 ELSE 0 END) JSRS
+    FROM T_LOCAL_FLIGHT_INFO AA INNER JOIN T_PASSENGER_INFO BB ON AA.FLIGHT_ID=BB.flightId WHERE BB.dpsrFltDate=CURRENT_DATE()
+    AND AA.ABNORMAL_FLIGHT_STAT_CD<>'CAN' AND AA.D_OR_A='D' AND AA.ISDEL <> '1' AND AA.ATOT IS NULL AND AA.SOBT < NOW() + INTERVAL 4 hour
+    ]]>
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AA.AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AA.AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+</mapper>

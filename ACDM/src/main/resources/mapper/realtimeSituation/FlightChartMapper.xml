@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.FlightChartMapper" >
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.realtimeSituation.HBSPerHour" >
+    <result column="TIME_H" property="time_H" jdbcType="VARCHAR" />
+    <result column="HBS" property="hBS" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="getAJHSPerHour" resultMap="ResultMap" parameterType="map">
+    SELECT substring(SIBT,-8,2) TIME_H,count(1) HBS FROM V_UTIL_DAILY_FLIGHT
+    WHERE D_OR_A='A'
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    GROUP BY TIME_H;
+  </select>
+  <select id="getASJSPerHour" resultMap="ResultMap" parameterType="map">
+    SELECT substring(ALDT,-8,2) TIME_H,count(1) HBS FROM V_UTIL_DAILY_FLIGHT
+    WHERE D_OR_A='A' AND ALDT IS NOT NULL AND DATE(ALDT) = CURRENT_DATE
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    GROUP BY TIME_H;
+  </select>
+  <select id="getDJHSPerHour" resultMap="ResultMap" parameterType="map">
+    SELECT substring(SOBT,-8,2) TIME_H,count(1) HBS FROM V_UTIL_DAILY_FLIGHT
+    WHERE D_OR_A='D'
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+     GROUP BY TIME_H;
+  </select>
+  <select id="getDSJSPerHour" resultMap="ResultMap" parameterType="map">
+    SELECT substring(ATOT,-8,2) TIME_H,count(1) HBS FROM V_UTIL_DAILY_FLIGHT
+    WHERE D_OR_A='D' AND ATOT IS NOT NULL AND DATE(ATOT) = CURRENT_DATE
+    <if test="params.agent !=null and params.agent != ''">
+      <choose>
+        <when test="params.dept !=null and params.dept == 'IGO'">
+          AND AIRLINES NOT IN (${params.agent})
+        </when>
+        <otherwise>
+          AND AIRLINES IN (${params.agent})
+        </otherwise>
+      </choose>
+    </if>
+    GROUP BY TIME_H;
+  </select>
+</mapper>

@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.LnitialNormalRateMapper" >
+    <select id="queryLnitialNormalRate" resultType="com.hq.acdm.model.statistics.lnitialNormalRate.LnitialNormalRate"  >
+        <![CDATA[
+   --6-10点始发正常率
+select AIRLINE_CODE_IATA,
+       SFS,
+       CASE WHEN SFYWS is null THEN 0 ELSE SFYWS END SFYWS,
+       COALESCE(trunc
+                  (round(((SFS - CASE WHEN SFYWS is null THEN 0 ELSE SFYWS END) * 1.0 / SFS) * 100, 2), 2) || '%',
+                '0%')                                ZCS
+       --round(((SFS - CASE WHEN SFYWS is null THEN 0 ELSE SFYWS END) * 1.0 / SFS) * 100, 2) ZCS
+from (select AIRLINE_CODE_IATA, sum(SF) SFS, sum(SFYW) SFYWS
+      from (select CASE
+                     WHEN T1.AIRLINE_CODE_IATA = 'HO' THEN T1.AIRLINE_CODE_IATA
+                     WHEN T1.AIRLINE_CODE_IATA = '9C' THEN T1.AIRLINE_CODE_IATA
+                     WHEN T1.AIRLINE_CODE_IATA = 'MU' THEN T1.AIRLINE_CODE_IATA
+                     WHEN T1.AIRLINE_CODE_IATA = 'FM' THEN T1.AIRLINE_CODE_IATA
+                     WHEN T1.AIRLINE_CODE_IATA = 'CZ' THEN T1.AIRLINE_CODE_IATA
+                     WHEN T1.AIRLINE_CODE_IATA = 'CA' THEN T1.AIRLINE_CODE_IATA
+                     WHEN T1.AIRLINE_CODE_IATA = 'MF' or T1.AIRLINE_CODE_IATA = 'HU' or T1.AIRLINE_CODE_IATA = 'NS' or
+                          T1.AIRLINE_CODE_IATA = 'KA' or T1.AIRLINE_CODE_IATA = 'NX' or T1.AIRLINE_CODE_IATA = 'TV' or
+                          T1.AIRLINE_CODE_IATA = '8L' or T1.AIRLINE_CODE_IATA = 'GS' THEN '地服'
+                     ELSE '其他' END AIRLINE_CODE_IATA,
+                   SF,
+                   SFYW
+            from (select CASE
+                           WHEN D1.AIRLINE_CODE_IATA is null THEN H1.AIRLINE_CODE_IATA
+                           ELSE D1.AIRLINE_CODE_IATA END                 AIRLINE_CODE_IATA,
+                         (CASE WHEN D1.SF is null THEN 0 ELSE D1.SF END +
+                          CASE WHEN H1.SF is null THEN 0 ELSE H1.SF END) SF
+                  from (SELECT AIRLINE_CODE_IATA,count(*) SF
+                        FROM DAILY_FLIGHT_MASTER AA
+                               LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+                                                                        AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+                                                                        AA.A_OR_D = BB.A_OR_D AND
+                                                                        AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+                        WHERE AA.A_OR_D = 'D'
+                          AND (
+                          AA.AOBT < sysdate OR AA.SOBT < sysdate OR AA.ATOT < sysdate)
+                          AND nvl(BB.FLIGHT_CANCEL_CODE, '-1') <> 'C'
+                          AND nvl(BB.CODE_SHARE_STATUS, '-1') <> 'SF'
+                          AND (AIRLINE_CODE_IATA = 'HO' or AIRLINE_CODE_IATA = '9C' or AIRLINE_CODE_IATA = 'MU' or
+                               AIRLINE_CODE_IATA = 'FM' or AIRLINE_CODE_IATA = 'CZ' or AIRLINE_CODE_IATA = 'CA' or
+                               AIRLINE_CODE_IATA = 'MF' or AIRLINE_CODE_IATA = 'HU' or AIRLINE_CODE_IATA = 'NS' or
+                               AIRLINE_CODE_IATA = 'KA' or AIRLINE_CODE_IATA = 'NX' or AIRLINE_CODE_IATA = 'TV' or
+                               AIRLINE_CODE_IATA = '8L' or AIRLINE_CODE_IATA = 'GS')
+                          and AA.OPERATIONAL_DATE >= to_date(#{startDate}, 'YYYY-MM-DD')
+                          and AA.OPERATIONAL_DATE <= to_date(#{endDate}, 'YYYY-MM-DD')
+                          and (BB.OPERATIONAL_DATE <> to_DATE(to_char(BB.LNK_SCHEDULE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
+                          AND to_char(AA.SOBT, 'HH24:MI:SS') >= '06:00:00'
+                          AND to_char(AA.SOBT, 'HH24:MI:SS') <= '10:00:00')
+                        group by AIRLINE_CODE_IATA) D1 --OK
+                         FULL join (SELECT AIRLINE_CODE_IATA,count(*) SF
+                                    FROM HISTORICAL_FLIGHT_MASTER AA
+                                           LEFT JOIN HISTORICAL_FLIGHT_ADD_DETAILS BB
+                                                     ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+                                                        AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+                                                        AA.A_OR_D = BB.A_OR_D AND
+                                                        AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+                                    WHERE AA.A_OR_D = 'D'
+                                      AND (
+                                      AA.AOBT < sysdate OR AA.SOBT < sysdate OR AA.ATOT < sysdate)
+                                      AND nvl(BB.FLIGHT_CANCEL_CODE, '-1') <> 'C'
+                                      AND nvl(BB.CODE_SHARE_STATUS, '-1') <> 'SF'
+                                      AND (AIRLINE_CODE_IATA = 'HO' or AIRLINE_CODE_IATA = '9C' or
+                                           AIRLINE_CODE_IATA = 'MU' or
+                                           AIRLINE_CODE_IATA = 'FM' or AIRLINE_CODE_IATA = 'CZ' or
+                                           AIRLINE_CODE_IATA = 'CA' or
+                                           AIRLINE_CODE_IATA = 'MF' or AIRLINE_CODE_IATA = 'HU' or
+                                           AIRLINE_CODE_IATA = 'NS' or
+                                           AIRLINE_CODE_IATA = 'KA' or AIRLINE_CODE_IATA = 'NX' or
+                                           AIRLINE_CODE_IATA = 'TV' or
+                                           AIRLINE_CODE_IATA = '8L' or AIRLINE_CODE_IATA = 'GS')
+                                      and AA.OPERATIONAL_DATE >= to_date(#{startDate}, 'YYYY-MM-DD')
+                                      and AA.OPERATIONAL_DATE <= to_date(#{endDate}, 'YYYY-MM-DD')
+                                      and (BB.OPERATIONAL_DATE <>
+                                           to_DATE(to_char(BB.LNK_SCHEDULE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
+                                      AND to_char(AA.SOBT, 'HH24:MI:SS') >= '06:00:00'
+                                      AND to_char(AA.SOBT, 'HH24:MI:SS') <= '10:00:00')
+                                    group by AIRLINE_CODE_IATA) H1 on
+                      D1
+                        .
+                        AIRLINE_CODE_IATA =
+                      H1
+                        .
+                        AIRLINE_CODE_IATA) T1
+                   FULL join(select CASE
+                                      WHEN D2.AIRLINE_CODE_IATA is null THEN H2.AIRLINE_CODE_IATA
+                                      ELSE D2.AIRLINE_CODE_IATA END                     AIRLINE_CODE_IATA,
+                                    (CASE WHEN D2.SFYW is null THEN 0 ELSE D2.SFYW END +
+                                     CASE WHEN H2.SFYW is null THEN 0 ELSE H2.SFYW END) SFYW
+                             from (SELECT AIRLINE_CODE_IATA,count(*) SFYW
+                                   FROM DAILY_FLIGHT_MASTER AA
+                                          LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB
+                                                    ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+                                                       AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+                                                       AA.A_OR_D = BB.A_OR_D AND
+                                                       AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+                                   WHERE AA.A_OR_D = 'D'
+                                     AND (AA.AOBT < sysdate OR AA.SOBT < sysdate OR AA.ATOT < sysdate)
+                                     AND nvl(BB.FLIGHT_CANCEL_CODE, '-1') <> 'C'
+                                     AND nvl(BB.CODE_SHARE_STATUS, '-1') <> 'SF'
+                                     AND (AIRLINE_CODE_IATA = 'HO' or AIRLINE_CODE_IATA = '9C' or
+                                          AIRLINE_CODE_IATA = 'MU' or
+                                          AIRLINE_CODE_IATA = 'FM' or AIRLINE_CODE_IATA = 'CZ' or
+                                          AIRLINE_CODE_IATA = 'CA' or
+                                          AIRLINE_CODE_IATA = 'MF' or AIRLINE_CODE_IATA = 'HU' or
+                                          AIRLINE_CODE_IATA = 'NS' or
+                                          AIRLINE_CODE_IATA = 'KA' or AIRLINE_CODE_IATA = 'NX' or
+                                          AIRLINE_CODE_IATA = 'TV' or
+                                          AIRLINE_CODE_IATA = '8L' or AIRLINE_CODE_IATA = 'GS')
+                                     and AA.OPERATIONAL_DATE >= to_date(#{startDate}, 'YYYY-MM-DD')
+                                     and AA.OPERATIONAL_DATE <= to_date(#{endDate}, 'YYYY-MM-DD')
+                                     and (BB.OPERATIONAL_DATE <>
+                                          to_DATE(to_char(BB.LNK_SCHEDULE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
+                                     AND to_char(AA.SOBT, 'HH24:MI:SS') >= '06:00:00'
+                                     AND to_char(AA.SOBT, 'HH24:MI:SS') <= '10:00:00')
+                                     AND ((
+                                                AA
+                                                  .
+                                                  ATOT
+                                                IS
+                                                NOT
+                                                NULL
+                                              AND
+                                                AA
+                                                  .
+                                                  SOBT <
+                                                AA
+                                                  .
+                                                  ATOT
+                                                  -
+                                                30 * 1 / (24 * 60)
+                                            )
+                                     OR
+                                          (
+                                                AA
+                                                  .
+                                                  ATOT
+                                                IS
+                                                NULL
+                                              AND
+                                                AA
+                                                  .
+                                                  SOBT
+                                                  < sysdate
+                                                  -
+                                                    30
+                                                      * 1 / (24 * 60)
+                                            )
+                                     )
+                                   group by AIRLINE_CODE_IATA) D2
+                                    FULL join (SELECT AIRLINE_CODE_IATA,count(*) SFYW
+                                               FROM HISTORICAL_FLIGHT_MASTER AA
+                                                      LEFT JOIN HISTORICAL_FLIGHT_ADD_DETAILS BB
+                                                                ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+                                                                   AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+                                                                   AA.A_OR_D = BB.A_OR_D AND
+                                                                   AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+                                               WHERE AA.A_OR_D = 'D'
+                                                 AND (AA.AOBT < sysdate OR AA.SOBT < sysdate OR AA.ATOT < sysdate)
+                                                 AND nvl(BB.FLIGHT_CANCEL_CODE, '-1') <> 'C'
+                                                 AND nvl(BB.CODE_SHARE_STATUS, '-1') <> 'SF'
+                                                 AND (AIRLINE_CODE_IATA = 'HO' or AIRLINE_CODE_IATA = '9C' or
+                                                      AIRLINE_CODE_IATA = 'MU' or
+                                                      AIRLINE_CODE_IATA = 'FM' or AIRLINE_CODE_IATA = 'CZ' or
+                                                      AIRLINE_CODE_IATA = 'CA' or
+                                                      AIRLINE_CODE_IATA = 'MF' or AIRLINE_CODE_IATA = 'HU' or
+                                                      AIRLINE_CODE_IATA = 'NS' or
+                                                      AIRLINE_CODE_IATA = 'KA' or AIRLINE_CODE_IATA = 'NX' or
+                                                      AIRLINE_CODE_IATA = 'TV' or
+                                                      AIRLINE_CODE_IATA = '8L' or AIRLINE_CODE_IATA = 'GS')
+                                                 and AA.OPERATIONAL_DATE >= to_date(#{startDate}, 'YYYY-MM-DD')
+                                                 and AA.OPERATIONAL_DATE <= to_date(#{endDate}, 'YYYY-MM-DD')
+                                                 and (BB.OPERATIONAL_DATE <>
+                                                      to_DATE(to_char(BB.LNK_SCHEDULE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
+                                                 AND to_char(AA.SOBT, 'HH24:MI:SS') >= '06:00:00'
+                                                 AND to_char(AA.SOBT, 'HH24:MI:SS') <= '10:00:00')
+                                                 AND ((
+                                                            AA
+                                                              .
+                                                              ATOT
+                                                            IS
+                                                            NOT
+                                                            NULL
+                                                          AND
+                                                            AA
+                                                              .
+                                                              SOBT <
+                                                            AA
+                                                              .
+                                                              ATOT
+                                                              -
+                                                            30
+                                                              * 1 / (24 * 60)
+                                                        )
+                                                 OR
+                                                      (
+                                                            AA
+                                                              .
+                                                              ATOT
+                                                            IS
+                                                            NULL
+                                                          AND
+                                                            AA
+                                                              .
+                                                              SOBT
+                                                              <
+                                                            sysdate
+                                                              -
+                                                            30
+                                                              * 1 / (24 * 60)
+                                                        )
+                                                 )
+                                               group by AIRLINE_CODE_IATA
+                             ) H2
+                                              on
+                                                  D2
+                                                    .
+                                                    AIRLINE_CODE_IATA =
+                                                  H2
+                                                    .
+                                                    AIRLINE_CODE_IATA
+            ) T2
+                            on
+                                T1
+                                  .
+                                  AIRLINE_CODE_IATA =
+                                T2
+                                  .
+                                  AIRLINE_CODE_IATA
+           )
+      group by AIRLINE_CODE_IATA
+     )
+order by trunc
+           (round(((SFS - CASE WHEN SFYWS is null THEN 0 ELSE SFYWS END) * 1.0 / SFS) * 100, 2), 2) DESC
+--order by DECIMAL (round(((SFS- CASE WHEN SFYWS is null THEN 0 ELSE SFYWS END ) * 1.0 /SFS) * 100, 2), 5, 2) DESC
+    ]]>
+    </select>
+
+    <select id="queryLnitialNormalRate1" resultType="com.hq.acdm.model.statistics.lnitialNormalRate.LnitialNormalRate1">
+        <![CDATA[
+        --6-10每小时始发正常率
+select AIRLINE_CODE_IATA,
+       ATOT,
+       SFS,
+       CASE WHEN SFYWS is null THEN 0 ELSE SFYWS END SFYWS,
+       COALESCE(trunc
+                  (round(((SFS - CASE WHEN SFYWS is null THEN 0 ELSE SFYWS END) * 1.0 / SFS) * 100, 2), 2) || '%',
+                '0%')
+                                                     ZCS
+from (select AIRLINE_CODE_IATA,ATOT, sum(SF) SFS, sum(SFYW) SFYWS
+      from (select CASE
+                     WHEN T1.AIRLINE_CODE_IATA = 'HO' THEN T1.AIRLINE_CODE_IATA
+                     WHEN T1.AIRLINE_CODE_IATA = '9C' THEN T1.AIRLINE_CODE_IATA
+                     WHEN T1.AIRLINE_CODE_IATA = 'MU' THEN T1.AIRLINE_CODE_IATA
+                     WHEN T1.AIRLINE_CODE_IATA = 'FM' THEN T1.AIRLINE_CODE_IATA
+                     WHEN T1.AIRLINE_CODE_IATA = 'CZ' THEN T1.AIRLINE_CODE_IATA
+                     WHEN T1.AIRLINE_CODE_IATA = 'CA' THEN T1.AIRLINE_CODE_IATA
+                     WHEN T1.AIRLINE_CODE_IATA = 'MF' or T1.AIRLINE_CODE_IATA = 'HU' or T1.AIRLINE_CODE_IATA = 'NS' or
+                          T1.AIRLINE_CODE_IATA = 'KA' or T1.AIRLINE_CODE_IATA = 'NX' or T1.AIRLINE_CODE_IATA = 'TV' or
+                          T1.AIRLINE_CODE_IATA = '8L' or T1.AIRLINE_CODE_IATA = 'GS' THEN '地服'
+                     ELSE '其他' END AIRLINE_CODE_IATA,
+                   T1.ATOT,
+                   SF,
+                   SFYW
+            from (select CASE
+                           WHEN D1.AIRLINE_CODE_IATA is null THEN H1.AIRLINE_CODE_IATA
+                           ELSE D1.AIRLINE_CODE_IATA END                         AIRLINE_CODE_IATA,
+                         CASE WHEN D1.ATOT is null THEN H1.ATOT ELSE D1.ATOT END ATOT,
+                         (CASE WHEN D1.SF is null THEN 0 ELSE D1.SF END +
+                          CASE WHEN H1.SF is null THEN 0 ELSE H1.SF END)         SF
+                  from (SELECT AIRLINE_CODE_IATA,to_char(SOBT, 'HH24') ATOT,count(*) SF
+                        FROM DAILY_FLIGHT_MASTER AA
+                               LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+                                                                        AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+                                                                        AA.A_OR_D = BB.A_OR_D AND
+                                                                        AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+                        WHERE AA.A_OR_D = 'D'
+                          AND (
+                          AA.AOBT < sysdate OR AA.SOBT < sysdate OR AA.ATOT < sysdate)
+                          AND nvl(BB.FLIGHT_CANCEL_CODE, '-1') <> 'C'
+                          AND nvl(BB.CODE_SHARE_STATUS, '-1') <> 'SF'
+                          AND (AIRLINE_CODE_IATA = 'HO' or AIRLINE_CODE_IATA = '9C' or AIRLINE_CODE_IATA = 'MU' or
+                               AIRLINE_CODE_IATA = 'FM' or AIRLINE_CODE_IATA = 'CZ' or AIRLINE_CODE_IATA = 'CA' or
+                               AIRLINE_CODE_IATA = 'MF' or AIRLINE_CODE_IATA = 'HU' or AIRLINE_CODE_IATA = 'NS' or
+                               AIRLINE_CODE_IATA = 'KA' or AIRLINE_CODE_IATA = 'NX' or AIRLINE_CODE_IATA = 'TV' or
+                               AIRLINE_CODE_IATA = '8L' or AIRLINE_CODE_IATA = 'GS')
+                          and AA.OPERATIONAL_DATE >= to_date(#{startDate}, 'YYYY-MM-DD')
+                          and AA.OPERATIONAL_DATE <= to_date(#{endDate}, 'YYYY-MM-DD')
+                          and (BB.OPERATIONAL_DATE <> to_DATE(to_char(BB.LNK_SCHEDULE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
+                          AND to_char(AA.SOBT, 'HH24:MI:SS') >= '06:00:00'
+                          AND to_char(AA.SOBT, 'HH24:MI:SS') <= '10:00:00')
+                        group by AIRLINE_CODE_IATA,to_char(SOBT, 'HH24')) D1
+                         FULL join (SELECT AIRLINE_CODE_IATA,to_char(SOBT, 'HH24') ATOT,count(*) SF
+                                    FROM HISTORICAL_FLIGHT_MASTER AA
+                                           LEFT JOIN HISTORICAL_FLIGHT_ADD_DETAILS BB
+                                                     ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+                                                        AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+                                                        AA.A_OR_D = BB.A_OR_D AND
+                                                        AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+                                    WHERE AA.A_OR_D = 'D'
+                                      AND (
+                                      AA.AOBT < sysdate OR AA.SOBT < sysdate OR AA.ATOT < sysdate)
+                                      AND nvl(BB.FLIGHT_CANCEL_CODE, '-1') <> 'C'
+                                      AND nvl(BB.CODE_SHARE_STATUS, '-1') <> 'SF'
+                                      AND (AIRLINE_CODE_IATA = 'HO' or AIRLINE_CODE_IATA = '9C' or
+                                           AIRLINE_CODE_IATA = 'MU' or
+                                           AIRLINE_CODE_IATA = 'FM' or AIRLINE_CODE_IATA = 'CZ' or
+                                           AIRLINE_CODE_IATA = 'CA' or
+                                           AIRLINE_CODE_IATA = 'MF' or AIRLINE_CODE_IATA = 'HU' or
+                                           AIRLINE_CODE_IATA = 'NS' or
+                                           AIRLINE_CODE_IATA = 'KA' or AIRLINE_CODE_IATA = 'NX' or
+                                           AIRLINE_CODE_IATA = 'TV' or
+                                           AIRLINE_CODE_IATA = '8L' or AIRLINE_CODE_IATA = 'GS')
+                                      and AA.OPERATIONAL_DATE >= to_date(#{startDate}, 'YYYY-MM-DD')
+                                      and AA.OPERATIONAL_DATE <= to_date(#{endDate}, 'YYYY-MM-DD')
+                                      and (BB.OPERATIONAL_DATE <>
+                                           to_DATE(to_char(BB.LNK_SCHEDULE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
+                                      AND to_char(AA.SOBT, 'HH24:MI:SS') >= '06:00:00'
+                                      AND to_char(AA.SOBT, 'HH24:MI:SS') <= '10:00:00')
+                                    group by AIRLINE_CODE_IATA,to_char(SOBT, 'HH24')) H1 on
+                        D1
+                          .
+                          AIRLINE_CODE_IATA =
+                        H1
+                          .
+                          AIRLINE_CODE_IATA
+                      and
+                        D1
+                          .
+                          ATOT =
+                        H1
+                          .
+                          ATOT) T1
+                   FULL join(select CASE
+                                      WHEN D2.AIRLINE_CODE_IATA is null THEN H2.AIRLINE_CODE_IATA
+                                      ELSE D2.AIRLINE_CODE_IATA END                         AIRLINE_CODE_IATA,
+                                    CASE WHEN D2.ATOT is null THEN H2.ATOT ELSE D2.ATOT END ATOT,
+                                    (CASE WHEN D2.SFYW is null THEN 0 ELSE D2.SFYW END +
+                                     CASE WHEN H2.SFYW is null THEN 0 ELSE H2.SFYW END)     SFYW
+                             from (SELECT AIRLINE_CODE_IATA,to_char(SOBT, 'HH24') ATOT,count(*) SFYW
+                                   FROM DAILY_FLIGHT_MASTER AA
+                                          LEFT JOIN DAILY_FLIGHT_ADD_DETAILS BB
+                                                    ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+                                                       AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+                                                       AA.A_OR_D = BB.A_OR_D AND
+                                                       AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+                                   WHERE AA.A_OR_D = 'D'
+                                     AND (AA.AOBT < sysdate OR AA.SOBT < sysdate OR AA.ATOT < sysdate)
+                                     AND nvl(BB.FLIGHT_CANCEL_CODE, '-1') <> 'C'
+                                     AND nvl(BB.CODE_SHARE_STATUS, '-1') <> 'SF'
+                                     AND (AIRLINE_CODE_IATA = 'HO' or AIRLINE_CODE_IATA = '9C' or
+                                          AIRLINE_CODE_IATA = 'MU' or
+                                          AIRLINE_CODE_IATA = 'FM' or AIRLINE_CODE_IATA = 'CZ' or
+                                          AIRLINE_CODE_IATA = 'CA' or
+                                          AIRLINE_CODE_IATA = 'MF' or AIRLINE_CODE_IATA = 'HU' or
+                                          AIRLINE_CODE_IATA = 'NS' or
+                                          AIRLINE_CODE_IATA = 'KA' or AIRLINE_CODE_IATA = 'NX' or
+                                          AIRLINE_CODE_IATA = 'TV' or
+                                          AIRLINE_CODE_IATA = '8L' or AIRLINE_CODE_IATA = 'GS')
+                                     and AA.OPERATIONAL_DATE >= to_date(#{startDate}, 'YYYY-MM-DD')
+                                     and AA.OPERATIONAL_DATE <= to_date(#{endDate}, 'YYYY-MM-DD')
+                                     and (BB.OPERATIONAL_DATE <>
+                                          to_DATE(to_char(BB.LNK_SCHEDULE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
+                                     AND to_char(AA.SOBT, 'HH24:MI:SS') >= '06:00:00'
+                                     AND to_char(AA.SOBT, 'HH24:MI:SS') <= '10:00:00')
+                                     AND ((
+                                                AA
+                                                  .
+                                                  ATOT
+                                                IS
+                                                NOT
+                                                NULL
+                                              AND
+                                                AA
+                                                  .
+                                                  SOBT <
+                                                AA
+                                                  .
+                                                  ATOT
+                                                  -
+                                                30
+                                                  * 1 / (24 * 60)
+                                            )
+                                     OR
+                                          (
+                                                AA
+                                                  .
+                                                  ATOT
+                                                IS
+                                                NULL
+                                              AND
+                                                AA
+                                                  .
+                                                  SOBT
+                                                  <
+                                                sysdate
+                                                  -
+                                                30
+                                                  * 1 / (24 * 60)
+                                            )
+                                     )
+                                   group by AIRLINE_CODE_IATA, to_char(SOBT, 'HH24'
+                                     )) D2
+                                    FULL join (SELECT AIRLINE_CODE_IATA,to_char(SOBT, 'HH24') ATOT,count(*) SFYW
+                                               FROM HISTORICAL_FLIGHT_MASTER AA
+                                                      LEFT JOIN HISTORICAL_FLIGHT_ADD_DETAILS BB
+                                                                ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA AND
+                                                                   AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE AND
+                                                                   AA.A_OR_D = BB.A_OR_D AND
+                                                                   AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+                                               WHERE AA.A_OR_D = 'D'
+                                                 AND (AA.AOBT < sysdate OR AA.SOBT < sysdate OR AA.ATOT < sysdate)
+                                                 AND nvl(BB.FLIGHT_CANCEL_CODE, '-1') <> 'C'
+                                                 AND nvl(BB.CODE_SHARE_STATUS, '-1') <> 'SF'
+                                                 AND (AIRLINE_CODE_IATA = 'HO' or AIRLINE_CODE_IATA = '9C' or
+                                                      AIRLINE_CODE_IATA = 'MU' or
+                                                      AIRLINE_CODE_IATA = 'FM' or AIRLINE_CODE_IATA = 'CZ' or
+                                                      AIRLINE_CODE_IATA = 'CA' or
+                                                      AIRLINE_CODE_IATA = 'MF' or AIRLINE_CODE_IATA = 'HU' or
+                                                      AIRLINE_CODE_IATA = 'NS' or
+                                                      AIRLINE_CODE_IATA = 'KA' or AIRLINE_CODE_IATA = 'NX' or
+                                                      AIRLINE_CODE_IATA = 'TV' or
+                                                      AIRLINE_CODE_IATA = '8L' or AIRLINE_CODE_IATA = 'GS')
+                                                 and AA.OPERATIONAL_DATE >= to_date(#{startDate}, 'YYYY-MM-DD')
+                                                 and AA.OPERATIONAL_DATE <= to_date(#{endDate}, 'YYYY-MM-DD')
+                                                 and (BB.OPERATIONAL_DATE <>
+                                                      to_DATE(to_char(BB.LNK_SCHEDULE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
+                                                 AND to_char(AA.SOBT, 'HH24:MI:SS') >= '06:00:00'
+                                                 AND to_char(AA.SOBT, 'HH24:MI:SS') <= '10:00:00')
+                                                 AND ((
+                                                            AA
+                                                              .
+                                                              ATOT
+                                                            IS
+                                                            NOT
+                                                            NULL
+                                                          AND
+                                                            AA
+                                                              .
+                                                              SOBT <
+                                                            AA
+                                                              .
+                                                              ATOT
+                                                              -
+                                                            30
+                                                              * 1 / (24 * 60))
+                                                 OR (
+                                                            AA
+                                                              .
+                                                              ATOT
+                                                            IS
+                                                            NULL
+                                                          AND
+                                                            AA
+                                                              .
+                                                              SOBT <
+                                                            sysdate
+                                                              -
+                                                            30
+                                                              * 1 / (24 * 60))
+                                                 )
+                                               group by AIRLINE_CODE_IATA, to_char(SOBT, 'HH24')
+                             ) H2
+                                              on D2
+                                                   .
+                                                   AIRLINE_CODE_IATA =
+                                                 H2
+                                                   .
+                                                   AIRLINE_CODE_IATA
+                                                and
+                                                 D2
+                                                   .
+                                                   ATOT =
+                                                 H2
+                                                   .
+                                                   ATOT
+            ) T2
+                            on T1
+                                 .
+                                 AIRLINE_CODE_IATA =
+                               T2
+                                 .
+                                 AIRLINE_CODE_IATA
+                              and
+                               T1
+                                 .
+                                 ATOT =
+                               T2
+                                 .
+                                 ATOT
+           )
+      group by AIRLINE_CODE_IATA,ATOT
+     )
+order by ATOT, trunc(round(((SFS - CASE WHEN SFYWS is null THEN 0 ELSE SFYWS END) * 1.0 / SFS) * 100, 2), 2) DESC
+        ]]>
+    </select>
+
+    <select id="queryLnitialNormalRate2" resultType="com.hq.acdm.model.statistics.lnitialNormalRate.LnitialNormalRate2"  >
+        <![CDATA[
+        --始发不正常前15航班
+        select * from
+  (select  T1.FLIGHT_NO_IATA, T1.DEST_AIRPORT_IATA,T1.SOBT,T1.ZS,T2.YWS,
+         CASE WHEN T2.YWS=0 THEN 0 ELSE trunc(round(T2.DELAYTIME*1.0/T1.ZS, 2), 2) END AVG,
+         COALESCE(trunc(round(((ZS- CASE WHEN YWS is null THEN 0 ELSE YWS END ) * 1.0 /ZS) * 100, 2), 2) || '%','0%') ZCS
+  from ( select
+          CASE WHEN H1.FLIGHT_NO_IATA is null THEN D1.FLIGHT_NO_IATA else H1.FLIGHT_NO_IATA end FLIGHT_NO_IATA,
+          CASE WHEN  H1.DEST_AIRPORT_IATA is null THEN D1.DEST_AIRPORT_IATA else  H1.DEST_AIRPORT_IATA end DEST_AIRPORT_IATA,
+          CASE WHEN H1.SOBT is null  THEN D1.SOBT else  H1.SOBT end SOBT,
+          (CASE WHEN H1.YWS is null THEN 0 ELSE H1.YWS END+
+          CASE WHEN D1.YWS is null THEN 0 ELSE D1.YWS END)
+           ZS
+       from (
+             SELECT AA.FLIGHT_NO_IATA,DEST_AIRPORT_IATA,to_char(AA.SOBT,'HH24:MI:SS') SOBT ,count(*) YWS
+             FROM  	HISTORICAL_FLIGHT_MASTER AA
+             LEFT JOIN  HISTORICAL_FLIGHT_ADD_DETAILS BB
+             ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+             AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE
+             AND AA.A_OR_D = BB.A_OR_D
+             AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+             WHERE AA.A_OR_D ='D'
+             AND  (AA.AOBT < sysdate
+             OR AA.SOBT < sysdate
+             OR AA.ATOT < sysdate)
+             AND  nvl(BB.FLIGHT_CANCEL_CODE,'-1') <> 'C'
+             AND  nvl(BB.CODE_SHARE_STATUS,'-1') <> 'SF'
+             AND nvl(BB.FLIGHT_CLASS_CODE,'-1') NOT IN ('N/M','Z/P','U/H')
+
+             and AA.OPERATIONAL_DATE >= to_date(#{startDate}, 'YYYY-MM-DD')
+             and AA.OPERATIONAL_DATE <= to_date(#{endDate}, 'YYYY-MM-DD')
+             and  (BB.OPERATIONAL_DATE <> to_DATE(to_char(BB.LNK_SCHEDULE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
+             AND to_char(AA.SOBT, 'HH24:MI:SS') >= '06:00:00'
+            AND to_char(AA.SOBT, 'HH24:MI:SS') <= '10:00:00')
+             group by  AA.FLIGHT_NO_IATA,DEST_AIRPORT_IATA,to_char(AA.SOBT,'HH24:MI:SS')
+         ) H1
+       FULL JOIN(
+             SELECT
+                    AA.FLIGHT_NO_IATA,DEST_AIRPORT_IATA,to_char(AA.SOBT, 'HH24:MI:SS') SOBT ,count(*) YWS
+             FROM  	DAILY_FLIGHT_MASTER AA
+             LEFT JOIN  DAILY_FLIGHT_ADD_DETAILS BB
+             ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+             AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE
+             AND AA.A_OR_D = BB.A_OR_D
+             AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+             WHERE AA.A_OR_D ='D'
+             AND  (AA.AOBT < sysdate  OR AA.SOBT < sysdate OR AA.ATOT < sysdate)
+             AND  nvl(BB.FLIGHT_CANCEL_CODE,'-1') <> 'C'
+             AND  nvl(BB.CODE_SHARE_STATUS,'-1') <> 'SF'
+             AND nvl(BB.FLIGHT_CLASS_CODE,'-1') NOT IN ('N/M','Z/P','U/H')
+             and  AA.OPERATIONAL_DATE>=to_date(#{startDate}, 'YYYY-MM-DD')
+             and AA.OPERATIONAL_DATE<=to_date(#{endDate}, 'YYYY-MM-DD')
+             and  (BB.OPERATIONAL_DATE <> to_DATE(to_char(BB.LNK_SCHEDULE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
+             AND to_char(AA.SOBT, 'HH24:MI:SS') >=  '06:00:00'
+             AND to_char(AA.SOBT, 'HH24:MI:SS') <=  '10:00:00')
+             group by  AA.FLIGHT_NO_IATA,DEST_AIRPORT_IATA,to_char(AA.SOBT, 'HH24:MI:SS')
+         ) D1
+       on D1.FLIGHT_NO_IATA=H1.FLIGHT_NO_IATA and D1.SOBT=H1.SOBT) T1
+       left join( select
+       CASE WHEN H2.FLIGHT_NO_IATA is null THEN D2.FLIGHT_NO_IATA else H2.FLIGHT_NO_IATA end FLIGHT_NO_IATA,
+       CASE WHEN  H2.DEST_AIRPORT_IATA is null THEN D2.DEST_AIRPORT_IATA else  H2.DEST_AIRPORT_IATA end DEST_AIRPORT_IATA,
+       CASE WHEN H2.SOBT is null  THEN D2.SOBT else  H2.SOBT end SOBT,
+       (CASE WHEN H2.YWS is null THEN 0 ELSE H2.YWS END+CASE WHEN D2.YWS is null THEN 0 ELSE D2.YWS END) YWS,
+       (CASE WHEN H2.DELAYTIME is null THEN 0 ELSE H2.DELAYTIME END
+       +CASE WHEN D2.DELAYTIME is null THEN 0 ELSE D2.DELAYTIME END) DELAYTIME
+       from (
+             SELECT AA.FLIGHT_NO_IATA,
+             DEST_AIRPORT_IATA,to_char(AA.SOBT, 'HH24:MI:SS') SOBT ,
+             /*SUM(TIMESTAMPDIFF(
+               4,CHAR(COALESCE(AA.ATOT,sysdate)-30 * 1/(24*60)-AA.SOBT)
+               )
+             ) DELAYTIME,*/
+            sum(extract(day from (COALESCE(AA.ATOT,sysdate)-30 * 1/(24*60)-AA.SOBT))* 24 * 60
+              + extract(hour from (COALESCE(AA.ATOT,sysdate)-30 * 1/(24*60)-AA.SOBT))*60
+              + extract(minute from (COALESCE(AA.ATOT,sysdate)-30 * 1/(24*60)-AA.SOBT)))
+              as DELAYTIME,
+            count(*) YWS
+            FROM
+             HISTORICAL_FLIGHT_MASTER AA
+             LEFT JOIN
+             HISTORICAL_FLIGHT_ADD_DETAILS BB
+              ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+              AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE
+              AND AA.A_OR_D = BB.A_OR_D
+              AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+               WHERE AA.A_OR_D ='D'
+                AND  (AA.AOBT < sysdate  OR AA.SOBT < sysdate OR AA.ATOT < sysdate)
+             AND  nvl(BB.FLIGHT_CANCEL_CODE,'-1') <> 'C'
+             AND  nvl(BB.CODE_SHARE_STATUS,'-1') <> 'SF'
+             AND nvl(BB.FLIGHT_CLASS_CODE,'-1') NOT IN ('N/M','Z/P','U/H')
+             and  AA.OPERATIONAL_DATE>=to_date(#{startDate}, 'YYYY-MM-DD')
+             and AA.OPERATIONAL_DATE<=to_date(#{endDate}, 'YYYY-MM-DD')
+             and  (BB.OPERATIONAL_DATE <> to_DATE(to_char(BB.LNK_SCHEDULE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
+             AND to_char(AA.SOBT, 'HH24:MI:SS') >=  '06:00:00'
+             AND to_char(AA.SOBT, 'HH24:MI:SS') <=  '10:00:00')
+             AND  ((AA.ATOT IS NOT NULL AND AA.SOBT  < AA.ATOT - 30 * 1/(24*60))
+             OR (AA.ATOT IS NULL AND  AA.SOBT  < sysdate - 30 * 1/(24*60)))
+             group by  AA.FLIGHT_NO_IATA,DEST_AIRPORT_IATA,to_char(AA.SOBT, 'HH24:MI:SS')
+         ) H2
+       FULL JOIN(
+          SELECT AA.FLIGHT_NO_IATA,DEST_AIRPORT_IATA,to_char(AA.SOBT, 'HH24:MI:SS') SOBT ,
+                  /*SUM(TIMESTAMPDIFF(
+               4,CHAR(COALESCE(AA.ATOT,sysdate)-30 * 1/(24*60)-AA.SOBT)
+               )
+             ) DELAYTIME,*/
+            sum(extract(day from (COALESCE(AA.ATOT,sysdate)-30 * 1/(24*60)-AA.SOBT))* 24 * 60
+              + extract(hour from (COALESCE(AA.ATOT,sysdate)-30 * 1/(24*60)-AA.SOBT))*60
+              + extract(minute from (COALESCE(AA.ATOT,sysdate)-30 * 1/(24*60)-AA.SOBT)))
+              as DELAYTIME,
+           count(*) YWS
+           FROM  	DAILY_FLIGHT_MASTER AA
+           LEFT JOIN  DAILY_FLIGHT_ADD_DETAILS BB
+           ON AA.FLIGHT_NO_IATA = BB.FLIGHT_NO_IATA
+           AND AA.OPERATIONAL_DATE = BB.OPERATIONAL_DATE
+           AND AA.A_OR_D = BB.A_OR_D
+           AND AA.FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+           WHERE AA.A_OR_D ='D'
+           AND  (AA.AOBT < sysdate
+           OR AA.SOBT < sysdate
+           OR AA.ATOT < sysdate)
+           AND  nvl(BB.FLIGHT_CANCEL_CODE,'-1') <> 'C'
+           AND  nvl(BB.CODE_SHARE_STATUS,'-1') <> 'SF'
+           AND nvl(BB.FLIGHT_CLASS_CODE,'-1') NOT IN ('N/M','Z/P','U/H')
+           and  AA.OPERATIONAL_DATE>=to_date(#{startDate}, 'YYYY-MM-DD')
+           and AA.OPERATIONAL_DATE<=to_date(#{endDate}, 'YYYY-MM-DD')
+           and  (BB.OPERATIONAL_DATE <> to_DATE(to_char(BB.LNK_SCHEDULE_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
+           AND to_char(AA.SOBT, 'HH24:MI:SS') >=  '06:00:00'
+           AND to_char(AA.SOBT, 'HH24:MI:SS') <=  '10:00:00')
+           AND  ((AA.ATOT IS NOT NULL AND AA.SOBT  < AA.ATOT - 30 * 1/(24*60))
+           OR (AA.ATOT IS NULL AND  AA.SOBT  < sysdate - 30 * 1/(24*60)))
+           group by  AA.FLIGHT_NO_IATA,DEST_AIRPORT_IATA,to_char(AA.SOBT, 'HH24:MI:SS')
+         ) D2
+       on D2.FLIGHT_NO_IATA=H2.FLIGHT_NO_IATA
+       and D2.SOBT=H2.SOBT) T2
+       on T1.FLIGHT_NO_IATA=T2.FLIGHT_NO_IATA
+       and T1.SOBT=T2.SOBT
+       and T1.DEST_AIRPORT_IATA=T2.DEST_AIRPORT_IATA
+      order by trunc(round(((ZS- CASE WHEN YWS is null THEN 0 ELSE YWS END ) * 1.0 /ZS) * 100, 2), 2))
+      where rownum <= 15
+        ]]>
+    </select>
+</mapper>

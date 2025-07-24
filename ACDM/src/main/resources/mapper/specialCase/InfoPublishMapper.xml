@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.specialCase.InfoPublishMapper" >
+    <select id="queryInfoPublish" parameterType="map" resultType="com.hq.acdm.model.specialCase.infoPublish.infoPublishResult">
+        SELECT * from INFO_PUBLISH WHERE
+        1=1
+        <if test="params.keyword!=null and params.keyword!=''">
+         and CONTENT like concat(concat('%',#{params.keyword}),'%')
+        </if>
+        <if test="params.effective_date!=null and params.effective_date!=''">
+            and to_char(EFFECTIVE_DATE,'YYYY-MM-DD HH24:MI:SS') &gt;= #{params.effective_date}
+        </if>
+        <if test="params.expire_date!=null and params.expire_date!=''">
+            and TO_CHAR(EXPIRE_DATE,'YYYY-MM-DD HH24:MI:SS') &lt;= #{params.expire_date}
+        </if>
+    </select>
+    <insert id="addInfoPublish" parameterType="com.hq.acdm.model.specialCase.infoPublish.infoPublish">
+        INSERT INTO INFO_PUBLISH(
+          CONTENT,
+          CREATE_DATE,
+          CREATE_PERSON,
+          EFFECTIVE_DATE,
+          EXPIRE_DATE
+        )VALUES (
+          #{CONTENT,jdbcType=VARCHAR},
+          SYSDATE,
+          #{CREATE_PERSON,jdbcType=VARCHAR},
+          #{EFFECTIVE_DATE},
+          #{EXPIRE_DATE}
+        )
+    </insert>
+</mapper>

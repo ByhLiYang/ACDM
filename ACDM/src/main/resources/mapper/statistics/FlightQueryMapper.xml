@@ -1,0 +1,948 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.FlightQueryMapper" >
+
+
+  <select id="getDetail" resultType="java.util.List">
+    WITH table_a AS (
+    SELECT
+    TT.TAXITIMEAVG SysAXIT,
+    d1.*,
+    D2.AIRPORT_VIA_IATA_7,
+    D2.LNK_SCHEDULE_DATE,
+    CASE
+
+    WHEN D2.AIBT_5 IS NULL THEN
+    D2.AIBT_3
+    WHEN D2.AIBT_5 IS NOT NULL THEN
+    D2.AIBT_5 ELSE NULL
+    END A_AIBT
+    FROM
+    DAILY_FLIGHT_MASTER D1
+    LEFT JOIN DAILY_FLIGHT_ADD_DETAILS D2 ON D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+    AND to_char ( D1.OPERATIONAL_DATE, 'YYYY-MM-DD' ) = to_char ( D2.OPERATIONAL_DATE, 'YYYY-MM-DD' )
+    AND D1.A_OR_D = D2.A_OR_D
+    AND D1.FLIGHT_NO_IATA = D2.FLIGHT_NO_IATA
+    LEFT JOIN daily_runway DA ON to_char ( d1.OPERATIONAL_DATE, 'YYYY-MM-DD' ) = to_char ( DA.OPERATIONAL_DATE, 'YYYY-MM-DD' )
+    AND d1.A_OR_D = DA.A_OR_D
+    AND trunc ( to_number ( to_char ( COALESCE ( D1.ALDT, D1.ELDT ), 'hh24' ) ) ) &gt;= DA.STARTTIME
+    AND trunc ( to_number ( to_char ( COALESCE ( D1.ALDT, D1.ELDT ), 'hh24' ) ) ) &lt;
+          CASE
+          WHEN ENDTIME = 23 THEN
+    24 ELSE ENDTIME
+
+    END LEFT JOIN AIRCRAFT_SUBTYPE AIS ON AIS.IATA_SUBTYPE = D2.AIRCRAFT_IATA_SUBTYPE
+    LEFT JOIN TAXI_TIME_TABLE TT ON TT.AIRCRAFT_TYPE =
+    CASE
+
+    WHEN AIS.AIRPORTTYPE IS NULL THEN
+    ''
+    WHEN AIS.AIRPORTTYPE IS NOT NULL THEN
+    AIRPORTTYPE ELSE ''
+    END
+    AND d1.A_OR_D = TT.A_OR_D
+    AND DA.RWY = TT.RWY
+    AND d1.STAND = TT.STAND
+    AND TT.TIME_RANGE =
+    CASE
+
+    WHEN trunc ( to_number ( to_char ( D1.ALDT, 'hh24' ) ) ) &gt;= 7
+    AND trunc ( to_number ( to_char ( D1.ALDT, 'hh24' ) ) ) &lt; 10 THEN 1 WHEN trunc ( to_number ( to_char ( D1.ALDT, 'hh24' ) ) ) &gt;= 10
+    AND trunc ( to_number ( to_char ( D1.ALDT, 'hh24' ) ) ) &lt; 12 THEN
+    2 ELSE 0
+    END
+    WHERE
+    d1.a_or_d = 'A'
+    AND nvl ( d2.CODE_SHARE_STATUS, ' ' ) <![CDATA[ <> ]]> 'SF'
+    AND nvl ( d2.FLIGHT_CLASS_CODE, ' ' ) <![CDATA[ <> ]]> 'U/H'
+    ),
+    table_b AS (
+    SELECT
+    TT.TAXITIMEAVG SysAXOT,
+    DM.T_TOBT,
+    DM.ACCT_4 ACCT,
+    d5.TERMINAL,
+    d4.AREAID,
+    D3.GATE,
+    D1.*,
+    D2.CTOT,
+    D2.LNK_SCHEDULE_DATE,
+    D2.LNK_CARRIER_CODE,
+    D2.LNK_FLIGHT_NO,
+    D2.LNK_FLIGHT_SUFFIX,
+    D2.LNK_FLIGHT_REPEAT_COUNT,
+    d2.FLIGHT_CANCEL_CODE,
+    d2.FLIGHT_CLASS_CODE,
+    d2.AIRCRAFT_TERMINAL_CODE,
+    D2.A_TOBT,
+    D2.COBT,
+    D2.IsStrictCtrl,
+    DC.DESCRIPTION,
+    D2.GATE_1_OPENDATETIME,
+    D2.GATE_2_OPENDATETIME,
+    D2.GATE_3_OPENDATETIME,
+    D2.GATE_1_CLOSEDATETIME,
+    D2.GATE_2_CLOSEDATETIME,
+    D2.GATE_3_CLOSEDATETIME,
+    D2.AIRPORT_VIA_IATA_1,
+    D2.AIRPORT_VIA_IATA_2,
+    D2.AIRPORT_VIA_IATA_7,
+    D2.GATE_1_BOARDSTATUS,
+    D2.GATE_2_BOARDSTATUS,
+    D2.GATE_3_BOARDSTATUS,
+    CASE
+
+    WHEN D2.AOBT_5 IS NULL THEN
+    D2.AOBT_3
+    WHEN D2.AOBT_5 IS NOT NULL THEN
+    D2.AOBT_5 ELSE NULL
+    END A_AOBT
+    FROM
+    DAILY_FLIGHT_MASTER D1
+    LEFT JOIN DAILY_FLIGHT_ADD_DETAILS D2 ON D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+    AND to_char ( D1.OPERATIONAL_DATE, 'YYYY-MM-DD' ) = to_char ( D2.OPERATIONAL_DATE, 'YYYY-MM-DD' )
+    AND D1.A_OR_D = D2.A_OR_D
+    AND D1.FLIGHT_NO_IATA = D2.FLIGHT_NO_IATA
+    LEFT JOIN DAILY_FLIGHT_ADD_DETAILS_MORE DM ON DM.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+    AND to_char ( DM.OPERATIONAL_DATE, 'YYYY-MM-DD' ) = to_char ( D2.OPERATIONAL_DATE, 'YYYY-MM-DD' )
+    AND DM.A_OR_D = D2.A_OR_D
+    AND DM.FLIGHT_NO_IATA = D2.FLIGHT_NO_IATA
+    LEFT JOIN GATE D3 ON ( D1.GATE_1 = D3.GATE OR D1.GATE_2 = D3.GATE OR D1.GATE_3 = D3.GATE )
+    LEFT JOIN AREA d4 ON d3.AREAID = d4.AREAID
+    LEFT JOIN TERMINAL D5 ON d4.TERMINAL = d5.TERMINAL
+    LEFT JOIN DELAY_CODE DC ON DC.IRR_CODE = D1.CURRENT_DELAY_CODE
+    LEFT JOIN daily_runway DA ON to_char ( d1.OPERATIONAL_DATE, 'YYYY-MM-DD' ) = to_char ( DA.OPERATIONAL_DATE, 'YYYY-MM-DD' )
+    AND d1.A_OR_D = DA.A_OR_D
+    AND trunc ( to_number ( to_char ( COALESCE ( D1.ATOT, D1.ETOT ), 'hh24' ) ) ) &gt;= DA.STARTTIME
+    AND trunc ( to_number ( to_char ( COALESCE ( D1.ATOT, D1.ETOT ), 'hh24' ) ) ) &lt;
+          CASE
+
+          WHEN ENDTIME = 23 THEN
+    24 ELSE ENDTIME
+
+    END LEFT JOIN AIRCRAFT_SUBTYPE AIS ON AIS.IATA_SUBTYPE = D2.AIRCRAFT_IATA_SUBTYPE
+    LEFT JOIN TAXI_TIME_TABLE TT ON TT.AIRCRAFT_TYPE =
+    CASE
+
+    WHEN AIS.AIRPORTTYPE IS NULL THEN
+    ''
+    WHEN AIS.AIRPORTTYPE IS NOT NULL THEN
+    AIRPORTTYPE ELSE ''
+    END
+    AND D1.A_OR_D = TT.A_OR_D
+    AND DA.RWY = TT.RWY
+    AND D1.STAND = TT.STAND
+    AND TT.TIME_RANGE =
+    CASE
+
+    WHEN trunc ( to_number ( to_char ( D1.ATOT, 'hh24' ) ) ) &gt;= 7
+    AND trunc ( to_number ( to_char ( D1.ATOT, 'hh24' ) ) ) &lt; 10 THEN 1 WHEN trunc ( to_number ( to_char ( D1.ATOT, 'hh24' ) ) ) &gt;= 10
+    AND trunc ( to_number ( to_char ( D1.ATOT, 'hh24' ) ) ) &lt; 12 THEN
+    2 ELSE 0
+    END
+    WHERE
+    d1.a_or_d = 'D'
+    AND nvl ( d2.CODE_SHARE_STATUS, ' ' ) <![CDATA[ <> ]]> 'SF'
+    AND nvl ( d2.FLIGHT_CLASS_CODE, ' ' ) <![CDATA[ <> ]]> 'U/H'
+    )
+    SELECT
+    *
+    FROM
+    (
+    SELECT
+    t1.OPERATIONAL_DATE OPERATIONAL_DATE_A,
+    T1.FLIGHT_NO_IATA FLIGHT_NO_IATA_A,
+    T1.AIRLINE_CODE_IATA AIRLINE_CODE_IATA_A,
+    T1.AIRLINE_CODE_ICAO AIRLINE_CODE_ICAO_A,
+    T1.ORIGIN_AIRPORT_IATA ORIGIN_AIRPORT_IATA,
+    T1.FLIGHT_REPEAT_COUNT FLIGHT_REPEAT_COUNT_A,
+    T1.ORIGIN_AIRPORT_ICAO ORIGIN_AIRPORT_ICAO,
+    T1.STAND STAND_A,
+    T1.ELDT,
+    T1.A_OR_D A,
+    T1.ATMO,
+    T1.SLDT,
+    T1.ALDT,
+    T1.SIBT,
+    T1.EIBT,
+    T1.AIBT,
+    CEIL((TO_DATE(to_char(T2.AOBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(T1.AIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60) ATTT,
+    T2.ACCT,
+    T2.AIRCRAFT_TERMINAL_CODE,
+    T2.A_TOBT,
+    T2.COBT,
+    T2.T_TOBT,
+    T2.CTOT,
+    t2.AREAID,
+    T2.ARDT,
+    CEIL((TO_DATE(to_char(T1.AIBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(T1.ALDT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60) AXIT,
+    T1.EXIT,
+    T2.ACZT,
+    T2.AEZT,
+    T2.A_OR_D,
+    T2.FLIGHT_CANCEL_CODE,
+    T2.FLIGHT_CLASS_CODE,
+    t2.OPERATIONAL_DATE OPERATIONAL_DATE_D,
+    T2.FLIGHT_NO_IATA FLIGHT_NO_IATA_D,
+    T2.FLIGHT_NO_ICAO FLIGHT_NO_ICAO_D,
+    T2.FLIGHT_REPEAT_COUNT FLIGHT_REPEAT_COUNT_D,
+    T2.AIRLINE_CODE_IATA AIRLINE_CODE_IATA_D,
+    T2.AIRLINE_CODE_ICAO AIRLINE_CODE_ICAO_D,
+    T2.GATE_1,
+    T2.GATE_2,
+    T2.GATE_3,
+    T2.LNK_FLIGHT_NO,
+    T2.LNK_FLIGHT_SUFFIX,
+    T2.STAND STAND_D,
+    T2.A_OR_D D,
+    T2.AIRPORT_VIA_IATA_1,
+    T2.AIRPORT_VIA_IATA_2,
+    T2.AIRPORT_VIA_IATA_7 AIRPORT_VIA_IATA_7_D,
+    T1.AIRPORT_VIA_IATA_7 AIRPORT_VIA_IATA_7_A,
+    CASE
+
+    WHEN T2.GATE_1_OPENDATETIME IS NOT NULL THEN
+    T2.GATE_1_OPENDATETIME
+    WHEN T2.GATE_2_OPENDATETIME IS NOT NULL THEN
+    T2.GATE_2_OPENDATETIME
+    WHEN T2.GATE_3_OPENDATETIME IS NOT NULL THEN
+    T2.GATE_3_OPENDATETIME ELSE NULL
+    END ASBT,
+    CASE
+
+    WHEN T2.GATE_1_OPENDATETIME IS NOT NULL THEN
+    T2.GATE_1_BOARDSTATUS
+    WHEN T2.GATE_2_OPENDATETIME IS NOT NULL THEN
+    T2.GATE_2_BOARDSTATUS
+    WHEN T2.GATE_3_OPENDATETIME IS NOT NULL THEN
+    T2.GATE_3_BOARDSTATUS ELSE NULL
+    END BOARDSTATUS,
+    T2.SOBT,
+    T2.EOBT,
+    T2.TOBT,
+    T2.AOBT,
+    T2.EXOT,
+    CEIL((TO_DATE(to_char(T2.ATOT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(T2.AOBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60) AXOT,
+
+    T2.DESCRIPTION,
+    t2.IsStrictCtrl,
+    T2.GATE_1_OPENDATETIME,
+    T2.GATE_2_OPENDATETIME,
+    T2.GATE_3_OPENDATETIME,
+    T2.GATE_1_CLOSEDATETIME,
+    T2.GATE_2_CLOSEDATETIME,
+    T2.GATE_3_CLOSEDATETIME,
+    T2.ATOT,
+    T2.DEST_AIRPORT_IATA,
+    T2.DEST_AIRPORT_ICAO
+    FROM
+    table_a t1
+    FULL JOIN table_b t2 ON T2.LNK_CARRIER_CODE || T2.LNK_FLIGHT_NO || NVL ( t2.LNK_FLIGHT_SUFFIX, '' ) = T1.FLIGHT_NO_IATA
+    AND T2.LNK_FLIGHT_REPEAT_COUNT = T1.FLIGHT_REPEAT_COUNT
+    AND to_char(t1.OPERATIONAL_DATE,'YYYY-MM-DD') = to_char(t2.LNK_SCHEDULE_DATE,'YYYY-MM-DD')
+    )
+    WHERE
+    (
+    AIRLINE_CODE_IATA_A = 'MU'
+    OR AIRLINE_CODE_IATA_A = 'FM'
+    OR AIRLINE_CODE_IATA_A = 'KN'
+    OR AIRLINE_CODE_IATA_A = 'CA'
+    OR AIRLINE_CODE_IATA_A = 'ZH'
+    OR AIRLINE_CODE_IATA_A = 'CZ'
+    OR AIRLINE_CODE_IATA_A = 'HO'
+    OR AIRLINE_CODE_IATA_A = '9C'
+    OR AIRLINE_CODE_IATA_A = 'MF'
+    OR AIRLINE_CODE_IATA_A = 'HU'
+    OR AIRLINE_CODE_IATA_A = '8L'
+    OR AIRLINE_CODE_IATA_A = 'GS'
+    OR AIRLINE_CODE_IATA_A = 'SC'
+    OR AIRLINE_CODE_IATA_A = 'TV'
+    OR AIRLINE_CODE_IATA_A = 'NS'
+    OR AIRLINE_CODE_IATA_A = 'EU'
+    );
+  </select>
+  <select id="getCount" resultType="java.util.List">
+    WITH table_a AS (
+    SELECT
+    TT.TAXITIMEAVG SysAXIT,
+    d1.*,
+    D2.AIRPORT_VIA_IATA_7,
+    D2.LNK_SCHEDULE_DATE,
+    CASE
+
+    WHEN D2.AIBT_5 IS NULL THEN
+    D2.AIBT_3
+    WHEN D2.AIBT_5 IS NOT NULL THEN
+    D2.AIBT_5 ELSE NULL
+    END A_AIBT
+    FROM
+    DAILY_FLIGHT_MASTER D1
+    LEFT JOIN DAILY_FLIGHT_ADD_DETAILS D2 ON D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+    AND to_char ( D1.OPERATIONAL_DATE, 'YYYY-MM-DD' ) = to_char ( D2.OPERATIONAL_DATE, 'YYYY-MM-DD' )
+    AND D1.A_OR_D = D2.A_OR_D
+    AND D1.FLIGHT_NO_IATA = D2.FLIGHT_NO_IATA
+    LEFT JOIN daily_runway DA ON to_char ( d1.OPERATIONAL_DATE, 'YYYY-MM-DD' ) = to_char ( DA.OPERATIONAL_DATE, 'YYYY-MM-DD' )
+    AND d1.A_OR_D = DA.A_OR_D
+    AND trunc ( to_number ( to_char ( COALESCE ( D1.ALDT, D1.ELDT ), 'hh24' ) ) ) &gt;= DA.STARTTIME
+    AND trunc ( to_number ( to_char ( COALESCE ( D1.ALDT, D1.ELDT ), 'hh24' ) ) ) &lt;
+          CASE
+
+          WHEN ENDTIME = 23 THEN
+    24 ELSE ENDTIME
+
+    END LEFT JOIN AIRCRAFT_SUBTYPE AIS ON AIS.IATA_SUBTYPE = D2.AIRCRAFT_IATA_SUBTYPE
+    LEFT JOIN TAXI_TIME_TABLE TT ON TT.AIRCRAFT_TYPE =
+    CASE
+
+    WHEN AIS.AIRPORTTYPE IS NULL THEN
+    ''
+    WHEN AIS.AIRPORTTYPE IS NOT NULL THEN
+    AIRPORTTYPE ELSE ''
+    END
+    AND d1.A_OR_D = TT.A_OR_D
+    AND DA.RWY = TT.RWY
+    AND d1.STAND = TT.STAND
+    AND TT.TIME_RANGE =
+    CASE
+
+    WHEN trunc ( to_number ( to_char ( D1.ALDT, 'hh24' ) ) ) &gt;= 7
+    AND trunc ( to_number ( to_char ( D1.ALDT, 'hh24' ) ) ) &lt; 10 THEN 1 WHEN trunc ( to_number ( to_char ( D1.ALDT, 'hh24' ) ) ) &gt;= 10
+    AND trunc ( to_number ( to_char ( D1.ALDT, 'hh24' ) ) ) &lt; 12 THEN
+    2 ELSE 0
+    END
+    WHERE
+    d1.a_or_d = 'A'
+    AND nvl ( d2.CODE_SHARE_STATUS, ' ' ) <![CDATA[ <> ]]> 'SF'
+    AND nvl ( d2.FLIGHT_CLASS_CODE, ' ' ) <![CDATA[ <> ]]> 'U/H'
+    ),
+    table_b AS (
+    SELECT
+    TT.TAXITIMEAVG SysAXOT,
+    DM.T_TOBT,
+    DM.ACCT_4 ACCT,
+    d5.TERMINAL,
+    d4.AREAID,
+    D3.GATE,
+    D1.*,
+    D2.CTOT,
+    D2.LNK_SCHEDULE_DATE,
+    D2.LNK_CARRIER_CODE,
+    D2.LNK_FLIGHT_NO,
+    D2.LNK_FLIGHT_SUFFIX,
+    D2.LNK_FLIGHT_REPEAT_COUNT,
+    d2.FLIGHT_CANCEL_CODE,
+    d2.FLIGHT_CLASS_CODE,
+    d2.AIRCRAFT_TERMINAL_CODE,
+    D2.A_TOBT,
+    D2.COBT,
+    D2.IsStrictCtrl,
+    DC.DESCRIPTION,
+    D2.GATE_1_OPENDATETIME,
+    D2.GATE_2_OPENDATETIME,
+    D2.GATE_3_OPENDATETIME,
+    D2.GATE_1_CLOSEDATETIME,
+    D2.GATE_2_CLOSEDATETIME,
+    D2.GATE_3_CLOSEDATETIME,
+    D2.AIRPORT_VIA_IATA_1,
+    D2.AIRPORT_VIA_IATA_2,
+    D2.AIRPORT_VIA_IATA_7,
+    D2.GATE_1_BOARDSTATUS,
+    D2.GATE_2_BOARDSTATUS,
+    D2.GATE_3_BOARDSTATUS,
+    CASE
+
+    WHEN D2.AOBT_5 IS NULL THEN
+    D2.AOBT_3
+    WHEN D2.AOBT_5 IS NOT NULL THEN
+    D2.AOBT_5 ELSE NULL
+    END A_AOBT
+    FROM
+    DAILY_FLIGHT_MASTER D1
+    LEFT JOIN DAILY_FLIGHT_ADD_DETAILS D2 ON D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+    AND to_char ( D1.OPERATIONAL_DATE, 'YYYY-MM-DD' ) = to_char ( D2.OPERATIONAL_DATE, 'YYYY-MM-DD' )
+    AND D1.A_OR_D = D2.A_OR_D
+    AND D1.FLIGHT_NO_IATA = D2.FLIGHT_NO_IATA
+    LEFT JOIN DAILY_FLIGHT_ADD_DETAILS_MORE DM ON DM.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+    AND to_char ( DM.OPERATIONAL_DATE, 'YYYY-MM-DD' ) = to_char ( D2.OPERATIONAL_DATE, 'YYYY-MM-DD' )
+    AND DM.A_OR_D = D2.A_OR_D
+    AND DM.FLIGHT_NO_IATA = D2.FLIGHT_NO_IATA
+    LEFT JOIN GATE D3 ON ( D1.GATE_1 = D3.GATE OR D1.GATE_2 = D3.GATE OR D1.GATE_3 = D3.GATE )
+    LEFT JOIN AREA d4 ON d3.AREAID = d4.AREAID
+    LEFT JOIN TERMINAL D5 ON d4.TERMINAL = d5.TERMINAL
+    LEFT JOIN DELAY_CODE DC ON DC.IRR_CODE = D1.CURRENT_DELAY_CODE
+    LEFT JOIN daily_runway DA ON to_char ( d1.OPERATIONAL_DATE, 'YYYY-MM-DD' ) = to_char ( DA.OPERATIONAL_DATE, 'YYYY-MM-DD' )
+    AND d1.A_OR_D = DA.A_OR_D
+    AND trunc ( to_number ( to_char ( COALESCE ( D1.ATOT, D1.ETOT ), 'hh24' ) ) ) &gt;= DA.STARTTIME
+    AND trunc ( to_number ( to_char ( COALESCE ( D1.ATOT, D1.ETOT ), 'hh24' ) ) ) &lt;
+          CASE
+
+          WHEN ENDTIME = 23 THEN
+    24 ELSE ENDTIME
+
+    END LEFT JOIN AIRCRAFT_SUBTYPE AIS ON AIS.IATA_SUBTYPE = D2.AIRCRAFT_IATA_SUBTYPE
+    LEFT JOIN TAXI_TIME_TABLE TT ON TT.AIRCRAFT_TYPE =
+    CASE
+
+    WHEN AIS.AIRPORTTYPE IS NULL THEN
+    ''
+    WHEN AIS.AIRPORTTYPE IS NOT NULL THEN
+    AIRPORTTYPE ELSE ''
+    END
+    AND D1.A_OR_D = TT.A_OR_D
+    AND DA.RWY = TT.RWY
+    AND D1.STAND = TT.STAND
+    AND TT.TIME_RANGE =
+    CASE
+
+    WHEN trunc ( to_number ( to_char ( D1.ATOT, 'hh24' ) ) ) &gt;= 7
+    AND trunc ( to_number ( to_char ( D1.ATOT, 'hh24' ) ) ) &lt; 10 THEN 1 WHEN trunc ( to_number ( to_char ( D1.ATOT, 'hh24' ) ) ) &gt;= 10
+    AND trunc ( to_number ( to_char ( D1.ATOT, 'hh24' ) ) ) &lt; 12 THEN
+    2 ELSE 0
+    END
+    WHERE
+    d1.a_or_d = 'D'
+    AND nvl ( d2.CODE_SHARE_STATUS, ' ' ) <![CDATA[ <> ]]> 'SF'
+    AND nvl ( d2.FLIGHT_CLASS_CODE, ' ' ) <![CDATA[ <> ]]> 'U/H'
+    )
+    SELECT
+    *
+    FROM
+    (
+    SELECT
+    t1.OPERATIONAL_DATE OPERATIONAL_DATE_A,
+    T1.FLIGHT_NO_IATA FLIGHT_NO_IATA_A,
+    T1.AIRLINE_CODE_IATA AIRLINE_CODE_IATA_A,
+    T1.AIRLINE_CODE_ICAO AIRLINE_CODE_ICAO_A,
+    T1.ORIGIN_AIRPORT_IATA ORIGIN_AIRPORT_IATA,
+    T1.FLIGHT_REPEAT_COUNT FLIGHT_REPEAT_COUNT_A,
+    T1.ORIGIN_AIRPORT_ICAO ORIGIN_AIRPORT_ICAO,
+    T1.STAND STAND_A,
+    T1.ELDT,
+    T1.A_OR_D A,
+    T1.ATMO,
+    T1.SLDT,
+    T1.ALDT,
+    T1.SIBT,
+    T1.EIBT,
+    T1.AIBT,
+    CEIL((TO_DATE(to_char(T2.AOBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(T1.AIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60) ATTT,
+    T2.ACCT,
+    T2.AIRCRAFT_TERMINAL_CODE,
+    T2.A_TOBT,
+    T2.COBT,
+    T2.T_TOBT,
+    T2.CTOT,
+    t2.AREAID,
+    T2.ARDT,
+    CEIL((TO_DATE(to_char(T1.AIBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(T1.ALDT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60) AXIT,
+    T1.EXIT,
+    T2.ACZT,
+    T2.AEZT,
+    T2.A_OR_D,
+    T2.FLIGHT_CANCEL_CODE,
+    T2.FLIGHT_CLASS_CODE,
+    t2.OPERATIONAL_DATE OPERATIONAL_DATE_D,
+    T2.FLIGHT_NO_IATA FLIGHT_NO_IATA_D,
+    T2.FLIGHT_NO_ICAO FLIGHT_NO_ICAO_D,
+    T2.FLIGHT_REPEAT_COUNT FLIGHT_REPEAT_COUNT_D,
+    T2.AIRLINE_CODE_IATA AIRLINE_CODE_IATA_D,
+    T2.AIRLINE_CODE_ICAO AIRLINE_CODE_ICAO_D,
+    T2.GATE_1,
+    T2.GATE_2,
+    T2.GATE_3,
+    T2.LNK_FLIGHT_NO,
+    T2.LNK_FLIGHT_SUFFIX,
+    T2.STAND STAND_D,
+    T2.A_OR_D D,
+    T2.AIRPORT_VIA_IATA_1,
+    T2.AIRPORT_VIA_IATA_2,
+    T2.AIRPORT_VIA_IATA_7 AIRPORT_VIA_IATA_7_D,
+    T1.AIRPORT_VIA_IATA_7 AIRPORT_VIA_IATA_7_A,
+    CASE
+
+    WHEN T2.GATE_1_OPENDATETIME IS NOT NULL THEN
+    T2.GATE_1_OPENDATETIME
+    WHEN T2.GATE_2_OPENDATETIME IS NOT NULL THEN
+    T2.GATE_2_OPENDATETIME
+    WHEN T2.GATE_3_OPENDATETIME IS NOT NULL THEN
+    T2.GATE_3_OPENDATETIME ELSE NULL
+    END ASBT,
+    CASE
+
+    WHEN T2.GATE_1_OPENDATETIME IS NOT NULL THEN
+    T2.GATE_1_BOARDSTATUS
+    WHEN T2.GATE_2_OPENDATETIME IS NOT NULL THEN
+    T2.GATE_2_BOARDSTATUS
+    WHEN T2.GATE_3_OPENDATETIME IS NOT NULL THEN
+    T2.GATE_3_BOARDSTATUS ELSE NULL
+    END BOARDSTATUS,
+    T2.SOBT,
+    T2.EOBT,
+    T2.TOBT,
+    T2.AOBT,
+    T2.EXOT,
+    CEIL((TO_DATE(to_char(T2.ATOT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(T2.AOBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60) AXOT,
+    T2.DESCRIPTION,
+    t2.IsStrictCtrl,
+    T2.GATE_1_OPENDATETIME,
+    T2.GATE_2_OPENDATETIME,
+    T2.GATE_3_OPENDATETIME,
+    T2.GATE_1_CLOSEDATETIME,
+    T2.GATE_2_CLOSEDATETIME,
+    T2.GATE_3_CLOSEDATETIME,
+    T2.ATOT,
+    T2.DEST_AIRPORT_IATA,
+    T2.DEST_AIRPORT_ICAO
+    FROM
+    table_a t1
+    FULL JOIN table_b t2 ON T2.LNK_CARRIER_CODE || T2.LNK_FLIGHT_NO || NVL ( t2.LNK_FLIGHT_SUFFIX, '' ) = T1.FLIGHT_NO_IATA
+    AND T2.LNK_FLIGHT_REPEAT_COUNT = T1.FLIGHT_REPEAT_COUNT
+    AND to_char(t1.OPERATIONAL_DATE,'YYYY-MM-DD') = to_char(t2.LNK_SCHEDULE_DATE,'YYYY-MM-DD')
+    )
+    WHERE
+    (
+    AIRLINE_CODE_IATA_A = 'MU'
+    OR AIRLINE_CODE_IATA_A = 'FM'
+    OR AIRLINE_CODE_IATA_A = 'KN'
+    OR AIRLINE_CODE_IATA_A = 'CA'
+    OR AIRLINE_CODE_IATA_A = 'ZH'
+    OR AIRLINE_CODE_IATA_A = 'CZ'
+    OR AIRLINE_CODE_IATA_A = 'HO'
+    OR AIRLINE_CODE_IATA_A = '9C'
+    OR AIRLINE_CODE_IATA_A = 'MF'
+    OR AIRLINE_CODE_IATA_A = 'HU'
+    OR AIRLINE_CODE_IATA_A = '8L'
+    OR AIRLINE_CODE_IATA_A = 'GS'
+    OR AIRLINE_CODE_IATA_A = 'SC'
+    OR AIRLINE_CODE_IATA_A = 'TV'
+    OR AIRLINE_CODE_IATA_A = 'NS'
+    OR AIRLINE_CODE_IATA_A = 'EU'
+    );
+  </select>
+  <select id="get_location" resultType="com.hq.acdm.model.statistics.flightQuery.Location">
+    sELECT DISTINCT LOCATION.IATA_CODE,LOCATION.NAME,LOCATION.ICAO_CODE FROM LOCATION,DAILY_FLIGHT_MASTER D WHERE LOCATION.IATA_CODE = D.ORIGIN_AIRPORT_IATA ORDER BY LOCATION.IATA_CODE
+  </select>
+  <select id="queryWithoutAORD" parameterType="map" resultType="com.hq.acdm.model.statistics.flightQuery.FlightQueryResult">
+    SELECT
+    *
+    FROM
+    (
+    SELECT
+    d1.*,
+    D2.AIRPORT_VIA_IATA_7,
+    D2.FLIGHT_CANCEL_CODE,
+    D2.AIRPORT_VIA_IATA_1,
+    D2.AIRPORT_VIA_IATA_2,
+    D2.IsStrictCtrl
+    FROM
+    DAILY_FLIGHT_MASTER D1 left join DAILY_FLIGHT_ADD_DETAILS D2 ON D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+    AND D1.OPERATIONAL_DATE = D2.OPERATIONAL_DATE
+    AND D1.A_OR_D = D2.A_OR_D
+    AND D1.FLIGHT_NO_IATA = D2.FLIGHT_NO_IATA
+    WHERE
+    nvl(d2.CODE_SHARE_STATUS,' ') <![CDATA[ <> ]]> 'SF'
+    AND nvl(d2.FLIGHT_CLASS_CODE,' ') <![CDATA[ <> ]]> 'U/H'
+    )
+    WHERE
+    (
+    AIRLINE_CODE_IATA = 'MU'
+    OR AIRLINE_CODE_IATA = 'FM'
+    OR AIRLINE_CODE_IATA = 'KN'
+    OR AIRLINE_CODE_IATA = 'CA'
+    OR AIRLINE_CODE_IATA = 'ZH'
+    OR AIRLINE_CODE_IATA = 'CZ'
+    OR AIRLINE_CODE_IATA = 'HO'
+    OR AIRLINE_CODE_IATA = '9C'
+    OR AIRLINE_CODE_IATA = 'MF'
+    OR AIRLINE_CODE_IATA = 'HU'
+    OR AIRLINE_CODE_IATA = '8L'
+    OR AIRLINE_CODE_IATA = 'GS'
+    OR AIRLINE_CODE_IATA = 'SC'
+    OR AIRLINE_CODE_IATA = 'TV'
+    OR AIRLINE_CODE_IATA = 'NS'
+    OR AIRLINE_CODE_IATA = 'EU'
+    )
+    <if test="params.airCompanyList !=null and params.airCompanyList.size() >0">
+      AND  AIRLINE_CODE_IATA IN
+      <foreach collection="params.airCompanyList" index="index" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+    </if>
+
+
+
+  </select>
+  <select id="queryWithAORD" parameterType="map" resultType="com.hq.acdm.model.statistics.flightQuery.FlightQueryResult">
+    SELECT
+      A.*,
+      B.OPERATIONAL_FLAG
+      FROM
+      (SELECT
+    *
+    FROM
+    (
+    SELECT
+    d1.*,
+    D2.AIRPORT_VIA_IATA_7,
+    D2.FLIGHT_CANCEL_CODE,
+    D2.AIRPORT_VIA_IATA_1,
+    D2.AIRPORT_VIA_IATA_2,
+    D2.ISSTRICTCTRL
+    FROM
+    DAILY_FLIGHT_MASTER D1 left join DAILY_FLIGHT_ADD_DETAILS D2 ON D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+    AND D1.OPERATIONAL_DATE = D2.OPERATIONAL_DATE
+    AND D1.A_OR_D = D2.A_OR_D
+    AND D1.FLIGHT_NO_IATA = D2.FLIGHT_NO_IATA
+    WHERE
+    nvl(d2.CODE_SHARE_STATUS,' ') <![CDATA[ <> ]]> 'SF'
+    AND nvl(d2.FLIGHT_CLASS_CODE,' ') <![CDATA[ <> ]]> 'U/H'
+    )
+    WHERE
+    (
+    AIRLINE_CODE_IATA = 'MU'
+    OR AIRLINE_CODE_IATA = 'FM'
+    OR AIRLINE_CODE_IATA = 'KN'
+    OR AIRLINE_CODE_IATA = 'CA'
+    OR AIRLINE_CODE_IATA = 'ZH'
+    OR AIRLINE_CODE_IATA = 'CZ'
+    OR AIRLINE_CODE_IATA = 'HO'
+    OR AIRLINE_CODE_IATA = '9C'
+    OR AIRLINE_CODE_IATA = 'MF'
+    OR AIRLINE_CODE_IATA = 'HU'
+    OR AIRLINE_CODE_IATA = '8L'
+    OR AIRLINE_CODE_IATA = 'GS'
+    OR AIRLINE_CODE_IATA = 'SC'
+    OR AIRLINE_CODE_IATA = 'TV'
+    OR AIRLINE_CODE_IATA = 'NS'
+    OR AIRLINE_CODE_IATA = 'EU'
+    )
+    <if test="params.cancel == '1'.toString()">
+      AND FLIGHT_CANCEL_CODE <![CDATA[ <> ]]> 'C'
+    </if>
+    <if test="params.a_or_d !=null and params.a_or_d !=''">
+      and A_OR_D = #{params.a_or_d}
+    </if>
+    <if test="params.jintingList !=null and params.jintingList.size() >0">
+      AND (AIRPORT_VIA_IATA_1 in
+      <foreach collection="params.jintingList" item="item" index="index" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+      OR AIRPORT_VIA_IATA_2 in
+      <foreach collection="params.jintingList" item="item" index="index" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+      )
+    </if>
+    <if test="params.destinationList !=null and params.destinationList.size() >0 and params.a_or_d =='A'.toString()">
+      AND ORIGIN_AIRPORT_IATA in
+      <foreach collection="params.destinationList" index="index" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+    </if>
+    <if test="params.destinationList !=null and params.destinationList.size() >0 and params.a_or_d =='D'.toString()">
+      AND DEST_AIRPORT_IATA in
+      <foreach collection="params.destinationList" index="index" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+    </if>
+    <if test="params.destinationList !=null and params.destinationList.size() >0  and (params.a_or_d == null or params.a_or_d == '')">
+      AND (ORIGIN_AIRPORT_IATA in
+      <foreach collection="params.destinationList" index="index" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+      OR DEST_AIRPORT_IATA in
+      <foreach collection="params.destinationList" index="index" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+      )
+    </if>
+    <if test="params.a_or_d !=null and params.a_or_d !='' and params.a_or_d == 'A'.toString() and params.startDate !=null and params.startDate !='' and params.endDate != null and params.endDate != ''">
+      AND to_char(SIBT,'YYYY-MM-DD HH24:MI:SS')&gt;=#{params.startDate}
+      AND to_char(SIBT,'YYYY-MM-DD HH24:MI:SS')&lt;#{params.endDate}
+    </if>
+    <if test="params.a_or_d !=null and params.a_or_d !='' and params.a_or_d == 'D'.toString() and params.startDate !=null and params.startDate !='' and params.endDate != null and params.endDate != ''">
+      AND to_char(SOBT,'YYYY-MM-DD HH24:MI:SS')&gt;=#{params.startDate}
+      AND to_char(SOBT,'YYYY-MM-DD HH24:MI:SS')&lt;#{params.endDate}
+    </if>
+    <if test="params.startDate !=null and params.startDate !='' and params.endDate != null and params.endDate != '' and params.a_or_d ==''">
+      AND ((to_char(SOBT,'YYYY-MM-DD HH24:MI:SS')&gt;=#{params.startDate} AND to_char(SOBT,'YYYY-MM-DD HH24:MI:SS')&lt;#{params.endDate})
+      OR (to_char(SIBT,'YYYY-MM-DD HH24:MI:SS')&gt;=#{params.startDate} AND to_char(SIBT,'YYYY-MM-DD HH24:MI:SS')&lt;#{params.endDate}))
+    </if>
+    <if test="params.execute == '1'.toString()">
+      AND ATOT is null
+    </if>
+    <if test="params.airCompanyList !=null and params.airCompanyList.size() >0">
+      AND  AIRLINE_CODE_IATA IN
+      <foreach collection="params.airCompanyList" index="index" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+    </if>
+    <if test="params.hangluList !=null and params.hangluList.size() >0 and params.a_or_d == 'A'.toString()">
+      AND ORIGIN_AIRPORT_IATA in
+      <foreach collection="params.hangluList" index="index" item="item" open="(" close=")" separator=",">
+      #{item}
+      </foreach>
+    </if>
+    <if test="params.hangluList !=null and params.hangluList.size() >0 and params.a_or_d == 'D'.toString()">
+      AND ((AIRPORT_VIA_IATA_1 is null and
+      DEST_AIRPORT_IATA in
+      <foreach collection="params.hangluList" index="index" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+      )
+      OR
+      (AIRPORT_VIA_IATA_1 is not null and AIRPORT_VIA_IATA_1 in
+      <foreach collection="params.hangluList" index="index" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>))
+    </if>
+    <if test="params.fangxiangList !=null and params.fangxiangList.size() >0 and params.a_or_d =='D'.toString() and params.hangluList.size()==0 ">
+      AND ((AIRPORT_VIA_IATA_1 is null and DEST_AIRPORT_IATA in
+      <foreach collection="params.fangxiangList" index="index" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+      ) OR
+      (AIRPORT_VIA_IATA_1 is not null and AIRPORT_VIA_IATA_1 in
+      <foreach collection="params.fangxiangList" index="index" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>))
+    </if>
+    <if test="params.fangxiangList !=null and params.fangxiangList.size() >0 and params.a_or_d =='A'.toString() and params.hangluList.size()==0">
+      AND ORIGIN_AIRPORT_IATA in
+      <foreach collection="params.fangxiangList" item="item" index="index" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+    </if>
+    ORDER BY SOBT) A
+      LEFT JOIN REDUCE B
+      ON B.A_OR_D = A.A_OR_D
+      AND B.OPERATIONAL_DATE = A.OPERATIONAL_DATE
+      AND B.FLIGHT_NO_IATA = A.FLIGHT_NO_IATA
+  </select>
+
+
+  <select id="xuejianA" parameterType="java.util.Map" resultType="com.hq.acdm.model.statistics.flightQuery.ReduceCalculateResult">
+    SELECT
+    to_char( SIBT,'hh24' ) AT,
+    AIRLINE_CODE_IATA AIRLINE_CODE_IATA,
+    COUNT( * ) NUM
+    FROM
+    (
+      SELECT
+      d1.*,
+      D2.AIRPORT_VIA_IATA_7,
+      D2.FLIGHT_CANCEL_CODE,
+      D2.AIRPORT_VIA_IATA_1,
+      D2.AIRPORT_VIA_IATA_2,
+      D2.IsStrictCtrl
+      FROM
+      DAILY_FLIGHT_MASTER D1 left join DAILY_FLIGHT_ADD_DETAILS D2 ON D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+      AND D1.OPERATIONAL_DATE = D2.OPERATIONAL_DATE
+      AND D1.A_OR_D = D2.A_OR_D
+      AND D1.FLIGHT_NO_IATA = D2.FLIGHT_NO_IATA
+      WHERE
+      nvl(d2.CODE_SHARE_STATUS,' ') <![CDATA[ <> ]]> 'SF'
+      AND nvl(d2.FLIGHT_CLASS_CODE,' ') <![CDATA[ <> ]]> 'U/H'
+      )
+      WHERE
+      (
+      AIRLINE_CODE_IATA = 'MU'
+      OR AIRLINE_CODE_IATA = 'FM'
+      OR AIRLINE_CODE_IATA = 'KN'
+      OR AIRLINE_CODE_IATA = 'CA'
+      OR AIRLINE_CODE_IATA = 'ZH'
+      OR AIRLINE_CODE_IATA = 'CZ'
+      OR AIRLINE_CODE_IATA = 'HO'
+      OR AIRLINE_CODE_IATA = '9C'
+      OR AIRLINE_CODE_IATA = 'MF'
+      OR AIRLINE_CODE_IATA = 'HU'
+      OR AIRLINE_CODE_IATA = '8L'
+      OR AIRLINE_CODE_IATA = 'GS'
+      OR AIRLINE_CODE_IATA = 'SC'
+      OR AIRLINE_CODE_IATA = 'TV'
+      OR AIRLINE_CODE_IATA = 'NS'
+      OR AIRLINE_CODE_IATA = 'EU'
+      )
+      <if test="params.cancel == '1'.toString()">
+          AND FLIGHT_CANCEL_CODE <![CDATA[ <> ]]> 'C'
+      </if>
+      <if test="params.a_or_d !=null and params.a_or_d !=''">
+          and A_OR_D = #{params.a_or_d}
+      </if>
+      <if test="params.jinting !=null and params.jinting !=''">
+          AND ((AIRPORT_VIA_IATA_1 = #{params.jinting}) OR (AIRPORT_VIA_IATA_2 = #{params.jinting}))
+      </if>
+      <if test="params.destination !=null and params.destination !='' and params.a_or_d =='A'.toString()">
+          AND ORIGIN_AIRPORT_IATA= #{params.destination}
+          and A_OR_D = 'A'
+      </if>
+      <if test="params.destination !=null and params.destination !='' and params.a_or_d =='D'.toString()">
+          AND DEST_AIRPORT_IATA= #{params.destination}
+          and A_OR_D = 'D'
+      </if>
+      <if test="params.destination !=null and params.destination !='' and (params.a_or_d == null or params.a_or_d == '')">
+          AND (ORIGIN_AIRPORT_IATA=#{params.destination} OR DEST_AIRPORT_IATA=#{params.destination})
+      </if>
+      <if test="params.a_or_d !=null and params.a_or_d !='' and params.a_or_d == 'A'.toString() and params.startDate !=null and params.startDate !='' and params.endDate != null and params.endDate != ''">
+          AND to_char(SIBT,'YYYY-MM-DD HH24:MI:SS')&gt;=#{params.startDate}
+          AND to_char(SIBT,'YYYY-MM-DD HH24:MI:SS')&lt;#{params.endDate}
+      </if>
+      <if test="params.a_or_d !=null and params.a_or_d !='' and params.a_or_d == 'D'.toString() and params.startDate !=null and params.startDate !='' and params.endDate != null and params.endDate != ''">
+          AND to_char(SOBT,'YYYY-MM-DD HH24:MI:SS')&gt;=#{params.startDate}
+          AND to_char(SOBT,'YYYY-MM-DD HH24:MI:SS')&lt;#{params.endDate}
+      </if>
+    <if test="params.a_or_d ==null and params.a_or_d =='' and params.startDate !=null and params.startDate !='' and params.endDate != null and params.endDate != ''">
+      AND ((to_char(SOBT,'YYYY-MM-DD HH24:MI:SS')&gt;=#{params.startDate} AND to_char(SOBT,'YYYY-MM-DD HH24:MI:SS')&lt;#{params.endDate})
+      OR (to_char(SIBT,'YYYY-MM-DD HH24:MI:SS')&gt;=#{params.startDate} AND to_char(SIBT,'YYYY-MM-DD HH24:MI:SS')&lt;#{params.endDate}))
+    </if>
+      <if test="params.execute == '1'.toString()">
+          AND ATOT is null
+      </if>
+      <if test="params.airCompany !=null and params.airCompany !='' and params.airCompany == 'MU/FM/KN'">
+          AND  (AIRLINE_CODE_IATA ='MU' OR AIRLINE_CODE_IATA ='FM' OR AIRLINE_CODE_IATA ='KN')
+      </if>
+      <if test="params.airCompany !=null and params.airCompany !='' and params.airCompany == 'CA/ZH'">
+          AND  (AIRLINE_CODE_IATA ='CA' OR AIRLINE_CODE_IATA ='ZH')
+      </if>
+      <if test="params.airCompany !=null and params.airCompany !='' and params.airCompany == 'HU/8L/GS'">
+          AND  (AIRLINE_CODE_IATA ='HU' OR AIRLINE_CODE_IATA ='8L' OR AIRLINE_CODE_IATA ='GS' )
+      </if>
+      <if test="params.airCompany !=null and params.airCompany !='' and params.airCompany == 'TV/NS/EU'">
+          AND  (AIRLINE_CODE_IATA ='TV' OR AIRLINE_CODE_IATA ='NS' OR AIRLINE_CODE_IATA ='EU' )
+      </if>
+      <if test="params.airCompany !=null and params.airCompany !='' and params.airCompany != 'TV/NS/EU' and params.airCompany != 'HU/8L/GS' and params.airCompany != 'CA/ZH' and params.airCompany != 'MU/FM/KN'">
+          AND  AIRLINE_CODE_IATA = #{params.airCompany}
+      </if>
+      <if test="params.way !=null and params.way !='' and params.a_or_d == 'A'.toString()">
+          AND ORIGIN_AIRPORT_IATA in (#{params.way})
+      </if>
+      <if test="params.way !=null and params.way !='' and params.a_or_d == 'D'.toString()">
+          AND ((AIRPORT_VIA_IATA_1 is null and
+          DEST_AIRPORT_IATA in (#{params.way})) or
+          (AIRPORT_VIA_IATA_1 is not null and AIRPORT_VIA_IATA_1 in (#{params.way})))
+      </if>
+      <if test="params.direction !=null and params.direction !='' and params.a_or_d =='D'.toString()">
+          AND (AIRPORT_VIA_IATA_1 is null and DEST_AIRPORT_IATA in ( #{params.direction})) or (AIRPORT_VIA_IATA_1 is not null and AIRPORT_VIA_IATA_1 in (#{params.direction}))
+      </if>
+      <if test="params.direction !=null and params.direction !='' and params.a_or_d =='A'.toString()">
+          AND ORIGIN_AIRPORT_IATA in (#{params.direction})
+      </if>
+    GROUP BY
+    to_char( SIBT,'hh24' ),
+    AIRLINE_CODE_IATA
+  </select>
+
+
+
+
+  <select id="xuejianD" parameterType="java.util.Map" resultType="com.hq.acdm.model.statistics.flightQuery.ReduceCalculateResult">
+    SELECT
+    to_char( SOBT,'hh24' ) AT,
+    AIRLINE_CODE_IATA AIRLINE_CODE_IATA,
+    COUNT( * ) NUM
+    FROM
+    (
+      SELECT
+      d1.*,
+      D2.AIRPORT_VIA_IATA_7,
+      D2.FLIGHT_CANCEL_CODE,
+      D2.AIRPORT_VIA_IATA_1,
+      D2.AIRPORT_VIA_IATA_2,
+      D2.IsStrictCtrl
+      FROM
+      DAILY_FLIGHT_MASTER D1 left join DAILY_FLIGHT_ADD_DETAILS D2 ON D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+      AND D1.OPERATIONAL_DATE = D2.OPERATIONAL_DATE
+      AND D1.A_OR_D = D2.A_OR_D
+      AND D1.FLIGHT_NO_IATA = D2.FLIGHT_NO_IATA
+      WHERE
+      nvl(d2.CODE_SHARE_STATUS,' ') <![CDATA[ <> ]]> 'SF'
+      AND nvl(d2.FLIGHT_CLASS_CODE,' ') <![CDATA[ <> ]]> 'U/H'
+      )
+      WHERE
+      (
+      AIRLINE_CODE_IATA = 'MU'
+      OR AIRLINE_CODE_IATA = 'FM'
+      OR AIRLINE_CODE_IATA = 'KN'
+      OR AIRLINE_CODE_IATA = 'CA'
+      OR AIRLINE_CODE_IATA = 'ZH'
+      OR AIRLINE_CODE_IATA = 'CZ'
+      OR AIRLINE_CODE_IATA = 'HO'
+      OR AIRLINE_CODE_IATA = '9C'
+      OR AIRLINE_CODE_IATA = 'MF'
+      OR AIRLINE_CODE_IATA = 'HU'
+      OR AIRLINE_CODE_IATA = '8L'
+      OR AIRLINE_CODE_IATA = 'GS'
+      OR AIRLINE_CODE_IATA = 'SC'
+      OR AIRLINE_CODE_IATA = 'TV'
+      OR AIRLINE_CODE_IATA = 'NS'
+      OR AIRLINE_CODE_IATA = 'EU'
+      )
+      <if test="params.cancel == '1'.toString()">
+          AND FLIGHT_CANCEL_CODE <![CDATA[ <> ]]> 'C'
+      </if>
+      <if test="params.a_or_d !=null and params.a_or_d !=''">
+          and A_OR_D = #{params.a_or_d}
+      </if>
+      <if test="params.jinting !=null and params.jinting !=''">
+          AND ((AIRPORT_VIA_IATA_1 = #{params.jinting}) OR (AIRPORT_VIA_IATA_2 = #{params.jinting}))
+      </if>
+      <if test="params.destination !=null and params.destination !='' and params.a_or_d =='A'.toString()">
+          AND ORIGIN_AIRPORT_IATA= #{params.destination}
+          and A_OR_D = 'A'
+      </if>
+      <if test="params.destination !=null and params.destination !='' and params.a_or_d =='D'.toString()">
+          AND DEST_AIRPORT_IATA= #{params.destination}
+          and A_OR_D = 'D'
+      </if>
+      <if test="params.destination !=null and params.destination !='' and (params.a_or_d == null or params.a_or_d == '')">
+          AND (ORIGIN_AIRPORT_IATA=#{params.destination} OR DEST_AIRPORT_IATA=#{params.destination})
+      </if>
+      <if test="params.a_or_d !=null and params.a_or_d !='' and params.a_or_d == 'A'.toString() and params.startDate !=null and params.startDate !='' and params.endDate != null and params.endDate != ''">
+          AND to_char(SIBT,'YYYY-MM-DD HH24:MI:SS')&gt;=#{params.startDate}
+          AND to_char(SIBT,'YYYY-MM-DD HH24:MI:SS')&lt;#{params.endDate}
+      </if>
+      <if test="params.a_or_d !=null and params.a_or_d !='' and params.a_or_d == 'D'.toString() and params.startDate !=null and params.startDate !='' and params.endDate != null and params.endDate != ''">
+          AND to_char(SOBT,'YYYY-MM-DD HH24:MI:SS')&gt;=#{params.startDate}
+          AND to_char(SOBT,'YYYY-MM-DD HH24:MI:SS')&lt;#{params.endDate}
+      </if>
+    <if test="params.a_or_d ==null and params.a_or_d =='' and params.startDate !=null and params.startDate !='' and params.endDate != null and params.endDate != ''">
+      AND ((to_char(SOBT,'YYYY-MM-DD HH24:MI:SS')&gt;=#{params.startDate} AND to_char(SOBT,'YYYY-MM-DD HH24:MI:SS')&lt;#{params.endDate})
+      OR (to_char(SIBT,'YYYY-MM-DD HH24:MI:SS')&gt;=#{params.startDate} AND to_char(SIBT,'YYYY-MM-DD HH24:MI:SS')&lt;#{params.endDate}))
+    </if>
+      <if test="params.execute == '1'.toString()">
+          AND ATOT is null
+      </if>
+      <if test="params.airCompany !=null and params.airCompany !='' and params.airCompany == 'MU/FM/KN'">
+          AND  (AIRLINE_CODE_IATA ='MU' OR AIRLINE_CODE_IATA ='FM' OR AIRLINE_CODE_IATA ='KN')
+      </if>
+      <if test="params.airCompany !=null and params.airCompany !='' and params.airCompany == 'CA/ZH'">
+          AND  (AIRLINE_CODE_IATA ='CA' OR AIRLINE_CODE_IATA ='ZH')
+      </if>
+      <if test="params.airCompany !=null and params.airCompany !='' and params.airCompany == 'HU/8L/GS'">
+          AND  (AIRLINE_CODE_IATA ='HU' OR AIRLINE_CODE_IATA ='8L' OR AIRLINE_CODE_IATA ='GS' )
+      </if>
+      <if test="params.airCompany !=null and params.airCompany !='' and params.airCompany == 'TV/NS/EU'">
+          AND  (AIRLINE_CODE_IATA ='TV' OR AIRLINE_CODE_IATA ='NS' OR AIRLINE_CODE_IATA ='EU' )
+      </if>
+      <if test="params.airCompany !=null and params.airCompany !='' and params.airCompany != 'TV/NS/EU' and params.airCompany != 'HU/8L/GS' and params.airCompany != 'CA/ZH' and params.airCompany != 'MU/FM/KN'">
+          AND  AIRLINE_CODE_IATA = #{params.airCompany}
+      </if>
+      <if test="params.way !=null and params.way !='' and params.a_or_d == 'A'.toString()">
+          AND ORIGIN_AIRPORT_IATA in (#{params.way})
+      </if>
+      <if test="params.way !=null and params.way !='' and params.a_or_d == 'D'.toString()">
+          AND ((AIRPORT_VIA_IATA_1 is null and
+          DEST_AIRPORT_IATA in (#{params.way})) or
+          (AIRPORT_VIA_IATA_1 is not null and AIRPORT_VIA_IATA_1 in (#{params.way})))
+      </if>
+      <if test="params.direction !=null and params.direction !='' and params.a_or_d =='D'.toString()">
+          AND (AIRPORT_VIA_IATA_1 is null and DEST_AIRPORT_IATA in ( #{params.direction})) or (AIRPORT_VIA_IATA_1 is not null and AIRPORT_VIA_IATA_1 in (#{params.direction}))
+      </if>
+      <if test="params.direction !=null and params.direction !='' and params.a_or_d =='A'.toString()">
+          AND ORIGIN_AIRPORT_IATA in (#{params.direction})
+      </if>
+    GROUP BY
+    to_char( SOBT,'hh24' ),
+    AIRLINE_CODE_IATA
+  </select>
+</mapper>

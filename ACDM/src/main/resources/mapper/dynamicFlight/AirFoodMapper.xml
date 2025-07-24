@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.dynamicFlight.AirFoodMapper" >
+
+  <resultMap id="AirFoodResultMap" type="com.hq.acdm.vo.dynamicFlight.AirFoodFlightInfoVo" >
+    <result column="FLIGHT_ID_D" property="flightIdD" jdbcType="VARCHAR" />
+    <result column="FLIGHT_ID_A" property="flightIdA" jdbcType="VARCHAR" />
+    <result column="FLNO_D" property="flnoD" jdbcType="VARCHAR" />
+    <result column="FLNO_A" property="flnoA" jdbcType="VARCHAR" />
+    <result column="EXEC_DATE_D" property="execDateD" jdbcType="VARCHAR" />
+    <result column="EXEC_DATE_A" property="execDateA" jdbcType="VARCHAR" />
+    <result column="FL_STATUS" property="flStatus" jdbcType="VARCHAR" />
+    <result column="FL_STATUS_A" property="flStatusA" jdbcType="VARCHAR" />
+    <result column="AIRLINES" property="airlines" jdbcType="VARCHAR" />
+      <result column="FLIGHT_TASK_A" property="flightTaskA" jdbcType="VARCHAR" />
+      <result column="FLIGHT_TASK" property="flightTask" jdbcType="VARCHAR" />
+    <result column="CRAFT_TYPE_ICAO" property="craftTypeIcao" jdbcType="VARCHAR" />
+    <result column="REGN" property="regn" jdbcType="VARCHAR" />
+    <result column="CHINESE_NAME" property="chineseName" jdbcType="VARCHAR" />
+    <result column="ETOT_A" property="etotA" jdbcType="VARCHAR" />
+    <result column="ATOT_A" property="atotA" jdbcType="VARCHAR" />
+    <result column="SIBT" property="sibt" jdbcType="VARCHAR" />
+    <result column="ELDT" property="eldt" jdbcType="VARCHAR" />
+    <result column="ALDT" property="aldt" jdbcType="VARCHAR" />
+    <result column="ETOT" property="etot" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="ATOT" property="atot" jdbcType="VARCHAR" />
+    <result column="ASC" property="asc" jdbcType="VARCHAR" />
+    <result column="AEC" property="aec" jdbcType="VARCHAR" />
+    <result column="STAND_D" property="standD" jdbcType="VARCHAR" />
+    <result column="TASKE_NAME" property="taskeName" jdbcType="VARCHAR" />
+    <result column="LINE_STATUS" property="lineStatus" jdbcType="VARCHAR" />
+    <result column="REGN_STATUS" property="regnStatus" jdbcType="VARCHAR" />
+    <result column="STAND_STATUS" property="standStatus" jdbcType="VARCHAR" />
+    <result column="MARK" property="mark" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+
+
+  <select id="getAirFoodFltInfo" resultMap="AirFoodResultMap" parameterType="map" >
+    <![CDATA[
+    SELECT T.FLIGHT_ID_D, -- 离港航班唯一ID
+    T.FLIGHT_ID_A, -- 进港航班唯一ID
+    T.FLNO_D,-- 出港航班号
+    T.FLNO_A,-- 进港航班号
+    T.EXEC_DATE_D,-- 出港日期
+    T.EXEC_DATE_A,-- 进港日期
+    B.CHINESE_NAME AS FL_STATUS,-- 出港航班状态
+    BB.CHINESE_NAME AS FL_STATUS_A,-- 进港航班状态
+    K.CHINESE_NAME AS FLIGHT_TASK_A,-- 进港航班任务
+    KK.CHINESE_NAME AS FLIGHT_TASK,-- 出港航班任务
+    CONCAT_WS('|', K.CHINESE_NAME,KK.CHINESE_NAME) AS TASKE_NAME,
+    T.AIRLINES, -- 离港航空公司2码
+    T.CRAFT_TYPE_ICAO, -- 机型
+    T.REGN AS REGN, -- 机号
+    CONCAT_WS('-',BBB.CHINESE_NAME,'武汉',
+    EEE.CHINESE_NAME) AS CHINESE_NAME,
+    T.ETOT_A, -- 前站预飞
+    T.ATOT_A, -- 前站实飞
+    T.SIBT,-- 记到
+    T.ELDT,-- 预到
+    T.ALDT,-- 实到
+    T.ETOT,-- 预飞
+    T.SOBT,-- 计飞
+    T.ATOT,-- 实飞
+    T.`ASC`,
+    T.AEC,
+    T.STAND_D, -- 离港机位
+    CASE WHEN T.VCHAR_2_D ='1' THEN '1' ELSE '0' END MARK,-- 是否录入餐食
+    CASE WHEN JH.FLIGHT_ID IS NOT NULL THEN '1' ELSE '0' END REGN_STATUS,-- 机号状态
+   CASE WHEN JW.FLIGHT_ID IS NOT NULL THEN '1' ELSE '0' END STAND_STATUS,-- 机位状态
+    CASE WHEN T.ATOT IS NOT NULL THEN '1'
+  WHEN 'AT' = #{params.sortad,jdbcType=VARCHAR} AND T.ATOT IS  NULL AND  (T.ALDT IS NOT NULL OR T.FLIGHT_ID_A IS NULL) THEN '2'
+  WHEN 'AT' = #{params.sortad,jdbcType=VARCHAR} AND  T.ATOT_A IS NOT NULL  THEN '3'
+  WHEN 'DT' = #{params.sortad,jdbcType=VARCHAR} AND  T.FLIGHT_ID_D IS NOT NULL AND  T.ATOT IS  NULL AND  (T.ALDT IS NOT NULL OR T.FLIGHT_ID_A IS NULL) THEN '3'
+  WHEN 'DT' = #{params.sortad,jdbcType=VARCHAR} AND  T.ATOT_A IS NOT NULL  THEN '2'
+  ELSE '0' END LINE_STATUS, -- 整行状态
+    CASE WHEN T.SIBT IS NOT NULL THEN T.SIBT ELSE T.SOBT END AS PAIXU
+    FROM V_UTIL_UNITE_FLIGHT T
+    LEFT JOIN T_FLIGHT_STATUS B ON T.FL_STATUS = B.`CODE`
+    LEFT JOIN T_FLIGHT_STATUS BB ON T.FL_STATUS_A = BB.`CODE`
+    LEFT JOIN T_FLIGHT_TASK K ON K.`CODE` = T.FLIGHT_TASK_A
+    LEFT JOIN T_FLIGHT_TASK KK ON KK.`CODE` = T.FLIGHT_TASK
+    LEFT JOIN T_AIRPORT BBB ON BBB.AIRPORT_IATA=T.ADEP_A
+
+    LEFT JOIN T_AIRPORT EEE ON EEE.AIRPORT_IATA=T.ADES_D
+    LEFT JOIN  (SELECT FLIGHT_ID from T_FLIGHT_EVENT where TYPE='STANDCHG' AND CREATE_TM>CURDATE()-1 GROUP BY FLIGHT_ID) JW ON JW.FLIGHT_ID=T.FLIGHT_ID_D
+    LEFT JOIN (SELECT FLIGHT_ID from T_FLIGHT_EVENT where TYPE='REGNCHG' AND CREATE_TM>CURDATE()-1 GROUP BY FLIGHT_ID) JH ON JH.FLIGHT_ID=T.FLIGHT_ID_D
+    WHERE
+    (T.FL_STATUS <> 'CAN' OR T.FL_STATUS IS NULL) AND (T.FL_STATUS_A <> 'CAN' OR T.FL_STATUS_A IS NULL)]]>
+
+    <if test="params.startTime !=null and params.startTime != '' ">
+     AND  CASE WHEN T.SIBT IS NOT NULL THEN T.SIBT ELSE T.SOBT END >= #{params.startTime,jdbcType=VARCHAR}
+    </if>
+
+    <if test="params.flno !=null and params.flno != ''">
+      AND (T.FLNO_D LIKE CONCAT('%',#{params.flno,jdbcType=VARCHAR},'%') OR T.FLNO_A LIKE CONCAT('%',#{params.flno,jdbcType=VARCHAR},'%'))
+    </if>
+
+    <if test="params.airlines !=null and params.airlines != ''">
+      AND T.AIRLINES = #{params.airlines,jdbcType=VARCHAR}
+    </if>
+
+    <if test="params.agent != null and params.agent != ''" >
+      <if test="params.agentSys !=null and params.agentSys != ''">
+        <choose>
+          <when test="params.dept !=null and params.dept == 'IGO'">
+            AND T.AIRLINES NOT IN (${params.agentSys})
+          </when>
+          <otherwise>
+            AND T.AIRLINES IN (${params.agentSys})
+          </otherwise>
+        </choose>
+      </if>
+    </if>
+
+
+
+
+    ORDER BY LINE_STATUS DESC, PAIXU ASC
+  </select>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.vo.dynamicFlight.AirPlanFoodVo" >
+    update T_AIR_PLAN_FOOD
+    <set >
+
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+
+      <if test="createUsr != null" >
+        CREATE_USR = #{createUsr,jdbcType=VARCHAR},
+      </if>
+
+    </set>
+    where FLNO = #{flno,jdbcType=VARCHAR}
+    and QUARTER = #{quarter,jdbcType=VARCHAR},
+
+  </update>
+
+  <insert id="insert" parameterType="com.hq.acdm.vo.dynamicFlight.AirPlanFoodVo" >
+    insert into T_AIR_PLAN_FOOD (FLNO,
+      QUARTER, CREATE_TM,
+       CREATE_USR
+      )
+    values (#{flno,jdbcType=VARCHAR},
+      #{quarter,jdbcType=VARCHAR},  #{createTm,jdbcType=TIMESTAMP},
+      #{createUsr,jdbcType=VARCHAR})
+  </insert>
+
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from T_AIR_PLAN_FOOD
+    where QUARTER = #{quarter,jdbcType=VARCHAR}  and CREATE_USR = #{username,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id ="addTaxiTimeVarBatch" parameterType="java.util.List" >
+    insert into T_AIR_PLAN_FOOD
+    (FLNO,
+    QUARTER, CREATE_TM,
+    CREATE_USR)
+    values
+    <foreach collection ="emps" item="reddemCode" index= "index" separator =",">
+      (
+      #{reddemCode.flno}, #{reddemCode.quarter},
+      #{reddemCode.createTm},
+      #{reddemCode.createUsr}
+      )
+    </foreach >
+  </insert >
+</mapper>

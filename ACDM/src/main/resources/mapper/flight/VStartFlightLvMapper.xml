@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.flight.VStartFlightLvMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.flight.VStartFlightLv" >
+    <result column="SOBT" property="sobt" jdbcType="TIMESTAMP" />
+    <result column="OPERATIONAL_DATE" property="operationalDate" jdbcType="TIMESTAMP" />
+    <result column="AIRLINE_CODE_IATA" property="airlineCodeIata" jdbcType="VARCHAR" />
+    <result column="PLANCOUNT" property="plancount" jdbcType="DECIMAL" />
+    <result column="EXECUTECOUNT" property="executecount" jdbcType="DECIMAL" />
+    <result column="NORMAL" property="normal" jdbcType="DECIMAL" />
+  </resultMap>
+  <insert id="insert" parameterType="com.hq.acdm.model.flight.VStartFlightLv" >
+    insert into V_START_FLIGHT_LV (SOBT, OPERATIONAL_DATE, AIRLINE_CODE_IATA, 
+      PLANCOUNT, EXECUTECOUNT, NORMAL
+      )
+    values (#{sobt,jdbcType=TIMESTAMP}, #{operationalDate,jdbcType=TIMESTAMP}, #{airlineCodeIata,jdbcType=VARCHAR}, 
+      #{plancount,jdbcType=DECIMAL}, #{executecount,jdbcType=DECIMAL}, #{normal,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.flight.VStartFlightLv" >
+    insert into V_START_FLIGHT_LV
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sobt != null" >
+        SOBT,
+      </if>
+      <if test="operationalDate != null" >
+        OPERATIONAL_DATE,
+      </if>
+      <if test="airlineCodeIata != null" >
+        AIRLINE_CODE_IATA,
+      </if>
+      <if test="plancount != null" >
+        PLANCOUNT,
+      </if>
+      <if test="executecount != null" >
+        EXECUTECOUNT,
+      </if>
+      <if test="normal != null" >
+        NORMAL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sobt != null" >
+        #{sobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operationalDate != null" >
+        #{operationalDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airlineCodeIata != null" >
+        #{airlineCodeIata,jdbcType=VARCHAR},
+      </if>
+      <if test="plancount != null" >
+        #{plancount,jdbcType=DECIMAL},
+      </if>
+      <if test="executecount != null" >
+        #{executecount,jdbcType=DECIMAL},
+      </if>
+      <if test="normal != null" >
+        #{normal,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="checkFightRegularity" parameterType="map" resultType="com.hq.acdm.vo.flight.VStartFlightLvVo"  >
+    SELECT AIRLINE_CODE_IATA as airlineCodeIata,operational_date as operationalDate,count(case when plancount=1 then plancount else null end ) as plancount,count(case when normal=1 then normal else null end) as unnormal,count(case when normal=0 then normal else null end) as normal,count(case when executecount=1 then executecount else null end) as executecount
+    FROM  V_START_FLIGHT_LV
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test="record.startDate != null and record.startDate != ''">
+        and sobt&gt;=to_date(#{record.startDate},'yyyy-mm-dd HH24:MI:SS')
+      </if>
+      <if test="record.endDate != null and record.endDate != ''">
+        and sobt&lt;=to_date(#{record.endDate},'yyyy-mm-dd HH24:MI:SS')
+      </if>
+      <if test="record.airCompany != null and record.airCompany != ''">
+        and AIRLINE_CODE_IATA=#{record.airCompany}
+      </if>
+    </trim>
+    group by AIRLINE_CODE_IATA,operational_date
+  </select>
+</mapper>

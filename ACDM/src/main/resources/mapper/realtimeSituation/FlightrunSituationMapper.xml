@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.FlightrunSituationMapper" >
+
+  <resultMap id="ResultMap" type="com.hq.acdm.model.realtimeSituation.TRunwayMode" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="RUNWAY" property="runway" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="findRunwayModeInfo" resultMap="ResultMap" parameterType="map" >
+    SELECT ID,`TYPE`,RUNWAY FROM T_RUNWAY_MODE
+  </select>
+  <update id="updateRunway" parameterType="com.hq.acdm.model.realtimeSituation.TRunwayMode" >
+    update T_RUNWAY_MODE AA
+    <set >
+
+      <if test="runway != null" >
+        AA.RUNWAY=#{runway,jdbcType=VARCHAR}
+
+      </if>
+
+    </set>
+    WHERE AA.`TYPE` = #{type,jdbcType=VARCHAR}
+  </update>
+  <update id="updateRunwayD" parameterType="com.hq.acdm.model.realtimeSituation.TRunwayMode" >
+    update T_LOCAL_FLIGHT_INFO
+    <set >
+
+      <if test="runway != null" >
+        RUNWAY=#{runway,jdbcType=VARCHAR}
+
+      </if>
+      <if test="runway == null" >
+        RUNWAY=NULL
+
+      </if>
+
+    </set>
+    WHERE to_days(EXEC_DATE) = to_days(now())   AND D_OR_A='D' AND RUNWAY IS NOT NULL AND ATOT IS NULL
+  </update>
+  <update id="updateRunwayA" parameterType="com.hq.acdm.model.realtimeSituation.TRunwayMode" >
+    update T_LOCAL_FLIGHT_INFO
+    <set >
+
+      <if test="runway != null" >
+        RUNWAY=#{runway,jdbcType=VARCHAR}
+
+      </if>
+      <if test="runway == null" >
+        RUNWAY=NULL
+
+      </if>
+
+    </set>
+    WHERE to_days(EXEC_DATE) = to_days(now())   AND D_OR_A='A' AND RUNWAY IS NOT NULL AND ALDT IS NULL
+  </update>
+
+
+  <select id="findRunwayAllInfo" resultType="com.hq.acdm.vo.realtimeSituation.FlightIndexRunwayVo" >
+    SELECT
+    ID id,
+    `MODE` `mode`,
+    `STATUS` `status`,
+    STATE state,
+    DEP dep,
+    ARR arr,
+    CAPACITY capacity
+    FROM T_RUNWAY
+  </select>
+
+  <update id="updateRunwayAllInfo" parameterType="map" >
+    update T_RUNWAY
+    set `MODE` = #{params.mode,jdbcType=VARCHAR},
+    `STATUS` = #{params.status,jdbcType=VARCHAR},
+    STATE = #{params.state,jdbcType=VARCHAR},
+    DEP = #{params.dep,jdbcType=VARCHAR},
+    ARR = #{params.arr,jdbcType=VARCHAR},
+    CAPACITY = #{params.capacity,jdbcType=VARCHAR}
+    where ID = #{params.id,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

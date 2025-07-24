@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TDynTaskMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TDynTask" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="FLIGHT_ID" property="flightId" jdbcType="INTEGER" />
+    <result column="TASK_CODE" property="taskCode" jdbcType="VARCHAR" />
+    <result column="TASK_NAME" property="taskName" jdbcType="VARCHAR" />
+    <result column="TASK_STATUS" property="taskStatus" jdbcType="INTEGER" />
+    <result column="TASK_ESTM" property="taskEstm" jdbcType="TIMESTAMP" />
+    <result column="TASK_ASTM" property="taskAstm" jdbcType="TIMESTAMP" />
+    <result column="TASK_EETM" property="taskEetm" jdbcType="TIMESTAMP" />
+    <result column="TASK_AETM" property="taskAetm" jdbcType="TIMESTAMP" />
+    <result column="RMK" property="rmk" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, FLIGHT_ID, TASK_CODE, TASK_NAME, TASK_STATUS, TASK_ESTM, TASK_ASTM, TASK_EETM, 
+    TASK_AETM, RMK, CREATE_TM, UPDATE_TM
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TDynTaskExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_DYN_TASK
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_DYN_TASK
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_DYN_TASK
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TDynTaskExample" >
+    delete from T_DYN_TASK
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TDynTask" >
+    insert into T_DYN_TASK (ID, FLIGHT_ID, TASK_CODE, 
+      TASK_NAME, TASK_STATUS, TASK_ESTM, 
+      TASK_ASTM, TASK_EETM, TASK_AETM, 
+      RMK, CREATE_TM, UPDATE_TM
+      )
+    values (#{id,jdbcType=VARCHAR}, #{flightId,jdbcType=INTEGER}, #{taskCode,jdbcType=VARCHAR}, 
+      #{taskName,jdbcType=VARCHAR}, #{taskStatus,jdbcType=INTEGER}, #{taskEstm,jdbcType=TIMESTAMP}, 
+      #{taskAstm,jdbcType=TIMESTAMP}, #{taskEetm,jdbcType=TIMESTAMP}, #{taskAetm,jdbcType=TIMESTAMP}, 
+      #{rmk,jdbcType=VARCHAR}, #{createTm,jdbcType=TIMESTAMP}, #{updateTm,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TDynTask" >
+    insert into T_DYN_TASK
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="flightId != null" >
+        FLIGHT_ID,
+      </if>
+      <if test="taskCode != null" >
+        TASK_CODE,
+      </if>
+      <if test="taskName != null" >
+        TASK_NAME,
+      </if>
+      <if test="taskStatus != null" >
+        TASK_STATUS,
+      </if>
+      <if test="taskEstm != null" >
+        TASK_ESTM,
+      </if>
+      <if test="taskAstm != null" >
+        TASK_ASTM,
+      </if>
+      <if test="taskEetm != null" >
+        TASK_EETM,
+      </if>
+      <if test="taskAetm != null" >
+        TASK_AETM,
+      </if>
+      <if test="rmk != null" >
+        RMK,
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM,
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="flightId != null" >
+        #{flightId,jdbcType=INTEGER},
+      </if>
+      <if test="taskCode != null" >
+        #{taskCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null" >
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskStatus != null" >
+        #{taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="taskEstm != null" >
+        #{taskEstm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskAstm != null" >
+        #{taskAstm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskEetm != null" >
+        #{taskEetm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskAetm != null" >
+        #{taskAetm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rmk != null" >
+        #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TDynTaskExample" resultType="java.lang.Integer" >
+    select count(*) from T_DYN_TASK
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_DYN_TASK
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flightId != null" >
+        FLIGHT_ID = #{record.flightId,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskCode != null" >
+        TASK_CODE = #{record.taskCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskName != null" >
+        TASK_NAME = #{record.taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskStatus != null" >
+        TASK_STATUS = #{record.taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.taskEstm != null" >
+        TASK_ESTM = #{record.taskEstm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.taskAstm != null" >
+        TASK_ASTM = #{record.taskAstm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.taskEetm != null" >
+        TASK_EETM = #{record.taskEetm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.taskAetm != null" >
+        TASK_AETM = #{record.taskAetm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rmk != null" >
+        RMK = #{record.rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTm != null" >
+        CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTm != null" >
+        UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_DYN_TASK
+    set ID = #{record.id,jdbcType=VARCHAR},
+      FLIGHT_ID = #{record.flightId,jdbcType=INTEGER},
+      TASK_CODE = #{record.taskCode,jdbcType=VARCHAR},
+      TASK_NAME = #{record.taskName,jdbcType=VARCHAR},
+      TASK_STATUS = #{record.taskStatus,jdbcType=INTEGER},
+      TASK_ESTM = #{record.taskEstm,jdbcType=TIMESTAMP},
+      TASK_ASTM = #{record.taskAstm,jdbcType=TIMESTAMP},
+      TASK_EETM = #{record.taskEetm,jdbcType=TIMESTAMP},
+      TASK_AETM = #{record.taskAetm,jdbcType=TIMESTAMP},
+      RMK = #{record.rmk,jdbcType=VARCHAR},
+      CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TDynTask" >
+    update T_DYN_TASK
+    <set >
+      <if test="flightId != null" >
+        FLIGHT_ID = #{flightId,jdbcType=INTEGER},
+      </if>
+      <if test="taskCode != null" >
+        TASK_CODE = #{taskCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null" >
+        TASK_NAME = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskStatus != null" >
+        TASK_STATUS = #{taskStatus,jdbcType=INTEGER},
+      </if>
+      <if test="taskEstm != null" >
+        TASK_ESTM = #{taskEstm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskAstm != null" >
+        TASK_ASTM = #{taskAstm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskEetm != null" >
+        TASK_EETM = #{taskEetm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskAetm != null" >
+        TASK_AETM = #{taskAetm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rmk != null" >
+        RMK = #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TDynTask" >
+    update T_DYN_TASK
+    set FLIGHT_ID = #{flightId,jdbcType=INTEGER},
+      TASK_CODE = #{taskCode,jdbcType=VARCHAR},
+      TASK_NAME = #{taskName,jdbcType=VARCHAR},
+      TASK_STATUS = #{taskStatus,jdbcType=INTEGER},
+      TASK_ESTM = #{taskEstm,jdbcType=TIMESTAMP},
+      TASK_ASTM = #{taskAstm,jdbcType=TIMESTAMP},
+      TASK_EETM = #{taskEetm,jdbcType=TIMESTAMP},
+      TASK_AETM = #{taskAetm,jdbcType=TIMESTAMP},
+      RMK = #{rmk,jdbcType=VARCHAR},
+      CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

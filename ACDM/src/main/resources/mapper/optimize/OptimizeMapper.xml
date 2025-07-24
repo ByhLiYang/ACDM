@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.OptimizeMapper" >
+    <select id="queryD" resultType="com.hq.acdm.model.statistics.optimize.optimizeModel">
+        SELECT * from
+        (
+        select * from daily_flight_master AA
+        left join daily_flight_add_details BB
+        on  BB.a_or_d = AA.a_or_d
+        AND BB.FLIGHT_NO_IATA = AA.FLIGHT_NO_IATA
+        AND BB.OPERATIONAL_DATE = AA.OPERATIONAL_DATE
+        AND BB.FLIGHT_REPEAT_COUNT = AA.FLIGHT_REPEAT_COUNT
+        left join daily_flight_add_details_more CC
+        on  CC.a_or_d = AA.a_or_d
+        AND CC.FLIGHT_NO_IATA = AA.FLIGHT_NO_IATA
+        AND CC.OPERATIONAL_DATE = AA.OPERATIONAL_DATE
+        AND CC.FLIGHT_REPEAT_COUNT = AA.FLIGHT_REPEAT_COUNT
+        where BB.cobt IS NOT NULL
+        AND to_char( BB.cobt, 'yyyy-mm-dd hh24:mi:ss' ) &gt;= to_char( SYSDATE, 'yyyy-mm-dd hh24:mi:ss' )
+        AND to_char( BB.cobt, 'yyyy-mm-dd hh24:mi:ss' ) &lt; to_char( SYSDATE + 2 / 24, 'yyyy-mm-dd hh24:mi:ss' )
+        AND AA.A_OR_D = 'D'
+        ) ORDER BY cobt
+
+    </select>
+    <select id="queryA" resultType="com.hq.acdm.model.statistics.optimize.optimizeModel">
+        SELECT * from
+        (
+        select * from daily_flight_master AA
+        left join daily_flight_add_details BB
+        on  BB.a_or_d = AA.a_or_d
+        AND BB.FLIGHT_NO_IATA = AA.FLIGHT_NO_IATA
+        AND BB.OPERATIONAL_DATE = AA.OPERATIONAL_DATE
+        AND BB.FLIGHT_REPEAT_COUNT = AA.FLIGHT_REPEAT_COUNT
+        left join daily_flight_add_details_more CC
+        on  CC.a_or_d = AA.a_or_d
+        AND CC.FLIGHT_NO_IATA = AA.FLIGHT_NO_IATA
+        AND CC.OPERATIONAL_DATE = AA.OPERATIONAL_DATE
+        AND CC.FLIGHT_REPEAT_COUNT = AA.FLIGHT_REPEAT_COUNT
+        where BB.ELDT_1 IS NOT NULL
+        AND to_char( BB.ELDT_1, 'yyyy-mm-dd hh24:mi:ss' ) &gt;= to_char( SYSDATE, 'yyyy-mm-dd hh24:mi:ss' )
+        AND to_char( BB.ELDT_1, 'yyyy-mm-dd hh24:mi:ss' ) &lt; to_char( SYSDATE + 2 / 24, 'yyyy-mm-dd hh24:mi:ss' )
+        AND AA.A_OR_D = 'A'
+        ) ORDER BY ELDT_1
+
+    </select>
+    <select id="queryOne" resultType="com.hq.acdm.model.statistics.optimize.optimizeModel" parameterType="map">
+        SELECT * from
+        (
+        select * from daily_flight_master AA
+        left join daily_flight_add_details BB
+        on  BB.a_or_d = AA.a_or_d
+        AND BB.FLIGHT_NO_IATA = AA.FLIGHT_NO_IATA
+        AND BB.OPERATIONAL_DATE = AA.OPERATIONAL_DATE
+        AND BB.FLIGHT_REPEAT_COUNT = AA.FLIGHT_REPEAT_COUNT
+        left join daily_flight_add_details_more CC
+        on  CC.a_or_d = AA.a_or_d
+        AND CC.FLIGHT_NO_IATA = AA.FLIGHT_NO_IATA
+        AND CC.OPERATIONAL_DATE = AA.OPERATIONAL_DATE
+        AND CC.FLIGHT_REPEAT_COUNT = AA.FLIGHT_REPEAT_COUNT
+        )
+        WHERE
+        1=1
+        <if test="params.a_or_d != null and params.a_or_d != ''">
+            and A_OR_D = #{params.a_or_d}
+        </if>
+        <if test="params.flightNumber != null and params.flightNumber != ''">
+            and FLIGHT_NO_IATA = #{params.flightNumber}
+        </if>
+        <if test="params.operationalDate != null and params.operationalDate != ''">
+            and to_char(OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.operationalDate}
+        </if>
+        <if test="params.flightRepeatCount != null and params.flightRepeatCount != ''">
+            and FLIGHT_REPEAT_COUNT = #{params.flightRepeatCount}
+        </if>
+    </select>
+</mapper>

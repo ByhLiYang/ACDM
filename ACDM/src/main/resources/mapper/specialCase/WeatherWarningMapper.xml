@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.specialCase.WeatherWarningMapper" >
+
+    <select id="queryWeatherWarningByAirport" resultType="com.hq.acdm.model.specialCase.weather.WeatherWarningModel"  >
+        SELECT
+        *
+        FROM
+        WEATHERWARN
+        WHERE
+        IMPORTADRESS IS NULL
+        AND ARIPORTCODE IS NOT NULL
+        AND SUBSTR(ABSVERTIME, 0, 10) = to_char( current_date, 'yyyy-mm-dd' )
+    </select>
+
+    <select id="queryWeatherWarningByArea" resultType="com.hq.acdm.model.specialCase.weather.WeatherWarningModel"  >
+        SELECT
+	    *
+        FROM
+        WEATHERWARN
+        WHERE
+        ARIPORTCODE IS NULL
+        AND IMPORTADRESS IS NOT NULL
+        AND SUBSTR(ABSVERTIME, 0, 10) = to_char( current_date, 'yyyy-mm-dd' )
+    </select>
+
+</mapper>

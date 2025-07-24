@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TDynResourceMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TDynResource" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="FLIGHT_ID" property="flightId" jdbcType="BIGINT" />
+    <result column="RSC_TYPE" property="rscType" jdbcType="VARCHAR" />
+    <result column="RSC_CD_1" property="rscCd1" jdbcType="VARCHAR" />
+    <result column="ALTERATE_START_TIME_1" property="alterateStartTime1" jdbcType="TIMESTAMP" />
+    <result column="ALTERATE_END_TIME_1" property="alterateEndTime1" jdbcType="TIMESTAMP" />
+    <result column="START_REAL_TIME_1" property="startRealTime1" jdbcType="TIMESTAMP" />
+    <result column="END_REAL_TIME_1" property="endRealTime1" jdbcType="TIMESTAMP" />
+    <result column="RSC_CD_2" property="rscCd2" jdbcType="VARCHAR" />
+    <result column="ALTERATE_START_TIME_2" property="alterateStartTime2" jdbcType="TIMESTAMP" />
+    <result column="ALTERATE_END_TIME_2" property="alterateEndTime2" jdbcType="TIMESTAMP" />
+    <result column="START_REAL_TIME_2" property="startRealTime2" jdbcType="TIMESTAMP" />
+    <result column="END_REAL_TIME_2" property="endRealTime2" jdbcType="TIMESTAMP" />
+    <result column="RSC_CD_3" property="rscCd3" jdbcType="VARCHAR" />
+    <result column="ALTERATE_START_TIME_3" property="alterateStartTime3" jdbcType="TIMESTAMP" />
+    <result column="ALTERATE_END_TIME_3" property="alterateEndTime3" jdbcType="TIMESTAMP" />
+    <result column="START_REAL_TIME_3" property="startRealTime3" jdbcType="TIMESTAMP" />
+    <result column="END_REAL_TIME_3" property="endRealTime3" jdbcType="TIMESTAMP" />
+    <result column="RSC_CD_4" property="rscCd4" jdbcType="VARCHAR" />
+    <result column="ALTERATE_START_TIME_4" property="alterateStartTime4" jdbcType="TIMESTAMP" />
+    <result column="ALTERATE_END_TIME_4" property="alterateEndTime4" jdbcType="TIMESTAMP" />
+    <result column="START_REAL_TIME_4" property="startRealTime4" jdbcType="TIMESTAMP" />
+    <result column="END_REAL_TIME_4" property="endRealTime4" jdbcType="TIMESTAMP" />
+    <result column="RSC_CD_5" property="rscCd5" jdbcType="VARCHAR" />
+    <result column="ALTERATE_START_TIME_5" property="alterateStartTime5" jdbcType="TIMESTAMP" />
+    <result column="ALTERATE_END_TIME_5" property="alterateEndTime5" jdbcType="TIMESTAMP" />
+    <result column="START_REAL_TIME_5" property="startRealTime5" jdbcType="TIMESTAMP" />
+    <result column="END_REAL_TIME_5" property="endRealTime5" jdbcType="TIMESTAMP" />
+    <result column="RSC_CD_6" property="rscCd6" jdbcType="VARCHAR" />
+    <result column="ALTERATE_START_TIME_6" property="alterateStartTime6" jdbcType="TIMESTAMP" />
+    <result column="ALTERATE_END_TIME_6" property="alterateEndTime6" jdbcType="TIMESTAMP" />
+    <result column="START_REAL_TIME_6" property="startRealTime6" jdbcType="TIMESTAMP" />
+    <result column="END_REAL_TIME_6" property="endRealTime6" jdbcType="TIMESTAMP" />
+    <result column="RSC_CD_7" property="rscCd7" jdbcType="VARCHAR" />
+    <result column="ALTERATE_START_TIME_7" property="alterateStartTime7" jdbcType="TIMESTAMP" />
+    <result column="ALTERATE_END_TIME_7" property="alterateEndTime7" jdbcType="TIMESTAMP" />
+    <result column="START_REAL_TIME_7" property="startRealTime7" jdbcType="TIMESTAMP" />
+    <result column="END_REAL_TIME_7" property="endRealTime7" jdbcType="TIMESTAMP" />
+    <result column="RSC_FLAG" property="rscFlag" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, FLIGHT_ID, RSC_TYPE, RSC_CD_1, ALTERATE_START_TIME_1, ALTERATE_END_TIME_1, START_REAL_TIME_1, 
+    END_REAL_TIME_1, RSC_CD_2, ALTERATE_START_TIME_2, ALTERATE_END_TIME_2, START_REAL_TIME_2, 
+    END_REAL_TIME_2, RSC_CD_3, ALTERATE_START_TIME_3, ALTERATE_END_TIME_3, START_REAL_TIME_3, 
+    END_REAL_TIME_3, RSC_CD_4, ALTERATE_START_TIME_4, ALTERATE_END_TIME_4, START_REAL_TIME_4, 
+    END_REAL_TIME_4, RSC_CD_5, ALTERATE_START_TIME_5, ALTERATE_END_TIME_5, START_REAL_TIME_5, 
+    END_REAL_TIME_5, RSC_CD_6, ALTERATE_START_TIME_6, ALTERATE_END_TIME_6, START_REAL_TIME_6, 
+    END_REAL_TIME_6, RSC_CD_7, ALTERATE_START_TIME_7, ALTERATE_END_TIME_7, START_REAL_TIME_7, 
+    END_REAL_TIME_7, RSC_FLAG, CREATE_TIME, UPDATE_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TDynResourceExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_DYN_RESOURCE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_DYN_RESOURCE
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_DYN_RESOURCE
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TDynResourceExample" >
+    delete from T_DYN_RESOURCE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TDynResource" >
+    insert into T_DYN_RESOURCE (ID, FLIGHT_ID, RSC_TYPE, 
+      RSC_CD_1, ALTERATE_START_TIME_1, ALTERATE_END_TIME_1, 
+      START_REAL_TIME_1, END_REAL_TIME_1, RSC_CD_2, 
+      ALTERATE_START_TIME_2, ALTERATE_END_TIME_2, 
+      START_REAL_TIME_2, END_REAL_TIME_2, RSC_CD_3, 
+      ALTERATE_START_TIME_3, ALTERATE_END_TIME_3, 
+      START_REAL_TIME_3, END_REAL_TIME_3, RSC_CD_4, 
+      ALTERATE_START_TIME_4, ALTERATE_END_TIME_4, 
+      START_REAL_TIME_4, END_REAL_TIME_4, RSC_CD_5, 
+      ALTERATE_START_TIME_5, ALTERATE_END_TIME_5, 
+      START_REAL_TIME_5, END_REAL_TIME_5, RSC_CD_6, 
+      ALTERATE_START_TIME_6, ALTERATE_END_TIME_6, 
+      START_REAL_TIME_6, END_REAL_TIME_6, RSC_CD_7, 
+      ALTERATE_START_TIME_7, ALTERATE_END_TIME_7, 
+      START_REAL_TIME_7, END_REAL_TIME_7, RSC_FLAG, 
+      CREATE_TIME, UPDATE_TIME)
+    values (#{id,jdbcType=VARCHAR}, #{flightId,jdbcType=BIGINT}, #{rscType,jdbcType=VARCHAR}, 
+      #{rscCd1,jdbcType=VARCHAR}, #{alterateStartTime1,jdbcType=TIMESTAMP}, #{alterateEndTime1,jdbcType=TIMESTAMP}, 
+      #{startRealTime1,jdbcType=TIMESTAMP}, #{endRealTime1,jdbcType=TIMESTAMP}, #{rscCd2,jdbcType=VARCHAR}, 
+      #{alterateStartTime2,jdbcType=TIMESTAMP}, #{alterateEndTime2,jdbcType=TIMESTAMP}, 
+      #{startRealTime2,jdbcType=TIMESTAMP}, #{endRealTime2,jdbcType=TIMESTAMP}, #{rscCd3,jdbcType=VARCHAR}, 
+      #{alterateStartTime3,jdbcType=TIMESTAMP}, #{alterateEndTime3,jdbcType=TIMESTAMP}, 
+      #{startRealTime3,jdbcType=TIMESTAMP}, #{endRealTime3,jdbcType=TIMESTAMP}, #{rscCd4,jdbcType=VARCHAR}, 
+      #{alterateStartTime4,jdbcType=TIMESTAMP}, #{alterateEndTime4,jdbcType=TIMESTAMP}, 
+      #{startRealTime4,jdbcType=TIMESTAMP}, #{endRealTime4,jdbcType=TIMESTAMP}, #{rscCd5,jdbcType=VARCHAR}, 
+      #{alterateStartTime5,jdbcType=TIMESTAMP}, #{alterateEndTime5,jdbcType=TIMESTAMP}, 
+      #{startRealTime5,jdbcType=TIMESTAMP}, #{endRealTime5,jdbcType=TIMESTAMP}, #{rscCd6,jdbcType=VARCHAR}, 
+      #{alterateStartTime6,jdbcType=TIMESTAMP}, #{alterateEndTime6,jdbcType=TIMESTAMP}, 
+      #{startRealTime6,jdbcType=TIMESTAMP}, #{endRealTime6,jdbcType=TIMESTAMP}, #{rscCd7,jdbcType=VARCHAR}, 
+      #{alterateStartTime7,jdbcType=TIMESTAMP}, #{alterateEndTime7,jdbcType=TIMESTAMP}, 
+      #{startRealTime7,jdbcType=TIMESTAMP}, #{endRealTime7,jdbcType=TIMESTAMP}, #{rscFlag,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TDynResource" >
+    insert into T_DYN_RESOURCE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="flightId != null" >
+        FLIGHT_ID,
+      </if>
+      <if test="rscType != null" >
+        RSC_TYPE,
+      </if>
+      <if test="rscCd1 != null" >
+        RSC_CD_1,
+      </if>
+      <if test="alterateStartTime1 != null" >
+        ALTERATE_START_TIME_1,
+      </if>
+      <if test="alterateEndTime1 != null" >
+        ALTERATE_END_TIME_1,
+      </if>
+      <if test="startRealTime1 != null" >
+        START_REAL_TIME_1,
+      </if>
+      <if test="endRealTime1 != null" >
+        END_REAL_TIME_1,
+      </if>
+      <if test="rscCd2 != null" >
+        RSC_CD_2,
+      </if>
+      <if test="alterateStartTime2 != null" >
+        ALTERATE_START_TIME_2,
+      </if>
+      <if test="alterateEndTime2 != null" >
+        ALTERATE_END_TIME_2,
+      </if>
+      <if test="startRealTime2 != null" >
+        START_REAL_TIME_2,
+      </if>
+      <if test="endRealTime2 != null" >
+        END_REAL_TIME_2,
+      </if>
+      <if test="rscCd3 != null" >
+        RSC_CD_3,
+      </if>
+      <if test="alterateStartTime3 != null" >
+        ALTERATE_START_TIME_3,
+      </if>
+      <if test="alterateEndTime3 != null" >
+        ALTERATE_END_TIME_3,
+      </if>
+      <if test="startRealTime3 != null" >
+        START_REAL_TIME_3,
+      </if>
+      <if test="endRealTime3 != null" >
+        END_REAL_TIME_3,
+      </if>
+      <if test="rscCd4 != null" >
+        RSC_CD_4,
+      </if>
+      <if test="alterateStartTime4 != null" >
+        ALTERATE_START_TIME_4,
+      </if>
+      <if test="alterateEndTime4 != null" >
+        ALTERATE_END_TIME_4,
+      </if>
+      <if test="startRealTime4 != null" >
+        START_REAL_TIME_4,
+      </if>
+      <if test="endRealTime4 != null" >
+        END_REAL_TIME_4,
+      </if>
+      <if test="rscCd5 != null" >
+        RSC_CD_5,
+      </if>
+      <if test="alterateStartTime5 != null" >
+        ALTERATE_START_TIME_5,
+      </if>
+      <if test="alterateEndTime5 != null" >
+        ALTERATE_END_TIME_5,
+      </if>
+      <if test="startRealTime5 != null" >
+        START_REAL_TIME_5,
+      </if>
+      <if test="endRealTime5 != null" >
+        END_REAL_TIME_5,
+      </if>
+      <if test="rscCd6 != null" >
+        RSC_CD_6,
+      </if>
+      <if test="alterateStartTime6 != null" >
+        ALTERATE_START_TIME_6,
+      </if>
+      <if test="alterateEndTime6 != null" >
+        ALTERATE_END_TIME_6,
+      </if>
+      <if test="startRealTime6 != null" >
+        START_REAL_TIME_6,
+      </if>
+      <if test="endRealTime6 != null" >
+        END_REAL_TIME_6,
+      </if>
+      <if test="rscCd7 != null" >
+        RSC_CD_7,
+      </if>
+      <if test="alterateStartTime7 != null" >
+        ALTERATE_START_TIME_7,
+      </if>
+      <if test="alterateEndTime7 != null" >
+        ALTERATE_END_TIME_7,
+      </if>
+      <if test="startRealTime7 != null" >
+        START_REAL_TIME_7,
+      </if>
+      <if test="endRealTime7 != null" >
+        END_REAL_TIME_7,
+      </if>
+      <if test="rscFlag != null" >
+        RSC_FLAG,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="flightId != null" >
+        #{flightId,jdbcType=BIGINT},
+      </if>
+      <if test="rscType != null" >
+        #{rscType,jdbcType=VARCHAR},
+      </if>
+      <if test="rscCd1 != null" >
+        #{rscCd1,jdbcType=VARCHAR},
+      </if>
+      <if test="alterateStartTime1 != null" >
+        #{alterateStartTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alterateEndTime1 != null" >
+        #{alterateEndTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startRealTime1 != null" >
+        #{startRealTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endRealTime1 != null" >
+        #{endRealTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rscCd2 != null" >
+        #{rscCd2,jdbcType=VARCHAR},
+      </if>
+      <if test="alterateStartTime2 != null" >
+        #{alterateStartTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alterateEndTime2 != null" >
+        #{alterateEndTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startRealTime2 != null" >
+        #{startRealTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endRealTime2 != null" >
+        #{endRealTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rscCd3 != null" >
+        #{rscCd3,jdbcType=VARCHAR},
+      </if>
+      <if test="alterateStartTime3 != null" >
+        #{alterateStartTime3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alterateEndTime3 != null" >
+        #{alterateEndTime3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startRealTime3 != null" >
+        #{startRealTime3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endRealTime3 != null" >
+        #{endRealTime3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rscCd4 != null" >
+        #{rscCd4,jdbcType=VARCHAR},
+      </if>
+      <if test="alterateStartTime4 != null" >
+        #{alterateStartTime4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alterateEndTime4 != null" >
+        #{alterateEndTime4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startRealTime4 != null" >
+        #{startRealTime4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endRealTime4 != null" >
+        #{endRealTime4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rscCd5 != null" >
+        #{rscCd5,jdbcType=VARCHAR},
+      </if>
+      <if test="alterateStartTime5 != null" >
+        #{alterateStartTime5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alterateEndTime5 != null" >
+        #{alterateEndTime5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startRealTime5 != null" >
+        #{startRealTime5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endRealTime5 != null" >
+        #{endRealTime5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rscCd6 != null" >
+        #{rscCd6,jdbcType=VARCHAR},
+      </if>
+      <if test="alterateStartTime6 != null" >
+        #{alterateStartTime6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alterateEndTime6 != null" >
+        #{alterateEndTime6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startRealTime6 != null" >
+        #{startRealTime6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endRealTime6 != null" >
+        #{endRealTime6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rscCd7 != null" >
+        #{rscCd7,jdbcType=VARCHAR},
+      </if>
+      <if test="alterateStartTime7 != null" >
+        #{alterateStartTime7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alterateEndTime7 != null" >
+        #{alterateEndTime7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startRealTime7 != null" >
+        #{startRealTime7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endRealTime7 != null" >
+        #{endRealTime7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rscFlag != null" >
+        #{rscFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TDynResourceExample" resultType="java.lang.Integer" >
+    select count(*) from T_DYN_RESOURCE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_DYN_RESOURCE
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flightId != null" >
+        FLIGHT_ID = #{record.flightId,jdbcType=BIGINT},
+      </if>
+      <if test="record.rscType != null" >
+        RSC_TYPE = #{record.rscType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rscCd1 != null" >
+        RSC_CD_1 = #{record.rscCd1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.alterateStartTime1 != null" >
+        ALTERATE_START_TIME_1 = #{record.alterateStartTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.alterateEndTime1 != null" >
+        ALTERATE_END_TIME_1 = #{record.alterateEndTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.startRealTime1 != null" >
+        START_REAL_TIME_1 = #{record.startRealTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endRealTime1 != null" >
+        END_REAL_TIME_1 = #{record.endRealTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rscCd2 != null" >
+        RSC_CD_2 = #{record.rscCd2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.alterateStartTime2 != null" >
+        ALTERATE_START_TIME_2 = #{record.alterateStartTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.alterateEndTime2 != null" >
+        ALTERATE_END_TIME_2 = #{record.alterateEndTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.startRealTime2 != null" >
+        START_REAL_TIME_2 = #{record.startRealTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endRealTime2 != null" >
+        END_REAL_TIME_2 = #{record.endRealTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rscCd3 != null" >
+        RSC_CD_3 = #{record.rscCd3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.alterateStartTime3 != null" >
+        ALTERATE_START_TIME_3 = #{record.alterateStartTime3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.alterateEndTime3 != null" >
+        ALTERATE_END_TIME_3 = #{record.alterateEndTime3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.startRealTime3 != null" >
+        START_REAL_TIME_3 = #{record.startRealTime3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endRealTime3 != null" >
+        END_REAL_TIME_3 = #{record.endRealTime3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rscCd4 != null" >
+        RSC_CD_4 = #{record.rscCd4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.alterateStartTime4 != null" >
+        ALTERATE_START_TIME_4 = #{record.alterateStartTime4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.alterateEndTime4 != null" >
+        ALTERATE_END_TIME_4 = #{record.alterateEndTime4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.startRealTime4 != null" >
+        START_REAL_TIME_4 = #{record.startRealTime4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endRealTime4 != null" >
+        END_REAL_TIME_4 = #{record.endRealTime4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rscCd5 != null" >
+        RSC_CD_5 = #{record.rscCd5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.alterateStartTime5 != null" >
+        ALTERATE_START_TIME_5 = #{record.alterateStartTime5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.alterateEndTime5 != null" >
+        ALTERATE_END_TIME_5 = #{record.alterateEndTime5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.startRealTime5 != null" >
+        START_REAL_TIME_5 = #{record.startRealTime5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endRealTime5 != null" >
+        END_REAL_TIME_5 = #{record.endRealTime5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rscCd6 != null" >
+        RSC_CD_6 = #{record.rscCd6,jdbcType=VARCHAR},
+      </if>
+      <if test="record.alterateStartTime6 != null" >
+        ALTERATE_START_TIME_6 = #{record.alterateStartTime6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.alterateEndTime6 != null" >
+        ALTERATE_END_TIME_6 = #{record.alterateEndTime6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.startRealTime6 != null" >
+        START_REAL_TIME_6 = #{record.startRealTime6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endRealTime6 != null" >
+        END_REAL_TIME_6 = #{record.endRealTime6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rscCd7 != null" >
+        RSC_CD_7 = #{record.rscCd7,jdbcType=VARCHAR},
+      </if>
+      <if test="record.alterateStartTime7 != null" >
+        ALTERATE_START_TIME_7 = #{record.alterateStartTime7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.alterateEndTime7 != null" >
+        ALTERATE_END_TIME_7 = #{record.alterateEndTime7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.startRealTime7 != null" >
+        START_REAL_TIME_7 = #{record.startRealTime7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endRealTime7 != null" >
+        END_REAL_TIME_7 = #{record.endRealTime7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rscFlag != null" >
+        RSC_FLAG = #{record.rscFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_DYN_RESOURCE
+    set ID = #{record.id,jdbcType=VARCHAR},
+      FLIGHT_ID = #{record.flightId,jdbcType=BIGINT},
+      RSC_TYPE = #{record.rscType,jdbcType=VARCHAR},
+      RSC_CD_1 = #{record.rscCd1,jdbcType=VARCHAR},
+      ALTERATE_START_TIME_1 = #{record.alterateStartTime1,jdbcType=TIMESTAMP},
+      ALTERATE_END_TIME_1 = #{record.alterateEndTime1,jdbcType=TIMESTAMP},
+      START_REAL_TIME_1 = #{record.startRealTime1,jdbcType=TIMESTAMP},
+      END_REAL_TIME_1 = #{record.endRealTime1,jdbcType=TIMESTAMP},
+      RSC_CD_2 = #{record.rscCd2,jdbcType=VARCHAR},
+      ALTERATE_START_TIME_2 = #{record.alterateStartTime2,jdbcType=TIMESTAMP},
+      ALTERATE_END_TIME_2 = #{record.alterateEndTime2,jdbcType=TIMESTAMP},
+      START_REAL_TIME_2 = #{record.startRealTime2,jdbcType=TIMESTAMP},
+      END_REAL_TIME_2 = #{record.endRealTime2,jdbcType=TIMESTAMP},
+      RSC_CD_3 = #{record.rscCd3,jdbcType=VARCHAR},
+      ALTERATE_START_TIME_3 = #{record.alterateStartTime3,jdbcType=TIMESTAMP},
+      ALTERATE_END_TIME_3 = #{record.alterateEndTime3,jdbcType=TIMESTAMP},
+      START_REAL_TIME_3 = #{record.startRealTime3,jdbcType=TIMESTAMP},
+      END_REAL_TIME_3 = #{record.endRealTime3,jdbcType=TIMESTAMP},
+      RSC_CD_4 = #{record.rscCd4,jdbcType=VARCHAR},
+      ALTERATE_START_TIME_4 = #{record.alterateStartTime4,jdbcType=TIMESTAMP},
+      ALTERATE_END_TIME_4 = #{record.alterateEndTime4,jdbcType=TIMESTAMP},
+      START_REAL_TIME_4 = #{record.startRealTime4,jdbcType=TIMESTAMP},
+      END_REAL_TIME_4 = #{record.endRealTime4,jdbcType=TIMESTAMP},
+      RSC_CD_5 = #{record.rscCd5,jdbcType=VARCHAR},
+      ALTERATE_START_TIME_5 = #{record.alterateStartTime5,jdbcType=TIMESTAMP},
+      ALTERATE_END_TIME_5 = #{record.alterateEndTime5,jdbcType=TIMESTAMP},
+      START_REAL_TIME_5 = #{record.startRealTime5,jdbcType=TIMESTAMP},
+      END_REAL_TIME_5 = #{record.endRealTime5,jdbcType=TIMESTAMP},
+      RSC_CD_6 = #{record.rscCd6,jdbcType=VARCHAR},
+      ALTERATE_START_TIME_6 = #{record.alterateStartTime6,jdbcType=TIMESTAMP},
+      ALTERATE_END_TIME_6 = #{record.alterateEndTime6,jdbcType=TIMESTAMP},
+      START_REAL_TIME_6 = #{record.startRealTime6,jdbcType=TIMESTAMP},
+      END_REAL_TIME_6 = #{record.endRealTime6,jdbcType=TIMESTAMP},
+      RSC_CD_7 = #{record.rscCd7,jdbcType=VARCHAR},
+      ALTERATE_START_TIME_7 = #{record.alterateStartTime7,jdbcType=TIMESTAMP},
+      ALTERATE_END_TIME_7 = #{record.alterateEndTime7,jdbcType=TIMESTAMP},
+      START_REAL_TIME_7 = #{record.startRealTime7,jdbcType=TIMESTAMP},
+      END_REAL_TIME_7 = #{record.endRealTime7,jdbcType=TIMESTAMP},
+      RSC_FLAG = #{record.rscFlag,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TDynResource" >
+    update T_DYN_RESOURCE
+    <set >
+      <if test="flightId != null" >
+        FLIGHT_ID = #{flightId,jdbcType=BIGINT},
+      </if>
+      <if test="rscType != null" >
+        RSC_TYPE = #{rscType,jdbcType=VARCHAR},
+      </if>
+      <if test="rscCd1 != null" >
+        RSC_CD_1 = #{rscCd1,jdbcType=VARCHAR},
+      </if>
+      <if test="alterateStartTime1 != null" >
+        ALTERATE_START_TIME_1 = #{alterateStartTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alterateEndTime1 != null" >
+        ALTERATE_END_TIME_1 = #{alterateEndTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startRealTime1 != null" >
+        START_REAL_TIME_1 = #{startRealTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endRealTime1 != null" >
+        END_REAL_TIME_1 = #{endRealTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rscCd2 != null" >
+        RSC_CD_2 = #{rscCd2,jdbcType=VARCHAR},
+      </if>
+      <if test="alterateStartTime2 != null" >
+        ALTERATE_START_TIME_2 = #{alterateStartTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alterateEndTime2 != null" >
+        ALTERATE_END_TIME_2 = #{alterateEndTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startRealTime2 != null" >
+        START_REAL_TIME_2 = #{startRealTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endRealTime2 != null" >
+        END_REAL_TIME_2 = #{endRealTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rscCd3 != null" >
+        RSC_CD_3 = #{rscCd3,jdbcType=VARCHAR},
+      </if>
+      <if test="alterateStartTime3 != null" >
+        ALTERATE_START_TIME_3 = #{alterateStartTime3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alterateEndTime3 != null" >
+        ALTERATE_END_TIME_3 = #{alterateEndTime3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startRealTime3 != null" >
+        START_REAL_TIME_3 = #{startRealTime3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endRealTime3 != null" >
+        END_REAL_TIME_3 = #{endRealTime3,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rscCd4 != null" >
+        RSC_CD_4 = #{rscCd4,jdbcType=VARCHAR},
+      </if>
+      <if test="alterateStartTime4 != null" >
+        ALTERATE_START_TIME_4 = #{alterateStartTime4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alterateEndTime4 != null" >
+        ALTERATE_END_TIME_4 = #{alterateEndTime4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startRealTime4 != null" >
+        START_REAL_TIME_4 = #{startRealTime4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endRealTime4 != null" >
+        END_REAL_TIME_4 = #{endRealTime4,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rscCd5 != null" >
+        RSC_CD_5 = #{rscCd5,jdbcType=VARCHAR},
+      </if>
+      <if test="alterateStartTime5 != null" >
+        ALTERATE_START_TIME_5 = #{alterateStartTime5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alterateEndTime5 != null" >
+        ALTERATE_END_TIME_5 = #{alterateEndTime5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startRealTime5 != null" >
+        START_REAL_TIME_5 = #{startRealTime5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endRealTime5 != null" >
+        END_REAL_TIME_5 = #{endRealTime5,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rscCd6 != null" >
+        RSC_CD_6 = #{rscCd6,jdbcType=VARCHAR},
+      </if>
+      <if test="alterateStartTime6 != null" >
+        ALTERATE_START_TIME_6 = #{alterateStartTime6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alterateEndTime6 != null" >
+        ALTERATE_END_TIME_6 = #{alterateEndTime6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startRealTime6 != null" >
+        START_REAL_TIME_6 = #{startRealTime6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endRealTime6 != null" >
+        END_REAL_TIME_6 = #{endRealTime6,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rscCd7 != null" >
+        RSC_CD_7 = #{rscCd7,jdbcType=VARCHAR},
+      </if>
+      <if test="alterateStartTime7 != null" >
+        ALTERATE_START_TIME_7 = #{alterateStartTime7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alterateEndTime7 != null" >
+        ALTERATE_END_TIME_7 = #{alterateEndTime7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startRealTime7 != null" >
+        START_REAL_TIME_7 = #{startRealTime7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endRealTime7 != null" >
+        END_REAL_TIME_7 = #{endRealTime7,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rscFlag != null" >
+        RSC_FLAG = #{rscFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TDynResource" >
+    update T_DYN_RESOURCE
+    set FLIGHT_ID = #{flightId,jdbcType=BIGINT},
+      RSC_TYPE = #{rscType,jdbcType=VARCHAR},
+      RSC_CD_1 = #{rscCd1,jdbcType=VARCHAR},
+      ALTERATE_START_TIME_1 = #{alterateStartTime1,jdbcType=TIMESTAMP},
+      ALTERATE_END_TIME_1 = #{alterateEndTime1,jdbcType=TIMESTAMP},
+      START_REAL_TIME_1 = #{startRealTime1,jdbcType=TIMESTAMP},
+      END_REAL_TIME_1 = #{endRealTime1,jdbcType=TIMESTAMP},
+      RSC_CD_2 = #{rscCd2,jdbcType=VARCHAR},
+      ALTERATE_START_TIME_2 = #{alterateStartTime2,jdbcType=TIMESTAMP},
+      ALTERATE_END_TIME_2 = #{alterateEndTime2,jdbcType=TIMESTAMP},
+      START_REAL_TIME_2 = #{startRealTime2,jdbcType=TIMESTAMP},
+      END_REAL_TIME_2 = #{endRealTime2,jdbcType=TIMESTAMP},
+      RSC_CD_3 = #{rscCd3,jdbcType=VARCHAR},
+      ALTERATE_START_TIME_3 = #{alterateStartTime3,jdbcType=TIMESTAMP},
+      ALTERATE_END_TIME_3 = #{alterateEndTime3,jdbcType=TIMESTAMP},
+      START_REAL_TIME_3 = #{startRealTime3,jdbcType=TIMESTAMP},
+      END_REAL_TIME_3 = #{endRealTime3,jdbcType=TIMESTAMP},
+      RSC_CD_4 = #{rscCd4,jdbcType=VARCHAR},
+      ALTERATE_START_TIME_4 = #{alterateStartTime4,jdbcType=TIMESTAMP},
+      ALTERATE_END_TIME_4 = #{alterateEndTime4,jdbcType=TIMESTAMP},
+      START_REAL_TIME_4 = #{startRealTime4,jdbcType=TIMESTAMP},
+      END_REAL_TIME_4 = #{endRealTime4,jdbcType=TIMESTAMP},
+      RSC_CD_5 = #{rscCd5,jdbcType=VARCHAR},
+      ALTERATE_START_TIME_5 = #{alterateStartTime5,jdbcType=TIMESTAMP},
+      ALTERATE_END_TIME_5 = #{alterateEndTime5,jdbcType=TIMESTAMP},
+      START_REAL_TIME_5 = #{startRealTime5,jdbcType=TIMESTAMP},
+      END_REAL_TIME_5 = #{endRealTime5,jdbcType=TIMESTAMP},
+      RSC_CD_6 = #{rscCd6,jdbcType=VARCHAR},
+      ALTERATE_START_TIME_6 = #{alterateStartTime6,jdbcType=TIMESTAMP},
+      ALTERATE_END_TIME_6 = #{alterateEndTime6,jdbcType=TIMESTAMP},
+      START_REAL_TIME_6 = #{startRealTime6,jdbcType=TIMESTAMP},
+      END_REAL_TIME_6 = #{endRealTime6,jdbcType=TIMESTAMP},
+      RSC_CD_7 = #{rscCd7,jdbcType=VARCHAR},
+      ALTERATE_START_TIME_7 = #{alterateStartTime7,jdbcType=TIMESTAMP},
+      ALTERATE_END_TIME_7 = #{alterateEndTime7,jdbcType=TIMESTAMP},
+      START_REAL_TIME_7 = #{startRealTime7,jdbcType=TIMESTAMP},
+      END_REAL_TIME_7 = #{endRealTime7,jdbcType=TIMESTAMP},
+      RSC_FLAG = #{rscFlag,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

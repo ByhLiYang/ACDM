@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.monitioring.SmallDelayMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.monitoring.smallDelay.smallDelay" >
+    <result column="queryDate" property="queryDate" jdbcType="TIMESTAMP" />
+    <result column="aircraft_terminal_code" property="aircraft_terminal_code" jdbcType="VARCHAR" />
+    <result column="flight_no_iata" property="flight_no_iata" jdbcType="VARCHAR" />
+    <result column="gate_1" property="gate_1" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="queryList" parameterType="map" resultType="com.hq.acdm.model.monitoring.smallDelay.smallDelay"  >
+      SELECT AA.FLIGHT_NO_IATA,
+      to_char(AA.OPERATIONAL_DATE,'yyyy-MM-dd') OPERATIONAL_DATE,
+      AA.A_OR_D,
+      AA.STAND,
+      AA.ORIGIN_AIRPORT_IATA,
+      to_char(AA.SIBT,'HH24:MI') SIBT,
+      to_char(AA.AIBT,'HH24:MI') AIBT,
+      to_char(AA.ALDT,'HH24:MI') ALDT,
+      BB.FLIGHT_NO_IATA FLIGHT_NO_IATA_D,
+      AA.isStrictCtrl isStrictCtrl,aa.airline_code_icao,
+      TO_CHAR(BB.OPERATIONAL_DATE,'yyyy-MM-dd')  OPERATIONAL_DATE_D,
+      BB.A_OR_D,
+      to_char(BB.SOBT,'HH24:MI') SOBT,
+      to_char(BB.AOBT,'HH24:MI') AOBT,
+      to_char(BB.COBT,'HH24:MI') COBT,
+      to_char(BB.CTOT,'HH24:MI') CTOT,
+      CEIL((TO_DATE(to_char(BB.CTOT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(BB.COBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60) ctot_Sobt,
+
+      to_char(BB.ATOT,'HH24:MI') ATOT,
+      CC.STATUS STATUS,  CC.STATUS STATE,cc.SENDER,cc.RECEIVER
+      FROM
+      (SELECT TA.FLIGHT_NO_IATA,
+      TA.OPERATIONAL_DATE,
+      TA.A_OR_D,
+      TA.SIBT,
+      TA.FLIGHT_REPEAT_COUNT,
+      TB.isStrictCtrl,
+      TB.LNK_CARRIER_CODE,
+      TB.LNK_FLIGHT_NO,
+      TB.LNK_FLIGHT_SUFFIX,
+      TB.LNK_FLIGHT_REPEAT_COUNT,
+      TB.LNK_SCHEDULE_DATE,ta.airline_code_icao,
+      TA.ALDT,
+      TA.AIBT,
+      TA.STAND,
+      TA.ORIGIN_AIRPORT_IATA
+      FROM DAILY_FLIGHT_MASTER TA
+      LEFT JOIN DAILY_FLIGHT_ADD_DETAILS TB
+      ON TA.FLIGHT_NO_IATA       =TB.FLIGHT_NO_IATA
+      AND TA.OPERATIONAL_DATE    =TB.OPERATIONAL_DATE
+      AND TA.A_OR_D              =TB.A_OR_D
+      WHERE nvl(TB.CODE_SHARE_STATUS,' ') &lt;>'SF'
+      AND nvl(TB.FLIGHT_CANCEL_CODE,' ') &lt;>'C'
+      AND nvl(TB.FLIGHT_CLASS_CODE,' ')  IN ('L/W','W/Z','C/B')
+      AND TA.A_OR_D              ='A'
+      <if test="params.startDate !=null and params.startDate != ''">
+         and TA.OPERATIONAL_DATE >= to_date(#{params.startDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:MI:SS')
+      </if>
+      <if test="params.endDate !=null and params.endDate != ''">
+          and TA.OPERATIONAL_DATE &lt;= to_date(#{params.endDate,jdbcType=VARCHAR}, 'yyyy-MM-dd HH24:MI:SS')
+      </if>
+      ) AA
+      LEFT JOIN
+      (SELECT T1.FLIGHT_NO_IATA,
+      T1.OPERATIONAL_DATE,
+      T1.A_OR_D,
+      T1.FLIGHT_REPEAT_COUNT,
+      T1.STAND,
+      T1.SOBT,
+      T2.COBT,
+      T2.CTOT,
+      CEIL((TO_DATE(to_char(T2.CTOT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(T2.COBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60) ctot_Sobt,
+      T1.AOBT,
+      T1.ATOT
+      FROM DAILY_FLIGHT_MASTER T1
+      LEFT JOIN DAILY_FLIGHT_ADD_DETAILS T2
+      ON T1.FLIGHT_NO_IATA       =T2.FLIGHT_NO_IATA
+      AND T1.OPERATIONAL_DATE    =T2.OPERATIONAL_DATE
+      AND T1.A_OR_D              =T2.A_OR_D
+      WHERE nvl(T2.CODE_SHARE_STATUS,' ') &lt;>'SF'
+      AND nvl(T2.FLIGHT_CANCEL_CODE,' ')  &lt;>'C'
+      AND nvl(T2.FLIGHT_CLASS_CODE,' ')  IN ('L/W','W/Z','C/B')
+      AND T1.A_OR_D              ='D'
+      ) BB ON (AA.LNK_CARRIER_CODE
+      || AA.LNK_FLIGHT_NO
+      || COALESCE(AA.LNK_FLIGHT_SUFFIX,''))=BB.FLIGHT_NO_IATA
+      AND AA.LNK_FLIGHT_REPEAT_COUNT         =BB.FLIGHT_REPEAT_COUNT
+      AND AA.LNK_SCHEDULE_DATE               = BB.OPERATIONAL_DATE
+      left join small_delay_status cc on BB.OPERATIONAL_DATE=cc.OPERATIONAL_DATE and BB.flight_no_iata=cc.flight_no_iata_d
+      order by ctot_Sobt
+
+      <if test="params.aircraft_terminal_code !=null and params.aircraft_terminal_code != ''">
+          and aircraft_terminal_code=#{params.aircraft_terminal_code}
+      </if>
+      <if test="params.areaid !=null and params.areaid != ''">
+          and areaid=#{params.areaid}
+      </if>
+  </select>
+
+    <select id="queryStatusList" parameterType="map" resultType="com.hq.acdm.model.monitoring.smallDelay.SmallDelayStatus"  >
+        SELECT  * from SMALL_DELAY_STATUS
+    </select>
+    <insert id="insert" parameterType="com.hq.acdm.model.monitoring.smallDelay.SmallDelayStatus" >
+    insert into SMALL_DELAY_STATUS (FLIGHT_NO_IATA_D, OPERATIONAL_DATE, SENDER, RECEIVER,
+    BEGIN_TIME, END_TIME, SCHEDULE_TIME,A_OR_D, SOBT,COBT,CTOT,AOBT,ATOT,CONCERT_TIME,status)
+    values (#{FLIGHT_NO_IATA_D,jdbcType=VARCHAR}, to_date(#{OPERATIONAL_DATE,jdbcType=TIMESTAMP},'yyyy-MM-dd HH24:MI:ss'),
+      #{SENDER,jdbcType=VARCHAR}, #{RECEIVER,jdbcType=VARCHAR},
+       #{BEGIN_TIME,jdbcType=VARCHAR},#{END_TIME,jdbcType=VARCHAR},#{SCHEDULE_TIME,jdbcType=TIMESTAMP},
+      #{A_OR_D,jdbcType=INTEGER}, #{SOBT,jdbcType=TIMESTAMP}, #{COBT,jdbcType=TIMESTAMP},
+      #{CTOT,jdbcType=TIMESTAMP}, #{AOBT,jdbcType=TIMESTAMP}, #{ATOT,jdbcType=TIMESTAMP}, #{CONCERT_TIME,jdbcType=TIMESTAMP},
+      #{STATUS,jdbcType=INTEGER})
+  </insert>
+  <update id="updateStatus" parameterType="com.hq.acdm.model.monitoring.smallDelay.SmallDelayStatus" >
+    update SMALL_DELAY_STATUS
+    set status = #{STATUS,jdbcType=INTEGER},
+   <if test="STATUS ==2">
+    BEGIN_TIME=#{BEGIN_TIME,jdbcType=TIMESTAMP}
+   </if>
+  <if test="STATUS ==3">
+      END_TIME=#{END_TIME,jdbcType=TIMESTAMP}
+  </if>
+    where FLIGHT_NO_IATA_D = #{FLIGHT_NO_IATA_D,jdbcType=VARCHAR}
+    and  to_char(OPERATIONAL_DATE,'yyyy-MM-dd')=#{OPERATIONAL_DATE,jdbcType=VARCHAR}
+  </update>
+</mapper>

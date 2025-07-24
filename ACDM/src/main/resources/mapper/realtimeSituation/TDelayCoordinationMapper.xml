@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TDelayCoordinationMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TDelayCoordination" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="FLIGHT_ID" property="flightId" jdbcType="BIGINT" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="TIMESTAMP" />
+    <result column="SIBT" property="sibt" jdbcType="TIMESTAMP" />
+    <result column="ADES" property="ades" jdbcType="VARCHAR" />
+    <result column="YWLJ" property="ywlj" jdbcType="TIMESTAMP" />
+    <result column="FXLJ" property="fxlj" jdbcType="TIMESTAMP" />
+    <result column="COBT" property="cobt" jdbcType="TIMESTAMP" />
+    <result column="TOBT" property="tobt" jdbcType="TIMESTAMP" />
+    <result column="CTOT" property="ctot" jdbcType="TIMESTAMP" />
+    <result column="TTOT" property="ttot" jdbcType="TIMESTAMP" />
+    <result column="ATDC" property="atdc" jdbcType="TIMESTAMP" />
+    <result column="AOBT" property="aobt" jdbcType="TIMESTAMP" />
+    <result column="ATOT" property="atot" jdbcType="TIMESTAMP" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+    <result column="PRIORITY" property="priority" jdbcType="VARCHAR" />
+    <result column="RMK" property="rmk" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="TIMESTAMP" />
+    <result column="CREATE_EMP" property="createEmp" jdbcType="VARCHAR" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_EMP" property="updateEmp" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, FLIGHT_ID, FLNO, SOBT, SIBT, ADES, YWLJ, FXLJ, COBT, TOBT, CTOT, TTOT, ATDC, 
+    AOBT, ATOT, STATE, PRIORITY, RMK, CREATE_TM, CREATE_EMP, UPDATE_TM, UPDATE_EMP
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TDelayCoordinationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_DELAY_COORDINATION
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_DELAY_COORDINATION
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_DELAY_COORDINATION
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TDelayCoordinationExample" >
+    delete from T_DELAY_COORDINATION
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TDelayCoordination" >
+    insert into T_DELAY_COORDINATION (ID, FLIGHT_ID, FLNO, 
+      SOBT, SIBT, ADES, 
+      YWLJ, FXLJ, COBT, 
+      TOBT, CTOT, TTOT, 
+      ATDC, AOBT, ATOT, 
+      STATE, PRIORITY, RMK, 
+      CREATE_TM, CREATE_EMP, UPDATE_TM, 
+      UPDATE_EMP)
+    values (#{id,jdbcType=VARCHAR}, #{flightId,jdbcType=BIGINT}, #{flno,jdbcType=VARCHAR}, 
+      #{sobt,jdbcType=TIMESTAMP}, #{sibt,jdbcType=TIMESTAMP}, #{ades,jdbcType=VARCHAR}, 
+      #{ywlj,jdbcType=TIMESTAMP}, #{fxlj,jdbcType=TIMESTAMP}, #{cobt,jdbcType=TIMESTAMP}, 
+      #{tobt,jdbcType=TIMESTAMP}, #{ctot,jdbcType=TIMESTAMP}, #{ttot,jdbcType=TIMESTAMP}, 
+      #{atdc,jdbcType=TIMESTAMP}, #{aobt,jdbcType=TIMESTAMP}, #{atot,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=VARCHAR}, #{priority,jdbcType=VARCHAR}, #{rmk,jdbcType=VARCHAR}, 
+      #{createTm,jdbcType=TIMESTAMP}, #{createEmp,jdbcType=VARCHAR}, #{updateTm,jdbcType=TIMESTAMP}, 
+      #{updateEmp,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TDelayCoordination" >
+    insert into T_DELAY_COORDINATION
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="flightId != null" >
+        FLIGHT_ID,
+      </if>
+      <if test="flno != null" >
+        FLNO,
+      </if>
+      <if test="sobt != null" >
+        SOBT,
+      </if>
+      <if test="sibt != null" >
+        SIBT,
+      </if>
+      <if test="ades != null" >
+        ADES,
+      </if>
+      <if test="ywlj != null" >
+        YWLJ,
+      </if>
+      <if test="fxlj != null" >
+        FXLJ,
+      </if>
+      <if test="cobt != null" >
+        COBT,
+      </if>
+      <if test="tobt != null" >
+        TOBT,
+      </if>
+      <if test="ctot != null" >
+        CTOT,
+      </if>
+      <if test="ttot != null" >
+        TTOT,
+      </if>
+      <if test="atdc != null" >
+        ATDC,
+      </if>
+      <if test="aobt != null" >
+        AOBT,
+      </if>
+      <if test="atot != null" >
+        ATOT,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="priority != null" >
+        PRIORITY,
+      </if>
+      <if test="rmk != null" >
+        RMK,
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM,
+      </if>
+      <if test="createEmp != null" >
+        CREATE_EMP,
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM,
+      </if>
+      <if test="updateEmp != null" >
+        UPDATE_EMP,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="flightId != null" >
+        #{flightId,jdbcType=BIGINT},
+      </if>
+      <if test="flno != null" >
+        #{flno,jdbcType=VARCHAR},
+      </if>
+      <if test="sobt != null" >
+        #{sobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sibt != null" >
+        #{sibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ades != null" >
+        #{ades,jdbcType=VARCHAR},
+      </if>
+      <if test="ywlj != null" >
+        #{ywlj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fxlj != null" >
+        #{fxlj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cobt != null" >
+        #{cobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tobt != null" >
+        #{tobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctot != null" >
+        #{ctot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ttot != null" >
+        #{ttot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atdc != null" >
+        #{atdc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aobt != null" >
+        #{aobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atot != null" >
+        #{atot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null" >
+        #{priority,jdbcType=VARCHAR},
+      </if>
+      <if test="rmk != null" >
+        #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createEmp != null" >
+        #{createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTm != null" >
+        #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateEmp != null" >
+        #{updateEmp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TDelayCoordinationExample" resultType="java.lang.Integer" >
+    select count(*) from T_DELAY_COORDINATION
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_DELAY_COORDINATION
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flightId != null" >
+        FLIGHT_ID = #{record.flightId,jdbcType=BIGINT},
+      </if>
+      <if test="record.flno != null" >
+        FLNO = #{record.flno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sobt != null" >
+        SOBT = #{record.sobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sibt != null" >
+        SIBT = #{record.sibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ades != null" >
+        ADES = #{record.ades,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ywlj != null" >
+        YWLJ = #{record.ywlj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.fxlj != null" >
+        FXLJ = #{record.fxlj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.cobt != null" >
+        COBT = #{record.cobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.tobt != null" >
+        TOBT = #{record.tobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ctot != null" >
+        CTOT = #{record.ctot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ttot != null" >
+        TTOT = #{record.ttot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.atdc != null" >
+        ATDC = #{record.atdc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.aobt != null" >
+        AOBT = #{record.aobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.atot != null" >
+        ATOT = #{record.atot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.priority != null" >
+        PRIORITY = #{record.priority,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rmk != null" >
+        RMK = #{record.rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTm != null" >
+        CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createEmp != null" >
+        CREATE_EMP = #{record.createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTm != null" >
+        UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateEmp != null" >
+        UPDATE_EMP = #{record.updateEmp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_DELAY_COORDINATION
+    set ID = #{record.id,jdbcType=VARCHAR},
+      FLIGHT_ID = #{record.flightId,jdbcType=BIGINT},
+      FLNO = #{record.flno,jdbcType=VARCHAR},
+      SOBT = #{record.sobt,jdbcType=TIMESTAMP},
+      SIBT = #{record.sibt,jdbcType=TIMESTAMP},
+      ADES = #{record.ades,jdbcType=VARCHAR},
+      YWLJ = #{record.ywlj,jdbcType=TIMESTAMP},
+      FXLJ = #{record.fxlj,jdbcType=TIMESTAMP},
+      COBT = #{record.cobt,jdbcType=TIMESTAMP},
+      TOBT = #{record.tobt,jdbcType=TIMESTAMP},
+      CTOT = #{record.ctot,jdbcType=TIMESTAMP},
+      TTOT = #{record.ttot,jdbcType=TIMESTAMP},
+      ATDC = #{record.atdc,jdbcType=TIMESTAMP},
+      AOBT = #{record.aobt,jdbcType=TIMESTAMP},
+      ATOT = #{record.atot,jdbcType=TIMESTAMP},
+      STATE = #{record.state,jdbcType=VARCHAR},
+      PRIORITY = #{record.priority,jdbcType=VARCHAR},
+      RMK = #{record.rmk,jdbcType=VARCHAR},
+      CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      CREATE_EMP = #{record.createEmp,jdbcType=VARCHAR},
+      UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      UPDATE_EMP = #{record.updateEmp,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TDelayCoordination" >
+    update T_DELAY_COORDINATION
+    <set >
+      <if test="flightId != null" >
+        FLIGHT_ID = #{flightId,jdbcType=BIGINT},
+      </if>
+      <if test="flno != null" >
+        FLNO = #{flno,jdbcType=VARCHAR},
+      </if>
+      <if test="sobt != null" >
+        SOBT = #{sobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sibt != null" >
+        SIBT = #{sibt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ades != null" >
+        ADES = #{ades,jdbcType=VARCHAR},
+      </if>
+      <if test="ywlj != null" >
+        YWLJ = #{ywlj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fxlj != null" >
+        FXLJ = #{fxlj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cobt != null" >
+        COBT = #{cobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tobt != null" >
+        TOBT = #{tobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctot != null" >
+        CTOT = #{ctot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ttot != null" >
+        TTOT = #{ttot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atdc != null" >
+        ATDC = #{atdc,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aobt != null" >
+        AOBT = #{aobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="atot != null" >
+        ATOT = #{atot,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null" >
+        PRIORITY = #{priority,jdbcType=VARCHAR},
+      </if>
+      <if test="rmk != null" >
+        RMK = #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createEmp != null" >
+        CREATE_EMP = #{createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateEmp != null" >
+        UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TDelayCoordination" >
+    update T_DELAY_COORDINATION
+    set FLIGHT_ID = #{flightId,jdbcType=BIGINT},
+      FLNO = #{flno,jdbcType=VARCHAR},
+      SOBT = #{sobt,jdbcType=TIMESTAMP},
+      SIBT = #{sibt,jdbcType=TIMESTAMP},
+      ADES = #{ades,jdbcType=VARCHAR},
+      YWLJ = #{ywlj,jdbcType=TIMESTAMP},
+      FXLJ = #{fxlj,jdbcType=TIMESTAMP},
+      COBT = #{cobt,jdbcType=TIMESTAMP},
+      TOBT = #{tobt,jdbcType=TIMESTAMP},
+      CTOT = #{ctot,jdbcType=TIMESTAMP},
+      TTOT = #{ttot,jdbcType=TIMESTAMP},
+      ATDC = #{atdc,jdbcType=TIMESTAMP},
+      AOBT = #{aobt,jdbcType=TIMESTAMP},
+      ATOT = #{atot,jdbcType=TIMESTAMP},
+      STATE = #{state,jdbcType=VARCHAR},
+      PRIORITY = #{priority,jdbcType=VARCHAR},
+      RMK = #{rmk,jdbcType=VARCHAR},
+      CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      CREATE_EMP = #{createEmp,jdbcType=VARCHAR},
+      UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="selectByFlightId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM T_DELAY_COORDINATION
+    WHERE FLIGHT_ID = #{flightId}
+  </select>
+
+  <select id="getIsCoordination" resultType="java.lang.String" parameterType="java.lang.String">
+    SELECT STATE FROM T_DELAY_COORDINATION
+    WHERE FLIGHT_ID = #{flightId}
+  </select>
+
+  <select id="getFlightTm" resultType="java.lang.String" parameterType="java.lang.String">
+    SELECT date_format(FLIGHT_TM, '%Y-%m-%d %H:%i:%s') TM FROM T_DELAY_COORDINATION
+    WHERE FLIGHT_ID = #{flightId}
+  </select>
+
+  <update id="updateTDelayCoordinationState" parameterType="map" >
+    update T_DELAY_COORDINATION
+    set
+    <if test="params.state2 != null " >
+      FLIGHT_TM=NOW(),
+    </if>
+    STATE = #{params.state,jdbcType=VARCHAR}
+    where FLIGHT_ID = #{params.flightId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.timer.DailyRunWay.DailyRunWayMapper" >
+<select id="queryDRW" resultType="com.hq.acdm.model.timer.DailyRunWay.DailyRunWay">
+    select * from DAILY_RUNWAY where (select to_char(max(operational_date),'yyyy-mm-dd hh24:mm') from DAILY_RUNWAY )= to_char(operational_date,'yyyy-mm-dd hh24:mm')
+</select>
+    <select id="queryLastest" resultType="com.hq.acdm.model.timer.DailyRunWay.DailyRunWay">
+        SELECT
+                *
+            FROM
+	( SELECT * FROM DAILY_RUNWAY WHERE STATUS = '0' ) R
+	INNER JOIN ( SELECT MAX( OPERATIONAL_DATE ) AS DD FROM DAILY_RUNWAY WHERE STATUS = '0' ) D ON D.DD = R.OPERATIONAL_DATE
+    </select>
+    <insert id="insertDRWA" parameterType="map">
+        INSERT INTO DAILY_RUNWAY(
+        OPERATIONAL_DATE,
+        A_OR_D,
+        RWY,
+        STARTTIME,
+        ENDTIME,
+        STATUS,
+        FLG,
+        EDITOR,
+        UPDATETIME,
+        STARTDATE
+        ) VALUES (
+          to_date(to_char(sysdate,'yyyy-mm-dd'),'yyyy-mm-dd'),
+          'A',
+          '18L',
+          0,
+          23,
+          '0',
+          '1',
+          'aocU01',
+          sysdate,
+          sysdate
+        )
+    </insert>
+    <insert id="insertDRWD" parameterType="map">
+        INSERT INTO DAILY_RUNWAY
+         (
+        OPERATIONAL_DATE,
+        A_OR_D,
+        RWY,
+        STARTTIME,
+        ENDTIME,
+        STATUS,
+        FLG,
+        EDITOR,
+        UPDATETIME,
+        STARTDATE
+        )
+        VALUES (
+         to_date(to_char(sysdate,'yyyy-mm-dd'),'yyyy-mm-dd'),
+          'D',
+          '18R',
+          0,
+          23,
+          '0',
+          '1',
+          'aocU01',
+          sysdate,
+          sysdate
+        )
+    </insert>
+    <insert id="insertCondition" parameterType="map">
+        INSERT INTO DAILY_RUNWAY
+         (
+        OPERATIONAL_DATE,
+        A_OR_D,
+        RWY,
+        STARTTIME,
+        ENDTIME,
+        STATUS,
+        FLG,
+        EDITOR,
+        UPDATETIME,
+        STARTDATE
+        )VALUES (
+        to_date(to_char(sysdate,'yyyy-mm-dd'),'yyyy-mm-dd'),
+        #{params.A_OR_D},
+        #{params.RWY},
+        0,
+        23,
+        '0',
+        '1',
+        #{params.EDITOR},
+        sysdate,
+        sysdate
+        )
+    </insert>
+    <select id="queryByConditionIfExist" parameterType="map" resultType="com.hq.acdm.model.timer.DailyRunWay.DailyRunWay">
+        select * FROM
+        DAILY_RUNWAY
+        where
+        1=1
+            AND to_char(OPERATIONAL_DATE,'YYYY-MM-DD') = to_char(SYSDATE,'YYYY-MM-DD')
+
+        <if test="params.A_OR_D !=null and params.A_OR_D !=''">
+            AND A_OR_D = #{params.A_OR_D}
+        </if>
+        <if test="params.RWY !=null and params.RWY !=''">
+            AND RWY = #{params.RWY}
+        </if>
+        order BY
+        UPDATETIME
+        DESC
+    </select>
+    <update id="updateDailyRunWay" parameterType="com.hq.acdm.model.timer.DailyRunWay.DailyRunWay">
+        UPDATE DAILY_RUNWAY SET ENDDATE = SYSDATE
+        where
+        1=1
+        AND to_char(updatetime,'YYYY-MM-DD') = to_char(#{UPDATETIME},'YYYY-MM-DD')
+        <if test="A_OR_D !=null and A_OR_D !=''">
+            AND A_OR_D = #{A_OR_D}
+        </if>
+        <if test="RWY !=null and RWY !=''">
+            AND RWY = #{RWY}
+        </if>
+    </update>
+    <select id="queryLastDailyRunWay" resultType="com.hq.acdm.model.timer.DailyRunWay.DailyRunWay">
+        select * from DAILY_RUNWAY where (select max(updatetime) from DAILY_RUNWAY) = updatetime
+    </select>
+    <select id="queryTodayDailyRunWay" resultType="com.hq.acdm.model.timer.DailyRunWay.DailyRunWay">
+        select * from DAILY_RUNWAY where to_char(updatetime,'YYYY-MM-DD') =to_char(SYSDATE,'YYYY-MM-DD')
+    </select>
+</mapper>

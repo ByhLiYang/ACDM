@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.nodeQueryMapper" >
+    <resultMap id="BaseResultMap" type="com.hq.acdm.model.statistics.nodeQuery.NodeQuery" >
+        <result column="queryDate" property="queryDate" jdbcType="TIMESTAMP" />
+        <result column="AIRLINE_CODE_IATA" property="airline_code_iata" jdbcType="VARCHAR" />
+        <result column="AIRPORTTYPE" property="airport_type" jdbcType="VARCHAR" />
+        <result column="AVGTime" property="averageTime" jdbcType="INTEGER" />
+    </resultMap>
+    <select id="queryList" parameterType="map" resultType="com.hq.acdm.model.statistics.nodeQuery.NodeQuery"  >
+
+        with table_a as (
+        select  TT.TAXITIMEAVG SysAXIT,d1.*,D2.LNK_SCHEDULE_DATE,case when D2.AIBT_5 is null then D2.AIBT_3 when D2.AIBT_5 is not null then D2.AIBT_5 else null end A_AIBT from  DAILY_FLIGHT_MASTER D1 left join
+        DAILY_FLIGHT_ADD_DETAILS D2 on D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+        AND D1.OPERATIONAL_DATE=D2.OPERATIONAL_DATE AND D1.A_OR_D = D2.A_OR_D  AND
+        D1.FLIGHT_NO_IATA=D2.FLIGHT_NO_IATA
+        left join daily_runway DA on d1.OPERATIONAL_DATE=DA.OPERATIONAL_DATE and d1.A_OR_D=DA.A_OR_D
+        and to_number(to_char((NVL(D1.ALDT,D1.ELDT)), 'hh24'))>=DA.STARTTIME and to_number(to_char((NVL(D1.ALDT,D1.ELDT)), 'hh24'))&lt;case when ENDTIME=23 then 24 else ENDTIME end
+        left join AIRCRAFT_SUBTYPE AIS on AIS.IATA_SUBTYPE=D2.AIRCRAFT_IATA_SUBTYPE
+        left join TAXI_TIME_TABLE TT on
+        TT.AIRCRAFT_TYPE=case when AIS.AIRPORTTYPE is null then '' when AIS.AIRPORTTYPE is not null then AIRPORTTYPE else '' end
+        and d1.A_OR_D=TT.A_OR_D
+        and DA.RWY=TT.RWY
+        and d1.STAND=TT.STAND
+        and TT.TIME_RANGE=
+        case when to_number(to_char(D1.ALDT, 'hh24'))>=7 and to_number(to_char(D1.ALDT, 'hh24'))&lt;10 then 1
+        when to_number(to_char(D1.ALDT, 'hh24'))>=10 and to_number(to_char(D1.ALDT, 'hh24'))&lt;12 then 2
+        else 0 end
+        where d1.a_or_d='A' and nvl(d2.CODE_SHARE_STATUS,' ')  &lt;>'SF'
+        ),table_b as (
+        select TT.TAXITIMEAVG SysAXOT,DM.T_TOBT,DM.ACCT_4 ACCT,d5.TERMINAL,d4.AREAID ,D3.GATE,D1.* ,D2.CTOT,D2.LNK_SCHEDULE_DATE,D2.LNK_CARRIER_CODE,D2.LNK_FLIGHT_NO,D2.LNK_FLIGHT_SUFFIX,D2.LNK_FLIGHT_REPEAT_COUNT ,d2.FLIGHT_CANCEL_CODE,d2.FLIGHT_CLASS_CODE,d2.AIRCRAFT_TERMINAL_CODE,D2.A_TOBT,D2.COBT
+        ,D2.IsStrictCtrl,DC.DESCRIPTION,D2.GATE_1_OPENDATETIME,D2.GATE_2_OPENDATETIME,D2.GATE_3_OPENDATETIME
+        ,D2.GATE_1_CLOSEDATETIME,D2.GATE_2_CLOSEDATETIME,D2.GATE_3_CLOSEDATETIME
+        ,D2.GATE_1_BOARDSTATUS,D2.GATE_2_BOARDSTATUS,D2.GATE_3_BOARDSTATUS, case when D2.AOBT_5 is null then D2.AOBT_3 when D2.AOBT_5 is not null then D2.AOBT_5 else null end A_AOBT
+        from  DAILY_FLIGHT_MASTER D1 left join
+        DAILY_FLIGHT_ADD_DETAILS D2 on D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT
+        AND D1.OPERATIONAL_DATE=D2.OPERATIONAL_DATE AND D1.A_OR_D = D2.A_OR_D  AND
+        D1.FLIGHT_NO_IATA=D2.FLIGHT_NO_IATA
+        left join DAILY_FLIGHT_ADD_DETAILS_MORE DM
+        on DM.FLIGHT_REPEAT_COUNT=D2.FLIGHT_REPEAT_COUNT
+        and DM.OPERATIONAL_DATE=D2.OPERATIONAL_DATE
+        and DM.A_OR_D=D2.A_OR_D
+        and DM.FLIGHT_NO_IATA=D2.FLIGHT_NO_IATA
+        left join GATE D3
+        on (D1.GATE_1=D3.GATE oR D1.GATE_2=D3.GATE oR D1.GATE_3=D3.GATE)
+        left join  AREA d4
+        on d3.AREAID=d4.AREAID
+        left join TERMINAL D5
+        on d4.TERMINAL=d5.TERMINAL
+        left join DELAY_CODE DC
+        on DC.IRR_CODE=D1.CURRENT_DELAY_CODE
+        left join daily_runway DA on d1.OPERATIONAL_DATE=DA.OPERATIONAL_DATE and d1.A_OR_D=DA.A_OR_D
+        and to_number(to_char((NVL(D1.ATOT,D1.ETOT)), 'hh24'))>=DA.STARTTIME and to_number(to_char((NVL(D1.ATOT,D1.ETOT)), 'hh24'))&lt; case when ENDTIME=23 then 24 else ENDTIME end
+        left join AIRCRAFT_SUBTYPE AIS on AIS.IATA_SUBTYPE=D2.AIRCRAFT_IATA_SUBTYPE
+        left join TAXI_TIME_TABLE TT on
+        TT.AIRCRAFT_TYPE=case when AIS.AIRPORTTYPE is null then '' when AIS.AIRPORTTYPE is not null then AIRPORTTYPE else '' end
+        and D1.A_OR_D=TT.A_OR_D
+        and DA.RWY=TT.RWY
+        and D1.STAND=TT.STAND
+        and TT.TIME_RANGE=
+        case when to_number(to_char(D1.ATOT, 'hh24'))>=7 and to_number(to_char(D1.ATOT, 'hh24'))&lt;10 then 1
+        when to_number(to_char(D1.ATOT, 'hh24'))>=10 and to_number(to_char(D1.ATOT, 'hh24'))&lt;12 then 2
+        else 0 end
+        where d1.a_or_d='D' and nvl(d2.CODE_SHARE_STATUS,' ') &lt;>'SF'
+        ) select * from(
+        select SysAXIT,SysAXOT,
+        t2.GATE_1_BOARDSTATUS,t1.atmo A_TMO,t1.A_AIBT,t2.A_AOBT,t1.OPERATIONAL_DATE OPERATIONAL_DATE_A,T1.FLIGHT_NO_IATA FLIGHT_NO_IATA_A,T1.FLIGHT_NO_ICAO FLIGHT_NO_ICAO_A,T1.AIRLINE_CODE_IATA AIRLINE_CODE_IATA_A,
+        T1.AIRLINE_CODE_ICAO AIRLINE_CODE_ICAO_A,
+        T1.ORIGIN_AIRPORT_IATA ORIGIN_AIRPORT_IATA,T1.FLIGHT_REPEAT_COUNT FLIGHT_REPEAT_COUNT_A,T1.ORIGIN_AIRPORT_ICAO ORIGIN_AIRPORT_ICAO,T1.STAND STAND_A,T1.ELDT,
+        T1.A_OR_D A,T1.ATMO,T1.SLDT,T1.ALDT,T1.SIBT,T1.EIBT,T1.AIBT,CEIL((TO_DATE(to_char(T2.AOBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(T1.AIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60) ATTT ,T2.ACCT,T2.AIRCRAFT_TERMINAL_CODE,T2.A_TOBT,T2.COBT
+        ,T2.T_TOBT,T2.CTOT,t2.AREAID,T2.ARDT,CEIL((TO_DATE(to_char(T1.AIBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(T1.ALDT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60) AXIT,T1.EXIT,T2.ACZT,T2.AEZT,T2.A_OR_D,T2.FLIGHT_CANCEL_CODE,T2.FLIGHT_CLASS_CODE,t2.OPERATIONAL_DATE OPERATIONAL_DATE_D,T2.FLIGHT_NO_IATA FLIGHT_NO_IATA_D ,
+        T2.FLIGHT_NO_ICAO FLIGHT_NO_ICAO_D,T2.FLIGHT_REPEAT_COUNT FLIGHT_REPEAT_COUNT_D,T2.AIRLINE_CODE_IATA AIRLINE_CODE_IATA_D, T2.AIRLINE_CODE_ICAO AIRLINE_CODE_ICAO_D,
+        T2.GATE_1,T2.GATE_2,T2.GATE_3,T2.LNK_FLIGHT_NO,T2.LNK_FLIGHT_SUFFIX,T2.STAND STAND_D,T2.A_OR_D D,
+        case when T2.GATE_1_OPENDATETIME is not null then T2.GATE_1_OPENDATETIME
+        when T2.GATE_2_OPENDATETIME is not null  then T2.GATE_2_OPENDATETIME
+        when T2.GATE_3_OPENDATETIME is not null  then T2.GATE_3_OPENDATETIME
+        else null end ASBT,
+        case when T2.GATE_1_OPENDATETIME is not null then T2.GATE_1_BOARDSTATUS
+        when T2.GATE_2_OPENDATETIME is not null  then T2.GATE_2_BOARDSTATUS
+        when T2.GATE_3_OPENDATETIME is not null  then T2.GATE_3_BOARDSTATUS
+        else null end BOARDSTATUS,
+        T2.SOBT  ,T2.EOBT,T2.TOBT,T2.AOBT,T2.EXOT,CEIL((TO_DATE(to_char(T2.ATOT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(T2.AOBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60)  AXOT,T2.DESCRIPTION,t2.IsStrictCtrl
+        ,T2.GATE_1_OPENDATETIME,T2.GATE_2_OPENDATETIME,T2.GATE_3_OPENDATETIME,T2.GATE_1_CLOSEDATETIME,T2.GATE_2_CLOSEDATETIME,T2.GATE_3_CLOSEDATETIME
+        ,T2.ATOT,T2.DEST_AIRPORT_IATA,T2.DEST_AIRPORT_ICAO  from table_a t1 full join
+        table_b t2 on T2.LNK_CARRIER_CODE||T2.LNK_FLIGHT_NO||NVL(t2.LNK_FLIGHT_SUFFIX,'') = T1.FLIGHT_NO_IATA
+        AND T2.LNK_FLIGHT_REPEAT_COUNT=T1.FLIGHT_REPEAT_COUNT and t1.OPERATIONAL_DATE=t2.LNK_SCHEDULE_DATE
+
+        ) where 1=1
+        <if test="params.airCompany != null and params.airCompany != ''">
+            and  AIRLINE_CODE_IATA_A LIKE #{params.airCompany,jdbcType=VARCHAR}
+        </if>
+        <if test="params.flight_no_iata != null and params.flight_no_iata != ''">
+            and  (FLIGHT_NO_IATA_A LIKE #{params.flight_no_iata,jdbcType=VARCHAR} or FLIGHT_NO_IATA_D LIKE #{params.flight_no_iata,jdbcType=VARCHAR})
+        </if>
+        <if test="params.flight_no_iata2 != null and params.flight_no_iata2 != ''"><!--多选-->
+            and  (FLIGHT_NO_IATA_A in
+            <foreach collection="params.list" item="item" index="index" open="(" close=")" separator=",">
+             #{item}
+            </foreach>
+            or FLIGHT_NO_IATA_D in
+            <foreach collection="params.list" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        <if test="params.terminal != null and params.terminal != ''">
+            and  AIRCRAFT_TERMINAL_CODE = #{params.terminal,jdbcType=VARCHAR}
+        </if>
+        <if test="params.destination != null and params.destination != ''">
+            and  ORIGIN_AIRPORT_IATA = #{params.destination,jdbcType=VARCHAR}
+        </if>
+        <if test="params.gate != null and params.gate != ''">
+            AND (GATE_1=#{params.gate,jdbcType=VARCHAR} OR GATE_2=#{params.gate,jdbcType=VARCHAR} OR GATE_3=#{params.gate,jdbcType=VARCHAR})
+        </if>
+        <if test="params.execution != null and params.execution!=''"><!--未执行-->
+            and  ATOT is null
+        </if>
+        <if test="params.areaid != null and params.areaid != ''">
+            and  AREAID = #{params.areaid,jdbcType=VARCHAR}
+        </if>
+        <if test="params.flightstatus != null and params.flightstatus=='0'.toString()"><!--航班状态 0=正常 1=不正常-->
+            AND( (CEIL((TO_DATE(to_char(AOBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60)
+            &lt;CEIL((TO_DATE(to_char(AIBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SOBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60))
+            or ( CEIL((TO_DATE(to_char(AIBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SOBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60+30/(24*60))
+            >CEIL((TO_DATE(to_char(ALDT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60) )
+            or  ((CEIL((TO_DATE(to_char(CURRENT_TIMESTAMP,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SOBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60)&lt;
+            CEIL((TO_DATE(to_char(AIBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60) ))
+            )
+        </if>
+        <if test="params.flightstatus != null and params.flightstatus=='1'.toString()"><!--航班状态 0=正常 1=不正常-->
+            AND(
+            ((AOBT IS NOT NULL or AIBT IS NOT NULL)  AND
+            CEIL((TO_DATE(to_char(AOBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60)
+            >CEIL((TO_DATE(to_char(AIBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SOBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60))
+            or((ALDT IS NOT NULL or ATOT IS NOT NULL) AND
+            CEIL((TO_DATE(to_char(AIBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SOBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60+30/(24*60))
+            &lt;CEIL((TO_DATE(to_char(ALDT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60) )
+            or ((AOBT IS  NULL AND AIBT IS  NULL AND (ALDT IS  NULL or ATOT IS NULL)) AND
+            ((CEIL((TO_DATE(to_char(CURRENT_TIMESTAMP,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SOBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60)&lt;
+            CEIL((TO_DATE(to_char(AIBT,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) * 24*60) )) )
+            )
+        </if>
+        <if test="params.passstatus != null and params.passstatus=='0'.toString()"><!--放行状态 0=正常 1=不正常-->
+            AND (
+            stand_d IN (
+            SELECT  stand FROM stand  WHERE terminal = '2' )
+            AND ( ( (
+            lnk_flight_no IS NULL
+            OR
+            length(lnk_flight_no) = 0
+            OR
+            nvl(
+            TO_CHAR(aibt,'YYYY-MM-DD'),
+            '-1'
+            ) != nvl(
+            TO_CHAR(sobt,'YYYY-MM-DD'),
+            '-1'
+            )
+            AND
+            sobt &lt; TO_DATE( TO_CHAR(SYSDATE,'YYYY-MM-DD') || ' 11:00:00',  'YYYY-MM-DD HH24:MI:SS' ) ) AND (
+            (
+            aobt IS NOT NULL
+            AND
+            ( CAST(aobt AS DATE) - CAST(sobt AS DATE) ) &lt; 5
+            ) OR (
+            sobt + 30 * 1 / ( 24 * 60 ) > atot
+            ) OR (
+            SYSDATE - 20 * 1 / ( 24 * 60 ) &lt; sobt
+            )
+            )
+            ) OR (
+            lnk_flight_no IS NOT NULL
+            AND
+            length(lnk_flight_no) > 0
+            OR
+            nvl(
+            TO_CHAR(aibt,'YYYY-MM-DD'),
+            '-1'
+            ) != nvl(
+            TO_CHAR(sobt,'YYYY-MM-DD'),
+            '-1'
+            )
+            AND (
+            (
+            aldt IS NOT NULL
+            AND
+            ( CAST(aibt AS DATE) - CAST(sibt AS DATE) ) &lt;= 1 / ( 24 * 60 )
+            AND
+            aldt IS NOT NULL
+            AND (
+            (
+            aobt IS NOT NULL
+            AND
+            aobt &lt; sobt + 5 * 1 / ( 24 * 60 )
+            ) OR (
+            sobt + 30 * 1 / ( 24 * 60 ) > atot
+            ) OR (
+            SYSDATE - 20 * 1 / ( 24 * 60 ) &lt; sobt
+            )          )          ) OR (
+            aibt > sibt
+            AND
+            aldt IS NOT NULL
+            AND (
+            (
+            aobt > aibt + ( CAST(sobt AS DATE) - CAST(sibt AS DATE) )
+            ) OR (
+            aibt + ( CAST(sobt AS DATE) - CAST(sibt AS DATE) ) + 30 * 1 / ( 24 * 60 ) > atot
+            ) OR (
+            SYSDATE > ( aibt + ( CAST(sobt AS DATE) - CAST(sibt AS DATE) ) )
+            )  ) ) ) )
+            ) OR (
+            stand_d IN (
+            SELECT stand FROM stand WHERE terminal = '1' )
+            AND (
+            (
+            lnk_flight_no IS NULL
+            OR
+            length(lnk_flight_no) = 0
+            OR
+            nvl(
+            TO_CHAR(aibt,'YYYY-MM-DD'),
+            '-1'
+            ) != nvl(
+            TO_CHAR(sobt,'YYYY-MM-DD'),
+            '-1'
+            )
+            ) AND
+            sobt &lt;TO_DATE(
+            TO_CHAR(SYSDATE,'YYYY-MM-DD') || ' 11:00:00',
+            'YYYY-MM-DD HH24:MI:SS'
+            )
+            AND
+            ( CAST(atot AS DATE) - CAST(sobt AS DATE) ) &lt;= 30 * 1 / ( 24 * 60 )
+            OR (
+            lnk_flight_no IS NOT NULL
+            AND
+            length(lnk_flight_no) > 0
+            OR
+            nvl(
+            TO_CHAR(aibt,'YYYY-MM-DD'),
+            '-1'
+            ) != nvl(
+            TO_CHAR(sobt,'YYYY-MM-DD'),
+            '-1'
+            )
+            ) AND (
+            aldt + 10 * 1 / ( 24 * 60 ) &lt;= sibt
+            AND
+            ( CAST(atot AS DATE) - CAST(sobt AS DATE) ) &lt;= 30 * 1 / ( 24 * 60 )
+            OR
+            aldt + 10 * 1 / ( 24 * 60 ) >= sibt
+            AND
+            atot &lt;= aibt + 10 * 1 / ( 24 * 60 ) + ( CAST(sobt AS DATE) - CAST(sibt AS DATE) ) + 30 * 1 / ( 24 * 60 )
+            )
+            )
+            )
+            )
+        </if>
+        <if test="params.passstatus != null and params.passstatus=='1'.toString()"><!--放行状态 0=正常 1=不正常-->
+            AND (STAND_D IN (SELECT STAND FROM STAND WHERE TERMINAL = '2') AND (((
+            LNK_FLIGHT_NO IS NULL OR
+            LENGTH(LNK_FLIGHT_NO) = 0 OR
+            nvl(TO_CHAR(AIBT, 'YYYY-MM-DD'), '-1') !=
+            nvl(TO_CHAR(SOBT, 'YYYY-MM-DD'), '-1')
+            and SOBT &lt; TO_DATE(
+            TO_CHAR(sysdate, 'YYYY-MM-DD') || ' 11:00:00',
+            'YYYY-MM-DD HH24:MI:SS')
+            and
+            ((AOBT IS NOT NULL AND (cast(AOBT as date) - cast(SOBT as date)) > 5)
+            OR (SOBT + 30 * 1 / (24 * 60) &lt; ATOT)
+            OR (sysdate - 20 * 1 / (24 * 60) > SOBT)))
+            or(
+            LNK_FLIGHT_NO IS not NULL AND LENGTH(LNK_FLIGHT_NO) &lt; 0
+            OR nvl(TO_CHAR(AIBT, 'YYYY-MM-DD'), '-1') =
+            nvl(TO_CHAR(SOBT, 'YYYY-MM-DD'), '-1')
+            AND
+            ((ALDT IS NOT NULL and (cast(AIBT as date) - cast(SIBT as date)) >= 0 AND
+            ALDT IS NOT NULL AND (
+            (AOBT IS NOT NULL AND AOBT > SOBT + 5 * 1 / (24 * 60))
+            OR
+            (SOBT + 30 * 1 / (24 * 60) &lt; ATOT)
+            OR
+            (sysdate - 20 * 1 / (24 * 60) > SOBT)))
+            OR (AIBT &lt; SIBT and ALDT IS NOT NULL
+            and
+            ((AOBT &lt; AIBT + (cast(SOBT as date) - cast(SIBT as date)))
+            OR
+            (AIBT + (cast(SOBT as date) - cast(SIBT as date)) + 30 * 1 / (24 * 60) &lt;
+            ATOT)
+            OR
+            (sysdate &lt; (AIBT + (cast(SOBT as date) - cast(SIBT as date))))
+            )))))
+            /**/OR (STAND_D IN (SELECT STAND
+            FROM STAND
+            WHERE TERMINAL = '1')
+            AND ((LNK_FLIGHT_NO IS NULL OR
+            LENGTH(LNK_FLIGHT_NO) = 0 OR
+            nvl(TO_CHAR(AIBT, 'YYYY-MM-DD'), '-1') !=
+            nvl(TO_CHAR(SOBT, 'YYYY-MM-DD'), '-1')) AND
+            SOBT &lt; TO_DATE(
+            TO_CHAR(sysdate, 'YYYY-MM-DD') || ' 11:00:00',
+            'YYYY-MM-DD HH24:MI:SS')
+            and
+            (cast(ATOT as date) - cast(SOBT as date)) >= 30 * 1 / (24 * 60)
+            OR
+            (LNK_FLIGHT_NO IS not NULL AND LENGTH(LNK_FLIGHT_NO) &lt; 0 OR
+            nvl(TO_CHAR(AIBT, 'YYYY-MM-DD'), '-1') =
+            nvl(TO_CHAR(SOBT, 'YYYY-MM-DD'), '-1')
+            ) and
+
+            (ALDT + 10 * 1 / (24 * 60) >= SIBT and
+            cast(ATOT as date) - cast(SOBT as date) >=
+            30 * 1 / (24 * 60)
+            or
+            ALDT + 10 * 1 / (24 * 60) &lt;= SIBT and
+            ATOT
+            >= AIBT +
+            10 * 1 / (24 * 60) +
+            (cast(SOBT as date) - cast(SIBT as date))
+            + 30 * 1 / (24 * 60)))
+            )
+
+            ))
+
+        </if>
+        <if test="params.flightdelaytime != null and params.flightdelaytime!=''.toString()"><!--航班延误时间(分钟)-->
+            AND ((A='A' AND CEIL((TO_DATE(to_char(COALESCE(AIBT,ALDT,CURRENT_TIMESTAMP),'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SIBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') )* 24*60) >=   (60)
+            AND (AIBT &lt; CURRENT_TIMESTAMP OR SIBT &lt; CURRENT_TIMESTAMP OR ALDT &lt;CURRENT_TIMESTAMP)
+            AND ((AIBT IS NOT NULL AND  AIBT > SIBT)
+            OR (AIBT IS NULL AND ALDT IS NOT NULL AND ALDT + 10 *1/(24*60) > SIBT)
+            OR (AIBT IS NULL AND ALDT IS NULL AND CURRENT_TIMESTAMP > SIBT)))
+            OR (A_OR_D='D' AND nvl(FLIGHT_CANCEL_CODE,' ') &lt;> 'C' AND FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND CEIL((TO_DATE(to_char(COALESCE(AOBT,ATOT,CURRENT_TIMESTAMP),'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SOBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') )* 24*60)  >=  (60)
+            AND (AOBT &lt; CURRENT_TIMESTAMP OR SOBT &lt; CURRENT_TIMESTAMP OR ATOT &lt; CURRENT_TIMESTAMP)
+            AND ((AOBT IS NOT NULL AND SOBT + 5 *1/(24*60) &lt; AOBT)
+            OR (AOBT IS NULL AND ATOT IS NOT NULL AND SOBT + 30 *1/(24*60) &lt; ATOT)
+            OR (AOBT IS NULL AND ATOT IS NULL AND CURRENT_TIMESTAMP - 20 *1/(24*60) > SOBT))))
+        </if>
+        <if test="params.passdelaytime != null and params.passdelaytime!=''.toString()"><!--放行延误时间(分钟)-->
+            AND (D='D' AND nvl(FLIGHT_CANCEL_CODE,' ')&lt;> 'C' AND
+            FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B')
+            AND    CEIL((TO_DATE(to_char(COALESCE(AOBT,ATOT,CURRENT_TIMESTAMP),'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')-TO_DATE(to_char(SOBT,'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') )* 24*60)>= (#{params.passdelaytime,jdbcType=INTEGER})
+            AND (AOBT &lt; CURRENT_TIMESTAMP OR SOBT &lt; CURRENT_TIMESTAMP OR ATOT &lt; CURRENT_TIMESTAMP)
+            AND ((AOBT IS NOT NULL AND SOBT +5 *1/(24*60)  &lt; AOBT)
+            OR (AOBT IS NULL AND ATOT IS NOT NULL AND SOBT +5 *1/(24*60) &lt; ATOT)
+            OR (AOBT IS NULL AND ATOT IS NULL AND SOBT + 20 *1/(24*60) &lt; CURRENT_TIMESTAMP)))
+        </if>
+        <if test="params.startDate != null and params.startDate != ''" >
+            AND (( (SIBT > to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS') and SIBT &lt;  to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS'))
+            OR (ALDT >  to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS') and ALDT &lt;  to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS'))
+            OR (ELDT > to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS') and ELDT &lt;  to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS'))
+            OR (SOBT > to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS') and SOBT &lt; to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS'))
+            OR (ATOT > to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS') and  ATOT &lt;  to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS'))
+            OR (A_TOBT > to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS') and A_TOBT &lt;  to_date(#{params.endDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS')) )
+            OR((SOBT &lt; to_date(#{params.startDate,jdbcType=VARCHAR},'yyyy-MM-dd HH24:MI:SS') ) and ATOT is  null
+            and to_char(SIBT,'yyyy-MM-dd')= to_char(current_date,'yyyy-MM-dd'))
+            )
+        </if>
+        and FLIGHT_NO_IATA_A IS not NULL and  FLIGHT_NO_IATA_D IS not NULL
+        and  nvl(FLIGHT_CANCEL_CODE,' ') &lt;> 'C' AND nvl(FLIGHT_CANCEL_CODE,' ') &lt;> 'U/H'
+        ORDER BY SOBT,SIBT,ALDT,ELDT,ATOT,A_TOBT
+    </select>
+
+
+
+    <!--到达航班明细查询-->
+    <select id="queryDetailA" parameterType="map" resultType="com.hq.acdm.model.statistics.nodeQuery.NodeDetail"  >
+  SELECT TA.FLIGHT_NO_IATA,
+  TA.OPERATIONAL_DATE,
+  TA.FLIGHT_REPEAT_COUNT,
+  TA.ARN,
+  TA.ORIGIN_AIRPORT_IATA,
+  TA.ORIGIN_AIRPORT_ICAO,
+  TA.DEST_AIRPORT_IATA,
+  TA.DEST_AIRPORT_ICAO,
+  TB.AIRPORT_VIA_IATA_1,
+  TB.AIRPORT_VIA_ICAO_1,
+  TB.AIRPORT_VIA_IATA_2,
+  TB.AIRPORT_VIA_ICAO_2,
+  TB.AIRPORT_VIA_IATA_3,
+  TB.AIRPORT_VIA_ICAO_3,
+  TB.FLIGHT_NO_IATA,
+  TB.AIRCRAFT_TERMINAL_CODE,
+  TA.GATE_1,
+  TA.GATE_2,
+  TA.GATE_3,
+  TB.CtrlContent,
+  TB.FLIGHT_CLASS_CODE,
+  TB.FLIGHT_SERVICE_TYPE,
+  TB.FLIGHT_NATURE_CODE,
+  TB.FLIGHT_SECTOR_CODE,
+  TB.REMARK_1_CODE,
+  TB.FLIGHT_CANCEL_CODE,
+  TB.SHARE_FLIGHT_NO,
+  TB.LNK_FLIGHT_NO,
+  TB.AIRCRAFT_TERMINAL_CODE,
+  TA.AIRLINE_CODE_IATA,
+  TB.PAX_TERMINAL_CODE,
+  TA.STAND,
+  DA.rwy,
+  TB.GATE_1_ROLE,
+  TB.GATE_1_BOARDSTATUS,
+  TB.GATE_1_OPENDATETIME,
+  TB.GATE_1_CLOSEDATETIME,
+  TB.GATE_2_ROLE,
+  TB.GATE_2_BOARDSTATUS,
+  TB.GATE_2_OPENDATETIME,
+  TB.GATE_2_CLOSEDATETIME,
+  TB.RECLAIM_BELT_1,
+  TB.RECLAIM_BELT_1_FBDATETIME,
+  TB.RECLAIM_BELT_1_LBDATETIME,
+  TB.RECLAIM_BELT_1_EXITDOORNO,
+  TB.RECLAIM_BELT_2,
+  TB.RECLAIM_BELT_2_FBDATETIME,
+  TB.RECLAIM_BELT_2_LBDATETIME,
+  TB.RECLAIM_BELT_2_EXITDOORNO,
+  TB.PREV_ELDT,
+  TB.PREV_ACCT,
+  TB.PREV_ASAT,
+  TA.SIBT,
+  TA.SLDT,
+  TA.ALDT,
+  TA.AIBT,
+  TA.EXIT,
+  TA.AXIT,
+  FC.DESCRIPTION FC_DESCRIPTION,
+  FS.DESCRIPTION FS_DESCRIPTION,
+  FN.DESCRIPTION FN_DESCRIPTION,
+  FR.DESCRIPTION FR_DESCRIPTION
+FROM DAILY_FLIGHT_MASTER TA
+LEFT JOIN DAILY_FLIGHT_ADD_DETAILS TB
+ON TA.FLIGHT_NO_IATA       =TB.FLIGHT_NO_IATA
+AND TA.A_OR_D              =TB.A_OR_D
+AND TA.FLIGHT_REPEAT_COUNT =TB.FLIGHT_REPEAT_COUNT
+AND TA.OPERATIONAL_DATE    =TB.OPERATIONAL_DATE
+LEFT JOIN daily_runway DA
+ON TA.OPERATIONAL_DATE              =DA.OPERATIONAL_DATE
+AND TA.A_OR_D                       =DA.A_OR_D
+AND to_number(to_char((NVL(TA.ALDT,TA.ELDT)), 'hh24'))>=DA.STARTTIME
+AND to_number(to_char((NVL(TA.ALDT,TA.ELDT)), 'hh24')) &lt;
+  CASE
+    WHEN ENDTIME=23
+    THEN 24
+    ELSE ENDTIME
+  END
+LEFT JOIN FLIGHT_CLASSIFICATION FC
+ON FC.CLASSIFICATION=TB.FLIGHT_CLASS_CODE
+LEFT JOIN FLIGHT_SERVICE_TYPE FS
+ON FS.FST=TB.FLIGHT_SERVICE_TYPE
+LEFT JOIN FLIGHT_NATURES FN
+ON FN.NATURE=TB.FLIGHT_NATURE_CODE
+LEFT JOIN FLIGHT_SECTOR FR
+ON FR.SECTOR_CODE         =TB.FLIGHT_SECTOR_CODE
+WHERE 1=1
+and TA.FLIGHT_NO_IATA   =#{params.flight_no_iata,jdbcType=VARCHAR}
+
+and to_char(ta.OPERATIONAL_DATE,'yyyy-mm-dd')  =#{params.OPERATIONAL_DATE,jdbcType=VARCHAR}
+
+
+  </select><!--#{params.flight_no_iata,jdbcType=VARCHAR}   #{params.OPERATIONAL_DATE,jdbcType=TIMESTAMP}-->
+    <!--出发航班明细查询-->
+    <select id="queryDetailD" parameterType="map" resultType="com.hq.acdm.model.statistics.nodeQuery.NodeDetail"  >
+      SELECT TA.FLIGHT_NO_IATA,
+      TA.OPERATIONAL_DATE,
+      TA.FLIGHT_REPEAT_COUNT,
+      TA.ARN,
+      TA.ORIGIN_AIRPORT_IATA,
+      TA.ORIGIN_AIRPORT_ICAO,
+      TA.DEST_AIRPORT_IATA,
+      TA.DEST_AIRPORT_ICAO,
+      TB.AIRPORT_VIA_IATA_1,
+      TB.AIRPORT_VIA_ICAO_1,
+      TB.AIRPORT_VIA_IATA_2,
+      TB.AIRPORT_VIA_ICAO_2,
+      TB.AIRPORT_VIA_IATA_3,
+      TB.AIRPORT_VIA_ICAO_3,
+      TB.FLIGHT_NO_IATA,
+      TB.AIRCRAFT_TERMINAL_CODE,
+      TA.GATE_1,
+      TA.GATE_2,
+      TA.GATE_3,
+      TB.CtrlContent,
+      TB.FLIGHT_CLASS_CODE,
+      TB.FLIGHT_SERVICE_TYPE,
+      TB.FLIGHT_NATURE_CODE,
+      TB.FLIGHT_SECTOR_CODE,
+      TB.REMARK_1_CODE,
+      TB.FLIGHT_CANCEL_CODE,
+      TB.SHARE_FLIGHT_NO,
+      TB.LNK_FLIGHT_NO,
+      TB.AIRCRAFT_TERMINAL_CODE,
+      TA.AIRLINE_CODE_IATA,
+      TB.PAX_TERMINAL_CODE,
+      TA.STAND,
+      DA.rwy,
+      TB.GATE_1_ROLE,
+      TB.GATE_1_BOARDSTATUS,
+      TB.GATE_1_OPENDATETIME,
+      TB.GATE_1_CLOSEDATETIME,
+      TB.GATE_2_ROLE,
+      TB.GATE_2_BOARDSTATUS,
+      TB.GATE_2_OPENDATETIME,
+      TB.GATE_2_CLOSEDATETIME,
+      TB.RECLAIM_BELT_1,
+      TB.RECLAIM_BELT_1_FBDATETIME,
+      TB.RECLAIM_BELT_1_LBDATETIME,
+      TB.RECLAIM_BELT_1_EXITDOORNO,
+      TB.RECLAIM_BELT_2,
+      TB.RECLAIM_BELT_2_FBDATETIME,
+      TB.RECLAIM_BELT_2_LBDATETIME,
+      TB.RECLAIM_BELT_2_EXITDOORNO,
+      TB.PREV_ELDT,
+      TB.PREV_ACCT,
+      TB.PREV_ASAT,
+      TA.SIBT,
+      TA.SLDT,
+      TA.ALDT,
+      TA.AIBT,
+      TA.EXIT,
+      TA.AXIT,
+      FC.DESCRIPTION FC_DESCRIPTION,
+      FS.DESCRIPTION FS_DESCRIPTION,
+      FN.DESCRIPTION FN_DESCRIPTION,
+      FR.DESCRIPTION FR_DESCRIPTION
+    FROM DAILY_FLIGHT_MASTER TA
+    LEFT JOIN DAILY_FLIGHT_ADD_DETAILS TB
+    ON TA.FLIGHT_NO_IATA       =TB.FLIGHT_NO_IATA
+    AND TA.A_OR_D              =TB.A_OR_D
+    AND TA.FLIGHT_REPEAT_COUNT =TB.FLIGHT_REPEAT_COUNT
+    AND TA.OPERATIONAL_DATE    =TB.OPERATIONAL_DATE
+    LEFT JOIN daily_runway DA
+    ON TA.OPERATIONAL_DATE              =DA.OPERATIONAL_DATE
+    AND TA.A_OR_D                       =DA.A_OR_D
+    AND to_number(to_char((NVL(TA.ALDT,TA.ELDT)), 'hh24'))>=DA.STARTTIME
+    AND to_number(to_char((NVL(TA.ALDT,TA.ELDT)), 'hh24')) &lt;
+      CASE
+        WHEN ENDTIME=23
+        THEN 24
+        ELSE ENDTIME
+      END
+    LEFT JOIN FLIGHT_CLASSIFICATION FC
+    ON FC.CLASSIFICATION=TB.FLIGHT_CLASS_CODE
+    LEFT JOIN FLIGHT_SERVICE_TYPE FS
+    ON FS.FST=TB.FLIGHT_SERVICE_TYPE
+    LEFT JOIN FLIGHT_NATURES FN
+    ON FN.NATURE=TB.FLIGHT_NATURE_CODE
+    LEFT JOIN FLIGHT_SECTOR FR
+    ON FR.SECTOR_CODE         =TB.FLIGHT_SECTOR_CODE
+    WHERE 1=1
+    and TA.FLIGHT_NO_IATA   =#{params.flight_no_iata,jdbcType=VARCHAR}
+
+    and to_char(ta.OPERATIONAL_DATE,'yyyy-mm-dd')  =#{params.OPERATIONAL_DATE,jdbcType=VARCHAR}
+
+  </select>
+</mapper>

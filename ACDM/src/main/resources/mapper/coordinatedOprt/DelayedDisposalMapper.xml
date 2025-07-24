@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.coordinatedOprt.DelayedDisposalMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.vo.coordinatedOprt.DelayedDisposalVo" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="C_FLIGHT_ID" property="cFlightId" jdbcType="VARCHAR" />
+    <result column="C_FLNO" property="cFlno" jdbcType="VARCHAR" />
+    <result column="C_EXEC_DATE" property="cExecDate" jdbcType="VARCHAR" />
+    <result column="C_SOBT" property="cSobt" jdbcType="VARCHAR" />
+    <result column="PASSANGER_COUNT" property="passangerCount" jdbcType="VARCHAR" />
+    <result column="BAGGAGE_COUNT" property="baggageCount" jdbcType="VARCHAR" />
+    <result column="TSTATUS" property="tstatus" jdbcType="VARCHAR" />
+    <result column="TTYPE" property="ttype" jdbcType="VARCHAR" />
+    <result column="ROUTE" property="route" jdbcType="VARCHAR" />
+    <result column="REMK" property="remk" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="HID" property="hid" jdbcType="VARCHAR" />
+    <result column="HOTEL_TYPE" property="hotelType" jdbcType="VARCHAR" />
+    <result column="ES_NUMBER" property="esNumber" jdbcType="VARCHAR" />
+    <result column="ES_BUSNUM" property="esBusnum" jdbcType="VARCHAR" />
+    <result column="HOTELS_NAME" property="hotelsName" jdbcType="VARCHAR" />
+    <result column="BID" property="bid" jdbcType="VARCHAR" />
+    <result column="CAR_REG" property="carReg" jdbcType="VARCHAR" />
+    <result column="DRIVER" property="driver" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="AC_NUMBER" property="acNumber" jdbcType="VARCHAR" />
+    <result column="START_TIME" property="startTime" jdbcType="VARCHAR" />
+    <result column="STAFF" property="staff" jdbcType="VARCHAR" />
+    <result column="DEAL_ID" property="dealId" jdbcType="VARCHAR" />
+    <result column="HOTEL_ID" property="hotelId" jdbcType="VARCHAR" />
+    <result column="BSTATUS" property="bstatus" jdbcType="VARCHAR" />
+
+    <result column="BREAKFASTS" property="breakfasts" jdbcType="VARCHAR" />
+    <result column="LUNCH" property="lunch" jdbcType="VARCHAR" />
+    <result column="DINNER" property="dinner" jdbcType="VARCHAR" />
+    <result column="SNACK" property="snack" jdbcType="VARCHAR" />
+
+    <result column="DRINKS" property="drinks" jdbcType="VARCHAR" />
+    <result column="BREAKFASTSNUM" property="breakfastsnum" jdbcType="VARCHAR" />
+    <result column="LUNCHNUM" property="lunchnum" jdbcType="VARCHAR" />
+    <result column="DINNERNUM" property="dinnernum" jdbcType="VARCHAR" />
+    <result column="SNACKNUM" property="snacknum" jdbcType="VARCHAR" />
+    <result column="DRINKSNUM" property="drinksnum" jdbcType="VARCHAR" />
+    <result column="HOTEL_ADDRESS" property="hotelAddress" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, C_FLIGHT_ID, C_FLNO,date_format(`C_EXEC_DATE`, '%Y-%m-%d') AS  C_EXEC_DATE,
+date_format(`C_SOBT`, '%Y-%m-%d %H:%i') AS   C_SOBT,date_format(`C_CNL_TIME`, '%Y-%m-%d %H:%i') AS    C_CNL_TIME,
+ S_FLIGHT_ID, S_FLNO,date_format(`S_EXEC_DATE`, '%Y-%m-%d') AS  S_EXEC_DATE,
+  date_format(`S_SOBT`, '%Y-%m-%d %H:%i') AS     S_SOBT, PASSANGER_COUNT, BAGGAGE_COUNT, `STATUS`,
+date_format(`CDAT`, '%Y-%m-%d %H:%i') AS   CDAT,date_format(`LSTU`, '%Y-%m-%d %H:%i') AS  LSTU
+  </sql>
+  <select id="findCnlInfo" parameterType="map" resultMap="BaseResultMap" >
+    SELECT D.ID,D.C_FLIGHT_ID,D.C_FLNO,date_format(D.C_SOBT, '%Y-%m-%d %H:%i') AS C_SOBT,D.TSTATUS,D.STATUS,D.TTYPE,D.ROUTE,D.REMK,
+    H.ID AS HID,H.DEAL_ID,H.HOTEL_TYPE,H.ES_NUMBER,H.ES_BUSNUM,H.HOTELS_NAME,H.BREAKFASTS,H.LUNCH,H.DINNER,H.SNACK,H.DRINKS,
+    H.BREAKFASTSNUM,H.LUNCHNUM,H.DINNERNUM,H.SNACKNUM,H.DRINKSNUM,H.HOTEL_ADDRESS,
+    B.ID AS BID,B.HOTEL_ID,B.CAR_REG,B.DRIVER,B.PHONE,B.AC_NUMBER,B.BSTATUS,
+    IFNULL(date_format(B.START_TIME , '%Y-%m-%d %H:%i:%s'),'') AS START_TIME,B.STAFF
+    FROM T_CNL_DEAL D
+    LEFT JOIN T_CNL_DEAL_HOTEL H ON D.ID=H.DEAL_ID
+    LEFT JOIN T_CNL_DEAL_BUS B ON H.ID=B.HOTEL_ID
+    <if test="params.startTime !=null and params.startTime !='' and params.endTime != null and params.endTime != ''">
+
+      WHERE D.C_SOBT BETWEEN #{params.startTime} AND #{params.endTime}
+    </if>
+    <if test="params.id !=null and params.id !=''">
+
+      WHERE D.ID = #{params.id}
+    </if>
+    <if test="params.status !=null and params.status !=''">
+
+      and D.STATUS = #{params.status}
+    </if>
+    ORDER BY D.C_SOBT,D.ID,H.ID
+  </select>
+
+  <select id="findCnlInfoByZH" parameterType="map" resultMap="BaseResultMap" >
+    SELECT D.C_FLIGHT_ID,D.C_FLNO,MAX(date_format(D.C_SOBT, '%Y-%m-%d')) AS C_SOBT,MAX(D.ROUTE) ROUTE,H.HOTELS_NAME,MAX(D.TSTATUS) TSTATUS,
+    H.HOTEL_TYPE,MAX(H.ES_NUMBER) ES_NUMBER,COUNT(H.HOTEL_TYPE) ES_BUSNUM,MAX(H.BREAKFASTS) BREAKFASTS,MAX(H.LUNCH) LUNCH,MAX(H.DINNER) DINNER,
+    MAX(H.SNACK) SNACK,MAX(H.DRINKS) DRINKS,MAX(DDD.REGN) STAFF,MAX(DDD.REMK) REMK,MAX(DDD.ATTRIBUTE) BSTATUS
+    FROM T_CNL_DEAL D
+    LEFT JOIN T_CNL_DEAL_HOTEL H ON D.ID=H.DEAL_ID
+    LEFT JOIN T_CNL_DEAL_BUS B ON H.ID=B.HOTEL_ID
+    LEFT JOIN (
+    SELECT DD.FLIGHT_ID,DD.REGN,IF(R.CHINESE_NAME <![CDATA[ <>  ]]>'',R.CHINESE_NAME,DD.REASONS_FOR_AUTO) REMK,DD.ATTRIBUTE from
+    (
+    SELECT FLIGHT_ID,REGN,REASONS_FOR_DELAY,REASONS_FOR_AUTO,ATTRIBUTE from T_LOCAL_FLIGHT_INFO where EXEC_DATE= #{params.startTime}
+    UNION
+    SELECT FLIGHT_ID,REGN,REASONS_FOR_DELAY,REASONS_FOR_AUTO,ATTRIBUTE from T_LOCAL_FLIGHT_INFO_HISTORY where EXEC_DATE= #{params.startTime}
+    ) DD
+    LEFT JOIN T_ABNORMAL_REASON R ON DD.REASONS_FOR_DELAY=R.`CODE`
+    ) DDD ON D.C_FLIGHT_ID=DDD.FLIGHT_ID
+    WHERE  <![CDATA[ B.CAR_REG <>''  ]]>
+    <if test="params.startTime !=null and params.startTime !=''">
+
+     AND  STR_TO_DATE(D.C_SOBT,'%Y-%m-%d') = #{params.startTime}
+    </if>
+
+    <if test="params.status !=null and params.status !=''">
+
+      and D.STATUS = #{params.status}
+    </if>
+    GROUP BY D.C_FLIGHT_ID,D.C_FLNO,H.HOTELS_NAME,H.HOTEL_TYPE
+  </select>
+
+  <select id="findCnlInfoNo" parameterType="map" resultMap="BaseResultMap" >
+    SELECT D.ID,D.C_FLIGHT_ID,D.C_FLNO,date_format(D.C_SOBT, '%Y-%m-%d %H:%i') AS C_SOBT,D.TSTATUS,D.STATUS,D.TTYPE,D.ROUTE,D.REMK,
+    H.ID AS HID,H.DEAL_ID,H.HOTEL_TYPE,H.ES_NUMBER,H.ES_BUSNUM,H.HOTELS_NAME,H.BREAKFASTS,H.LUNCH,H.DINNER,H.SNACK,H.DRINKS,
+    H.BREAKFASTSNUM,H.LUNCHNUM,H.DINNERNUM,H.SNACKNUM,H.DRINKSNUM,TH.HOTEL_ADDRES HOTEL_ADDRESS,
+    B.ID AS BID,B.HOTEL_ID,B.CAR_REG,B.DRIVER,B.PHONE,B.AC_NUMBER,B.BSTATUS,
+    IFNULL(date_format(B.START_TIME , '%Y-%m-%d %H:%i:%s'),'') AS START_TIME,B.STAFF
+    FROM T_CNL_DEAL D
+    LEFT JOIN T_CNL_DEAL_HOTEL H ON D.ID=H.DEAL_ID
+    LEFT JOIN T_CNL_DEAL_BUS B ON H.ID=B.HOTEL_ID
+    LEFT JOIN T_HOTEL_INFO TH ON H.HOTELS_NAME=TH.HOTEL_NAME
+    WHERE D.C_SOBT BETWEEN date_sub(NOW(),INTERVAL 12 hour) AND date_add(NOW(),INTERVAL 12 hour)
+    <if test="params.id !=null and params.id !=''">
+      AND D.ID = #{params.id}
+    </if>
+    <if test="params.status !=null and params.status !=''">
+      AND D.STATUS = #{params.status}
+    </if>
+    <if test="params.plateNo !=null and params.plateNo !=''">
+      AND (D.C_FLNO like '%${params.flightNo}%' or B.CAR_REG  like '%${params.plateNo}%')
+    </if>
+
+    <if test="params.execDate !=null and params.execDate !=''">
+      AND D.C_EXEC_DATE = #{params.execDate}
+    </if>
+    ORDER BY
+    <if test="params.acount !=null and params.acount =='SK'">
+      B.CAR_REG,
+    </if>
+    <if test="params.acount !=null and params.acount =='KY'">
+      B.START_TIME,
+    </if>
+    D.C_SOBT,D.ID,H.ID
+  </select>
+
+  <select id="findholInfo" parameterType="map" resultMap="BaseResultMap" >
+    SELECT D.ID,D.C_FLIGHT_ID,D.C_FLNO,date_format(D.C_SOBT, '%Y-%m-%d %H:%i') AS C_SOBT,D.TSTATUS,D.TTYPE,D.ROUTE,D.REMK,
+    H.ID AS HID,H.DEAL_ID,H.HOTEL_TYPE,H.ES_NUMBER,H.ES_BUSNUM,H.HOTELS_NAME,H.BREAKFASTS,H.LUNCH,H.DINNER,H.SNACK,H.DRINKS,
+    H.BREAKFASTSNUM,H.LUNCHNUM,H.DINNERNUM,H.SNACKNUM,H.DRINKSNUM,H.HOTEL_ADDRESS
+     FROM T_CNL_DEAL D
+    LEFT JOIN T_CNL_DEAL_HOTEL H ON D.ID=H.DEAL_ID
+    <if test="params.id !=null and params.id !=''">
+
+      WHERE D.ID = #{params.id}
+    </if>
+
+  </select>
+
+  <select id="findTCnlDealInfo" parameterType="map" resultType="com.hq.acdm.vo.coordinatedOprt.TCnlDeal" >
+    SELECT * FROM T_CNL_DEAL
+    WHERE C_FLIGHT_ID = #{params.cflightId}
+    AND TSTATUS = #{params.tstatus}
+    AND TTYPE = #{params.ttype}
+  </select>
+  <select id="findFCnlDealInfo" parameterType="map" resultType="com.hq.acdm.vo.coordinatedOprt.TCnlDeal" >
+    SELECT * FROM T_CNL_DEAL
+    WHERE FID = #{params.fid}
+  </select>
+
+  <delete id="deleteHolByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_CNL_DEAL_HOTEL
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteHolByDealIdKey" parameterType="java.lang.String" >
+    delete from T_CNL_DEAL_HOTEL
+    where DEAL_ID = #{dealId,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insertHolSelective" parameterType="com.hq.acdm.vo.coordinatedOprt.TCnlDealHotel" >
+    insert into T_CNL_DEAL_HOTEL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="dealId != null" >
+        DEAL_ID,
+      </if>
+      <if test="hotelsName != null" >
+        HOTELS_NAME,
+      </if>
+      <if test="hotelType != null" >
+        HOTEL_TYPE,
+      </if>
+      <if test="hotelAddress != null" >
+        HOTEL_ADDRESS,
+      </if>
+      <if test="hotelPhone != null" >
+        HOTEL_PHONE,
+      </if>
+      <if test="esBusnum != null" >
+        ES_BUSNUM,
+      </if>
+      <if test="esNumber != null" >
+        ES_NUMBER,
+      </if>
+      <if test="breakfasts != null" >
+        BREAKFASTS,
+      </if>
+      <if test="lunch != null" >
+        LUNCH,
+      </if>
+      <if test="dinner != null" >
+        DINNER,
+      </if>
+      <if test="snack != null" >
+        SNACK,
+      </if>
+      <if test="staff != null" >
+        STAFF,
+      </if>
+      <if test="remk != null" >
+        REMK,
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM,
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM,
+      </if>
+
+      <if test="drinks != null" >
+        DRINKS,
+      </if>
+      <if test="breakfastsnum != null" >
+        BREAKFASTSNUM,
+      </if>
+      <if test="lunchnum != null" >
+        LUNCHNUM,
+      </if>
+      <if test="dinnernum != null" >
+        DINNERNUM,
+      </if>
+      <if test="snacknum != null" >
+        SNACKNUM,
+      </if>
+      <if test="drinksnum != null" >
+        DRINKSNUM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="dealId != null" >
+        #{dealId,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelsName != null" >
+        #{hotelsName,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelType != null" >
+        #{hotelType,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelAddress != null" >
+        #{hotelAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelPhone != null" >
+        #{hotelPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="esBusnum != null" >
+        #{esBusnum,jdbcType=VARCHAR},
+      </if>
+      <if test="esNumber != null" >
+        #{esNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="breakfasts != null" >
+        #{breakfasts,jdbcType=VARCHAR},
+      </if>
+      <if test="lunch != null" >
+        #{lunch,jdbcType=VARCHAR},
+      </if>
+      <if test="dinner != null" >
+        #{dinner,jdbcType=VARCHAR},
+      </if>
+      <if test="snack != null" >
+        #{snack,jdbcType=VARCHAR},
+      </if>
+      <if test="staff != null" >
+        #{staff,jdbcType=VARCHAR},
+      </if>
+      <if test="remk != null" >
+        #{remk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+
+      <if test="drinks != null" >
+        #{drinks,jdbcType=VARCHAR},
+      </if>
+      <if test="breakfastsnum != null" >
+        #{breakfastsnum,jdbcType=VARCHAR},
+      </if>
+      <if test="lunchnum != null" >
+        #{lunchnum,jdbcType=VARCHAR},
+      </if>
+      <if test="dinnernum != null" >
+        #{dinnernum,jdbcType=VARCHAR},
+      </if>
+      <if test="snacknum != null" >
+        #{snacknum,jdbcType=VARCHAR},
+      </if>
+      <if test="drinksnum != null" >
+        #{drinksnum,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateHolByPrimaryKeySelective" parameterType="com.hq.acdm.vo.coordinatedOprt.TCnlDealHotel" >
+    update T_CNL_DEAL_HOTEL
+    <set >
+      <if test="dealId != null" >
+        DEAL_ID = #{dealId,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelsName != null" >
+        HOTELS_NAME = #{hotelsName,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelType != null" >
+        HOTEL_TYPE = #{hotelType,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelAddress != null" >
+        HOTEL_ADDRESS = #{hotelAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelPhone != null" >
+        HOTEL_PHONE = #{hotelPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="esBusnum != null" >
+        ES_BUSNUM = #{esBusnum,jdbcType=VARCHAR},
+      </if>
+      <if test="esNumber != null" >
+        ES_NUMBER = #{esNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="breakfasts != null" >
+        BREAKFASTS = #{breakfasts,jdbcType=VARCHAR},
+      </if>
+      <if test="lunch != null" >
+        LUNCH = #{lunch,jdbcType=VARCHAR},
+      </if>
+      <if test="dinner != null" >
+        DINNER = #{dinner,jdbcType=VARCHAR},
+      </if>
+      <if test="snack != null" >
+        SNACK = #{snack,jdbcType=VARCHAR},
+      </if>
+      <if test="staff != null" >
+        STAFF = #{staff,jdbcType=VARCHAR},
+      </if>
+      <if test="remk != null" >
+        REMK = #{remk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+
+      <if test="drinks != null" >
+        DRINKS = #{drinks,jdbcType=VARCHAR},
+      </if>
+      <if test="breakfastsnum != null" >
+        BREAKFASTSNUM = #{breakfastsnum,jdbcType=VARCHAR},
+      </if>
+      <if test="lunchnum != null" >
+        LUNCHNUM = #{lunchnum,jdbcType=VARCHAR},
+      </if>
+      <if test="dinnernum != null" >
+        DINNERNUM = #{dinnernum,jdbcType=VARCHAR},
+      </if>
+      <if test="snacknum != null" >
+        SNACKNUM = #{snacknum,jdbcType=VARCHAR},
+      </if>
+      <if test="drinksnum != null" >
+        DRINKSNUM = #{drinksnum,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <delete id="deleteBusByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_CNL_DEAL_BUS
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteBusByHotelIdKey" parameterType="java.lang.String" >
+    delete from T_CNL_DEAL_BUS
+    where HOTEL_ID = #{hotelId,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insertBusSelective" parameterType="com.hq.acdm.vo.coordinatedOprt.TCnlDealBus" >
+    insert into T_CNL_DEAL_BUS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="hotelId != null" >
+        HOTEL_ID,
+      </if>
+      <if test="carReg != null" >
+        CAR_REG,
+      </if>
+      <if test="busType != null" >
+        BUS_TYPE,
+      </if>
+      <if test="driver != null" >
+        DRIVER,
+      </if>
+      <if test="phone != null" >
+        PHONE,
+      </if>
+      <if test="destination != null" >
+        DESTINATION,
+      </if>
+      <if test="acNumber != null" >
+        AC_NUMBER,
+      </if>
+      <if test="startTime != null" >
+        START_TIME,
+      </if>
+      <if test="arrTime != null" >
+        ARR_TIME,
+      </if>
+      <if test="staff != null" >
+        STAFF,
+      </if>
+      <if test="remk != null" >
+        REMK,
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM,
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelId != null" >
+        #{hotelId,jdbcType=VARCHAR},
+      </if>
+      <if test="carReg != null" >
+        #{carReg,jdbcType=VARCHAR},
+      </if>
+      <if test="busType != null" >
+        #{busType,jdbcType=VARCHAR},
+      </if>
+      <if test="driver != null" >
+        #{driver,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="destination != null" >
+        #{destination,jdbcType=VARCHAR},
+      </if>
+      <if test="acNumber != null" >
+        #{acNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arrTime != null" >
+        #{arrTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staff != null" >
+        #{staff,jdbcType=VARCHAR},
+      </if>
+      <if test="remk != null" >
+        #{remk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateBusByPrimaryKeySelective" parameterType="com.hq.acdm.vo.coordinatedOprt.TCnlDealBus" >
+    update T_CNL_DEAL_BUS
+    <set >
+      <if test="hotelId != null" >
+        HOTEL_ID = #{hotelId,jdbcType=VARCHAR},
+      </if>
+      <if test="carReg != null" >
+        CAR_REG = #{carReg,jdbcType=VARCHAR},
+      </if>
+      <if test="busType != null" >
+        BUS_TYPE = #{busType,jdbcType=VARCHAR},
+      </if>
+      <if test="driver != null" >
+        DRIVER = #{driver,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="destination != null" >
+        DESTINATION = #{destination,jdbcType=VARCHAR},
+      </if>
+      <if test="acNumber != null" >
+        AC_NUMBER = #{acNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null  and startTime !=''" >
+        START_TIME = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arrTime != null  and arrTime !=''" >
+        ARR_TIME = #{arrTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staff != null" >
+        STAFF = #{staff,jdbcType=VARCHAR},
+      </if>
+      <if test="remk != null" >
+        REMK = #{remk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bstatus != null" >
+        BSTATUS = #{bstatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <delete id="deleteDealByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_CNL_DEAL
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insertDealSelective" parameterType="com.hq.acdm.vo.coordinatedOprt.TCnlDeal" >
+    insert into T_CNL_DEAL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="cFlightId != null" >
+        C_FLIGHT_ID,
+      </if>
+      <if test="cFlno != null" >
+        C_FLNO,
+      </if>
+      <if test="cExecDate != null" >
+        C_EXEC_DATE,
+      </if>
+      <if test="cSobt != null" >
+        C_SOBT,
+      </if>
+      <if test="cCnlTime != null" >
+        C_CNL_TIME,
+      </if>
+      <if test="passangerCount != null" >
+        PASSANGER_COUNT,
+      </if>
+      <if test="baggageCount != null" >
+        BAGGAGE_COUNT,
+      </if>
+      <if test="route != null" >
+        ROUTE,
+      </if>
+      <if test="ttype != null" >
+        TTYPE,
+      </if>
+      <if test="tstatus != null" >
+        TSTATUS,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM,
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM,
+      </if>
+      <if test="fid != null" >
+        FID,
+      </if>
+      <if test="remk != null" >
+        REMK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="cFlightId != null" >
+        #{cFlightId,jdbcType=INTEGER},
+      </if>
+      <if test="cFlno != null" >
+        #{cFlno,jdbcType=VARCHAR},
+      </if>
+      <if test="cExecDate != null" >
+        #{cExecDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cSobt != null" >
+        #{cSobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cCnlTime != null" >
+        #{cCnlTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="passangerCount != null" >
+        #{passangerCount,jdbcType=VARCHAR},
+      </if>
+      <if test="baggageCount != null" >
+        #{baggageCount,jdbcType=VARCHAR},
+      </if>
+      <if test="route != null" >
+        #{route,jdbcType=VARCHAR},
+      </if>
+      <if test="ttype != null" >
+        #{ttype,jdbcType=VARCHAR},
+      </if>
+      <if test="tstatus != null" >
+        #{tstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fid != null" >
+        #{fid,jdbcType=VARCHAR},
+      </if>
+      <if test="remk != null" >
+        #{remk,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateDealByPrimaryKeySelective" parameterType="com.hq.acdm.vo.coordinatedOprt.TCnlDeal" >
+    update T_CNL_DEAL
+    <set >
+      <if test="cFlightId != null" >
+        C_FLIGHT_ID = #{cFlightId,jdbcType=INTEGER},
+      </if>
+      <if test="cFlno != null" >
+        C_FLNO = #{cFlno,jdbcType=VARCHAR},
+      </if>
+      <if test="cExecDate != null" >
+        C_EXEC_DATE = #{cExecDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cSobt != null" >
+        C_SOBT = #{cSobt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cCnlTime != null" >
+        C_CNL_TIME = #{cCnlTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="passangerCount != null" >
+        PASSANGER_COUNT = #{passangerCount,jdbcType=VARCHAR},
+      </if>
+      <if test="baggageCount != null" >
+        BAGGAGE_COUNT = #{baggageCount,jdbcType=VARCHAR},
+      </if>
+      <if test="route != null" >
+        ROUTE = #{route,jdbcType=VARCHAR},
+      </if>
+      <if test="ttype != null" >
+        TTYPE = #{ttype,jdbcType=VARCHAR},
+      </if>
+      <if test="tstatus != null" >
+        TSTATUS = #{tstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remk != null" >
+        REMK = #{remk,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <sql id="Base_Column_BusList" >
+    ID, HOTEL_ID, CAR_REG, BUS_TYPE, DRIVER, PHONE, DESTINATION, AC_NUMBER, START_TIME,
+    ARR_TIME, STAFF, BSTATUS, REMK, CREATE_TM, UPDATE_TM
+  </sql>
+  <resultMap id="BaseResultBusMap" type="com.hq.acdm.vo.coordinatedOprt.TCnlDealBus" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="HOTEL_ID" property="hotelId" jdbcType="VARCHAR" />
+    <result column="CAR_REG" property="carReg" jdbcType="VARCHAR" />
+    <result column="BUS_TYPE" property="busType" jdbcType="VARCHAR" />
+    <result column="DRIVER" property="driver" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="DESTINATION" property="destination" jdbcType="VARCHAR" />
+    <result column="AC_NUMBER" property="acNumber" jdbcType="VARCHAR" />
+    <result column="START_TIME" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="ARR_TIME" property="arrTime" jdbcType="TIMESTAMP" />
+    <result column="STAFF" property="staff" jdbcType="VARCHAR" />
+    <result column="BSTATUS" property="bstatus" jdbcType="VARCHAR" />
+    <result column="REMK" property="remk" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="selectByPrimaryKey" resultMap="BaseResultBusMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_BusList" />
+    from T_CNL_DEAL_BUS
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

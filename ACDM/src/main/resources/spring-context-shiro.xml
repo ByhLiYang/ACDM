@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.1.xsd"
+       default-lazy-init="true">
+    <!-- 加载配置属性文件 -->
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:config.properties" />
+
+    <!-- 定义Shiro安全管理配置 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="systemAuthorizingRealm" />
+        <!-- 使用shiro自带的缓存管理器 -->
+        <property name="cacheManager" ref="cacheManager" />
+    </bean>
+
+    <bean name="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
+
+    <bean id="systemAuthorizingRealm" class="com.hq.acdm.util.SystemAuthorizingRealm">
+        <property name="casServerUrlPrefix" value="${cas.server.url}"/>
+        <property name="casService" value="${cas.project.url}/cas"/>
+    </bean>
+
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+    <bean name="shiroFilterChainDefinitions" class="java.lang.String">
+        <constructor-arg>
+            <value>
+                /static/** = anon
+                /userfiles/** = anon
+                /index.jsp = anon
+                /cas = cas
+                /login = authc
+                /ssoLogin.action = authc
+                /logout.action = logout
+                /** = user
+                /act/editor/** = user
+                /ReportServer/** = user
+            </value>
+        </constructor-arg>
+    </bean>
+
+    <!-- 安全认证过滤器 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- Shiro的核心安全接口,这个属性是必须的 -->
+        <property name="securityManager" ref="securityManager" />
+        <!-- loginUrl认证提交地址，如果没有认证将会请求此地址进行认证，请求此地址将由formAuthenticationFilter进行表单认证 -->
+        <!--<property name="loginUrl" value="${cas.server.url}?init=1&amp;service=${cas.project.url}/cas" />-->
+        <property name="loginUrl" value="${cas.server.url}?init=1&amp;service=${cas.project.url}/cas" />
+        <!-- 认证成功统一跳转到first.action，建议不配置，shiro认证成功自动到上一个请求路径
+        <property name="successUrl" value="?login" /> -->
+        <!-- 自定义filter配置 -->
+        <property name="filters">
+            <map>
+                <entry key="cas" value-ref="casFilter"/>
+                <!-- 将自定义 的FormAuthenticationFilter注入shiroFilter中 -->
+                <entry key="logout" value-ref="logoutFilter"/>
+            </map>
+        </property>
+        <!-- Shiro连接约束配置,即过滤链的定义 -->
+        <property name="filterChainDefinitions">
+            <ref bean="shiroFilterChainDefinitions"/>
+        </property>
+    </bean>
+
+    <!-- 退出 -->
+    <bean id="logoutFilter" class ="org.apache.shiro.web.filter.authc.LogoutFilter">
+        <property name="redirectUrl" value="${cas.server.url}/logout?service=${cas.project.url}/login"/>
+    </bean>
+    <!-- CAS认证过滤器 -->
+    <bean id="casFilter" class="org.apache.shiro.cas.CasFilter">
+        <property name="failureUrl" value="${cas.server.url}/logout?service=${cas.project.url}/login"/>
+    </bean>
+
+</beans>

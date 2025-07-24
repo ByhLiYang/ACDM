@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.index.VRealInterfaceMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.index.VRealInterface" >
+    <result column="OPERATIONAL_DATE" property="operationalDate" jdbcType="TIMESTAMP" />
+    <result column="FLIGHT_NUM" property="flightNum" jdbcType="DECIMAL" />
+    <result column="CANCEL_NUM" property="cancelNum" jdbcType="DECIMAL" />
+    <result column="ALREADY_NUM" property="alreadyNum" jdbcType="DECIMAL" />
+    <result column="READY_NUM" property="readyNum" jdbcType="DECIMAL" />
+    <result column="GOOD_NUM" property="goodNum" jdbcType="DECIMAL" />
+    <result column="GOOD_FLI_NUM" property="goodFliNum" jdbcType="DECIMAL" />
+    <result column="FLI_TOT_NUM" property="fliTotNum" jdbcType="DECIMAL" />
+    <result column="DEPART_NUM" property="departNum" jdbcType="DECIMAL" />
+    <result column="ARRIVED_NUM" property="arrivedNum" jdbcType="DECIMAL" />
+    <result column="FLIGHT_RELEASE_RATE_NUMERATOR" property="flightReleaseRateNumerator" jdbcType="DECIMAL" />
+    <result column="F_RELEASE_RATE_DENOMINATOR" property="fReleaseRateDenominator" jdbcType="DECIMAL" />
+    <result column="FLIGHT_NORMAL_RATE_NUMERATOR" property="flightNormalRateNumerator" jdbcType="DECIMAL" />
+    <result column="FLIGHT_NORMAL_RATE_DENOMINATOR" property="flightNormalRateDenominator" jdbcType="DECIMAL" />
+  </resultMap>
+  <select id="getRecord" resultMap="BaseResultMap">
+    select * from V_REAL_INTERFACE
+  </select>
+  <select id="getRecordMU" resultMap="BaseResultMap">
+    select * from V_REAL_INTERFACE_MU
+  </select>
+  <select id="getRecordCA" resultMap="BaseResultMap">
+    select * from V_REAL_INTERFACE_CA
+  </select>
+  <select id="getRecordHAS" resultMap="BaseResultMap">
+    select * from V_REAL_INTERFACE_HAS
+  </select>
+  <select id="getRecordHO" resultMap="BaseResultMap">
+    select * from V_REAL_INTERFACE_HO
+  </select>
+  <select id="getRecordCZ" resultMap="BaseResultMap">
+    select * from V_REAL_INTERFACE_CZ
+  </select>
+</mapper>

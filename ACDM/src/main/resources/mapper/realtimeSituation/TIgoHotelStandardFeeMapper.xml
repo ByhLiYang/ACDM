@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TIgoHotelStandardFeeMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TIgoHotelStandardFee" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="HOTEL_NAME" property="hotelName" jdbcType="VARCHAR" />
+    <result column="HOTEL_ADDRES" property="hotelAddres" jdbcType="VARCHAR" />
+    <result column="HOTEL_TEL" property="hotelTel" jdbcType="VARCHAR" />
+    <result column="HOTEL_MANAGER_TEL" property="hotelManagerTel" jdbcType="VARCHAR" />
+    <result column="NAME_OF_PARTY_B" property="nameOfPartyB" jdbcType="VARCHAR" />
+    <result column="AGREEMENT_START_DATE" property="agreementStartDate" jdbcType="DATE" />
+    <result column="AGREEMENT_END_DATE" property="agreementEndDate" jdbcType="DATE" />
+    <result column="BED" property="bed" jdbcType="DOUBLE" />
+    <result column="HOME_BREAKFAST" property="homeBreakfast" jdbcType="DOUBLE" />
+    <result column="HOME_LUNCH" property="homeLunch" jdbcType="DOUBLE" />
+    <result column="HOME_DINNER" property="homeDinner" jdbcType="DOUBLE" />
+    <result column="INTERNATIONAL_BREAKFAST" property="internationalBreakfast" jdbcType="DOUBLE" />
+    <result column="INTERNATIONAL_LUNCH" property="internationalLunch" jdbcType="DOUBLE" />
+    <result column="INTERNATIONAL_DINNER" property="internationalDinner" jdbcType="DOUBLE" />
+    <result column="NIGHT_SNACK" property="nightSnack" jdbcType="DOUBLE" />
+    <result column="RMK" property="rmk" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="TIMESTAMP" />
+    <result column="CREATE_EMP" property="createEmp" jdbcType="VARCHAR" />
+    <result column="UPDATE_EMP" property="updateEmp" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, HOTEL_NAME, HOTEL_ADDRES, HOTEL_TEL, HOTEL_MANAGER_TEL, NAME_OF_PARTY_B, AGREEMENT_START_DATE, 
+    AGREEMENT_END_DATE, BED, HOME_BREAKFAST, HOME_LUNCH, HOME_DINNER, INTERNATIONAL_BREAKFAST, 
+    INTERNATIONAL_LUNCH, INTERNATIONAL_DINNER, NIGHT_SNACK, RMK, CREATE_TM, UPDATE_TM, 
+    CREATE_EMP, UPDATE_EMP
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TIgoHotelStandardFeeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_IGO_HOTEL_STANDARD_FEE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_IGO_HOTEL_STANDARD_FEE
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_IGO_HOTEL_STANDARD_FEE
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TIgoHotelStandardFeeExample" >
+    delete from T_IGO_HOTEL_STANDARD_FEE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TIgoHotelStandardFee" >
+    insert into T_IGO_HOTEL_STANDARD_FEE (ID, HOTEL_NAME, HOTEL_ADDRES, 
+      HOTEL_TEL, HOTEL_MANAGER_TEL, NAME_OF_PARTY_B, 
+      AGREEMENT_START_DATE, AGREEMENT_END_DATE, BED, 
+      HOME_BREAKFAST, HOME_LUNCH, HOME_DINNER, 
+      INTERNATIONAL_BREAKFAST, INTERNATIONAL_LUNCH, 
+      INTERNATIONAL_DINNER, NIGHT_SNACK, RMK, 
+      CREATE_TM, UPDATE_TM, CREATE_EMP, 
+      UPDATE_EMP)
+    values (#{id,jdbcType=VARCHAR}, #{hotelName,jdbcType=VARCHAR}, #{hotelAddres,jdbcType=VARCHAR}, 
+      #{hotelTel,jdbcType=VARCHAR}, #{hotelManagerTel,jdbcType=VARCHAR}, #{nameOfPartyB,jdbcType=VARCHAR}, 
+      #{agreementStartDate,jdbcType=DATE}, #{agreementEndDate,jdbcType=DATE}, #{bed,jdbcType=DOUBLE}, 
+      #{homeBreakfast,jdbcType=DOUBLE}, #{homeLunch,jdbcType=DOUBLE}, #{homeDinner,jdbcType=DOUBLE}, 
+      #{internationalBreakfast,jdbcType=DOUBLE}, #{internationalLunch,jdbcType=DOUBLE}, 
+      #{internationalDinner,jdbcType=DOUBLE}, #{nightSnack,jdbcType=DOUBLE}, #{rmk,jdbcType=VARCHAR}, 
+      #{createTm,jdbcType=TIMESTAMP}, #{updateTm,jdbcType=TIMESTAMP}, #{createEmp,jdbcType=VARCHAR}, 
+      #{updateEmp,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TIgoHotelStandardFee" >
+    insert into T_IGO_HOTEL_STANDARD_FEE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="hotelName != null" >
+        HOTEL_NAME,
+      </if>
+      <if test="hotelAddres != null" >
+        HOTEL_ADDRES,
+      </if>
+      <if test="hotelTel != null" >
+        HOTEL_TEL,
+      </if>
+      <if test="hotelManagerTel != null" >
+        HOTEL_MANAGER_TEL,
+      </if>
+      <if test="nameOfPartyB != null" >
+        NAME_OF_PARTY_B,
+      </if>
+      <if test="agreementStartDate != null" >
+        AGREEMENT_START_DATE,
+      </if>
+      <if test="agreementEndDate != null" >
+        AGREEMENT_END_DATE,
+      </if>
+      <if test="bed != null" >
+        BED,
+      </if>
+      <if test="homeBreakfast != null" >
+        HOME_BREAKFAST,
+      </if>
+      <if test="homeLunch != null" >
+        HOME_LUNCH,
+      </if>
+      <if test="homeDinner != null" >
+        HOME_DINNER,
+      </if>
+      <if test="internationalBreakfast != null" >
+        INTERNATIONAL_BREAKFAST,
+      </if>
+      <if test="internationalLunch != null" >
+        INTERNATIONAL_LUNCH,
+      </if>
+      <if test="internationalDinner != null" >
+        INTERNATIONAL_DINNER,
+      </if>
+      <if test="nightSnack != null" >
+        NIGHT_SNACK,
+      </if>
+      <if test="rmk != null" >
+        RMK,
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM,
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM,
+      </if>
+      <if test="createEmp != null" >
+        CREATE_EMP,
+      </if>
+      <if test="updateEmp != null" >
+        UPDATE_EMP,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelName != null" >
+        #{hotelName,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelAddres != null" >
+        #{hotelAddres,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelTel != null" >
+        #{hotelTel,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelManagerTel != null" >
+        #{hotelManagerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="nameOfPartyB != null" >
+        #{nameOfPartyB,jdbcType=VARCHAR},
+      </if>
+      <if test="agreementStartDate != null" >
+        #{agreementStartDate,jdbcType=DATE},
+      </if>
+      <if test="agreementEndDate != null" >
+        #{agreementEndDate,jdbcType=DATE},
+      </if>
+      <if test="bed != null" >
+        #{bed,jdbcType=DOUBLE},
+      </if>
+      <if test="homeBreakfast != null" >
+        #{homeBreakfast,jdbcType=DOUBLE},
+      </if>
+      <if test="homeLunch != null" >
+        #{homeLunch,jdbcType=DOUBLE},
+      </if>
+      <if test="homeDinner != null" >
+        #{homeDinner,jdbcType=DOUBLE},
+      </if>
+      <if test="internationalBreakfast != null" >
+        #{internationalBreakfast,jdbcType=DOUBLE},
+      </if>
+      <if test="internationalLunch != null" >
+        #{internationalLunch,jdbcType=DOUBLE},
+      </if>
+      <if test="internationalDinner != null" >
+        #{internationalDinner,jdbcType=DOUBLE},
+      </if>
+      <if test="nightSnack != null" >
+        #{nightSnack,jdbcType=DOUBLE},
+      </if>
+      <if test="rmk != null" >
+        #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createEmp != null" >
+        #{createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="updateEmp != null" >
+        #{updateEmp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TIgoHotelStandardFeeExample" resultType="java.lang.Integer" >
+    select count(*) from T_IGO_HOTEL_STANDARD_FEE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_IGO_HOTEL_STANDARD_FEE
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hotelName != null" >
+        HOTEL_NAME = #{record.hotelName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hotelAddres != null" >
+        HOTEL_ADDRES = #{record.hotelAddres,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hotelTel != null" >
+        HOTEL_TEL = #{record.hotelTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hotelManagerTel != null" >
+        HOTEL_MANAGER_TEL = #{record.hotelManagerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nameOfPartyB != null" >
+        NAME_OF_PARTY_B = #{record.nameOfPartyB,jdbcType=VARCHAR},
+      </if>
+      <if test="record.agreementStartDate != null" >
+        AGREEMENT_START_DATE = #{record.agreementStartDate,jdbcType=DATE},
+      </if>
+      <if test="record.agreementEndDate != null" >
+        AGREEMENT_END_DATE = #{record.agreementEndDate,jdbcType=DATE},
+      </if>
+      <if test="record.bed != null" >
+        BED = #{record.bed,jdbcType=DOUBLE},
+      </if>
+      <if test="record.homeBreakfast != null" >
+        HOME_BREAKFAST = #{record.homeBreakfast,jdbcType=DOUBLE},
+      </if>
+      <if test="record.homeLunch != null" >
+        HOME_LUNCH = #{record.homeLunch,jdbcType=DOUBLE},
+      </if>
+      <if test="record.homeDinner != null" >
+        HOME_DINNER = #{record.homeDinner,jdbcType=DOUBLE},
+      </if>
+      <if test="record.internationalBreakfast != null" >
+        INTERNATIONAL_BREAKFAST = #{record.internationalBreakfast,jdbcType=DOUBLE},
+      </if>
+      <if test="record.internationalLunch != null" >
+        INTERNATIONAL_LUNCH = #{record.internationalLunch,jdbcType=DOUBLE},
+      </if>
+      <if test="record.internationalDinner != null" >
+        INTERNATIONAL_DINNER = #{record.internationalDinner,jdbcType=DOUBLE},
+      </if>
+      <if test="record.nightSnack != null" >
+        NIGHT_SNACK = #{record.nightSnack,jdbcType=DOUBLE},
+      </if>
+      <if test="record.rmk != null" >
+        RMK = #{record.rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTm != null" >
+        CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTm != null" >
+        UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createEmp != null" >
+        CREATE_EMP = #{record.createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateEmp != null" >
+        UPDATE_EMP = #{record.updateEmp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_IGO_HOTEL_STANDARD_FEE
+    set ID = #{record.id,jdbcType=VARCHAR},
+      HOTEL_NAME = #{record.hotelName,jdbcType=VARCHAR},
+      HOTEL_ADDRES = #{record.hotelAddres,jdbcType=VARCHAR},
+      HOTEL_TEL = #{record.hotelTel,jdbcType=VARCHAR},
+      HOTEL_MANAGER_TEL = #{record.hotelManagerTel,jdbcType=VARCHAR},
+      NAME_OF_PARTY_B = #{record.nameOfPartyB,jdbcType=VARCHAR},
+      AGREEMENT_START_DATE = #{record.agreementStartDate,jdbcType=DATE},
+      AGREEMENT_END_DATE = #{record.agreementEndDate,jdbcType=DATE},
+      BED = #{record.bed,jdbcType=DOUBLE},
+      HOME_BREAKFAST = #{record.homeBreakfast,jdbcType=DOUBLE},
+      HOME_LUNCH = #{record.homeLunch,jdbcType=DOUBLE},
+      HOME_DINNER = #{record.homeDinner,jdbcType=DOUBLE},
+      INTERNATIONAL_BREAKFAST = #{record.internationalBreakfast,jdbcType=DOUBLE},
+      INTERNATIONAL_LUNCH = #{record.internationalLunch,jdbcType=DOUBLE},
+      INTERNATIONAL_DINNER = #{record.internationalDinner,jdbcType=DOUBLE},
+      NIGHT_SNACK = #{record.nightSnack,jdbcType=DOUBLE},
+      RMK = #{record.rmk,jdbcType=VARCHAR},
+      CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      CREATE_EMP = #{record.createEmp,jdbcType=VARCHAR},
+      UPDATE_EMP = #{record.updateEmp,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TIgoHotelStandardFee" >
+    update T_IGO_HOTEL_STANDARD_FEE
+    <set >
+      <if test="hotelName != null" >
+        HOTEL_NAME = #{hotelName,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelAddres != null" >
+        HOTEL_ADDRES = #{hotelAddres,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelTel != null" >
+        HOTEL_TEL = #{hotelTel,jdbcType=VARCHAR},
+      </if>
+      <if test="hotelManagerTel != null" >
+        HOTEL_MANAGER_TEL = #{hotelManagerTel,jdbcType=VARCHAR},
+      </if>
+      <if test="nameOfPartyB != null" >
+        NAME_OF_PARTY_B = #{nameOfPartyB,jdbcType=VARCHAR},
+      </if>
+      <if test="agreementStartDate != null" >
+        AGREEMENT_START_DATE = #{agreementStartDate,jdbcType=DATE},
+      </if>
+      <if test="agreementEndDate != null" >
+        AGREEMENT_END_DATE = #{agreementEndDate,jdbcType=DATE},
+      </if>
+      <if test="bed != null" >
+        BED = #{bed,jdbcType=DOUBLE},
+      </if>
+      <if test="homeBreakfast != null" >
+        HOME_BREAKFAST = #{homeBreakfast,jdbcType=DOUBLE},
+      </if>
+      <if test="homeLunch != null" >
+        HOME_LUNCH = #{homeLunch,jdbcType=DOUBLE},
+      </if>
+      <if test="homeDinner != null" >
+        HOME_DINNER = #{homeDinner,jdbcType=DOUBLE},
+      </if>
+      <if test="internationalBreakfast != null" >
+        INTERNATIONAL_BREAKFAST = #{internationalBreakfast,jdbcType=DOUBLE},
+      </if>
+      <if test="internationalLunch != null" >
+        INTERNATIONAL_LUNCH = #{internationalLunch,jdbcType=DOUBLE},
+      </if>
+      <if test="internationalDinner != null" >
+        INTERNATIONAL_DINNER = #{internationalDinner,jdbcType=DOUBLE},
+      </if>
+      <if test="nightSnack != null" >
+        NIGHT_SNACK = #{nightSnack,jdbcType=DOUBLE},
+      </if>
+      <if test="rmk != null" >
+        RMK = #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createEmp != null" >
+        CREATE_EMP = #{createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="updateEmp != null" >
+        UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TIgoHotelStandardFee" >
+    update T_IGO_HOTEL_STANDARD_FEE
+    set HOTEL_NAME = #{hotelName,jdbcType=VARCHAR},
+      HOTEL_ADDRES = #{hotelAddres,jdbcType=VARCHAR},
+      HOTEL_TEL = #{hotelTel,jdbcType=VARCHAR},
+      HOTEL_MANAGER_TEL = #{hotelManagerTel,jdbcType=VARCHAR},
+      NAME_OF_PARTY_B = #{nameOfPartyB,jdbcType=VARCHAR},
+      AGREEMENT_START_DATE = #{agreementStartDate,jdbcType=DATE},
+      AGREEMENT_END_DATE = #{agreementEndDate,jdbcType=DATE},
+      BED = #{bed,jdbcType=DOUBLE},
+      HOME_BREAKFAST = #{homeBreakfast,jdbcType=DOUBLE},
+      HOME_LUNCH = #{homeLunch,jdbcType=DOUBLE},
+      HOME_DINNER = #{homeDinner,jdbcType=DOUBLE},
+      INTERNATIONAL_BREAKFAST = #{internationalBreakfast,jdbcType=DOUBLE},
+      INTERNATIONAL_LUNCH = #{internationalLunch,jdbcType=DOUBLE},
+      INTERNATIONAL_DINNER = #{internationalDinner,jdbcType=DOUBLE},
+      NIGHT_SNACK = #{nightSnack,jdbcType=DOUBLE},
+      RMK = #{rmk,jdbcType=VARCHAR},
+      UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+  <resultMap id="BaseResultMapVO" type="com.hq.acdm.vo.realtimeSituation.TIgoHotelStandardFeeVO" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="HOTEL_NAME" property="hotelName" jdbcType="VARCHAR" />
+    <result column="HOTEL_ADDRES" property="hotelAddres" jdbcType="VARCHAR" />
+    <result column="HOTEL_TEL" property="hotelTel" jdbcType="VARCHAR" />
+    <result column="HOTEL_MANAGER_TEL" property="hotelManagerTel" jdbcType="VARCHAR" />
+    <result column="NAME_OF_PARTY_B" property="nameOfPartyB" jdbcType="VARCHAR" />
+    <result column="AGREEMENT_START_DATE" property="agreementStartDate" jdbcType="VARCHAR" />
+    <result column="AGREEMENT_END_DATE" property="agreementEndDate" jdbcType="VARCHAR" />
+    <result column="BED" property="bed" jdbcType="DOUBLE" />
+    <result column="HOME_BREAKFAST" property="homeBreakfast" jdbcType="DOUBLE" />
+    <result column="HOME_LUNCH" property="homeLunch" jdbcType="DOUBLE" />
+    <result column="HOME_DINNER" property="homeDinner" jdbcType="DOUBLE" />
+    <result column="INTERNATIONAL_BREAKFAST" property="internationalBreakfast" jdbcType="DOUBLE" />
+    <result column="INTERNATIONAL_LUNCH" property="internationalLunch" jdbcType="DOUBLE" />
+    <result column="INTERNATIONAL_DINNER" property="internationalDinner" jdbcType="DOUBLE" />
+    <result column="NIGHT_SNACK" property="nightSnack" jdbcType="DOUBLE" />
+    <result column="RMK" property="rmk" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="VARCHAR" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="VARCHAR" />
+    <result column="CREATE_EMP" property="createEmp" jdbcType="VARCHAR" />
+    <result column="UPDATE_EMP" property="updateEmp" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="findAllTSpecialInfo" resultMap="BaseResultMapVO" parameterType="map" >
+    SELECT * FROM T_IGO_HOTEL_STANDARD_FEE WHERE 1=1
+
+    <if test="params.tiaojian !=null and params.tiaojian != ''">
+      AND HOTEL_NAME LIKE CONCAT('%',#{params.tiaojian},'%')
+    </if>
+
+  </select>
+</mapper>

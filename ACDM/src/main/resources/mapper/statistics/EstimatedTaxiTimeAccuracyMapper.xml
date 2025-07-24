@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.EstimatedTaxiTimeAccuracyMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.statistics.estimatedTaxiTimeAccuracy.EstimatedTaxiTimeAccuracy" >
+    <result column="A_OR_D" property="A_OR_D" jdbcType="VARCHAR" />
+    <result column="OPERATIONAL_DATE" property="operational_date" jdbcType="TIMESTAMP" />
+    <result column="AIRLINE_CODE_IATA" property="airline_code_iata" jdbcType="VARCHAR" />
+    <result column="AIRPORTTYPE" property="airport_type" jdbcType="VARCHAR" />
+    <result column="STIME" property="stime" jdbcType="VARCHAR" />
+    <result column="EXITFLG" property="EXIT_flag" jdbcType="INTEGER" />
+    <result column="EXOTFLG" property="EXOT_flag" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="queryEstimatedTaxiTimeAccuracyInfo" parameterType="map" resultType="com.hq.acdm.model.statistics.estimatedTaxiTimeAccuracy.EstimatedTaxiTimeAccuracy"  >
+      select AIRLINE_CODE_IATA,operational_date,count(*) as total,AIRPORTTYPE,count(case when EXITFLG=1 then EXITFLG ELSE null end) as inbound,
+      count(case when EXOTFLG=1 then EXOTFLG ELSE null end) as outbound
+      from V_ESTIMATED_TAXITIME_ACCURACY
+      where 1=1
+      <if test="params.startDate != null and params.startDate != ''">
+       and STIME&gt;=to_date(#{params.startDate},'yyyy-mm-dd hh24:mi:ss')
+      </if>
+      <if test="params.endDate != null and params.endDate != ''">
+          and STIME&lt;=to_date(#{params.endDate},'yyyy-mm-dd hh24:mi:ss')
+      </if>
+      <if test="params.airCompany !=null and params.airCompany != ''">
+          and AIRLINE_CODE_IATA=#{params.airCompany}
+      </if>
+      <if test="params.planeModel !=null and params.planeModel != ''">
+          and AIRPORTTYPE=#{params.planeModel}
+      </if>
+      <if test="params.taxiType !=null and params.taxiType != ''">
+          and A_OR_D=#{params.taxiType}
+      </if>
+      GROUP BY AIRLINE_CODE_IATA,AIRPORTTYPE,operational_date
+      order by AIRLINE_CODE_IATA
+  </select>
+</mapper>

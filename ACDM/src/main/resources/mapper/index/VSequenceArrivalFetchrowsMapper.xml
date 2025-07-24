@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.index.VSequenceArrivalFetchrowsMapper" >
+<resultMap id="BaseResultMap" type="com.hq.acdm.model.index.VSequenceArrivalFetchrows" >
+  <result column="FLIGHT_ID" property="flightId" jdbcType="VARCHAR" />
+  <result column="FLIGHT_NO_IATA" property="flightNoIata" jdbcType="VARCHAR" />
+  <result column="ELDT" property="eldt" jdbcType="VARCHAR" />
+  <result column="ETA" property="eta" jdbcType="VARCHAR" />
+  <result column="SIBT" property="sibt" jdbcType="VARCHAR" />
+  <result column="A_TMO" property="aTmo" jdbcType="VARCHAR" />
+  <result column="STAND" property="stand" jdbcType="VARCHAR" />
+</resultMap>
+
+  <!--
+<select id="getRecord" resultMap="BaseResultMap">
+  select FLIGHT_NO_IATA,to_char(ELDT,'HH24:MI') ELDT,to_char(ETA,'HH24:MI') ETA,to_char(A_TMO,'HH24:MI') A_TMO from V_SEQUENCE_ARRIVAL_MORE
+</select>
+-->
+
+  <select id="getRecord" resultMap="BaseResultMap">
+  SELECT FLIGHT_ID,FLNO AS FLIGHT_NO_IATA,DATE_FORMAT(ELDT,'%H:%i') AS ELDT,DATE_FORMAT(SIBT,'%H:%i') AS ETA,STAND AS A_TMO
+  FROM V_UTIL_DAILY_FLIGHT WHERE D_OR_A = 'A' AND ALDT IS NULL AND ELDT IS NOT NULL ORDER BY ELDT ASC
+  </select>
+
+</mapper>

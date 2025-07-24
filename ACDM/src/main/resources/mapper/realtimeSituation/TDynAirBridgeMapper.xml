@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TDynAirBridgeMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TDynAirBridge" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="FLIGHT_ID" property="flightId" jdbcType="BIGINT" />
+    <result column="AIR_BRIDGE_CD_1" property="airBridgeCd1" jdbcType="VARCHAR" />
+    <result column="AIR_BRIDGE_START_TIME_1" property="airBridgeStartTime1" jdbcType="TIMESTAMP" />
+    <result column="AIR_BRIDGE_END_TIME_1" property="airBridgeEndTime1" jdbcType="TIMESTAMP" />
+    <result column="AIR_BRIDGE_DURATION_1" property="airBridgeDuration1" jdbcType="INTEGER" />
+    <result column="POWER_SUPPLY_START_TIME_1" property="powerSupplyStartTime1" jdbcType="TIMESTAMP" />
+    <result column="POWER_SUPPLY_END_TIMR_1" property="powerSupplyEndTimr1" jdbcType="TIMESTAMP" />
+    <result column="POWER_SUPPLY_DURATION_1" property="powerSupplyDuration1" jdbcType="INTEGER" />
+    <result column="AIR_CONDITIONING_START_TIME_1" property="airConditioningStartTime1" jdbcType="TIMESTAMP" />
+    <result column="AIR_CONDITIONING_END_TIME_1" property="airConditioningEndTime1" jdbcType="TIMESTAMP" />
+    <result column="AIR_CONDITIONING_DURATION_1" property="airConditioningDuration1" jdbcType="INTEGER" />
+    <result column="AIR_BRIDGE_CD_2" property="airBridgeCd2" jdbcType="VARCHAR" />
+    <result column="AIR_BRIDGE_START_TIME_2" property="airBridgeStartTime2" jdbcType="TIMESTAMP" />
+    <result column="AIR_BRIDGE_END_TIME_2" property="airBridgeEndTime2" jdbcType="TIMESTAMP" />
+    <result column="AIR_BRIDGE_DURATION_2" property="airBridgeDuration2" jdbcType="INTEGER" />
+    <result column="POWER_SUPPLY_START_TIME_2" property="powerSupplyStartTime2" jdbcType="TIMESTAMP" />
+    <result column="POWER_SUPPLY_END_TIMR_2" property="powerSupplyEndTimr2" jdbcType="TIMESTAMP" />
+    <result column="POWER_SUPPLY_DURATION_2" property="powerSupplyDuration2" jdbcType="INTEGER" />
+    <result column="AIR_CONDITIONING_START_TIME_2" property="airConditioningStartTime2" jdbcType="TIMESTAMP" />
+    <result column="AIR_CONDITIONING_END_TIME_2" property="airConditioningEndTime2" jdbcType="TIMESTAMP" />
+    <result column="AIR_CONDITIONING_DURATION_2" property="airConditioningDuration2" jdbcType="INTEGER" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, FLIGHT_ID, AIR_BRIDGE_CD_1, AIR_BRIDGE_START_TIME_1, AIR_BRIDGE_END_TIME_1, AIR_BRIDGE_DURATION_1, 
+    POWER_SUPPLY_START_TIME_1, POWER_SUPPLY_END_TIMR_1, POWER_SUPPLY_DURATION_1, AIR_CONDITIONING_START_TIME_1, 
+    AIR_CONDITIONING_END_TIME_1, AIR_CONDITIONING_DURATION_1, AIR_BRIDGE_CD_2, AIR_BRIDGE_START_TIME_2, 
+    AIR_BRIDGE_END_TIME_2, AIR_BRIDGE_DURATION_2, POWER_SUPPLY_START_TIME_2, POWER_SUPPLY_END_TIMR_2, 
+    POWER_SUPPLY_DURATION_2, AIR_CONDITIONING_START_TIME_2, AIR_CONDITIONING_END_TIME_2, 
+    AIR_CONDITIONING_DURATION_2, CREATE_TIME, UPDATE_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TDynAirBridgeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_DYN_AIR_BRIDGE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_DYN_AIR_BRIDGE
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_DYN_AIR_BRIDGE
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TDynAirBridgeExample" >
+    delete from T_DYN_AIR_BRIDGE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TDynAirBridge" >
+    insert into T_DYN_AIR_BRIDGE (ID, FLIGHT_ID, AIR_BRIDGE_CD_1, 
+      AIR_BRIDGE_START_TIME_1, AIR_BRIDGE_END_TIME_1, 
+      AIR_BRIDGE_DURATION_1, POWER_SUPPLY_START_TIME_1, 
+      POWER_SUPPLY_END_TIMR_1, POWER_SUPPLY_DURATION_1, 
+      AIR_CONDITIONING_START_TIME_1, AIR_CONDITIONING_END_TIME_1, 
+      AIR_CONDITIONING_DURATION_1, AIR_BRIDGE_CD_2, 
+      AIR_BRIDGE_START_TIME_2, AIR_BRIDGE_END_TIME_2, 
+      AIR_BRIDGE_DURATION_2, POWER_SUPPLY_START_TIME_2, 
+      POWER_SUPPLY_END_TIMR_2, POWER_SUPPLY_DURATION_2, 
+      AIR_CONDITIONING_START_TIME_2, AIR_CONDITIONING_END_TIME_2, 
+      AIR_CONDITIONING_DURATION_2, CREATE_TIME, 
+      UPDATE_TIME)
+    values (#{id,jdbcType=VARCHAR}, #{flightId,jdbcType=BIGINT}, #{airBridgeCd1,jdbcType=VARCHAR}, 
+      #{airBridgeStartTime1,jdbcType=TIMESTAMP}, #{airBridgeEndTime1,jdbcType=TIMESTAMP}, 
+      #{airBridgeDuration1,jdbcType=INTEGER}, #{powerSupplyStartTime1,jdbcType=TIMESTAMP}, 
+      #{powerSupplyEndTimr1,jdbcType=TIMESTAMP}, #{powerSupplyDuration1,jdbcType=INTEGER}, 
+      #{airConditioningStartTime1,jdbcType=TIMESTAMP}, #{airConditioningEndTime1,jdbcType=TIMESTAMP}, 
+      #{airConditioningDuration1,jdbcType=INTEGER}, #{airBridgeCd2,jdbcType=VARCHAR}, 
+      #{airBridgeStartTime2,jdbcType=TIMESTAMP}, #{airBridgeEndTime2,jdbcType=TIMESTAMP}, 
+      #{airBridgeDuration2,jdbcType=INTEGER}, #{powerSupplyStartTime2,jdbcType=TIMESTAMP}, 
+      #{powerSupplyEndTimr2,jdbcType=TIMESTAMP}, #{powerSupplyDuration2,jdbcType=INTEGER}, 
+      #{airConditioningStartTime2,jdbcType=TIMESTAMP}, #{airConditioningEndTime2,jdbcType=TIMESTAMP}, 
+      #{airConditioningDuration2,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TDynAirBridge" >
+    insert into T_DYN_AIR_BRIDGE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="flightId != null" >
+        FLIGHT_ID,
+      </if>
+      <if test="airBridgeCd1 != null" >
+        AIR_BRIDGE_CD_1,
+      </if>
+      <if test="airBridgeStartTime1 != null" >
+        AIR_BRIDGE_START_TIME_1,
+      </if>
+      <if test="airBridgeEndTime1 != null" >
+        AIR_BRIDGE_END_TIME_1,
+      </if>
+      <if test="airBridgeDuration1 != null" >
+        AIR_BRIDGE_DURATION_1,
+      </if>
+      <if test="powerSupplyStartTime1 != null" >
+        POWER_SUPPLY_START_TIME_1,
+      </if>
+      <if test="powerSupplyEndTimr1 != null" >
+        POWER_SUPPLY_END_TIMR_1,
+      </if>
+      <if test="powerSupplyDuration1 != null" >
+        POWER_SUPPLY_DURATION_1,
+      </if>
+      <if test="airConditioningStartTime1 != null" >
+        AIR_CONDITIONING_START_TIME_1,
+      </if>
+      <if test="airConditioningEndTime1 != null" >
+        AIR_CONDITIONING_END_TIME_1,
+      </if>
+      <if test="airConditioningDuration1 != null" >
+        AIR_CONDITIONING_DURATION_1,
+      </if>
+      <if test="airBridgeCd2 != null" >
+        AIR_BRIDGE_CD_2,
+      </if>
+      <if test="airBridgeStartTime2 != null" >
+        AIR_BRIDGE_START_TIME_2,
+      </if>
+      <if test="airBridgeEndTime2 != null" >
+        AIR_BRIDGE_END_TIME_2,
+      </if>
+      <if test="airBridgeDuration2 != null" >
+        AIR_BRIDGE_DURATION_2,
+      </if>
+      <if test="powerSupplyStartTime2 != null" >
+        POWER_SUPPLY_START_TIME_2,
+      </if>
+      <if test="powerSupplyEndTimr2 != null" >
+        POWER_SUPPLY_END_TIMR_2,
+      </if>
+      <if test="powerSupplyDuration2 != null" >
+        POWER_SUPPLY_DURATION_2,
+      </if>
+      <if test="airConditioningStartTime2 != null" >
+        AIR_CONDITIONING_START_TIME_2,
+      </if>
+      <if test="airConditioningEndTime2 != null" >
+        AIR_CONDITIONING_END_TIME_2,
+      </if>
+      <if test="airConditioningDuration2 != null" >
+        AIR_CONDITIONING_DURATION_2,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="flightId != null" >
+        #{flightId,jdbcType=BIGINT},
+      </if>
+      <if test="airBridgeCd1 != null" >
+        #{airBridgeCd1,jdbcType=VARCHAR},
+      </if>
+      <if test="airBridgeStartTime1 != null" >
+        #{airBridgeStartTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airBridgeEndTime1 != null" >
+        #{airBridgeEndTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airBridgeDuration1 != null" >
+        #{airBridgeDuration1,jdbcType=INTEGER},
+      </if>
+      <if test="powerSupplyStartTime1 != null" >
+        #{powerSupplyStartTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="powerSupplyEndTimr1 != null" >
+        #{powerSupplyEndTimr1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="powerSupplyDuration1 != null" >
+        #{powerSupplyDuration1,jdbcType=INTEGER},
+      </if>
+      <if test="airConditioningStartTime1 != null" >
+        #{airConditioningStartTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airConditioningEndTime1 != null" >
+        #{airConditioningEndTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airConditioningDuration1 != null" >
+        #{airConditioningDuration1,jdbcType=INTEGER},
+      </if>
+      <if test="airBridgeCd2 != null" >
+        #{airBridgeCd2,jdbcType=VARCHAR},
+      </if>
+      <if test="airBridgeStartTime2 != null" >
+        #{airBridgeStartTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airBridgeEndTime2 != null" >
+        #{airBridgeEndTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airBridgeDuration2 != null" >
+        #{airBridgeDuration2,jdbcType=INTEGER},
+      </if>
+      <if test="powerSupplyStartTime2 != null" >
+        #{powerSupplyStartTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="powerSupplyEndTimr2 != null" >
+        #{powerSupplyEndTimr2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="powerSupplyDuration2 != null" >
+        #{powerSupplyDuration2,jdbcType=INTEGER},
+      </if>
+      <if test="airConditioningStartTime2 != null" >
+        #{airConditioningStartTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airConditioningEndTime2 != null" >
+        #{airConditioningEndTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airConditioningDuration2 != null" >
+        #{airConditioningDuration2,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TDynAirBridgeExample" resultType="java.lang.Integer" >
+    select count(*) from T_DYN_AIR_BRIDGE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_DYN_AIR_BRIDGE
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flightId != null" >
+        FLIGHT_ID = #{record.flightId,jdbcType=BIGINT},
+      </if>
+      <if test="record.airBridgeCd1 != null" >
+        AIR_BRIDGE_CD_1 = #{record.airBridgeCd1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.airBridgeStartTime1 != null" >
+        AIR_BRIDGE_START_TIME_1 = #{record.airBridgeStartTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.airBridgeEndTime1 != null" >
+        AIR_BRIDGE_END_TIME_1 = #{record.airBridgeEndTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.airBridgeDuration1 != null" >
+        AIR_BRIDGE_DURATION_1 = #{record.airBridgeDuration1,jdbcType=INTEGER},
+      </if>
+      <if test="record.powerSupplyStartTime1 != null" >
+        POWER_SUPPLY_START_TIME_1 = #{record.powerSupplyStartTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.powerSupplyEndTimr1 != null" >
+        POWER_SUPPLY_END_TIMR_1 = #{record.powerSupplyEndTimr1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.powerSupplyDuration1 != null" >
+        POWER_SUPPLY_DURATION_1 = #{record.powerSupplyDuration1,jdbcType=INTEGER},
+      </if>
+      <if test="record.airConditioningStartTime1 != null" >
+        AIR_CONDITIONING_START_TIME_1 = #{record.airConditioningStartTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.airConditioningEndTime1 != null" >
+        AIR_CONDITIONING_END_TIME_1 = #{record.airConditioningEndTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.airConditioningDuration1 != null" >
+        AIR_CONDITIONING_DURATION_1 = #{record.airConditioningDuration1,jdbcType=INTEGER},
+      </if>
+      <if test="record.airBridgeCd2 != null" >
+        AIR_BRIDGE_CD_2 = #{record.airBridgeCd2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.airBridgeStartTime2 != null" >
+        AIR_BRIDGE_START_TIME_2 = #{record.airBridgeStartTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.airBridgeEndTime2 != null" >
+        AIR_BRIDGE_END_TIME_2 = #{record.airBridgeEndTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.airBridgeDuration2 != null" >
+        AIR_BRIDGE_DURATION_2 = #{record.airBridgeDuration2,jdbcType=INTEGER},
+      </if>
+      <if test="record.powerSupplyStartTime2 != null" >
+        POWER_SUPPLY_START_TIME_2 = #{record.powerSupplyStartTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.powerSupplyEndTimr2 != null" >
+        POWER_SUPPLY_END_TIMR_2 = #{record.powerSupplyEndTimr2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.powerSupplyDuration2 != null" >
+        POWER_SUPPLY_DURATION_2 = #{record.powerSupplyDuration2,jdbcType=INTEGER},
+      </if>
+      <if test="record.airConditioningStartTime2 != null" >
+        AIR_CONDITIONING_START_TIME_2 = #{record.airConditioningStartTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.airConditioningEndTime2 != null" >
+        AIR_CONDITIONING_END_TIME_2 = #{record.airConditioningEndTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.airConditioningDuration2 != null" >
+        AIR_CONDITIONING_DURATION_2 = #{record.airConditioningDuration2,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_DYN_AIR_BRIDGE
+    set ID = #{record.id,jdbcType=VARCHAR},
+      FLIGHT_ID = #{record.flightId,jdbcType=BIGINT},
+      AIR_BRIDGE_CD_1 = #{record.airBridgeCd1,jdbcType=VARCHAR},
+      AIR_BRIDGE_START_TIME_1 = #{record.airBridgeStartTime1,jdbcType=TIMESTAMP},
+      AIR_BRIDGE_END_TIME_1 = #{record.airBridgeEndTime1,jdbcType=TIMESTAMP},
+      AIR_BRIDGE_DURATION_1 = #{record.airBridgeDuration1,jdbcType=INTEGER},
+      POWER_SUPPLY_START_TIME_1 = #{record.powerSupplyStartTime1,jdbcType=TIMESTAMP},
+      POWER_SUPPLY_END_TIMR_1 = #{record.powerSupplyEndTimr1,jdbcType=TIMESTAMP},
+      POWER_SUPPLY_DURATION_1 = #{record.powerSupplyDuration1,jdbcType=INTEGER},
+      AIR_CONDITIONING_START_TIME_1 = #{record.airConditioningStartTime1,jdbcType=TIMESTAMP},
+      AIR_CONDITIONING_END_TIME_1 = #{record.airConditioningEndTime1,jdbcType=TIMESTAMP},
+      AIR_CONDITIONING_DURATION_1 = #{record.airConditioningDuration1,jdbcType=INTEGER},
+      AIR_BRIDGE_CD_2 = #{record.airBridgeCd2,jdbcType=VARCHAR},
+      AIR_BRIDGE_START_TIME_2 = #{record.airBridgeStartTime2,jdbcType=TIMESTAMP},
+      AIR_BRIDGE_END_TIME_2 = #{record.airBridgeEndTime2,jdbcType=TIMESTAMP},
+      AIR_BRIDGE_DURATION_2 = #{record.airBridgeDuration2,jdbcType=INTEGER},
+      POWER_SUPPLY_START_TIME_2 = #{record.powerSupplyStartTime2,jdbcType=TIMESTAMP},
+      POWER_SUPPLY_END_TIMR_2 = #{record.powerSupplyEndTimr2,jdbcType=TIMESTAMP},
+      POWER_SUPPLY_DURATION_2 = #{record.powerSupplyDuration2,jdbcType=INTEGER},
+      AIR_CONDITIONING_START_TIME_2 = #{record.airConditioningStartTime2,jdbcType=TIMESTAMP},
+      AIR_CONDITIONING_END_TIME_2 = #{record.airConditioningEndTime2,jdbcType=TIMESTAMP},
+      AIR_CONDITIONING_DURATION_2 = #{record.airConditioningDuration2,jdbcType=INTEGER},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TDynAirBridge" >
+    update T_DYN_AIR_BRIDGE
+    <set >
+      <if test="flightId != null" >
+        FLIGHT_ID = #{flightId,jdbcType=BIGINT},
+      </if>
+      <if test="airBridgeCd1 != null" >
+        AIR_BRIDGE_CD_1 = #{airBridgeCd1,jdbcType=VARCHAR},
+      </if>
+      <if test="airBridgeStartTime1 != null" >
+        AIR_BRIDGE_START_TIME_1 = #{airBridgeStartTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airBridgeEndTime1 != null" >
+        AIR_BRIDGE_END_TIME_1 = #{airBridgeEndTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airBridgeDuration1 != null" >
+        AIR_BRIDGE_DURATION_1 = #{airBridgeDuration1,jdbcType=INTEGER},
+      </if>
+      <if test="powerSupplyStartTime1 != null" >
+        POWER_SUPPLY_START_TIME_1 = #{powerSupplyStartTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="powerSupplyEndTimr1 != null" >
+        POWER_SUPPLY_END_TIMR_1 = #{powerSupplyEndTimr1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="powerSupplyDuration1 != null" >
+        POWER_SUPPLY_DURATION_1 = #{powerSupplyDuration1,jdbcType=INTEGER},
+      </if>
+      <if test="airConditioningStartTime1 != null" >
+        AIR_CONDITIONING_START_TIME_1 = #{airConditioningStartTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airConditioningEndTime1 != null" >
+        AIR_CONDITIONING_END_TIME_1 = #{airConditioningEndTime1,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airConditioningDuration1 != null" >
+        AIR_CONDITIONING_DURATION_1 = #{airConditioningDuration1,jdbcType=INTEGER},
+      </if>
+      <if test="airBridgeCd2 != null" >
+        AIR_BRIDGE_CD_2 = #{airBridgeCd2,jdbcType=VARCHAR},
+      </if>
+      <if test="airBridgeStartTime2 != null" >
+        AIR_BRIDGE_START_TIME_2 = #{airBridgeStartTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airBridgeEndTime2 != null" >
+        AIR_BRIDGE_END_TIME_2 = #{airBridgeEndTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airBridgeDuration2 != null" >
+        AIR_BRIDGE_DURATION_2 = #{airBridgeDuration2,jdbcType=INTEGER},
+      </if>
+      <if test="powerSupplyStartTime2 != null" >
+        POWER_SUPPLY_START_TIME_2 = #{powerSupplyStartTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="powerSupplyEndTimr2 != null" >
+        POWER_SUPPLY_END_TIMR_2 = #{powerSupplyEndTimr2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="powerSupplyDuration2 != null" >
+        POWER_SUPPLY_DURATION_2 = #{powerSupplyDuration2,jdbcType=INTEGER},
+      </if>
+      <if test="airConditioningStartTime2 != null" >
+        AIR_CONDITIONING_START_TIME_2 = #{airConditioningStartTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airConditioningEndTime2 != null" >
+        AIR_CONDITIONING_END_TIME_2 = #{airConditioningEndTime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="airConditioningDuration2 != null" >
+        AIR_CONDITIONING_DURATION_2 = #{airConditioningDuration2,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TDynAirBridge" >
+    update T_DYN_AIR_BRIDGE
+    set FLIGHT_ID = #{flightId,jdbcType=BIGINT},
+      AIR_BRIDGE_CD_1 = #{airBridgeCd1,jdbcType=VARCHAR},
+      AIR_BRIDGE_START_TIME_1 = #{airBridgeStartTime1,jdbcType=TIMESTAMP},
+      AIR_BRIDGE_END_TIME_1 = #{airBridgeEndTime1,jdbcType=TIMESTAMP},
+      AIR_BRIDGE_DURATION_1 = #{airBridgeDuration1,jdbcType=INTEGER},
+      POWER_SUPPLY_START_TIME_1 = #{powerSupplyStartTime1,jdbcType=TIMESTAMP},
+      POWER_SUPPLY_END_TIMR_1 = #{powerSupplyEndTimr1,jdbcType=TIMESTAMP},
+      POWER_SUPPLY_DURATION_1 = #{powerSupplyDuration1,jdbcType=INTEGER},
+      AIR_CONDITIONING_START_TIME_1 = #{airConditioningStartTime1,jdbcType=TIMESTAMP},
+      AIR_CONDITIONING_END_TIME_1 = #{airConditioningEndTime1,jdbcType=TIMESTAMP},
+      AIR_CONDITIONING_DURATION_1 = #{airConditioningDuration1,jdbcType=INTEGER},
+      AIR_BRIDGE_CD_2 = #{airBridgeCd2,jdbcType=VARCHAR},
+      AIR_BRIDGE_START_TIME_2 = #{airBridgeStartTime2,jdbcType=TIMESTAMP},
+      AIR_BRIDGE_END_TIME_2 = #{airBridgeEndTime2,jdbcType=TIMESTAMP},
+      AIR_BRIDGE_DURATION_2 = #{airBridgeDuration2,jdbcType=INTEGER},
+      POWER_SUPPLY_START_TIME_2 = #{powerSupplyStartTime2,jdbcType=TIMESTAMP},
+      POWER_SUPPLY_END_TIMR_2 = #{powerSupplyEndTimr2,jdbcType=TIMESTAMP},
+      POWER_SUPPLY_DURATION_2 = #{powerSupplyDuration2,jdbcType=INTEGER},
+      AIR_CONDITIONING_START_TIME_2 = #{airConditioningStartTime2,jdbcType=TIMESTAMP},
+      AIR_CONDITIONING_END_TIME_2 = #{airConditioningEndTime2,jdbcType=TIMESTAMP},
+      AIR_CONDITIONING_DURATION_2 = #{airConditioningDuration2,jdbcType=INTEGER},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

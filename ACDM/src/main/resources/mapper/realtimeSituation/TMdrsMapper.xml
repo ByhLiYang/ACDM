@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TMdrsMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TMdrs" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="IDENTIFICATION" property="identification" jdbcType="VARCHAR" />
+    <result column="AREA" property="area" jdbcType="VARCHAR" />
+    <result column="LEVEL" property="level" jdbcType="VARCHAR" />
+    <result column="PUBLISHTIME" property="publishtime" jdbcType="TIMESTAMP" />
+    <result column="EXPECTINFLUENCE" property="expectinfluence" jdbcType="VARCHAR" />
+    <result column="REASON" property="reason" jdbcType="VARCHAR" />
+    <result column="TIMESCOPE" property="timescope" jdbcType="VARCHAR" />
+    <result column="TIMESCOPE_START" property="timescopeStart" jdbcType="TIMESTAMP" />
+    <result column="TIMESCOPE_END" property="timescopeEnd" jdbcType="TIMESTAMP" />
+    <result column="ISDEL" property="isdel" jdbcType="INTEGER" />
+    <result column="STATUSS" property="statuss" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_USR" property="updateUsr" jdbcType="VARCHAR" />
+    <result column="CREATE_USR" property="createUsr" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, IDENTIFICATION, AREA, LEVEL, PUBLISHTIME, EXPECTINFLUENCE, REASON, TIMESCOPE, 
+    TIMESCOPE_START, TIMESCOPE_END, ISDEL, STATUSS, CREATE_TM, UPDATE_TM, UPDATE_USR, 
+    CREATE_USR
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TMdrsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_MDRS
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_MDRS
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_MDRS
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TMdrsExample" >
+    delete from T_MDRS
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TMdrs" >
+    insert into T_MDRS (ID, IDENTIFICATION, AREA, 
+      LEVEL, PUBLISHTIME, EXPECTINFLUENCE, 
+      REASON, TIMESCOPE, TIMESCOPE_START, 
+      TIMESCOPE_END, ISDEL, STATUSS, 
+      CREATE_TM, UPDATE_TM, UPDATE_USR, 
+      CREATE_USR)
+    values (#{id,jdbcType=VARCHAR}, #{identification,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
+      #{level,jdbcType=VARCHAR}, #{publishtime,jdbcType=TIMESTAMP}, #{expectinfluence,jdbcType=VARCHAR}, 
+      #{reason,jdbcType=VARCHAR}, #{timescope,jdbcType=VARCHAR}, #{timescopeStart,jdbcType=TIMESTAMP}, 
+      #{timescopeEnd,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER}, #{statuss,jdbcType=VARCHAR}, 
+      #{createTm,jdbcType=TIMESTAMP}, #{updateTm,jdbcType=TIMESTAMP}, #{updateUsr,jdbcType=VARCHAR}, 
+      #{createUsr,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TMdrs" >
+    insert into T_MDRS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="identification != null" >
+        IDENTIFICATION,
+      </if>
+      <if test="area != null" >
+        AREA,
+      </if>
+      <if test="level != null" >
+        LEVEL,
+      </if>
+      <if test="publishtime != null" >
+        PUBLISHTIME,
+      </if>
+      <if test="expectinfluence != null" >
+        EXPECTINFLUENCE,
+      </if>
+      <if test="reason != null" >
+        REASON,
+      </if>
+      <if test="timescope != null" >
+        TIMESCOPE,
+      </if>
+      <if test="timescopeStart != null" >
+        TIMESCOPE_START,
+      </if>
+      <if test="timescopeEnd != null" >
+        TIMESCOPE_END,
+      </if>
+      <if test="isdel != null" >
+        ISDEL,
+      </if>
+      <if test="statuss != null" >
+        STATUSS,
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM,
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM,
+      </if>
+      <if test="updateUsr != null" >
+        UPDATE_USR,
+      </if>
+      <if test="createUsr != null" >
+        CREATE_USR,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="identification != null" >
+        #{identification,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="publishtime != null" >
+        #{publishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expectinfluence != null" >
+        #{expectinfluence,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="timescope != null" >
+        #{timescope,jdbcType=VARCHAR},
+      </if>
+      <if test="timescopeStart != null" >
+        #{timescopeStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timescopeEnd != null" >
+        #{timescopeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdel != null" >
+        #{isdel,jdbcType=INTEGER},
+      </if>
+      <if test="statuss != null" >
+        #{statuss,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUsr != null" >
+        #{updateUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="createUsr != null" >
+        #{createUsr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TMdrsExample" resultType="java.lang.Integer" >
+    select count(*) from T_MDRS
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_MDRS
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.identification != null" >
+        IDENTIFICATION = #{record.identification,jdbcType=VARCHAR},
+      </if>
+      <if test="record.area != null" >
+        AREA = #{record.area,jdbcType=VARCHAR},
+      </if>
+      <if test="record.level != null" >
+        LEVEL = #{record.level,jdbcType=VARCHAR},
+      </if>
+      <if test="record.publishtime != null" >
+        PUBLISHTIME = #{record.publishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.expectinfluence != null" >
+        EXPECTINFLUENCE = #{record.expectinfluence,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reason != null" >
+        REASON = #{record.reason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.timescope != null" >
+        TIMESCOPE = #{record.timescope,jdbcType=VARCHAR},
+      </if>
+      <if test="record.timescopeStart != null" >
+        TIMESCOPE_START = #{record.timescopeStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.timescopeEnd != null" >
+        TIMESCOPE_END = #{record.timescopeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isdel != null" >
+        ISDEL = #{record.isdel,jdbcType=INTEGER},
+      </if>
+      <if test="record.statuss != null" >
+        STATUSS = #{record.statuss,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTm != null" >
+        CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTm != null" >
+        UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateUsr != null" >
+        UPDATE_USR = #{record.updateUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUsr != null" >
+        CREATE_USR = #{record.createUsr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_MDRS
+    set ID = #{record.id,jdbcType=VARCHAR},
+      IDENTIFICATION = #{record.identification,jdbcType=VARCHAR},
+      AREA = #{record.area,jdbcType=VARCHAR},
+      LEVEL = #{record.level,jdbcType=VARCHAR},
+      PUBLISHTIME = #{record.publishtime,jdbcType=TIMESTAMP},
+      EXPECTINFLUENCE = #{record.expectinfluence,jdbcType=VARCHAR},
+      REASON = #{record.reason,jdbcType=VARCHAR},
+      TIMESCOPE = #{record.timescope,jdbcType=VARCHAR},
+      TIMESCOPE_START = #{record.timescopeStart,jdbcType=TIMESTAMP},
+      TIMESCOPE_END = #{record.timescopeEnd,jdbcType=TIMESTAMP},
+      ISDEL = #{record.isdel,jdbcType=INTEGER},
+      STATUSS = #{record.statuss,jdbcType=VARCHAR},
+      CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      UPDATE_USR = #{record.updateUsr,jdbcType=VARCHAR},
+      CREATE_USR = #{record.createUsr,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TMdrs" >
+    update T_MDRS
+    <set >
+      <if test="identification != null" >
+        IDENTIFICATION = #{identification,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        AREA = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        LEVEL = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="publishtime != null" >
+        PUBLISHTIME = #{publishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expectinfluence != null" >
+        EXPECTINFLUENCE = #{expectinfluence,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        REASON = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="timescope != null" >
+        TIMESCOPE = #{timescope,jdbcType=VARCHAR},
+      </if>
+      <if test="timescopeStart != null" >
+        TIMESCOPE_START = #{timescopeStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timescopeEnd != null" >
+        TIMESCOPE_END = #{timescopeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdel != null" >
+        ISDEL = #{isdel,jdbcType=INTEGER},
+      </if>
+      <if test="statuss != null" >
+        STATUSS = #{statuss,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUsr != null" >
+        UPDATE_USR = #{updateUsr,jdbcType=VARCHAR},
+      </if>
+      <if test="createUsr != null" >
+        CREATE_USR = #{createUsr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TMdrs" >
+    update T_MDRS
+    set IDENTIFICATION = #{identification,jdbcType=VARCHAR},
+      AREA = #{area,jdbcType=VARCHAR},
+      LEVEL = #{level,jdbcType=VARCHAR},
+      PUBLISHTIME = #{publishtime,jdbcType=TIMESTAMP},
+      EXPECTINFLUENCE = #{expectinfluence,jdbcType=VARCHAR},
+      REASON = #{reason,jdbcType=VARCHAR},
+      TIMESCOPE = #{timescope,jdbcType=VARCHAR},
+      TIMESCOPE_START = #{timescopeStart,jdbcType=TIMESTAMP},
+      TIMESCOPE_END = #{timescopeEnd,jdbcType=TIMESTAMP},
+      ISDEL = #{isdel,jdbcType=INTEGER},
+      STATUSS = #{statuss,jdbcType=VARCHAR},
+      CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      UPDATE_USR = #{updateUsr,jdbcType=VARCHAR},
+      CREATE_USR = #{createUsr,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="findTMdrsInfo" resultType="String" parameterType="map" >
+    SELECT CONCAT(AREA,PUBLISHTIME,'发布：',DATE_FORMAT(TIMESCOPE_START, '%Y-%m-%d %H:%i'),'至',DATE_FORMAT(TIMESCOPE_END, '%Y-%m-%d %H:%i'),'：',REASON,'-',EXPECTINFLUENCE) MSG
+    FROM T_MDRS
+    WHERE DATE_FORMAT(PUBLISHTIME, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+    and TIMESCOPE_END>NOW()
+    <if test="params.content !=null and params.content != ''">
+      AND (AREA LIKE CONCAT('%',#{params.content,jdbcType=VARCHAR},'%')
+      OR REASON LIKE CONCAT('%',#{params.content,jdbcType=VARCHAR},'%')
+      OR EXPECTINFLUENCE LIKE CONCAT('%',#{params.content,jdbcType=VARCHAR},'%'))
+    </if>
+    ORDER BY PUBLISHTIME DESC
+  </select>
+
+
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TAirlineAbroadMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TAirlineAbroad" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="TWO_CHAR_CD" property="twoCharCd" jdbcType="VARCHAR" />
+    <result column="THREE_CHAR_CD" property="threeCharCd" jdbcType="VARCHAR" />
+    <result column="ATTRIBUTE" property="attribute" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, TWO_CHAR_CD, THREE_CHAR_CD, ATTRIBUTE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TAirlineAbroadExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_AIRLINE_ABROAD
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_AIRLINE_ABROAD
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_AIRLINE_ABROAD
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TAirlineAbroadExample" >
+    delete from T_AIRLINE_ABROAD
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TAirlineAbroad" >
+    insert into T_AIRLINE_ABROAD (ID, TWO_CHAR_CD, THREE_CHAR_CD, 
+      ATTRIBUTE)
+    values (#{id,jdbcType=VARCHAR}, #{twoCharCd,jdbcType=VARCHAR}, #{threeCharCd,jdbcType=VARCHAR}, 
+      #{attribute,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TAirlineAbroad" >
+    insert into T_AIRLINE_ABROAD
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="twoCharCd != null" >
+        TWO_CHAR_CD,
+      </if>
+      <if test="threeCharCd != null" >
+        THREE_CHAR_CD,
+      </if>
+      <if test="attribute != null" >
+        ATTRIBUTE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="twoCharCd != null" >
+        #{twoCharCd,jdbcType=VARCHAR},
+      </if>
+      <if test="threeCharCd != null" >
+        #{threeCharCd,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute != null" >
+        #{attribute,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TAirlineAbroadExample" resultType="java.lang.Integer" >
+    select count(*) from T_AIRLINE_ABROAD
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_AIRLINE_ABROAD
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.twoCharCd != null" >
+        TWO_CHAR_CD = #{record.twoCharCd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.threeCharCd != null" >
+        THREE_CHAR_CD = #{record.threeCharCd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attribute != null" >
+        ATTRIBUTE = #{record.attribute,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_AIRLINE_ABROAD
+    set ID = #{record.id,jdbcType=VARCHAR},
+      TWO_CHAR_CD = #{record.twoCharCd,jdbcType=VARCHAR},
+      THREE_CHAR_CD = #{record.threeCharCd,jdbcType=VARCHAR},
+      ATTRIBUTE = #{record.attribute,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TAirlineAbroad" >
+    update T_AIRLINE_ABROAD
+    <set >
+      <if test="twoCharCd != null" >
+        TWO_CHAR_CD = #{twoCharCd,jdbcType=VARCHAR},
+      </if>
+      <if test="threeCharCd != null" >
+        THREE_CHAR_CD = #{threeCharCd,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute != null" >
+        ATTRIBUTE = #{attribute,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TAirlineAbroad" >
+    update T_AIRLINE_ABROAD
+    set TWO_CHAR_CD = #{twoCharCd,jdbcType=VARCHAR},
+      THREE_CHAR_CD = #{threeCharCd,jdbcType=VARCHAR},
+      ATTRIBUTE = #{attribute,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.TomorrowPlanFlightNumMapper" >
+
+  <select id="queryA" resultType="com.hq.acdm.model.statistics.tomorrowPlanFlightNum.TomorrowPlanFlightNum">
+    select * from V_UTIL_DAILY_FLIGHT_A
+
+  </select>
+  <select id="queryD" resultType="com.hq.acdm.model.statistics.tomorrowPlanFlightNum.TomorrowPlanFlightNum">
+    select * from V_UTIL_DAILY_FLIGHT_D
+
+  </select>
+</mapper>

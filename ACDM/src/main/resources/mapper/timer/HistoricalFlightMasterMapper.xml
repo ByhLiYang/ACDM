@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.timer.Historical_Flight_Master.HistoricalFlightMasterMapper" >
+    <resultMap id="BaseResultMap" type="com.hq.acdm.model.timer.HistoricalFlightMaster.DailyFlightAddDetailsMore" >
+        <id column="FLIGHT_NO_IATA" property="flightNoIata" jdbcType="VARCHAR" />
+        <id column="OPERATIONAL_DATE" property="operationalDate" jdbcType="TIMESTAMP" />
+        <id column="A_OR_D" property="aOrD" jdbcType="VARCHAR" />
+        <id column="FLIGHT_REPEAT_COUNT" property="flightRepeatCount" jdbcType="VARCHAR" />
+        <result column="PREV_ETOT" property="prevEtot" jdbcType="TIMESTAMP" />
+        <result column="ACCT_1" property="acct1" jdbcType="TIMESTAMP" />
+        <result column="ACCT_2" property="acct2" jdbcType="TIMESTAMP" />
+        <result column="ACCT_3" property="acct3" jdbcType="TIMESTAMP" />
+        <result column="ACCT_4" property="acct4" jdbcType="TIMESTAMP" />
+        <result column="ACCT_5" property="acct5" jdbcType="TIMESTAMP" />
+        <result column="ACCT_6" property="acct6" jdbcType="TIMESTAMP" />
+        <result column="ACCT_7" property="acct7" jdbcType="TIMESTAMP" />
+        <result column="SHARE_FLIGHT_NO_1" property="shareFlightNo1" jdbcType="VARCHAR" />
+        <result column="SHARE_FLIGHT_RP_1" property="shareFlightRp1" jdbcType="DECIMAL" />
+        <result column="SHARE_FLIGHT_NO_2" property="shareFlightNo2" jdbcType="VARCHAR" />
+        <result column="SHARE_FLIGHT_RP_2" property="shareFlightRp2" jdbcType="DECIMAL" />
+        <result column="SHARE_FLIGHT_NO_3" property="shareFlightNo3" jdbcType="VARCHAR" />
+        <result column="SHARE_FLIGHT_RP_3" property="shareFlightRp3" jdbcType="DECIMAL" />
+        <result column="SHARE_FLIGHT_NO_4" property="shareFlightNo4" jdbcType="VARCHAR" />
+        <result column="SHARE_FLIGHT_RP_4" property="shareFlightRp4" jdbcType="DECIMAL" />
+        <result column="SHARE_FLIGHT_NO_5" property="shareFlightNo5" jdbcType="VARCHAR" />
+        <result column="SHARE_FLIGHT_RP_5" property="shareFlightRp5" jdbcType="DECIMAL" />
+        <result column="SHARE_FLIGHT_NO_6" property="shareFlightNo6" jdbcType="VARCHAR" />
+        <result column="SHARE_FLIGHT_RP_6" property="shareFlightRp6" jdbcType="DECIMAL" />
+        <result column="NXT_ALDT" property="nxtAldt" jdbcType="TIMESTAMP" />
+        <result column="NXT_ELDT" property="nxtEldt" jdbcType="TIMESTAMP" />
+        <result column="AWMD" property="awmd" jdbcType="TIMESTAMP" />
+        <result column="AAND" property="aand" jdbcType="TIMESTAMP" />
+        <result column="AIBEGI" property="aibegi" jdbcType="TIMESTAMP" />
+        <result column="ADUMET" property="adumet" jdbcType="TIMESTAMP" />
+        <result column="T_TOBT" property="tTobt" jdbcType="TIMESTAMP" />
+        <result column="C_TOBT" property="cTobt" jdbcType="TIMESTAMP" />
+        <result column="GATE_1_OPENDATETIME_4" property="gate1Opendatetime4" jdbcType="TIMESTAMP" />
+        <result column="GATE_1_CLOSEDATETIME_4" property="gate1Closedatetime4" jdbcType="TIMESTAMP" />
+        <result column="ASRT_2" property="asrt2" jdbcType="TIMESTAMP" />
+        <result column="ASAT_2" property="asat2" jdbcType="TIMESTAMP" />
+        <result column="AXIT_2" property="axit2" jdbcType="TIMESTAMP" />
+        <result column="AXOT_2" property="axot2" jdbcType="TIMESTAMP" />
+        <result column="CTRLREASON" property="ctrlreason" jdbcType="VARCHAR" />
+        <result column="PREFLNO" property="preflno" jdbcType="VARCHAR" />
+    </resultMap>
+  <select id="countDFM"  resultType="com.hq.acdm.model.timer.HistoricalFlightMaster.DailyFlightMaster">
+      select count(*) as countNumber from DAILY_FLIGHT_MASTER where operational_date &lt; (SYSDATE-5)
+  </select>
+  <select id="queryLatestRWY" resultType="com.hq.acdm.model.timer.HistoricalFlightMaster.DailyFlightMaster">
+SELECT
+	*
+FROM
+	DAILY_FLIGHT_MASTER
+WHERE
+	rwy IS NOT NULL
+	AND ( a_or_d = 'A' OR a_or_d = 'D' )
+	AND eldt = (
+SELECT
+	max( eldt )
+FROM
+	DAILY_FLIGHT_MASTER
+WHERE
+	eldt IS NOT NULL
+	AND rwy IS NOT NULL
+	AND ( a_or_d = 'A' OR a_or_d = 'D' )
+	AND to_char ( eldt, 'YYYY-MM-DD' ) = to_char ( SYSDATE, 'YYYY-MM-DD' )
+	)
+
+  </select>
+  <select id="queryDFM"  resultType="com.hq.acdm.model.timer.HistoricalFlightMaster.DailyFlightMaster">
+      select * from DAILY_FLIGHT_MASTER where operational_date &lt; (SYSDATE-5)
+  </select>
+  <insert id="insertHistoricalFlightMaster" parameterType="com.hq.acdm.model.timer.HistoricalFlightMaster.DailyFlightMaster" useGeneratedKeys="false">
+    INSERT INTO HISTORICAL_FLIGHT_MASTER
+      (ARN,
+      TYPE,
+      OPERATIONAL_DATE,
+      FLIGHT_NO_IATA,
+      FLIGHT_NO_ICAO,
+      AIRLINE_CODE_IATA,
+      AIRLINE_CODE_ICAO,
+      ORIGIN_AIRPORT_IATA,
+      ORIGIN_AIRPORT_ICAO,
+      DEST_AIRPORT_IATA,
+      DEST_AIRPORT_ICAO,
+      PREV_FLIGHT_NO_IATA,
+      PREV_FLIGHT_NO_ICAO,
+      NXT_FLIGHT_NO_IATA,
+      NXT_FLIGHT_NO_ICAO,
+      STAND,
+      GATE_1,
+      GATE_2,
+      GATE_3,
+      RWY,
+      BELT_1,
+      BELT_2,
+      BELT_3,
+      COUNTERS,
+      TAXIWAY,
+      DEICING_GATE,
+      A_OR_D,
+      D_OR_I,
+      MILESTONE_STATUS,
+      DELAY_STATUS,
+      CURRENT_DELAY_CODE,
+      ATMO,
+      FADT,
+      ATOT,
+      SLDT,
+      ELDT,
+      ALDT,
+      SIBT,
+      EIBT,
+      AIBT,
+      EXIT,
+      AXIT,
+      SCGT,
+      ECGT,
+      ACGT,
+      AEGT,
+      MTTT,
+      ETTT,
+      STTT,
+      AGHT,
+      SSBT,
+      ESBT,
+      ASBT,
+      SRDT,
+      ERDT,
+      ARDT,
+      ESRT,
+      ASRT,
+      SSAT,
+      ESAT,
+      TSAT,
+      ASAT,
+      SOBT,
+      EOBT,
+      TOBT,
+      AOBT,
+      EXOT,
+      AXOT,
+      ERZT,
+      SCZT,
+      ECZT,
+      ACZT,
+      SEZT,
+      EEZT,
+      AEZT,
+      ADIT,
+      STOT,
+      ETOT,
+      TTOT,
+      EET,
+      FLIGHT_REPEAT_COUNT)
+      VALUES (
+      #{params.arn, jdbcType=VARCHAR},
+
+      #{params.type, jdbcType=VARCHAR},
+
+      #{params.operational_date, jdbcType=DATE},
+
+      #{params.flight_no_iata, jdbcType=VARCHAR},
+
+      #{params.flight_no_icao , jdbcType=VARCHAR},
+
+      #{params.airline_code_iata, jdbcType=VARCHAR},
+
+      #{params.airline_code_icao, jdbcType=VARCHAR},
+
+      #{params.origin_airport_iata, jdbcType=VARCHAR},
+
+      #{params.origin_airport_icao, jdbcType=VARCHAR},
+
+      #{params.dest_airport_iata, jdbcType=VARCHAR},
+
+      #{params.dest_airport_icao, jdbcType=VARCHAR},
+
+      #{params.prev_flight_no_iata, jdbcType=VARCHAR},
+
+      #{params.prev_flight_no_icao, jdbcType=VARCHAR},
+
+      #{params.nxt_flight_no_iata, jdbcType=VARCHAR},
+
+      #{params.nxt_flight_no_icao, jdbcType=VARCHAR},
+
+      #{params.stand, jdbcType=VARCHAR},
+
+      #{params.gate1, jdbcType=VARCHAR},
+
+      #{params.gate2, jdbcType=VARCHAR},
+
+      #{params.gate3, jdbcType=VARCHAR},
+
+      #{params.rwy, jdbcType=VARCHAR},
+
+      #{params.belt1, jdbcType=VARCHAR},
+
+      #{params.belt2, jdbcType=VARCHAR},
+
+      #{params.belt3, jdbcType=VARCHAR},
+
+      #{params.counters, jdbcType=VARCHAR},
+
+      #{params.taxiway, jdbcType=VARCHAR},
+
+      #{params.deicing_gate, jdbcType=VARCHAR},
+
+      #{params.a_or_d, jdbcType=VARCHAR},
+
+      #{params.d_or_i, jdbcType=VARCHAR},
+
+      #{params.milestone_status, jdbcType=VARCHAR},
+
+      #{params.delay_status, jdbcType=VARCHAR},
+
+      #{params.current_delay_code, jdbcType=VARCHAR},
+
+      #{params.atmo, jdbcType=DATE},
+
+      #{params.fadt, jdbcType=DATE},
+
+      #{params.atot, jdbcType=DATE},
+
+      #{params.sldt, jdbcType=DATE},
+
+      #{params.eldt, jdbcType=DATE},
+
+      #{params.aldt, jdbcType=DATE},
+
+      #{params.sibt, jdbcType=DATE},
+
+      #{params.eibt, jdbcType=DATE},
+
+      #{params.aibt, jdbcType=DATE},
+
+      #{params.exit, jdbcType=DECIMAL},
+
+      #{params.axit, jdbcType=DECIMAL},
+
+      #{params.scgt, jdbcType=DATE},
+
+      #{params.ecgt, jdbcType=DATE},
+
+      #{params.acgt, jdbcType=DATE},
+
+      #{params.aegt, jdbcType=DATE},
+
+      #{params.mttt, jdbcType=DECIMAL},
+
+      #{params.ettt, jdbcType=DECIMAL},
+
+      #{params.sttt, jdbcType=DECIMAL},
+
+      #{params.aght, jdbcType=DECIMAL},
+
+      #{params.ssbt, jdbcType=DATE},
+
+      #{params.esbt, jdbcType=DATE},
+
+      #{params.asbt, jdbcType=DATE},
+
+      #{params.srdt, jdbcType=DATE},
+
+      #{params.erdt, jdbcType=DATE},
+
+      #{params.ardt, jdbcType=DATE},
+
+      #{params.esrt, jdbcType=DATE},
+
+      #{params.asrt, jdbcType=DATE},
+
+      #{params.ssat, jdbcType=DATE},
+
+      #{params.esat, jdbcType=DATE},
+
+      #{params.tsat, jdbcType=DATE},
+
+      #{params.asat, jdbcType=DATE},
+
+      #{params.sobt, jdbcType=DATE},
+
+      #{params.eobt, jdbcType=DATE},
+
+      #{params.tobt, jdbcType=DATE},
+
+      #{params.aobt, jdbcType=DATE},
+
+      #{params.exot, jdbcType=DECIMAL},
+
+      #{params.axot, jdbcType=DECIMAL},
+
+      #{params.erzt, jdbcType=DATE},
+
+      #{params.sczt, jdbcType=DATE},
+
+      #{params.eczt, jdbcType=DATE},
+
+      #{params.aczt, jdbcType=DATE},
+
+      #{params.sezt, jdbcType=DATE},
+
+      #{params.eezt, jdbcType=DATE},
+
+      #{params.aezt, jdbcType=DATE},
+
+      #{params.adit, jdbcType=DECIMAL},
+
+      #{params.stot, jdbcType=DATE},
+
+      #{params.etot, jdbcType=DATE},
+
+      #{params.ttot, jdbcType=DATE},
+
+      #{params.eet, jdbcType=VARCHAR},
+
+      #{params.flight_repeat_count, jdbcType=VARCHAR}
+      )
+    
+  </insert>
+<delete id="deleteHistorical" parameterType="map">
+  delete from HISTORICAL_FLIGHT_MASTER WHERE
+    1=1
+  <if test="params.operational_date!=null and params.operational_date!=''">
+    AND to_char(operational_date,'YYYY-MM-DD') = #{params.operational_date}
+  </if>
+  <if test="params.flight_no_iata!=null and params.flight_no_iata!=''">
+    AND flight_no_iata = #{params.flight_no_iata}
+  </if>
+  <if test="params.a_or_d!=null and params.a_or_d!=''">
+    AND a_or_d = #{params.a_or_d}
+  </if>
+  <if test="params.flight_repeat_count!=null and params.flight_repeat_count!=''">
+    AND flight_repeat_count = #{params.flight_repeat_count}
+  </if>
+</delete>
+  <delete id="deleteDFM" parameterType="map">
+    delete from DAILY_FLIGHT_MASTER WHERE
+    1=1
+    <if test="params.operational_date!=null and params.operational_date!=''">
+      AND to_char(operational_date,'YYYY-MM-DD') = #{params.operational_date}
+    </if>
+    <if test="params.flight_no_iata!=null and params.flight_no_iata!=''">
+      AND flight_no_iata = #{params.flight_no_iata}
+    </if>
+    <if test="params.a_or_d!=null and params.a_or_d!=''">
+      AND a_or_d = #{params.a_or_d}
+    </if>
+    <if test="params.flight_repeat_count!=null and params.flight_repeat_count!=''">
+      AND flight_repeat_count = #{params.flight_repeat_count}
+    </if>
+  </delete>
+  <select id="queryByCondition" parameterType="map" resultType="com.hq.acdm.model.timer.HistoricalFlightMaster.DailyFlightMaster">
+    select count(*) as countNumber from HISTORICAL_FLIGHT_MASTER WHERE
+    1=1
+    <if test="params.operational_date!=null and params.operational_date!=''">
+    AND to_char(operational_date,'YYYY-MM-DD') = #{params.operational_date}
+    </if>
+    <if test="params.flight_no_iata!=null and params.flight_no_iata!=''">
+    AND flight_no_iata = #{params.flight_no_iata}
+    </if>
+    <if test="params.a_or_d!=null and params.a_or_d!=''">
+    AND a_or_d = #{params.a_or_d}
+    </if>
+    <if test="params.flight_repeat_count!=null and params.flight_repeat_count!=''">
+    AND flight_repeat_count = #{params.flight_repeat_count}
+    </if>
+  </select>
+  <select id="countDFAD" resultType="com.hq.acdm.model.timer.HistoricalFlightMaster.DailyFlightAddDetails">
+    SELECT count(*) as countNumber from DAILY_FLIGHT_ADD_DETAILS where operational_date &lt; (SYSDATE-5)
+  </select>
+  <select id="queryDFAD" resultType="com.hq.acdm.model.timer.HistoricalFlightMaster.DailyFlightAddDetails">
+    SELECT * from DAILY_FLIGHT_ADD_DETAILS where operational_date &lt; (SYSDATE-5)
+  </select>
+  <delete id="deleteHFAD" parameterType="map">
+    delete from HISTORICAL_FLIGHT_ADD_DETAILS
+    WHERE
+    1=1
+    <if test="params.operational_date!=null and params.operational_date!=''">
+      AND to_char(operational_date,'YYYY-MM-DD') = #{params.operational_date}
+    </if>
+    <if test="params.flight_no_iata!=null and params.flight_no_iata!=''">
+      AND flight_no_iata = #{params.flight_no_iata}
+    </if>
+    <if test="params.a_or_d!=null and params.a_or_d!=''">
+      AND a_or_d = #{params.a_or_d}
+    </if>
+    <if test="params.flight_repeat_count!=null and params.flight_repeat_count!=''">
+      AND flight_repeat_count = #{params.flight_repeat_count}
+    </if>
+  </delete>
+    <select id="queryHFADByCondition" parameterType="map" resultType="com.hq.acdm.model.timer.HistoricalFlightMaster.DailyFlightAddDetails">
+        SELECT count(*) as countNumber from HISTORICAL_FLIGHT_ADD_DETAILS
+        WHERE
+        1=1
+        <if test="params.operational_date!=null and params.operational_date!=''">
+            AND to_char(operational_date,'YYYY-MM-DD') = #{params.operational_date}
+        </if>
+        <if test="params.flight_no_iata!=null and params.flight_no_iata!=''">
+            AND flight_no_iata = #{params.flight_no_iata}
+        </if>
+        <if test="params.a_or_d!=null and params.a_or_d!=''">
+            AND a_or_d = #{params.a_or_d}
+        </if>
+        <if test="params.flight_repeat_count!=null and params.flight_repeat_count!=''">
+            AND flight_repeat_count = #{params.flight_repeat_count}
+        </if>
+    </select>
+  <insert id="insertDFAM" parameterType="map" useGeneratedKeys="false">
+    insert into HISTORICAL_FLIGHT_ADD_DETAILS select * from DAILY_FLIGHT_ADD_DETAILS
+    where
+    1=1
+    <if test="params.operational_date!=null and params.operational_date!=''">
+      AND to_char(operational_date,'YYYY-MM-DD') = #{params.operational_date}
+    </if>
+    <if test="params.flight_no_iata!=null and params.flight_no_iata!=''">
+      AND flight_no_iata = #{params.flight_no_iata}
+    </if>
+    <if test="params.a_or_d!=null and params.a_or_d!=''">
+      AND a_or_d = #{params.a_or_d}
+    </if>
+    <if test="params.flight_repeat_count!=null and params.flight_repeat_count!=''">
+      AND flight_repeat_count = #{params.flight_repeat_count}
+    </if>
+  </insert>
+  <delete id="deleteDFAD" parameterType="map">
+     delete from DAILY_FLIGHT_ADD_DETAILS
+    where
+    1=1
+    <if test="params.operational_date!=null and params.operational_date!=''">
+      AND to_char(operational_date,'YYYY-MM-DD') = #{params.operational_date}
+    </if>
+    <if test="params.flight_no_iata!=null and params.flight_no_iata!=''">
+      AND flight_no_iata = #{params.flight_no_iata}
+    </if>
+    <if test="params.a_or_d!=null and params.a_or_d!=''">
+      AND a_or_d = #{params.a_or_d}
+    </if>
+    <if test="params.flight_repeat_count!=null and params.flight_repeat_count!=''">
+      AND flight_repeat_count = #{params.flight_repeat_count}
+    </if>
+  </delete>
+  <select id="countDFADM" resultType="com.hq.acdm.model.timer.HistoricalFlightMaster.DailyFlightAddDetailsMore">
+    select count(*) as countNumber from DAILY_FLIGHT_ADD_DETAILS_MORE
+    where
+    operational_date &lt;(SYSDATE-5)
+  </select>
+  <select id="queryDFADM" resultMap="BaseResultMap">
+    select * from DAILY_FLIGHT_ADD_DETAILS_MORE where operational_date &lt;(SYSDATE-5)
+  </select>
+  <delete id="deleteHFADM" parameterType="map">
+    delete from HI_FLIGHT_ADD_DETAILS_MORE
+    where
+    1=1
+    <if test="params.operational_date!=null and params.operational_date!=''">
+      AND to_char(operational_date,'YYYY-MM-DD') = #{params.operational_date}
+    </if>
+    <if test="params.flight_no_iata!=null and params.flight_no_iata!=''">
+      AND flight_no_iata = #{params.flight_no_iata}
+    </if>
+    <if test="params.a_or_d!=null and params.a_or_d!=''">
+      AND a_or_d = #{params.a_or_d}
+    </if>
+    <if test="params.flight_repeat_count!=null and params.flight_repeat_count!=''">
+      AND flight_repeat_count = #{params.flight_repeat_count}
+    </if>
+  </delete>
+    <select id="queryHFADMByCondition" parameterType="map" resultType="com.hq.acdm.model.timer.HistoricalFlightMaster.DailyFlightAddDetailsMore">
+        SELECT count(*) as countNumber from HI_FLIGHT_ADD_DETAILS_MORE
+        where
+        1=1
+        <if test="params.operational_date!=null and params.operational_date!=''">
+            AND to_char(operational_date,'YYYY-MM-DD') = #{params.operational_date}
+        </if>
+        <if test="params.flight_no_iata!=null and params.flight_no_iata!=''">
+            AND flight_no_iata = #{params.flight_no_iata}
+        </if>
+        <if test="params.a_or_d!=null and params.a_or_d!=''">
+            AND a_or_d = #{params.a_or_d}
+        </if>
+        <if test="params.flight_repeat_count!=null and params.flight_repeat_count!=''">
+            AND flight_repeat_count = #{params.flight_repeat_count}
+        </if>
+    </select>
+  <insert id="insertHFADM" parameterType="map" useGeneratedKeys="false">
+    insert into HI_FLIGHT_ADD_DETAILS_MORE select * from DAILY_FLIGHT_ADD_DETAILS_MORE
+    where
+    1=1
+    <if test="params.operational_date!=null and params.operational_date!=''">
+      AND to_char(operational_date,'YYYY-MM-DD') = #{params.operational_date}
+    </if>
+    <if test="params.flight_no_iata!=null and params.flight_no_iata!=''">
+      AND flight_no_iata = #{params.flight_no_iata}
+    </if>
+    <if test="params.a_or_d!=null and params.a_or_d!=''">
+      AND a_or_d = #{params.a_or_d}
+    </if>
+    <if test="params.flight_repeat_count!=null and params.flight_repeat_count!=''">
+      AND flight_repeat_count = #{params.flight_repeat_count}
+    </if>
+  </insert>
+  <delete id="deleteDFADM" parameterType="map">
+    delete from DAILY_FLIGHT_ADD_DETAILS_MORE
+    where
+    1=1
+    <if test="params.operational_date!=null and params.operational_date!=''">
+      AND to_char(operational_date,'YYYY-MM-DD') = #{params.operational_date}
+    </if>
+    <if test="params.flight_no_iata!=null and params.flight_no_iata!=''">
+      AND flight_no_iata = #{params.flight_no_iata}
+    </if>
+    <if test="params.a_or_d!=null and params.a_or_d!=''">
+      AND a_or_d = #{params.a_or_d}
+    </if>
+    <if test="params.flight_repeat_count!=null and params.flight_repeat_count!=''">
+      AND flight_repeat_count = #{params.flight_repeat_count}
+    </if>
+  </delete>
+</mapper>

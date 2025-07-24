@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.effectAnalysis.DelayedAnlssMapper" >
+  <resultMap id="ResultMap" type="com.hq.acdm.vo.effectAnalysis.DelayedAnlssVo" >
+    <result column="FLIGHT_ID_D" property="flightIdD" jdbcType="VARCHAR" />
+    <result column="FLIGHT_ID_A" property="flightIdA" jdbcType="VARCHAR" />
+    <result column="AIRLINES" property="airlines" jdbcType="VARCHAR" />
+    <result column="CRAFT_TYPE_ICAO" property="craftTypeIcao" jdbcType="VARCHAR" />
+    <result column="CHINESE_NAME" property="chineseName" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="SIBT" property="sibt" jdbcType="VARCHAR" />
+    <result column="FLIGHT_TASK_A" property="flightTaskA" jdbcType="VARCHAR" />
+    <result column="FLIGHT_TASK_D" property="flightTaskD" jdbcType="VARCHAR" />
+    <result column="FLNOA" property="flnoA" jdbcType="VARCHAR" />
+    <result column="FLNOD" property="flnoD" jdbcType="VARCHAR" />
+
+    <result column="REGN" property="regn" jdbcType="VARCHAR" />
+    <result column="ALDT" property="aldt" jdbcType="VARCHAR" />
+    <result column="STAND" property="stand" jdbcType="VARCHAR" />
+    <result column="STDC" property="stdc" jdbcType="VARCHAR" />
+    <result column="ATDC" property="atdc" jdbcType="VARCHAR" />
+    <result column="ATOT" property="atot" jdbcType="VARCHAR" />
+    <result column="DELAY_TIME" property="delayTime" jdbcType="VARCHAR" />
+    <result column="cato" property="cato" jdbcType="VARCHAR" />
+    <result column="REASON_FC" property="reasonFc" jdbcType="VARCHAR" />
+    <result column="REASON_TYPE" property="reasonType" jdbcType="VARCHAR" />
+    <result column="REASONS_FOR_DELAY" property="reasonsForDelay" jdbcType="VARCHAR" />
+    <result column="isBefore" property="isBefore" jdbcType="VARCHAR" />
+    <result column="isLate" property="isLate" jdbcType="VARCHAR" />
+    <result column="isDelay" property="isDelay" jdbcType="VARCHAR" />
+    <result column="plan_t_time" property="planTTime" jdbcType="VARCHAR" />
+    <result column="VCHAR_1" property="rmk" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectDelayedAnlssByDate" resultMap="ResultMap" parameterType="map"  statementType="STATEMENT">
+    select    D.AIRLINES,A.FLIGHT_TASK AS FLIGHT_TASK_A,A.FLNO as FLNOA, D.REGN,D.CRAFT_TYPE_ICAO,CONCAT_WS('-',B.CHINESE_NAME,C.CHINESE_NAME,
+    E.CHINESE_NAME) AS CHINESE_NAME,A.SIBT,A.ALDT,D.STAND,
+    D.FLIGHT_TASK AS FLIGHT_TASK_D,D.FLNO as FLNOD,D.STDC,D.ATDC,D.VCHAR_1,
+    D.SOBT,D.ATOT,CAST(D.DELAY_TIME as signed)-CAST(IFNULL(A.DELAY_TIME,0) as signed) as DELAY_TIME,
+    TIMESTAMPDIFF(MINUTE,D.ATDC,D.ATOT) as cato,D.REASON_FC,D.REASON_TYPE,D.REASONS_FOR_DELAY REASONS_FOR_DELAY,
+    IFNULL(D.ATDC <![CDATA[>]]> D.STDC,0) as isBefore,IFNULL(D.ATDC <![CDATA[<]]> D.STDC,0)   as isLate,CONCAT(TIMEDIFF(D.SOBT,IFNULL(A.SIBT,D.SOBT)),'') as plan_t_time,1 as isDelay
+    ,A.FLIGHT_ID AS FLIGHT_ID_A,D.FLIGHT_ID AS FLIGHT_ID_D
+    from T_LOCAL_FLIGHT_INFO D
+    LEFT JOIN
+    T_LOCAL_FLIGHT_INFO A
+    ON D.ASSOCIATED_FLIGHT_ID=A.FLIGHT_ID
+    LEFT JOIN
+    T_AIRPORT B
+    ON A.ADEP=B.AIRPORT_IATA
+    LEFT JOIN
+    T_AIRPORT C
+    ON D.ADEP=C.AIRPORT_IATA
+    LEFT JOIN
+    T_AIRPORT E
+    ON D.ADES=E.AIRPORT_IATA
+    LEFT JOIN
+    T_ABNORMAL_REASON EE
+    ON D.REASONS_FOR_DELAY=EE.`CODE`
+    WHERE D.D_OR_A='D'
+    and D.ABNORMAL_FLIGHT_STAT_CD!='CAN'  AND D.ISDEL!='1'
+    AND ( (D.ASSOCIATED_FLIGHT_ID IS NULL AND D.DELAY_TIME >0)OR (D.ASSOCIATED_FLIGHT_ID IS NOT NULL AND CAST(D.DELAY_TIME as signed)-CAST(A.DELAY_TIME as signed) >0))
+    <choose>
+      <when test="params.execDate != null  and params.execDate != ''">
+        AND STR_TO_DATE(D.EXEC_DATE,'%Y-%m-%d') = ${params.execDate}
+      </when>
+    </choose>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND D.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND D.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND D.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND D.AIRLINES IN ('UW','O3','CF','OZ','Y8','GI')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND D.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','GI','XX')
+    </if>
+  </select>
+  <select id="selectDelayedAnlssByDateHistory" resultMap="ResultMap" parameterType="map"  statementType="STATEMENT">
+    select    D.AIRLINES,A.FLIGHT_TASK AS FLIGHT_TASK_A,A.FLNO as FLNOA, D.REGN,D.CRAFT_TYPE_ICAO,CONCAT_WS('-',B.CHINESE_NAME,C.CHINESE_NAME,
+    E.CHINESE_NAME) AS CHINESE_NAME,A.SIBT,A.ALDT,D.STAND,
+    D.FLIGHT_TASK AS FLIGHT_TASK_D,D.FLNO as FLNOD,D.STDC,D.ATDC,D.VCHAR_1,
+    D.SOBT,D.ATOT,CAST(D.DELAY_TIME as signed)-CAST(IFNULL(A.DELAY_TIME,0) as signed) as DELAY_TIME,
+    TIMESTAMPDIFF(MINUTE,D.ATDC,D.ATOT) as cato,D.REASON_FC,D.REASON_TYPE,D.REASONS_FOR_DELAY REASONS_FOR_DELAY,
+    IFNULL(D.ATDC <![CDATA[>]]> D.STDC,0) as isBefore,IFNULL(D.ATDC <![CDATA[<]]> D.STDC,0)   as isLate,CONCAT(TIMEDIFF(D.SOBT,IFNULL(A.SIBT,D.SOBT)),'') as plan_t_time,1 as isDelay
+    ,A.FLIGHT_ID AS FLIGHT_ID_A,D.FLIGHT_ID AS FLIGHT_ID_D
+    from T_LOCAL_FLIGHT_INFO_HISTORY D
+    LEFT JOIN
+    T_LOCAL_FLIGHT_INFO_HISTORY A
+    ON D.ASSOCIATED_FLIGHT_ID=A.FLIGHT_ID
+    LEFT JOIN
+    T_AIRPORT B
+    ON A.ADEP=B.AIRPORT_IATA
+    LEFT JOIN
+    T_AIRPORT C
+    ON D.ADEP=C.AIRPORT_IATA
+    LEFT JOIN
+    T_AIRPORT E
+    ON D.ADES=E.AIRPORT_IATA
+
+    WHERE D.D_OR_A='D'
+    and D.ABNORMAL_FLIGHT_STAT_CD!='CAN' AND D.ISDEL!='1'
+    AND  ( (D.ASSOCIATED_FLIGHT_ID IS NULL AND D.DELAY_TIME >0)OR (D.ASSOCIATED_FLIGHT_ID IS NOT NULL AND CAST(D.DELAY_TIME as signed)-CAST(A.DELAY_TIME as signed) >0))
+    <choose>
+      <when test="params.execDate != null  and params.execDate != ''">
+        AND STR_TO_DATE(D.EXEC_DATE,'%Y-%m-%d') = ${params.execDate}
+      </when>
+    </choose>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND D.AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND D.AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND D.AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND D.AIRLINES IN ('UW','O3','CF','OZ','Y8','GI')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND D.AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','GI','XX')
+    </if>
+  </select>
+  <update id="updateReason" parameterType="com.hq.acdm.vo.effectAnalysis.DelayedAnlssVo" >
+    UPDATE T_LOCAL_FLIGHT_INFO a SET
+     a.REASON_FC=#{reasonFc,jdbcType=VARCHAR},
+     a.REASON_TYPE=#{reasonType,jdbcType=VARCHAR},
+     a.REASONS_FOR_DELAY=#{reasonsForDelay,jdbcType=VARCHAR},
+     a.VCHAR_1=#{rmk,jdbcType=VARCHAR}
+    WHERE a.FLIGHT_ID = #{flightIdD,jdbcType=VARCHAR}
+
+
+  </update>
+
+  <resultMap id="ResultReasonMap" type="com.hq.acdm.vo.effectAnalysis.DelayReasonVo" >
+    <result column="FCODE" property="fcode" jdbcType="VARCHAR" />
+    <result column="SCODE" property="scode" jdbcType="VARCHAR" />
+    <result column="CHINESE_NAME" property="chineseName" jdbcType="VARCHAR" />
+
+    <result column="IS_SUPER" property="isSuper" jdbcType="VARCHAR" />
+
+  </resultMap>
+  <select id="selectDelayedReason" resultMap="ResultReasonMap" parameterType="map"  >
+   SELECT SUPER_CODE FCODE,`CODE` SCODE,CHINESE_NAME ,IS_SUPER from T_ABNORMAL_REASON
+   ORDER BY `CODE`
+  </select>
+
+  <resultMap id="ResultReasonMapForCtot" type="com.hq.acdm.vo.effectAnalysis.TAtcDelayStatistics" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="FLIGHT_ID" property="flightId" jdbcType="VARCHAR" />
+    <result column="AIRLINES" property="airlines" jdbcType="VARCHAR" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="FLNO3" property="flno3" jdbcType="VARCHAR" />
+    <result column="D_OR_A" property="dOrA" jdbcType="VARCHAR" />
+    <result column="EXEC_DATE" property="execDate" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="FXLJ" property="fxlj" jdbcType="VARCHAR" />
+    <result column="ATOT" property="atot" jdbcType="VARCHAR" />
+    <result column="DELAY_TIME" property="delayTime" jdbcType="VARCHAR" />
+    <result column="REASONS_FOR_DELAY" property="reasonsForDelay" jdbcType="VARCHAR" />
+    <result column="ADES" property="ades" jdbcType="VARCHAR" />
+    <result column="CHINESE_NAME" property="chineseName" jdbcType="VARCHAR" />
+    <result column="RMK" property="rmk" jdbcType="VARCHAR" />
+    <result column="CREATE_USR" property="createUsr" jdbcType="VARCHAR" />
+    <result column="UPDATE_USR" property="updateUsr" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="VARCHAR" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="VARCHAR" />
+
+  </resultMap>
+  <select id="selectDelayedReasonforCTOT" resultMap="ResultReasonMapForCtot" parameterType="map"  >
+   SELECT ID, FLIGHT_ID, AIRLINES, FLNO, FLNO3, D_OR_A, EXEC_DATE, SOBT, FXLJ, ATOT, DELAY_TIME,
+    REASONS_FOR_DELAY, ADES, CHINESE_NAME, RMK, CREATE_USR, UPDATE_USR, CREATE_TM, UPDATE_TM from T_ATC_DELAY_STATISTICS
+    WHERE 1=1
+    <if test="params.startDate != null  and params.startDate != '' and params.endDate != null  and params.endDate != ''">
+      AND EXEC_DATE  BETWEEN  #{params.startDate} and  #{params.endDate}
+    </if>
+    <if test="params.agent !=null and params.agent == 'GH'">
+      AND AIRLINES IN ('CA','ZH')
+    </if>
+    <if test="params.agent !=null and params.agent == 'NH'">
+      AND AIRLINES IN ('CZ','OQ')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DH'">
+      AND AIRLINES IN ('FM','MU')
+    </if>
+    <if test="params.agent !=null and params.agent == 'HY'">
+      AND AIRLINES IN ('UW','O3','CF','OZ','Y8','GI')
+    </if>
+    <if test="params.agent !=null and params.agent == 'DF'">
+      AND AIRLINES NOT IN ('CA','ZH','CZ','OQ','FM','MU','UW','O3','CF','OZ','Y8','GI','XX')
+    </if>
+   ORDER BY SOBT
+  </select>
+
+  <update id="updateATCReason" parameterType="com.hq.acdm.vo.effectAnalysis.TAtcDelayStatistics" >
+    UPDATE T_ATC_DELAY_STATISTICS a SET
+     a.UPDATE_TM=NOW(),
+     a.REASONS_FOR_DELAY=#{reasonsForDelay,jdbcType=VARCHAR}
+    WHERE a.FLIGHT_ID = #{flightId,jdbcType=VARCHAR}
+
+
+  </update>
+</mapper>

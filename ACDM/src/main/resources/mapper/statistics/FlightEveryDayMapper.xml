@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.statistics.FlightEveryDayMapper" >
+    <select id="queryByDate" parameterType="map" resultType="com.hq.acdm.model.statistics.flightEveryDay.FlightEveryDayModel">
+        SELECT
+        AA.FLIGHT_NO_IATA_A,
+        AA.ORIGIN_AIRPORT_IATA,
+        AA.AIRPORT_VIA_IATA_A,
+        AA.SOBT as SOBT_A,
+        AA.PRE_ATOT,
+        AA.SIBT,
+        AA.ALDT,
+        AA.STAND_A,
+        AA.ARN as ARN_A,
+        AA.TYPE as TYPE_A,
+        AA.FLIGHT_CLASS_CODE as FLIGHT_CLASS_CODE_A,
+        AA.FLIGHT_SECTOR_CODE as FLIGHT_SECTOR_CODE_A,
+        AA.OPERATION_TYPE_CODE_1 as OPERATION_TYPE_CODE_1_A,
+        AA.AIBT,
+        AA.ISSTRICTCTRL as ISSTRICTCTRL_A,
+        AA.CTRLCONTENT as CTRLCONTENT_A,
+        AA.CTRLPOINT as CTRLPOINT_A,
+        AA.CTRLREASON as CTRLREASON_A,
+        AA.RWY as RWY_A,
+        BB.FLIGHT_NO_IATA_D,
+        BB.AIRPORT_VIA_IATA_D,
+        BB.DEST_AIRPORT_IATA,
+        BB.SOBT as SOBT_D,
+        BB.ATOT,
+        BB.STAND_D,
+        BB.ARN as ARN_D,
+        BB.TYPE as TYPE_D,
+        BB.FLIGHT_CLASS_CODE as FLIGHT_CLASS_CODE_D,
+        BB.FLIGHT_SECTOR_CODE as FLIGHT_SECTOR_CODE_D,
+        BB.OPERATION_TYPE_CODE_1 as OPERATION_TYPE_CODE_1_D,
+        BB.CTOT,
+        BB.COBT,
+        BB.AOBT,
+        BB.ISSTRICTCTRL as ISSTRICTCTRL_D,
+        BB.CTRLCONTENT as CTRLCONTENT_D,
+        BB.CTRLPOINT as CTRLPOINT_D,
+        BB.CTRLREASON as CTRLREASON_D,
+        BB.RWY as RWY_D
+        FROM
+        (
+        SELECT
+        TA.OPERATIONAL_DATE OPERATIONAL_DATE_A,
+        CASE
+
+        WHEN COALESCE(
+        TB.AIRPORT_VIA_IATA_7,
+        TB.AIRPORT_VIA_IATA_6,
+        TB.AIRPORT_VIA_IATA_5,
+        TB.AIRPORT_VIA_IATA_4,
+        TB.AIRPORT_VIA_IATA_3,
+        TB.AIRPORT_VIA_IATA_2,
+        TB.AIRPORT_VIA_IATA_1
+        ) <![CDATA[<>]]> TA.ORIGIN_AIRPORT_IATA THEN
+        COALESCE(
+        TB.AIRPORT_VIA_IATA_7,
+        TB.AIRPORT_VIA_IATA_6,
+        TB.AIRPORT_VIA_IATA_5,
+        TB.AIRPORT_VIA_IATA_4,
+        TB.AIRPORT_VIA_IATA_3,
+        TB.AIRPORT_VIA_IATA_2,
+        TB.AIRPORT_VIA_IATA_1
+        ) ELSE ''
+        END AIRPORT_VIA_IATA_A,
+        TA.ARN,
+        TA.TYPE,
+        TA.RWY,
+        TB.FLIGHT_CLASS_CODE,
+        TB.FLIGHT_SECTOR_CODE,
+        TB.OPERATION_TYPE_CODE_1,
+        TA.ORIGIN_AIRPORT_IATA,
+        TB.ISSTRICTCTRL,
+        TB.CTRLCONTENT,
+        TB.CTRLPOINT,
+        TD.CTRLREASON,
+        TB.LNK_CARRIER_CODE,
+        TB.LNK_FLIGHT_NO,
+        TB.LNK_FLIGHT_SUFFIX,
+        TB.LNK_FLIGHT_REPEAT_COUNT,
+        TB.LNK_SCHEDULE_DATE,
+        TA.FLIGHT_NO_IATA FLIGHT_NO_IATA_A,
+        TA.STAND STAND_A,
+        TA.SOBT,
+        TA.SIBT,
+        TA.ELDT,
+        TA.ATOT PRE_ATOT,
+        TA.ALDT,
+        '' A_GROUND_TRANSFER,
+        COALESCE( TA.AIBT, TB.AIBT_1, TB.AIBT_2, TB.AIBT_3, TC.ALDT ) AIBT
+        FROM
+        HISTORICAL_FLIGHT_MASTER TA
+        LEFT JOIN HISTORICAL_FLIGHT_ADD_DETAILS TB ON TA.FLIGHT_NO_IATA = TB.FLIGHT_NO_IATA
+        AND TA.OPERATIONAL_DATE = TB.OPERATIONAL_DATE
+        AND TA.A_OR_D = TB.A_OR_D
+        LEFT JOIN DAILY_FLIGHT_AIRLINES TC ON TA.FLIGHT_NO_IATA = TC.FLIGHT_NO_IATA
+        AND TA.OPERATIONAL_DATE = TC.OPERATIONAL_DATE
+        AND TA.A_OR_D = TC.A_OR_D
+        LEFT JOIN HI_FLIGHT_ADD_DETAILS_MORE TD ON TA.FLIGHT_NO_IATA = TD.FLIGHT_NO_IATA
+        AND TA.OPERATIONAL_DATE = TD.OPERATIONAL_DATE
+        AND TA.A_OR_D = TD.A_OR_D
+        WHERE
+        NVL( TB.CODE_SHARE_STATUS, ' ' ) <![CDATA[<>]]> 'SF'
+        AND NVL( TB.FLIGHT_CANCEL_CODE, ' ' ) <![CDATA[<>]]> 'C' --AND TB.FLIGHT_CLASS_CODE                     IN ('L/W','W/Z','C/B')
+
+        AND TA.A_OR_D = 'A'
+        AND TA.SIBT IS NOT NULL
+        <if test="params.date!=null and params.date!=''">
+            AND to_char(TA.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.date} --TO_CHAR( TA.SIBT,'yyyy-MM-dd') = '2019-01-09'
+        </if>
+
+        ) AA
+        FULL JOIN (
+        SELECT
+        T1.OPERATIONAL_DATE OPERATIONAL_DATE_D,
+        CASE
+
+        WHEN T2.AIRPORT_VIA_IATA_1 <![CDATA[<>]]> T1.DEST_AIRPORT_IATA THEN
+        T2.AIRPORT_VIA_IATA_1 ELSE ''
+        END AIRPORT_VIA_IATA_D,
+        T1.FLIGHT_REPEAT_COUNT,
+        T1.ARN,
+        T1.TYPE,
+        T1.RWY,
+        T2.FLIGHT_CLASS_CODE,
+        T2.FLIGHT_SECTOR_CODE,
+        T2.OPERATION_TYPE_CODE_1,
+        T1.DEST_AIRPORT_IATA,
+        T2.ISSTRICTCTRL,
+        T2.CTRLCONTENT,
+        T2.CTRLPOINT,
+        T4.CTRLREASON,
+        T1.FLIGHT_NO_IATA FLIGHT_NO_IATA_D,
+        T1.SOBT,
+        T1.STAND STAND_D,
+        T2.COBT,
+        T2.CTOT,
+        COALESCE( T1.AOBT, T2.AOBT_1, T2.AOBT_2, T2.AOBT_3, T3.ATOT ) AOBT,
+        '' D_GROUND_TRANSFER,
+        T1.ATOT
+        FROM
+        HISTORICAL_FLIGHT_MASTER T1
+        LEFT JOIN HISTORICAL_FLIGHT_ADD_DETAILS T2 ON T1.FLIGHT_NO_IATA = T2.FLIGHT_NO_IATA
+        AND T1.OPERATIONAL_DATE = T2.OPERATIONAL_DATE
+        AND T1.A_OR_D = T2.A_OR_D
+        LEFT JOIN DAILY_FLIGHT_AIRLINES T3 ON T1.FLIGHT_NO_IATA = T3.FLIGHT_NO_IATA
+        AND T1.OPERATIONAL_DATE = T3.OPERATIONAL_DATE
+        AND T1.A_OR_D = T3.A_OR_D
+        LEFT JOIN HI_FLIGHT_ADD_DETAILS_MORE T4 ON T1.FLIGHT_NO_IATA = T4.FLIGHT_NO_IATA
+        AND T1.OPERATIONAL_DATE = T4.OPERATIONAL_DATE
+        AND T1.A_OR_D = T4.A_OR_D
+        WHERE
+        NVL( T2.CODE_SHARE_STATUS, ' ' ) <![CDATA[<>]]> 'SF'
+        AND NVL( T2.FLIGHT_CANCEL_CODE, ' ' ) <![CDATA[<>]]> 'C' --AND T2.FLIGHT_CLASS_CODE  IN ('L/W','W/Z','C/B')
+
+        AND T1.A_OR_D = 'D'
+        AND T1.SOBT IS NOT NULL --AND TO_CHAR( T1.SOBT,'yyyy-MM-dd') = '2019-01-09'
+        <if test="params.date!=null and params.date!=''">
+            AND to_char(T1.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.date} --11.27 12.30 7.22 5.25 8.10 12.17 12.21 20191.4
+        </if>
+
+        ) BB ON (
+        AA.LNK_CARRIER_CODE || AA.LNK_FLIGHT_NO || COALESCE( AA.LNK_FLIGHT_SUFFIX, '' )) = BB.FLIGHT_NO_IATA_D
+        AND AA.LNK_FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        AND AA.LNK_SCHEDULE_DATE = BB.OPERATIONAL_DATE_D UNION ALL
+        SELECT
+        AA.FLIGHT_NO_IATA_A,
+        AA.ORIGIN_AIRPORT_IATA,
+        AA.AIRPORT_VIA_IATA_A,
+        AA.SOBT as SOBT_A,
+        AA.PRE_ATOT,
+        AA.SIBT,
+        AA.ALDT,
+        AA.STAND_A,
+        AA.ARN as ARN_A,
+        AA.TYPE as TYPE_A,
+        AA.FLIGHT_CLASS_CODE as FLIGHT_CLASS_CODE_A,
+        AA.FLIGHT_SECTOR_CODE as FLIGHT_SECTOR_CODE_A,
+        AA.OPERATION_TYPE_CODE_1 as OPERATION_TYPE_CODE_1_A,
+        AA.AIBT,
+        AA.ISSTRICTCTRL as ISSTRICTCTRL_A,
+        AA.CTRLCONTENT as CTRLCONTENT_A,
+        AA.CTRLPOINT as CTRLPOINT_A,
+        AA.CTRLREASON as CTRLREASON_A,
+        AA.RWY as RWY_A,
+        BB.FLIGHT_NO_IATA_D,
+        BB.AIRPORT_VIA_IATA_D,
+        BB.DEST_AIRPORT_IATA,
+        BB.SOBT as SOBT_D,
+        BB.ATOT,
+        BB.STAND_D,
+        BB.ARN as ARN_D,
+        BB.TYPE as TYPE_D,
+        BB.FLIGHT_CLASS_CODE as FLIGHT_CLASS_CODE_D,
+        BB.FLIGHT_SECTOR_CODE as FLIGHT_SECTOR_CODE_D,
+        BB.OPERATION_TYPE_CODE_1 as OPERATION_TYPE_CODE_1_D,
+        BB.CTOT,
+        BB.COBT,
+        BB.AOBT,
+        BB.ISSTRICTCTRL as ISSTRICTCTRL_D,
+        BB.CTRLCONTENT as CTRLCONTENT_D,
+        BB.CTRLPOINT as CTRLPOINT_D,
+        BB.CTRLREASON as CTRLREASON_D,
+        BB.RWY as RWY_D
+        FROM
+        (
+        SELECT
+        TA.OPERATIONAL_DATE OPERATIONAL_DATE_A,
+        CASE
+
+        WHEN COALESCE(
+        TB.AIRPORT_VIA_IATA_7,
+        TB.AIRPORT_VIA_IATA_6,
+        TB.AIRPORT_VIA_IATA_5,
+        TB.AIRPORT_VIA_IATA_4,
+        TB.AIRPORT_VIA_IATA_3,
+        TB.AIRPORT_VIA_IATA_2,
+        TB.AIRPORT_VIA_IATA_1
+        ) <![CDATA[<>]]> TA.ORIGIN_AIRPORT_IATA THEN
+        COALESCE(
+        TB.AIRPORT_VIA_IATA_7,
+        TB.AIRPORT_VIA_IATA_6,
+        TB.AIRPORT_VIA_IATA_5,
+        TB.AIRPORT_VIA_IATA_4,
+        TB.AIRPORT_VIA_IATA_3,
+        TB.AIRPORT_VIA_IATA_2,
+        TB.AIRPORT_VIA_IATA_1
+        ) ELSE ''
+        END AIRPORT_VIA_IATA_A,
+        TA.ARN,
+        TA.TYPE,
+        TA.RWY,
+        TB.FLIGHT_CLASS_CODE,
+        TB.FLIGHT_SECTOR_CODE,
+        TB.OPERATION_TYPE_CODE_1,
+        TA.ORIGIN_AIRPORT_IATA,
+        TB.ISSTRICTCTRL,
+        TB.CTRLCONTENT,
+        TB.CTRLPOINT,
+        TD.CTRLREASON,
+        TB.LNK_CARRIER_CODE,
+        TB.LNK_FLIGHT_NO,
+        TB.LNK_FLIGHT_SUFFIX,
+        TB.LNK_FLIGHT_REPEAT_COUNT,
+        TB.LNK_SCHEDULE_DATE,
+        TA.FLIGHT_NO_IATA FLIGHT_NO_IATA_A,
+        TA.STAND STAND_A,
+        TA.SOBT,
+        TA.SIBT,
+        TA.ELDT,
+        TA.ATOT PRE_ATOT,
+        TA.ALDT,
+        '' A_GROUND_TRANSFER,
+        COALESCE( TA.AIBT, TB.AIBT_1, TB.AIBT_2, TB.AIBT_3, TC.ALDT ) AIBT
+        FROM
+        DAILY_FLIGHT_MASTER TA
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS TB ON TA.FLIGHT_NO_IATA = TB.FLIGHT_NO_IATA
+        AND TA.OPERATIONAL_DATE = TB.OPERATIONAL_DATE
+        AND TA.A_OR_D = TB.A_OR_D
+        LEFT JOIN DAILY_FLIGHT_AIRLINES TC ON TA.FLIGHT_NO_IATA = TC.FLIGHT_NO_IATA
+        AND TA.OPERATIONAL_DATE = TC.OPERATIONAL_DATE
+        AND TA.A_OR_D = TC.A_OR_D
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS_MORE TD ON TA.FLIGHT_NO_IATA = TD.FLIGHT_NO_IATA
+        AND TA.OPERATIONAL_DATE = TD.OPERATIONAL_DATE
+        AND TA.A_OR_D = TD.A_OR_D
+        WHERE
+        NVL( TB.CODE_SHARE_STATUS, ' ' ) <![CDATA[<>]]> 'SF'
+        AND NVL( TB.FLIGHT_CANCEL_CODE, ' ' ) <![CDATA[<>]]> 'C' --AND TB.FLIGHT_CLASS_CODE                     IN ('L/W','W/Z','C/B')
+
+        AND TA.A_OR_D = 'A'
+        AND TA.SIBT IS NOT NULL
+        <if test="params.date!=null and params.date!=''">
+            AND to_char(TA.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.date} --TO_CHAR( TA.SIBT,'yyyy-MM-dd') = '2019-01-09'
+        </if>
+        ) AA
+        FULL JOIN (
+        SELECT
+        T1.OPERATIONAL_DATE OPERATIONAL_DATE_D,
+        CASE
+
+        WHEN T2.AIRPORT_VIA_IATA_1 <![CDATA[<>]]> T1.DEST_AIRPORT_IATA THEN
+        T2.AIRPORT_VIA_IATA_1 ELSE ''
+        END AIRPORT_VIA_IATA_D,
+        T1.FLIGHT_REPEAT_COUNT,
+        T1.ARN,
+        T1.TYPE,
+        T1.RWY,
+        T2.FLIGHT_CLASS_CODE,
+        T2.FLIGHT_SECTOR_CODE,
+        T2.OPERATION_TYPE_CODE_1,
+        T1.DEST_AIRPORT_IATA,
+        T2.ISSTRICTCTRL,
+        T2.CTRLCONTENT,
+        T2.CTRLPOINT,
+        T4.CTRLREASON,
+        T1.FLIGHT_NO_IATA FLIGHT_NO_IATA_D,
+        T1.SOBT,
+        T1.STAND STAND_D,
+        T2.COBT,
+        T2.CTOT,
+        COALESCE( T1.AOBT, T2.AOBT_1, T2.AOBT_2, T2.AOBT_3, T3.ATOT ) AOBT,
+        '' D_GROUND_TRANSFER,
+        T1.ATOT
+        FROM
+        DAILY_FLIGHT_MASTER T1
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS T2 ON T1.FLIGHT_NO_IATA = T2.FLIGHT_NO_IATA
+        AND T1.OPERATIONAL_DATE = T2.OPERATIONAL_DATE
+        AND T1.A_OR_D = T2.A_OR_D
+        LEFT JOIN DAILY_FLIGHT_AIRLINES T3 ON T1.FLIGHT_NO_IATA = T3.FLIGHT_NO_IATA
+        AND T1.OPERATIONAL_DATE = T3.OPERATIONAL_DATE
+        AND T1.A_OR_D = T3.A_OR_D
+        LEFT JOIN DAILY_FLIGHT_ADD_DETAILS_MORE T4 ON T1.FLIGHT_NO_IATA = T4.FLIGHT_NO_IATA
+        AND T1.OPERATIONAL_DATE = T4.OPERATIONAL_DATE
+        AND T1.A_OR_D = T4.A_OR_D
+        WHERE
+        NVL( T2.CODE_SHARE_STATUS, ' ' ) <![CDATA[<>]]> 'SF'
+        AND NVL( T2.FLIGHT_CANCEL_CODE, ' ' ) <![CDATA[<>]]> 'C' --AND T2.FLIGHT_CLASS_CODE  IN ('L/W','W/Z','C/B')
+
+        AND T1.A_OR_D = 'D'
+        AND T1.SOBT IS NOT NULL --AND TO_CHAR( T1.SOBT,'yyyy-MM-dd') = '2019-01-09'
+        <if test="params.date!=null and params.date!=''">
+            AND to_char(T1.OPERATIONAL_DATE,'yyyy-mm-dd') = #{params.date} --11.27 12.30 7.22 5.25 8.10 12.17 12.21 20191.4
+        </if>
+        ) BB ON (
+        AA.LNK_CARRIER_CODE || AA.LNK_FLIGHT_NO || COALESCE( AA.LNK_FLIGHT_SUFFIX, '' )) = BB.FLIGHT_NO_IATA_D
+        AND AA.LNK_FLIGHT_REPEAT_COUNT = BB.FLIGHT_REPEAT_COUNT
+        AND AA.LNK_SCHEDULE_DATE = BB.OPERATIONAL_DATE_D
+    </select>
+
+</mapper>

@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TSchedulingNoticeInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TSchedulingNoticeInfo" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="FLIGHT_ID" property="flightId" jdbcType="INTEGER" />
+    <result column="FLNO" property="flno" jdbcType="VARCHAR" />
+    <result column="TASK_TYPE" property="taskType" jdbcType="VARCHAR" />
+    <result column="DEVICE_NO" property="deviceNo" jdbcType="VARCHAR" />
+    <result column="DISPATCHER" property="dispatcher" jdbcType="VARCHAR" />
+    <result column="EXEC_EMP" property="execEmp" jdbcType="VARCHAR" />
+    <result column="MSG" property="msg" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="MSG_TIME" property="msgTime" jdbcType="TIMESTAMP" />
+    <result column="CREATE_EMP" property="createEmp" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_EMP" property="updateEmp" jdbcType="VARCHAR" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, FLIGHT_ID, FLNO, TASK_TYPE, DEVICE_NO, DISPATCHER, EXEC_EMP, MSG, STATUS, MSG_TIME, 
+    CREATE_EMP, CREATE_TM, UPDATE_EMP, UPDATE_TM
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TSchedulingNoticeInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_SCHEDULING_NOTICE_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_SCHEDULING_NOTICE_INFO
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_SCHEDULING_NOTICE_INFO
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TSchedulingNoticeInfoExample" >
+    delete from T_SCHEDULING_NOTICE_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TSchedulingNoticeInfo" >
+    insert into T_SCHEDULING_NOTICE_INFO (ID, FLIGHT_ID, FLNO, 
+      TASK_TYPE, DEVICE_NO, DISPATCHER, 
+      EXEC_EMP, MSG, STATUS, 
+      MSG_TIME, CREATE_EMP, CREATE_TM, 
+      UPDATE_EMP, UPDATE_TM)
+    values (#{id,jdbcType=VARCHAR}, #{flightId,jdbcType=INTEGER}, #{flno,jdbcType=VARCHAR}, 
+      #{taskType,jdbcType=VARCHAR}, #{deviceNo,jdbcType=VARCHAR}, #{dispatcher,jdbcType=VARCHAR}, 
+      #{execEmp,jdbcType=VARCHAR}, #{msg,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{msgTime,jdbcType=TIMESTAMP}, #{createEmp,jdbcType=VARCHAR}, #{createTm,jdbcType=TIMESTAMP}, 
+      #{updateEmp,jdbcType=VARCHAR}, #{updateTm,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TSchedulingNoticeInfo" >
+    insert into T_SCHEDULING_NOTICE_INFO
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="flightId != null" >
+        FLIGHT_ID,
+      </if>
+      <if test="flno != null" >
+        FLNO,
+      </if>
+      <if test="taskType != null" >
+        TASK_TYPE,
+      </if>
+      <if test="deviceNo != null" >
+        DEVICE_NO,
+      </if>
+      <if test="dispatcher != null" >
+        DISPATCHER,
+      </if>
+      <if test="execEmp != null" >
+        EXEC_EMP,
+      </if>
+      <if test="msg != null" >
+        MSG,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="msgTime != null" >
+        MSG_TIME,
+      </if>
+      <if test="createEmp != null" >
+        CREATE_EMP,
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM,
+      </if>
+      <if test="updateEmp != null" >
+        UPDATE_EMP,
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="flightId != null" >
+        #{flightId,jdbcType=INTEGER},
+      </if>
+      <if test="flno != null" >
+        #{flno,jdbcType=VARCHAR},
+      </if>
+      <if test="taskType != null" >
+        #{taskType,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceNo != null" >
+        #{deviceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="dispatcher != null" >
+        #{dispatcher,jdbcType=VARCHAR},
+      </if>
+      <if test="execEmp != null" >
+        #{execEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null" >
+        #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="msgTime != null" >
+        #{msgTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createEmp != null" >
+        #{createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateEmp != null" >
+        #{updateEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTm != null" >
+        #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TSchedulingNoticeInfoExample" resultType="java.lang.Integer" >
+    select count(*) from T_SCHEDULING_NOTICE_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_SCHEDULING_NOTICE_INFO
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flightId != null" >
+        FLIGHT_ID = #{record.flightId,jdbcType=INTEGER},
+      </if>
+      <if test="record.flno != null" >
+        FLNO = #{record.flno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskType != null" >
+        TASK_TYPE = #{record.taskType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceNo != null" >
+        DEVICE_NO = #{record.deviceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dispatcher != null" >
+        DISPATCHER = #{record.dispatcher,jdbcType=VARCHAR},
+      </if>
+      <if test="record.execEmp != null" >
+        EXEC_EMP = #{record.execEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.msg != null" >
+        MSG = #{record.msg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        STATUS = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.msgTime != null" >
+        MSG_TIME = #{record.msgTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createEmp != null" >
+        CREATE_EMP = #{record.createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTm != null" >
+        CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateEmp != null" >
+        UPDATE_EMP = #{record.updateEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTm != null" >
+        UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_SCHEDULING_NOTICE_INFO
+    set ID = #{record.id,jdbcType=VARCHAR},
+      FLIGHT_ID = #{record.flightId,jdbcType=INTEGER},
+      FLNO = #{record.flno,jdbcType=VARCHAR},
+      TASK_TYPE = #{record.taskType,jdbcType=VARCHAR},
+      DEVICE_NO = #{record.deviceNo,jdbcType=VARCHAR},
+      DISPATCHER = #{record.dispatcher,jdbcType=VARCHAR},
+      EXEC_EMP = #{record.execEmp,jdbcType=VARCHAR},
+      MSG = #{record.msg,jdbcType=VARCHAR},
+      STATUS = #{record.status,jdbcType=VARCHAR},
+      MSG_TIME = #{record.msgTime,jdbcType=TIMESTAMP},
+      CREATE_EMP = #{record.createEmp,jdbcType=VARCHAR},
+      CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      UPDATE_EMP = #{record.updateEmp,jdbcType=VARCHAR},
+      UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TSchedulingNoticeInfo" >
+    update T_SCHEDULING_NOTICE_INFO
+    <set >
+      <if test="flightId != null" >
+        FLIGHT_ID = #{flightId,jdbcType=INTEGER},
+      </if>
+      <if test="flno != null" >
+        FLNO = #{flno,jdbcType=VARCHAR},
+      </if>
+      <if test="taskType != null" >
+        TASK_TYPE = #{taskType,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceNo != null" >
+        DEVICE_NO = #{deviceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="dispatcher != null" >
+        DISPATCHER = #{dispatcher,jdbcType=VARCHAR},
+      </if>
+      <if test="execEmp != null" >
+        EXEC_EMP = #{execEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null" >
+        MSG = #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="msgTime != null" >
+        MSG_TIME = #{msgTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createEmp != null" >
+        CREATE_EMP = #{createEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateEmp != null" >
+        UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TSchedulingNoticeInfo" >
+    update T_SCHEDULING_NOTICE_INFO
+    set FLIGHT_ID = #{flightId,jdbcType=INTEGER},
+      FLNO = #{flno,jdbcType=VARCHAR},
+      TASK_TYPE = #{taskType,jdbcType=VARCHAR},
+      DEVICE_NO = #{deviceNo,jdbcType=VARCHAR},
+      DISPATCHER = #{dispatcher,jdbcType=VARCHAR},
+      EXEC_EMP = #{execEmp,jdbcType=VARCHAR},
+      MSG = #{msg,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      MSG_TIME = #{msgTime,jdbcType=TIMESTAMP},
+      CREATE_EMP = #{createEmp,jdbcType=VARCHAR},
+      CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      UPDATE_EMP = #{updateEmp,jdbcType=VARCHAR},
+      UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

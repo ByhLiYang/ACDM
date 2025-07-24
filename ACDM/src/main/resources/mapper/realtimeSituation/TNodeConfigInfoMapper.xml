@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.realtimeSituation.TNodeConfigInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.realtimeSituation.TNodeConfigInfo" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="NODE_CODE" property="nodeCode" jdbcType="VARCHAR" />
+    <result column="NODE_SEQ" property="nodeSeq" jdbcType="INTEGER" />
+    <result column="NODE_NAME" property="nodeName" jdbcType="VARCHAR" />
+    <result column="NODE_COLUMN" property="nodeColumn" jdbcType="VARCHAR" />
+    <result column="NODE_ESTIMATE_COLUMN" property="nodeEstimateColumn" jdbcType="VARCHAR" />
+    <result column="NODE_SUBEXP" property="nodeSubexp" jdbcType="VARCHAR" />
+    <result column="ISAVAILABL" property="isavailabl" jdbcType="INTEGER" />
+    <result column="ISNECESSARY" property="isnecessary" jdbcType="INTEGER" />
+    <result column="RMK" property="rmk" jdbcType="VARCHAR" />
+    <result column="CREATE_TM" property="createTm" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TM" property="updateTm" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <resultMap id="ALLNodeResultMap" type="com.hq.acdm.vo.realtimeSituation.NodeInfoVo" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="NODE_CODE" property="nodeCode" jdbcType="VARCHAR" />
+    <result column="NODE_NAME" property="nodeName" jdbcType="VARCHAR" />
+    <result column="ISAVAILABL" property="isavailabl" jdbcType="INTEGER" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, NODE_CODE, NODE_SEQ, NODE_NAME, NODE_COLUMN, NODE_ESTIMATE_COLUMN, NODE_SUBEXP, 
+    ISAVAILABL, ISNECESSARY, RMK, CREATE_TM, UPDATE_TM
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hq.acdm.model.realtimeSituation.TNodeConfigInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from T_NODE_CONFIG_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_NODE_CONFIG_INFO
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from T_NODE_CONFIG_INFO
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hq.acdm.model.realtimeSituation.TNodeConfigInfoExample" >
+    delete from T_NODE_CONFIG_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.realtimeSituation.TNodeConfigInfo" >
+    insert into T_NODE_CONFIG_INFO (ID, NODE_CODE, NODE_SEQ, 
+      NODE_NAME, NODE_COLUMN, NODE_ESTIMATE_COLUMN, 
+      NODE_SUBEXP, ISAVAILABL, ISNECESSARY, 
+      RMK, CREATE_TM, UPDATE_TM
+      )
+    values (#{id,jdbcType=VARCHAR}, #{nodeCode,jdbcType=VARCHAR}, #{nodeSeq,jdbcType=INTEGER}, 
+      #{nodeName,jdbcType=VARCHAR}, #{nodeColumn,jdbcType=VARCHAR}, #{nodeEstimateColumn,jdbcType=VARCHAR}, 
+      #{nodeSubexp,jdbcType=VARCHAR}, #{isavailabl,jdbcType=INTEGER}, #{isnecessary,jdbcType=INTEGER}, 
+      #{rmk,jdbcType=VARCHAR}, #{createTm,jdbcType=TIMESTAMP}, #{updateTm,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hq.acdm.model.realtimeSituation.TNodeConfigInfo" >
+    insert into T_NODE_CONFIG_INFO
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="nodeCode != null" >
+        NODE_CODE,
+      </if>
+      <if test="nodeSeq != null" >
+        NODE_SEQ,
+      </if>
+      <if test="nodeName != null" >
+        NODE_NAME,
+      </if>
+      <if test="nodeColumn != null" >
+        NODE_COLUMN,
+      </if>
+      <if test="nodeEstimateColumn != null" >
+        NODE_ESTIMATE_COLUMN,
+      </if>
+      <if test="nodeSubexp != null" >
+        NODE_SUBEXP,
+      </if>
+      <if test="isavailabl != null" >
+        ISAVAILABL,
+      </if>
+      <if test="isnecessary != null" >
+        ISNECESSARY,
+      </if>
+      <if test="rmk != null" >
+        RMK,
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM,
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeCode != null" >
+        #{nodeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeSeq != null" >
+        #{nodeSeq,jdbcType=INTEGER},
+      </if>
+      <if test="nodeName != null" >
+        #{nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeColumn != null" >
+        #{nodeColumn,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeEstimateColumn != null" >
+        #{nodeEstimateColumn,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeSubexp != null" >
+        #{nodeSubexp,jdbcType=VARCHAR},
+      </if>
+      <if test="isavailabl != null" >
+        #{isavailabl,jdbcType=INTEGER},
+      </if>
+      <if test="isnecessary != null" >
+        #{isnecessary,jdbcType=INTEGER},
+      </if>
+      <if test="rmk != null" >
+        #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hq.acdm.model.realtimeSituation.TNodeConfigInfoExample" resultType="java.lang.Integer" >
+    select count(*) from T_NODE_CONFIG_INFO
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update T_NODE_CONFIG_INFO
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nodeCode != null" >
+        NODE_CODE = #{record.nodeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nodeSeq != null" >
+        NODE_SEQ = #{record.nodeSeq,jdbcType=INTEGER},
+      </if>
+      <if test="record.nodeName != null" >
+        NODE_NAME = #{record.nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nodeColumn != null" >
+        NODE_COLUMN = #{record.nodeColumn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nodeEstimateColumn != null" >
+        NODE_ESTIMATE_COLUMN = #{record.nodeEstimateColumn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nodeSubexp != null" >
+        NODE_SUBEXP = #{record.nodeSubexp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isavailabl != null" >
+        ISAVAILABL = #{record.isavailabl,jdbcType=INTEGER},
+      </if>
+      <if test="record.isnecessary != null" >
+        ISNECESSARY = #{record.isnecessary,jdbcType=INTEGER},
+      </if>
+      <if test="record.rmk != null" >
+        RMK = #{record.rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTm != null" >
+        CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTm != null" >
+        UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update T_NODE_CONFIG_INFO
+    set ID = #{record.id,jdbcType=VARCHAR},
+      NODE_CODE = #{record.nodeCode,jdbcType=VARCHAR},
+      NODE_SEQ = #{record.nodeSeq,jdbcType=INTEGER},
+      NODE_NAME = #{record.nodeName,jdbcType=VARCHAR},
+      NODE_COLUMN = #{record.nodeColumn,jdbcType=VARCHAR},
+      NODE_ESTIMATE_COLUMN = #{record.nodeEstimateColumn,jdbcType=VARCHAR},
+      NODE_SUBEXP = #{record.nodeSubexp,jdbcType=VARCHAR},
+      ISAVAILABL = #{record.isavailabl,jdbcType=INTEGER},
+      ISNECESSARY = #{record.isnecessary,jdbcType=INTEGER},
+      RMK = #{record.rmk,jdbcType=VARCHAR},
+      CREATE_TM = #{record.createTm,jdbcType=TIMESTAMP},
+      UPDATE_TM = #{record.updateTm,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.realtimeSituation.TNodeConfigInfo" >
+    update T_NODE_CONFIG_INFO
+    <set >
+      <if test="nodeCode != null" >
+        NODE_CODE = #{nodeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeSeq != null" >
+        NODE_SEQ = #{nodeSeq,jdbcType=INTEGER},
+      </if>
+      <if test="nodeName != null" >
+        NODE_NAME = #{nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeColumn != null" >
+        NODE_COLUMN = #{nodeColumn,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeEstimateColumn != null" >
+        NODE_ESTIMATE_COLUMN = #{nodeEstimateColumn,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeSubexp != null" >
+        NODE_SUBEXP = #{nodeSubexp,jdbcType=VARCHAR},
+      </if>
+      <if test="isavailabl != null" >
+        ISAVAILABL = #{isavailabl,jdbcType=INTEGER},
+      </if>
+      <if test="isnecessary != null" >
+        ISNECESSARY = #{isnecessary,jdbcType=INTEGER},
+      </if>
+      <if test="rmk != null" >
+        RMK = #{rmk,jdbcType=VARCHAR},
+      </if>
+      <if test="createTm != null" >
+        CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTm != null" >
+        UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.realtimeSituation.TNodeConfigInfo" >
+    update T_NODE_CONFIG_INFO
+    set NODE_CODE = #{nodeCode,jdbcType=VARCHAR},
+      NODE_SEQ = #{nodeSeq,jdbcType=INTEGER},
+      NODE_NAME = #{nodeName,jdbcType=VARCHAR},
+      NODE_COLUMN = #{nodeColumn,jdbcType=VARCHAR},
+      NODE_ESTIMATE_COLUMN = #{nodeEstimateColumn,jdbcType=VARCHAR},
+      NODE_SUBEXP = #{nodeSubexp,jdbcType=VARCHAR},
+      ISAVAILABL = #{isavailabl,jdbcType=INTEGER},
+      ISNECESSARY = #{isnecessary,jdbcType=INTEGER},
+      RMK = #{rmk,jdbcType=VARCHAR},
+      CREATE_TM = #{createTm,jdbcType=TIMESTAMP},
+      UPDATE_TM = #{updateTm,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="selectAllNode" resultMap="ALLNodeResultMap" >
+    SELECT ID,NODE_CODE,NODE_NAME,ISAVAILABL
+    FROM T_NODE_CONFIG_INFO
+    ORDER BY NODE_SEQ ASC
+  </select>
+
+  <select id="selectAllNodeConfigInfo" resultMap="BaseResultMap" parameterType="map">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM T_NODE_CONFIG_INFO
+    WHERE 1=1
+    <if test="params.nodeCode !=null and params.nodeCode != ''">
+      AND NODE_CODE LIKE CONCAT('%',#{params.nodeCode,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="params.nodeName !=null and params.nodeName != ''">
+      AND NODE_NAME LIKE CONCAT('%',#{params.nodeName,jdbcType=VARCHAR},'%')
+    </if>
+    ORDER BY NODE_SEQ ASC
+  </select>
+
+
+  <update id="updateAllNodeIsAvailabl" parameterType="String" >
+    update T_NODE_CONFIG_INFO
+    set ISAVAILABL = #{isavailabl,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

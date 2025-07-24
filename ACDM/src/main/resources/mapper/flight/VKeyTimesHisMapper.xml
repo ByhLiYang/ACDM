@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.flight.VKeyTimesHisMapper" >
+    <resultMap id="BaseResultMap" type="com.hq.acdm.model.flight.VKeyTimesHis" >
+        <result column="FLIGHT_NO_IATA" property="flightNoIata" jdbcType="VARCHAR" />
+        <result column="MILESTONE_STATUS" property="milestoneStatus" jdbcType="VARCHAR" />
+        <result column="STAND" property="stand" jdbcType="VARCHAR" />
+        <result column="ARN" property="arn" jdbcType="VARCHAR" />
+        <result column="DEST_AIRPORT_IATA" property="destAirportIata" jdbcType="VARCHAR" />
+        <result column="AIRLINE_CODE_IATA" property="airlineCodeIata" jdbcType="VARCHAR" />
+        <result column="AIRLINE_CODE_ICAO" property="airlineCodeIcao" jdbcType="VARCHAR" />
+        <result column="OPERATIONAL_DATE" property="operationalDate" jdbcType="VARCHAR" />
+        <result column="ELDT" property="eldt" jdbcType="VARCHAR" />
+        <result column="LNK_CARRIER_CODE" property="lnkCarrierCode" jdbcType="VARCHAR" />
+        <result column="LNK_FLIGHT_NO" property="lnkFlightNo" jdbcType="VARCHAR" />
+        <result column="FLIGHT_REPEAT_COUNT" property="flightRepeatCount" jdbcType="VARCHAR" />
+        <result column="LNK_FLIGHT_REPEAT_COUNT" property="lnkFlightRepeatCount" jdbcType="VARCHAR" />
+        <result column="FLIGHT_CANCEL_CODE" property="flightCancelCode" jdbcType="VARCHAR" />
+        <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+        <result column="AOBT" property="aobt" jdbcType="VARCHAR" />
+        <result column="ATOT" property="atot" jdbcType="VARCHAR" />
+        <result column="ALDT" property="aldt" jdbcType="VARCHAR" />
+        <result column="SIBT" property="sibt" jdbcType="VARCHAR" />
+        <result column="FLIGHT_CLASS_CODE" property="flightClassCode" jdbcType="VARCHAR" />
+        <result column="CTRLCONTENT" property="ctrlcontent" jdbcType="VARCHAR" />
+        <result column="AIBT" property="aibt" jdbcType="VARCHAR" />
+        <result column="ASBT" property="asbt" jdbcType="VARCHAR" />
+        <result column="ATMO" property="atmo" jdbcType="VARCHAR" />
+        <result column="ORIGIN_AIRPORT_IATA" property="originAirportIata" jdbcType="VARCHAR" />
+        <result column="A_OR_D" property="aOrD" jdbcType="VARCHAR" />
+        <result column="AXOT" property="axot" jdbcType="VARCHAR" />
+        <result column="AXIT" property="axit" jdbcType="VARCHAR" />
+        <result column="AGHT" property="aght" jdbcType="VARCHAR" />
+        <result column="GATE_1" property="gate1" jdbcType="VARCHAR" />
+        <result column="GATE_2" property="gate2" jdbcType="VARCHAR" />
+        <result column="GATE_3" property="gate3" jdbcType="VARCHAR" />
+        <result column="GATE_1_CLOSEDATETIME" property="gate1Closedatetime" jdbcType="VARCHAR" />
+        <result column="GATE_2_CLOSEDATETIME" property="gate2Closedatetime" jdbcType="VARCHAR" />
+        <result column="GATE_3_CLOSEDATETIME" property="gate3Closedatetime" jdbcType="VARCHAR" />
+        <result column="AIRCRAFT_TERMINAL_CODE" property="aircraftTerminalCode" jdbcType="VARCHAR" />
+        <result column="IS_OVERNIGHT" property="isOvernight" jdbcType="VARCHAR" />
+        <result column="TERMINAL" property="terminal" jdbcType="VARCHAR" />
+        <result column="AREAID" property="areaid" jdbcType="VARCHAR" />
+        <result column="OPENDATETIME" property="opendatetime" jdbcType="VARCHAR" />
+        <result column="CLOSEDATETIME" property="closedatetime" jdbcType="VARCHAR" />
+        <result column="STOP" property="stop" jdbcType="VARCHAR" />
+        <result column="IN_DELAY" property="inDelay" jdbcType="VARCHAR" />
+        <result column="OUT_DELAY" property="outDelay" jdbcType="VARCHAR" />
+        <result column="ROW_NUM" property="rowNum" jdbcType="VARCHAR" />
+        <result column="LINK_CODE" property="linkCode" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <sql id="Base_Column_List" >
+    FLIGHT_NO_IATA, MILESTONE_STATUS, STAND, ARN, DEST_AIRPORT_IATA, AIRLINE_CODE_IATA,
+    AIRLINE_CODE_ICAO, OPERATIONAL_DATE, ELDT, LNK_CARRIER_CODE, LNK_FLIGHT_NO, FLIGHT_REPEAT_COUNT,
+    LNK_FLIGHT_REPEAT_COUNT, FLIGHT_CANCEL_CODE, SOBT, AOBT, ATOT, ALDT, SIBT, FLIGHT_CLASS_CODE,
+    CTRLCONTENT, AIBT, ASBT, ATMO, ORIGIN_AIRPORT_IATA, A_OR_D, AXOT, AXIT, AGHT, GATE_1,
+    GATE_2, GATE_3, GATE_1_CLOSEDATETIME, GATE_2_CLOSEDATETIME, GATE_3_CLOSEDATETIME,
+    AIRCRAFT_TERMINAL_CODE, IS_OVERNIGHT, TERMINAL, AREAID, OPENDATETIME, CLOSEDATETIME,
+    IN_DELAY, OUT_DELAY, ROW_NUM,STOP,LINK_CODE
+  </sql>
+
+    <select id="query" resultMap="BaseResultMap" parameterType="java.util.Map"  >
+        select
+        FLIGHT_NO_IATA,
+        MILESTONE_STATUS,
+        STAND,
+        ARN,
+        DEST_AIRPORT_IATA,
+        AIRLINE_CODE_IATA,
+        AIRLINE_CODE_ICAO,
+        OPERATIONAL_DATE,
+        ELDT,
+        LNK_CARRIER_CODE,
+        LNK_FLIGHT_NO,
+        FLIGHT_REPEAT_COUNT,
+        LNK_FLIGHT_REPEAT_COUNT,
+        FLIGHT_CANCEL_CODE,
+        SOBT,
+        AOBT,
+        ATOT,
+        ALDT,
+        SIBT,
+        FLIGHT_CLASS_CODE,
+        CTRLCONTENT,
+        AIBT,
+        ASBT,
+        ATMO,
+        ORIGIN_AIRPORT_IATA,
+        A_OR_D,
+        AXOT,
+        AXIT,
+        AGHT,
+        GATE_1,
+        GATE_2,
+        GATE_3,
+        GATE_1_CLOSEDATETIME,
+        GATE_2_CLOSEDATETIME,
+        GATE_3_CLOSEDATETIME,
+        AIRCRAFT_TERMINAL_CODE,
+        IS_OVERNIGHT,
+        TERMINAL,
+        AREAID,
+        OPENDATETIME,
+        CLOSEDATETIME,
+        stop,
+        LINK_CODE,
+        extract(day from (IN_DELAY))* 24 * 60 + extract(hour from (IN_DELAY))*60 + extract(minute from (IN_DELAY)) as
+        IN_DELAY,
+        extract(day from (OUT_DELAY))* 24 * 60 + extract(hour from (OUT_DELAY))*60 + extract(minute from (OUT_DELAY)) as OUT_DELAY,
+        ROW_NUM
+        from(
+        SELECT FLIGHT_NO_IATA,
+        MILESTONE_STATUS,
+        STAND,
+        ARN,
+        DEST_AIRPORT_IATA,
+        AIRLINE_CODE_IATA,
+        AIRLINE_CODE_ICAO,
+        OPERATIONAL_DATE,
+        ELDT,
+        LNK_CARRIER_CODE,
+        LNK_FLIGHT_NO,
+        FLIGHT_REPEAT_COUNT,
+        LNK_FLIGHT_REPEAT_COUNT,
+        FLIGHT_CANCEL_CODE,
+        SOBT,
+        AOBT,
+        ATOT,
+        ALDT,
+        SIBT,
+        FLIGHT_CLASS_CODE,
+        CTRLCONTENT,
+        AIBT,
+        ASBT,
+        ATMO,
+        ORIGIN_AIRPORT_IATA,
+        A_OR_D,
+        AXOT,
+        AXIT,
+        AGHT,
+        GATE_1,
+        GATE_2,
+        GATE_3,
+        GATE_1_CLOSEDATETIME,
+        GATE_2_CLOSEDATETIME,
+        GATE_3_CLOSEDATETIME,
+        AIRCRAFT_TERMINAL_CODE,
+        IS_OVERNIGHT,
+        TERMINAL,
+        AREAID,
+        OPENDATETIME,
+        CLOSEDATETIME,
+        case A_OR_D
+        when 'A' then ORIGIN_AIRPORT_IATA
+        when 'D' then DEST_AIRPORT_IATA
+        end as stop,
+        nvl(LNK_CARRIER_CODE,'')||nvl(LNK_FLIGHT_NO,'') as LINK_CODE,
+        case when (COALESCE(CAST(AIBT AS DATE),CAST(ALDT AS DATE),sysdate) -CAST(SIBT AS DATE) ) >0
+        then COALESCE(AIBT,ALDT,sysdate) - SIBT
+        else null
+        end as IN_DELAY,
+        case when (COALESCE(CAST(AOBT AS DATE),CAST(ATOT AS DATE),sysdate) -CAST(SOBT AS DATE) ) >0
+        then COALESCE(AOBT,ATOT,sysdate) - SOBT
+        else null
+        end as OUT_DELAY,
+        rownum as ROW_NUM
+        FROM (SELECT tmp.*
+        FROM (
+        select T1.*, NULL LNK_AIBT, NULL LNK_SIBT, T2.SOBT LNK_SOBT, T2.AOBT LNK_AOBT, NULL LNK_ALDT
+        FROM (
+        SELECT D1.*,
+        D2.GATE_1_BOARDSTATUS,
+        D2.GATE_2_BOARDSTATUS,
+        D2.GATE_3_BOARDSTATUS,
+        D2.GATE_1_CLOSEDATETIME,
+        D2.GATE_2_CLOSEDATETIME,
+        D2.GATE_3_CLOSEDATETIME,
+        D2.LNK_CARRIER_CODE,
+        D2.LNK_FLIGHT_NO,
+        D2.AIRCRAFT_TERMINAL_CODE,
+        D2.IS_OVERNIGHT,
+        D2.LNK_FLIGHT_REPEAT_COUNT,
+        D2.FLIGHT_CANCEL_CODE,
+        stand.terminal,
+        COALESCE(D2.GATE_1_OPENDATETIME, D2.GATE_2_OPENDATETIME, D2.GATE_3_OPENDATETIME) OPENDATETIME,
+        COALESCE(D2.GATE_1_CLOSEDATETIME, D2.GATE_2_CLOSEDATETIME,
+        D2.GATE_3_CLOSEDATETIME) CLOSEDATETIME,
+        D2.CTRLCONTENT,
+        gate.areaid,
+        D2.FLIGHT_CLASS_CODE
+        FROM HISTORICAL_FLIGHT_MASTER D1
+        left join HISTORICAL_FLIGHT_ADD_DETAILS D2
+        on D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT AND
+        D1.OPERATIONAL_DATE = D2.OPERATIONAL_DATE AND D1.A_OR_D = D2.A_OR_D AND
+        D1.FLIGHT_NO_IATA = D2.FLIGHT_NO_IATA
+        left join STAND ON STAND.STAND = D1.STAND
+        left join gate on gate.gate = d1.gate_1 or gate.gate = d1.gate_2 or gate.gate = d1.gate_3
+        WHERE d2.cODE_SHARE_STATUS != 'SF'
+        AND d1.SIBT between to_date(#{beginDate}||' 00:00:00', 'YYYY-MM-DD HH24:MI:SS') and to_date(#{endDate}||' 23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+        and d1.A_OR_D = 'A') T1
+        LEFT JOIN (
+        SELECT TM.*, TA.LNK_SCHEDULE_DATE
+        FROM HISTORICAL_FLIGHT_MASTER TM,
+        HISTORICAL_FLIGHT_ADD_DETAILS TA
+        WHERE (TM.SOBT between to_date(#{beginDate}||' 00:00:00', 'YYYY-MM-DD HH24:MI:SS') and to_date(#{endDate}||' 23:59:59', 'YYYY-MM-DD HH24:MI:SS') and
+        TM.A_OR_D = 'D')
+        AND ta.FLIGHT_NO_IATA = tm.FLIGHT_NO_IATA
+        AND ta.CODE_SHARE_STATUS != 'SF'
+        AND ta.A_OR_D = tm.A_OR_D
+        AND ta.FLIGHT_REPEAT_COUNT = tm.FLIGHT_REPEAT_COUNT
+        AND ta.OPERATIONAL_DATE = tm.OPERATIONAL_DATE
+        AND TM.A_OR_D = 'D') T2
+        ON (T1.LNK_CARRIER_CODE || T1.LNK_FLIGHT_NO) = T2.FLIGHT_NO_IATA AND
+        T1.LNK_FLIGHT_REPEAT_COUNT = T2.FLIGHT_REPEAT_COUNT and
+        t1.OPERATIONAL_DATE = t2.LNK_SCHEDULE_DATE
+        UNION
+        SELECT T1.*, T2.AIBT LNK_AIBT, T2.SIBT LNK_SIBT, NULL LNK_SOBT, NULL LNK_AOBT, T2.ALDT LNK_ALDT
+        FROM (
+        SELECT D1.*,
+        D2.GATE_1_BOARDSTATUS,
+        D2.GATE_2_BOARDSTATUS,
+        D2.GATE_3_BOARDSTATUS,
+        D2.GATE_1_CLOSEDATETIME,
+        D2.GATE_2_CLOSEDATETIME,
+        D2.GATE_3_CLOSEDATETIME,
+        D2.LNK_CARRIER_CODE,
+        D2.LNK_FLIGHT_NO,
+        D2.AIRCRAFT_TERMINAL_CODE,
+        D2.IS_OVERNIGHT,
+        D2.LNK_FLIGHT_REPEAT_COUNT,
+        D2.FLIGHT_CANCEL_CODE,
+        stand.terminal,
+        COALESCE(D2.GATE_1_OPENDATETIME, D2.GATE_2_OPENDATETIME,
+        D2.GATE_3_OPENDATETIME) OPENDATETIME,
+        COALESCE(D2.GATE_1_CLOSEDATETIME, D2.GATE_2_CLOSEDATETIME,
+        D2.GATE_3_CLOSEDATETIME) CLOSEDATETIME,
+        D2.CTRLCONTENT,
+        gate.areaid,
+        D2.FLIGHT_CLASS_CODE
+        FROM HISTORICAL_FLIGHT_MASTER D1
+        left join HISTORICAL_FLIGHT_ADD_DETAILS D2
+        on D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT AND
+        D1.OPERATIONAL_DATE = D2.OPERATIONAL_DATE AND
+        D1.FLIGHT_NO_IATA = D2.FLIGHT_NO_IATA AND D1.A_OR_D = D2.A_OR_D
+        left join STAND ON STAND.STAND = D1.STAND
+        left join gate on gate.gate = d1.gate_1 or gate.gate = d1.gate_2 or gate.gate = d1.gate_3
+        WHERE d2.cODE_SHARE_STATUS != 'SF'
+        AND D1.A_OR_D = 'D'
+        AND (d1.SOBT between to_date(#{beginDate}||' 00:00:00', 'YYYY-MM-DD HH24:MI:SS') and to_date(#{endDate}||' 23:59:59', 'YYYY-MM-DD HH24:MI:SS') and
+        d1.A_OR_D = 'D')) T1
+        LEFT JOIN (SELECT TM.*, TA.LNK_SCHEDULE_DATE
+        FROM HISTORICAL_FLIGHT_MASTER TM,
+        HISTORICAL_FLIGHT_ADD_DETAILS TA
+        WHERE (TM.SIBT between to_date(#{beginDate}||' 00:00:00', 'YYYY-MM-DD HH24:MI:SS') and to_date(#{endDate}||' 23:59:59', 'YYYY-MM-DD HH24:MI:SS') and
+        TM.A_OR_D = 'A')
+        AND ta.FLIGHT_NO_IATA = tm.FLIGHT_NO_IATA
+        AND ta.CODE_SHARE_STATUS != 'SF'
+        AND ta.A_OR_D = tm.A_OR_D
+        AND ta.FLIGHT_REPEAT_COUNT = tm.FLIGHT_REPEAT_COUNT
+        AND ta.OPERATIONAL_DATE = tm.OPERATIONAL_DATE
+        AND TM.A_OR_D = 'A') T2
+        ON (T1.LNK_CARRIER_CODE || T1.LNK_FLIGHT_NO) = T2.FLIGHT_NO_IATA AND
+        T1.LNK_FLIGHT_REPEAT_COUNT = T2.FLIGHT_REPEAT_COUNT and
+        t1.OPERATIONAL_DATE = t2.LNK_SCHEDULE_DATE
+
+        union
+
+
+        select T1.*, NULL LNK_AIBT, NULL LNK_SIBT, T2.SOBT LNK_SOBT, T2.AOBT LNK_AOBT, NULL LNK_ALDT
+        FROM (SELECT D1.*,
+        D2.GATE_1_BOARDSTATUS,
+        D2.GATE_2_BOARDSTATUS,
+        D2.GATE_3_BOARDSTATUS,
+        D2.GATE_1_CLOSEDATETIME,
+        D2.GATE_2_CLOSEDATETIME,
+        D2.GATE_3_CLOSEDATETIME,
+        D2.LNK_CARRIER_CODE,
+        D2.LNK_FLIGHT_NO,
+        D2.AIRCRAFT_TERMINAL_CODE,
+        D2.IS_OVERNIGHT,
+        D2.LNK_FLIGHT_REPEAT_COUNT,
+        D2.FLIGHT_CANCEL_CODE,
+        stand.terminal,
+        COALESCE(D2.GATE_1_OPENDATETIME, D2.GATE_2_OPENDATETIME, D2.GATE_3_OPENDATETIME)    OPENDATETIME,
+        COALESCE(D2.GATE_1_CLOSEDATETIME, D2.GATE_2_CLOSEDATETIME, D2.GATE_3_CLOSEDATETIME) CLOSEDATETIME,
+        D2.CTRLCONTENT,
+        gate.areaid,
+        D2.FLIGHT_CLASS_CODE
+        FROM DAILY_FLIGHT_MASTER D1
+        left join DAILY_FLIGHT_ADD_DETAILS D2 on D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT AND
+        D1.OPERATIONAL_DATE = D2.OPERATIONAL_DATE AND
+        D1.A_OR_D = D2.A_OR_D AND
+        D1.FLIGHT_NO_IATA = D2.FLIGHT_NO_IATA
+        left join STAND ON STAND.STAND = D1.STAND
+        left join gate on gate.gate = d1.gate_1 or gate.gate = d1.gate_2 or gate.gate = d1.gate_3
+        WHERE nvl(d2.cODE_SHARE_STATUS,'-1') != 'SF'
+        AND d1.SIBT between to_date(#{beginDate}||' 00:00:00', 'YYYY-MM-DD HH24:MI:SS') and to_date(#{endDate}||' 23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+        and d1.A_OR_D = 'A') T1
+        LEFT JOIN (SELECT TM.*, TA.LNK_SCHEDULE_DATE
+        FROM DAILY_FLIGHT_MASTER TM,
+        DAILY_FLIGHT_ADD_DETAILS TA
+        WHERE (TM.SOBT between to_date(#{beginDate}||' 00:00:00', 'YYYY-MM-DD HH24:MI:SS') and to_date(#{endDate}||' 23:59:59', 'YYYY-MM-DD HH24:MI:SS') and
+        TM.A_OR_D = 'D')
+        AND ta.FLIGHT_NO_IATA = tm.FLIGHT_NO_IATA
+        AND nvl(ta.CODE_SHARE_STATUS,'-1') != 'SF'
+        AND ta.A_OR_D = tm.A_OR_D
+        AND ta.FLIGHT_REPEAT_COUNT = tm.FLIGHT_REPEAT_COUNT
+        AND ta.OPERATIONAL_DATE = tm.OPERATIONAL_DATE
+        AND TM.A_OR_D = 'D') T2 ON (T1.LNK_CARRIER_CODE || T1.LNK_FLIGHT_NO) = T2.FLIGHT_NO_IATA AND
+        T1.LNK_FLIGHT_REPEAT_COUNT = T2.FLIGHT_REPEAT_COUNT and
+        t1.OPERATIONAL_DATE = t2.LNK_SCHEDULE_DATE
+        UNION SELECT T1.*, T2.AIBT LNK_AIBT, T2.SIBT LNK_SIBT, NULL LNK_SOBT, NULL LNK_AOBT, T2.ALDT LNK_ALDT
+        FROM (SELECT D1.*,
+        D2.GATE_1_BOARDSTATUS,
+        D2.GATE_2_BOARDSTATUS,
+        D2.GATE_3_BOARDSTATUS,
+        D2.GATE_1_CLOSEDATETIME,
+        D2.GATE_2_CLOSEDATETIME,
+        D2.GATE_3_CLOSEDATETIME,
+        D2.LNK_CARRIER_CODE,
+        D2.LNK_FLIGHT_NO,
+        D2.AIRCRAFT_TERMINAL_CODE,
+        D2.IS_OVERNIGHT,
+        D2.LNK_FLIGHT_REPEAT_COUNT,
+        D2.FLIGHT_CANCEL_CODE,
+        stand.terminal,
+        COALESCE(D2.GATE_1_OPENDATETIME, D2.GATE_2_OPENDATETIME, D2.GATE_3_OPENDATETIME) OPENDATETIME,
+        COALESCE(D2.GATE_1_CLOSEDATETIME, D2.GATE_2_CLOSEDATETIME,
+        D2.GATE_3_CLOSEDATETIME)                                                CLOSEDATETIME,
+        D2.CTRLCONTENT,
+        gate.areaid,
+        D2.FLIGHT_CLASS_CODE
+        FROM DAILY_FLIGHT_MASTER D1
+        left join DAILY_FLIGHT_ADD_DETAILS D2 on D1.FLIGHT_REPEAT_COUNT = D2.FLIGHT_REPEAT_COUNT AND
+        D1.OPERATIONAL_DATE = D2.OPERATIONAL_DATE AND
+        D1.FLIGHT_NO_IATA = D2.FLIGHT_NO_IATA AND
+        D1.A_OR_D = D2.A_OR_D
+        left join STAND ON STAND.STAND = D1.STAND
+        left join gate on gate.gate = d1.gate_1 or gate.gate = d1.gate_2 or gate.gate = d1.gate_3
+        WHERE nvl(d2.cODE_SHARE_STATUS,'-1') != 'SF'
+        AND D1.A_OR_D = 'D'
+        AND (d1.SOBT between to_date(#{beginDate}||' 00:00:00', 'YYYY-MM-DD HH24:MI:SS') and to_date(#{endDate}||' 23:59:59', 'YYYY-MM-DD HH24:MI:SS') and
+        d1.A_OR_D = 'D')) T1
+        LEFT JOIN (SELECT TM.*, TA.LNK_SCHEDULE_DATE
+        FROM DAILY_FLIGHT_MASTER TM,
+        DAILY_FLIGHT_ADD_DETAILS TA
+        WHERE (TM.SIBT between to_date(#{beginDate}||' 00:00:00', 'YYYY-MM-DD HH24:MI:SS') and to_date(#{endDate}||' 23:59:59', 'YYYY-MM-DD HH24:MI:SS') and
+        TM.A_OR_D = 'A')
+        AND ta.FLIGHT_NO_IATA = tm.FLIGHT_NO_IATA
+        AND nvl(ta.CODE_SHARE_STATUS,'-1') != 'SF'
+        AND ta.A_OR_D = tm.A_OR_D
+        AND ta.FLIGHT_REPEAT_COUNT = tm.FLIGHT_REPEAT_COUNT
+        AND ta.OPERATIONAL_DATE = tm.OPERATIONAL_DATE
+        AND TM.A_OR_D = 'A') T2
+        ON (T1.LNK_CARRIER_CODE || T1.LNK_FLIGHT_NO) = T2.FLIGHT_NO_IATA AND
+        T1.LNK_FLIGHT_REPEAT_COUNT = T2.FLIGHT_REPEAT_COUNT and
+        t1.OPERATIONAL_DATE = t2.LNK_SCHEDULE_DATE
+        ) tmp
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="airline != null and airline!=''">
+                and tmp.FLIGHT_NO_IATA like #{airline}||'%'
+            </if>
+            <if test="flightNoIata != null and flightNoIata!=''">
+                and tmp.FLIGHT_NO_IATA = #{flightNoIata}
+            </if>
+        </trim>
+        ORDER BY tmp.SIBT, tmp.SOBT)
+
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="dest != null and dest!=''">
+                and
+                (
+                ORIGIN_AIRPORT_IATA = #{dest}
+                or
+                DEST_AIRPORT_IATA = #{dest}
+                )
+            </if>
+            <if test="aOrD != null and aOrD!=''">
+                and A_OR_D = #{aOrD}
+            </if>
+            <if test="terminal != null and terminal!=''">
+                and TERMINAL = #{terminal}
+            </if>
+            <if test="areaid != null and areaid!=''">
+                and AREAID = #{areaid}
+            </if>
+
+            <if test="gate != null  and gate!=''">
+                and (GATE_1 = #{gate} or GATE_2 = #{gate} or GATE_3 = #{gate})
+            </if>
+            <if test='flightstatus =="0"'>
+                and ((A_OR_D='A'
+                AND (AIBT &lt; sysdate OR SIBT &lt; sysdate OR ALDT &lt; sysdate)
+                AND ((AIBT IS NOT NULL AND  AIBT &lt; SIBT)
+                OR (AIBT IS NULL AND ALDT IS NOT NULL AND ALDT + 10*1/(24*60)  &lt; SIBT)
+                OR (AIBT IS NULL AND ALDT IS NULL AND sysdate &lt; SIBT)))
+                OR (A_OR_D='D' AND nvl(FLIGHT_CANCEL_CODE,'-1') != 'C' AND FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B')
+                AND (AOBT &lt; sysdate OR SOBT &lt; sysdate OR ATOT &lt; sysdate)
+                AND ((AOBT IS NOT NULL AND SOBT + 5*1/(24*60)  &gt; AOBT)
+                OR (AOBT IS NULL AND ATOT IS NOT NULL AND SOBT + 30*1/(24*60)  &gt; ATOT)
+                OR (AOBT IS NULL AND ATOT IS NULL AND sysdate - 20*1/(24*60)  &lt; SOBT))))
+            </if>
+            <if test='flightstatus =="1"'>
+                ((A_OR_D='A'
+                AND (AIBT &lt; sysdate OR SIBT &lt; sysdate OR ALDT &lt; sysdate)
+                AND ((AIBT IS NOT NULL AND  AIBT &gt;= SIBT)
+                OR (AIBT IS NULL AND ALDT IS NOT NULL AND ALDT + 10*1/(24*60)  &gt;= SIBT)
+                OR (AIBT IS NULL AND ALDT IS NULL AND sysdate &gt;= SIBT)))
+                OR (A_OR_D='D' AND nvl(FLIGHT_CANCEL_CODE,'-1') != 'C'  AND FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B')
+                AND (AOBT &lt; sysdate OR SOBT &lt; sysdate OR ATOT &lt; sysdate)
+                AND ((AOBT IS NOT NULL AND SOBT + 5*1/(24*60)  &lt;= AOBT)
+                OR (AOBT IS NULL AND ATOT IS NOT NULL AND SOBT + 30*1/(24*60)  &lt;= ATOT)
+                OR (AOBT IS NULL AND ATOT IS NULL AND sysdate - 20*1/(24*60)  &lt;= SOBT))))
+            </if>
+            <if test='passstatus=="0"'>
+                nvl(FLIGHT_CANCEL_CODE,'-1') != 'C' AND FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') and (A_OR_D='D') AND ( (
+                LNK_FLIGHT_NO IS NULL OR LENGTH(LNK_FLIGHT_NO) = 0 OR nvl(TO_CHAR(LNK_AIBT, 'YYYY-MM-DD'),'-1') != nvl(TO_CHAR(SOBT, 'YYYY-MM-DD'),'-1')  and
+                SOBT &lt; TO_DATE(TO_CHAR(sysdate, 'YYYY-MM-DD')|| ' 11:00:00','YYYY-MM-DD HH24:MI:SS')) and ((AOBT IS NOT NULL AND AOBT &lt; 5 *1/(24*60) + SOBT)
+                OR (AOBT IS NULL AND ATOT IS NOT NULL AND SOBT + 30 *1/(24*60) &gt; ATOT)
+                OR (AOBT IS NULL AND ATOT IS NULL AND sysdate - 20 *1/(24*60) &lt; SOBT)))
+                or ( LNK_FLIGHT_NO IS not NULL AND LENGTH(LNK_FLIGHT_NO) &gt; 0 AND TO_CHAR(LNK_AIBT,'YYYY-MM-DD') = TO_CHAR(SOBT,'YYYY-MM-DD') and
+                (AOBT &lt; sysdate OR SOBT &lt; sysdate OR ATOT &lt; sysdate)
+                AND (( LNK_ALDT IS NOT NULL and  (cast(LNK_AIBT as date) - cast(LNK_SIBT as date)) &lt;=1/(24*60)  AND ((AOBT IS NOT NULL AND AOBT &lt;= SOBT + 5 *1/(24*60))
+                OR (AOBT IS NULL AND ATOT IS NOT NULL AND SOBT + 30 *1/(24*60) &gt;= ATOT)
+                OR (AOBT IS NULL AND ATOT IS NULL AND sysdate - 20 *1/(24*60) &lt;= SOBT)))
+                OR (LNK_AIBT &gt; LNK_SIBT  and LNK_ALDT IS NOT NULL
+                and ((AOBT IS NOT NULL AND AOBT &gt; LNK_AIBT + (cast(SOBT as date) - cast(LNK_SIBT as date)))
+                OR (AOBT IS NULL AND ATOT IS NOT NULL  AND LNK_AIBT + (cast(SOBT as date) - cast(LNK_SIBT as date)) + 30 *1/(24*60) &gt; ATOT)
+                OR (AOBT IS NULL AND ATOT IS NULL AND sysdate &gt; (LNK_AIBT + (cast(SOBT as date) - cast(LNK_SIBT as date))))))))
+
+            </if>
+            <if test='passstatus=="1"'>
+                nvl(FLIGHT_CANCEL_CODE,'-1') != 'C' AND FLIGHT_CLASS_CODE IN ('L/W', 'W/Z', 'C/B') AND (A_OR_D='D') AND ( (
+                LNK_FLIGHT_NO IS NULL OR LENGTH(LNK_FLIGHT_NO) = 0 OR nvl(TO_CHAR(LNK_AIBT, 'YYYY-MM-DD'),'-1') != nvl(TO_CHAR(SOBT, 'YYYY-MM-DD'),'-1')  and
+                SOBT &lt; TO_DATE(TO_CHAR(sysdate, 'YYYY-MM-DD')|| ' 11:00:00','YYYY-MM-DD HH24:MI:SS')) and ((AOBT IS NOT NULL AND AOBT  &gt;= 5 *1/(24*60) + SOBT)
+                OR (AOBT IS NULL AND ATOT IS NOT NULL AND SOBT + 30 *1/(24*60) &lt;= ATOT)
+                OR (AOBT IS NULL AND ATOT IS NULL AND sysdate - 20 *1/(24*60) &gt;= SOBT)))
+                or( LNK_FLIGHT_NO IS not NULL AND LENGTH(LNK_FLIGHT_NO) &gt; 0 AND TO_CHAR(LNK_AIBT,'YYYY-MM-DD') = TO_CHAR(SOBT,'YYYY-MM-DD') and
+                (AOBT &lt; sysdate OR SOBT &lt; sysdate OR ATOT &lt; sysdate)
+                AND (( LNK_ALDT IS NOT NULL and  (cast(LNK_AIBT as date) - cast(LNK_SIBT as date)) &lt;=1/(24*60) AND LNK_ALDT IS NOT NULL AND ((AOBT IS NOT NULL AND AOBT &gt;= SOBT + 5 *1/(24*60))
+                OR (AOBT IS NULL AND ATOT IS NOT NULL AND SOBT + 30 *1/(24*60) &lt;= ATOT)
+                OR (AOBT IS NULL AND ATOT IS NULL AND sysdate - 20 *1/(24*60) &gt;= SOBT)))
+                OR (LNK_AIBT &gt; LNK_SIBT  and LNK_ALDT IS NOT NULL
+                and ((AOBT IS NOT NULL AND AOBT &lt;= LNK_AIBT + (cast(SOBT as date) - cast(LNK_SIBT as date)))
+                OR (AOBT IS NULL AND ATOT IS NOT NULL  AND LNK_AIBT + (cast(SOBT as date) - cast(LNK_SIBT as date)) + 30 *1/(24*60) &lt;= ATOT)
+                OR (AOBT IS NULL AND ATOT IS NULL AND sysdate &lt;= (LNK_AIBT + (cast(SOBT as date) - cast(LNK_SIBT as date))))))))
+
+            </if>
+
+        </trim>
+        )
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="inDelay != null and inDelay!=''">
+                extract(day from (IN_DELAY))* 24 * 60 +
+                extract(hour from (IN_DELAY))* 60 +
+                extract(minute from (IN_DELAY)) &gt; #{inDelay}
+            </if>
+            <if test="outDelay != null and inDelay!=''">
+                extract(day from (OUT_DELAY))* 24 * 60 +
+                extract(hour from (OUT_DELAY))* 60 +
+                extract(minute from (OUT_DELAY)) &gt; #{outDelay}
+            </if>
+        </trim>
+    </select>
+
+</mapper>

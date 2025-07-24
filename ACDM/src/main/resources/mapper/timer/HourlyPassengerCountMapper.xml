@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.timer.HourlyPassengerCount.HourlyPassengerCountMapper" >
+  <update id="updateHourlyPassengerCountT1">
+    UPDATE HOURLY_PASSENGER_COUNT
+    SET "Count_Checked-in" = (
+    SELECT
+    COUNT( * )
+    FROM
+    DAILY_PASSENGER_MASTER TT LEFT JOIN DAILY_FLIGHT_MASTER TM ON TT.PAX_FLIGHTNO = TM.FLIGHT_NO_IATA
+    AND to_char(TT.DPERATION_DATE,'YYYY-MM-DD') = to_char(TM.OPERATIONAL_DATE,'YYYY-MM-DD')
+    AND TM.A_OR_D = 'D' LEFT JOIN DAILY_FLIGHT_ADD_DETAILS TD ON TM.FLIGHT_NO_IATA = TD.FLIGHT_NO_IATA
+    AND TM.A_OR_D = TD.A_OR_D
+    AND to_char(TM.OPERATIONAL_DATE,'YYYY-MM-DD') =to_char(TD.OPERATIONAL_DATE,'YYYY-MM-DD')
+    AND TM.FLIGHT_REPEAT_COUNT = TD.FLIGHT_REPEAT_COUNT
+    WHERE
+    to_char( TT.PAX_CHECKINTIME, 'YYYY-MM-DD HH24:MI:SS' ) &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' 00:00:00' )
+    AND TT.PAX_CHECKINTIME IS NOT NULL
+    AND to_char(TT.PAX_CHECKINTIME,'YYYY-MM-DD HH24:MI:SS') &lt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    AND (
+    to_char( TT.PAX_SECURITYCHECKTIME, 'YYYY-MM-DD HH24:MI:SS' ) &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    OR TT.PAX_SECURITYCHECKTIME IS NULL
+    )
+    AND (
+    to_char( TM.ATOT, 'YYYY-MM-DD HH24:MI:SS' ) &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    OR TM.ATOT IS NULL
+    )
+    AND TD.AIRCRAFT_TERMINAL_CODE = 1
+    AND NOT EXISTS (
+    SELECT
+    1
+    FROM
+    DAILY_PASSENGER_MASTER
+    WHERE
+    PAX_TANSFERYN = 1
+    AND PAX_FLIGHTNOBEFORETSF = TT.PAX_FLIGHTNO
+    AND to_char(PAX_DATEBEFORETSF,'YYYY-MM-DD') = to_char(TT.DPERATION_DATE,'YYYY-MM-DD')
+    AND PAX_NAME_ENGLISH = TT.PAX_NAME_ENGLISH
+    )
+    ),
+    COUNT_INSECURITYZONE = (
+    SELECT
+    COUNT( * )
+    FROM
+    DAILY_PASSENGER_MASTER TT LEFT JOIN DAILY_FLIGHT_MASTER TM ON TT.PAX_FLIGHTNO = TM.FLIGHT_NO_IATA
+    AND to_char(TT.DPERATION_DATE,'YYYY-MM-DD') =  to_char(TM.OPERATIONAL_DATE,'YYYY-MM-DD')
+    AND TM.A_OR_D = 'D' LEFT JOIN DAILY_FLIGHT_ADD_DETAILS TD ON TM.FLIGHT_NO_IATA = TD.FLIGHT_NO_IATA
+    AND TM.A_OR_D = TD.A_OR_D
+    AND to_char(TM.OPERATIONAL_DATE,'YYYY-MM-DD') =  to_char(TD.OPERATIONAL_DATE,'YYYY-MM-DD')
+    AND TM.FLIGHT_REPEAT_COUNT = TD.FLIGHT_REPEAT_COUNT
+    WHERE
+    to_char( TT.PAX_CHECKINTIME, 'YYYY-MM-DD HH24:MI:SS' ) &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' 00:00:00' )
+    AND TT.PAX_SECURITYCHECKTIME IS NOT NULL
+    AND to_char(TT.PAX_SECURITYCHECKTIME,'YYYY-MM-DD HH24:MI:SS') &lt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    AND (
+    to_char( TT.PAX_BOARDINGTIME, 'YYYY-MM-DD HH24:MI:SS' ) &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    OR TT.PAX_BOARDINGTIME IS NULL
+    )
+    AND (
+    to_char( TM.ATOT, 'YYYY-MM-DD HH24:MI:SS' ) &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    OR TM.ATOT IS NULL
+    )
+    AND TD.AIRCRAFT_TERMINAL_CODE = 1
+    AND NOT EXISTS (
+    SELECT
+    1
+    FROM
+    DAILY_PASSENGER_MASTER
+    WHERE
+    PAX_TANSFERYN = 1
+    AND PAX_FLIGHTNOBEFORETSF = TT.PAX_FLIGHTNO
+    AND to_char(PAX_DATEBEFORETSF,'YYYY-MM-DD') =to_char(TT.DPERATION_DATE,'YYYY-MM-DD')
+    AND PAX_NAME_ENGLISH = TT.PAX_NAME_ENGLISH
+    )
+    ),
+    COUNT_ONFLIGHTS = (
+    SELECT
+    COUNT( * )
+    FROM
+    DAILY_PASSENGER_MASTER TT LEFT JOIN DAILY_FLIGHT_MASTER TM ON TT.PAX_FLIGHTNO = TM.FLIGHT_NO_IATA
+    AND to_char(TT.DPERATION_DATE,'YYYY-MM-DD') = to_char(TM.OPERATIONAL_DATE,'YYYY-MM-DD')
+    AND TM.A_OR_D = 'D' LEFT JOIN DAILY_FLIGHT_ADD_DETAILS TD ON TM.FLIGHT_NO_IATA = TD.FLIGHT_NO_IATA
+    AND TM.A_OR_D = TD.A_OR_D
+    AND to_char(TM.OPERATIONAL_DATE,'YYYY-MM-DD') =  to_char(TD.OPERATIONAL_DATE,'YYYY-MM-DD')
+    AND TM.FLIGHT_REPEAT_COUNT = TD.FLIGHT_REPEAT_COUNT
+    WHERE
+    to_char( TT.PAX_CHECKINTIME, 'YYYY-MM-DD HH24:MI:SS' ) &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' 00:00:00' )
+    AND TT.PAX_BOARDINGTIME IS NOT NULL
+    AND to_char( TT.PAX_BOARDINGTIME, 'YYYY-MM-DD HH24:MI:SS' ) &lt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    AND (
+    to_char(TM.ATOT,'YYYY-MM-DD HH24:MI:SS') &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    OR TM.ATOT IS NULL
+    )
+    AND TD.AIRCRAFT_TERMINAL_CODE = 1
+    AND NOT EXISTS (
+    SELECT
+    1
+    FROM
+    DAILY_PASSENGER_MASTER
+    WHERE
+    PAX_TANSFERYN = 1
+    AND PAX_FLIGHTNOBEFORETSF = TT.PAX_FLIGHTNO
+    AND to_char(PAX_DATEBEFORETSF,'YYYY-MM-DD') =to_char(TT.DPERATION_DATE,'YYYY-MM-DD')
+    AND PAX_NAME_ENGLISH = TT.PAX_NAME_ENGLISH
+    )
+    )
+    WHERE
+    to_number(PAX_COUNT_HOUR24H)  = trunc(to_number(to_char( SYSDATE, 'HH24' )))
+    AND to_char( PAX_COUNT_DATE, 'YYYY-MM-DD' ) = to_char( SYSDATE, 'YYYY-MM-DD' )
+    AND TERMINAL = 1
+  </update>
+  <update id="updateHourlyPassengerCountT2">
+    UPDATE HOURLY_PASSENGER_COUNT
+    SET "Count_Checked-in" = (
+    SELECT
+    COUNT( * )
+    FROM
+    DAILY_PASSENGER_MASTER TT LEFT JOIN DAILY_FLIGHT_MASTER TM ON TT.PAX_FLIGHTNO = TM.FLIGHT_NO_IATA
+    AND to_char(TT.DPERATION_DATE,'YYYY-MM-DD') = to_char(TM.OPERATIONAL_DATE,'YYYY-MM-DD')
+    AND TM.A_OR_D = 'D' LEFT JOIN DAILY_FLIGHT_ADD_DETAILS TD ON TM.FLIGHT_NO_IATA = TD.FLIGHT_NO_IATA
+    AND TM.A_OR_D = TD.A_OR_D
+    AND to_char(TM.OPERATIONAL_DATE,'YYYY-MM-DD') =to_char(TD.OPERATIONAL_DATE,'YYYY-MM-DD')
+    AND TM.FLIGHT_REPEAT_COUNT = TD.FLIGHT_REPEAT_COUNT
+    WHERE
+    to_char( TT.PAX_CHECKINTIME, 'YYYY-MM-DD HH24:MI:SS' ) &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' 00:00:00' )
+    AND TT.PAX_CHECKINTIME IS NOT NULL
+    AND to_char(TT.PAX_CHECKINTIME,'YYYY-MM-DD HH24:MI:SS') &lt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    AND (
+    to_char( TT.PAX_SECURITYCHECKTIME, 'YYYY-MM-DD HH24:MI:SS' ) &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    OR TT.PAX_SECURITYCHECKTIME IS NULL
+    )
+    AND (
+    to_char( TM.ATOT, 'YYYY-MM-DD HH24:MI:SS' ) &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    OR TM.ATOT IS NULL
+    )
+    AND TD.AIRCRAFT_TERMINAL_CODE = 2
+    AND NOT EXISTS (
+    SELECT
+    1
+    FROM
+    DAILY_PASSENGER_MASTER
+    WHERE
+    PAX_TANSFERYN = 1
+    AND PAX_FLIGHTNOBEFORETSF = TT.PAX_FLIGHTNO
+    AND to_char(PAX_DATEBEFORETSF,'YYYY-MM-DD') = to_char(TT.DPERATION_DATE,'YYYY-MM-DD')
+    AND PAX_NAME_ENGLISH = TT.PAX_NAME_ENGLISH
+    )
+    ),
+    COUNT_INSECURITYZONE = (
+    SELECT
+    COUNT( * )
+    FROM
+    DAILY_PASSENGER_MASTER TT LEFT JOIN DAILY_FLIGHT_MASTER TM ON TT.PAX_FLIGHTNO = TM.FLIGHT_NO_IATA
+    AND to_char(TT.DPERATION_DATE,'YYYY-MM-DD') =  to_char(TM.OPERATIONAL_DATE,'YYYY-MM-DD')
+    AND TM.A_OR_D = 'D' LEFT JOIN DAILY_FLIGHT_ADD_DETAILS TD ON TM.FLIGHT_NO_IATA = TD.FLIGHT_NO_IATA
+    AND TM.A_OR_D = TD.A_OR_D
+    AND to_char(TM.OPERATIONAL_DATE,'YYYY-MM-DD') =  to_char(TD.OPERATIONAL_DATE,'YYYY-MM-DD')
+    AND TM.FLIGHT_REPEAT_COUNT = TD.FLIGHT_REPEAT_COUNT
+    WHERE
+    to_char( TT.PAX_CHECKINTIME, 'YYYY-MM-DD HH24:MI:SS' ) &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' 00:00:00' )
+    AND TT.PAX_SECURITYCHECKTIME IS NOT NULL
+    AND to_char(TT.PAX_SECURITYCHECKTIME,'YYYY-MM-DD HH24:MI:SS') &lt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    AND (
+    to_char( TT.PAX_BOARDINGTIME, 'YYYY-MM-DD HH24:MI:SS' ) &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    OR TT.PAX_BOARDINGTIME IS NULL
+    )
+    AND (
+    to_char( TM.ATOT, 'YYYY-MM-DD HH24:MI:SS' ) &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    OR TM.ATOT IS NULL
+    )
+    AND TD.AIRCRAFT_TERMINAL_CODE = 2
+    AND NOT EXISTS (
+    SELECT
+    1
+    FROM
+    DAILY_PASSENGER_MASTER
+    WHERE
+    PAX_TANSFERYN = 1
+    AND PAX_FLIGHTNOBEFORETSF = TT.PAX_FLIGHTNO
+    AND to_char(PAX_DATEBEFORETSF,'YYYY-MM-DD') =to_char(TT.DPERATION_DATE,'YYYY-MM-DD')
+    AND PAX_NAME_ENGLISH = TT.PAX_NAME_ENGLISH
+    )
+    ),
+    COUNT_ONFLIGHTS = (
+    SELECT
+    COUNT( * )
+    FROM
+    DAILY_PASSENGER_MASTER TT LEFT JOIN DAILY_FLIGHT_MASTER TM ON TT.PAX_FLIGHTNO = TM.FLIGHT_NO_IATA
+    AND to_char(TT.DPERATION_DATE,'YYYY-MM-DD') = to_char(TM.OPERATIONAL_DATE,'YYYY-MM-DD')
+    AND TM.A_OR_D = 'D' LEFT JOIN DAILY_FLIGHT_ADD_DETAILS TD ON TM.FLIGHT_NO_IATA = TD.FLIGHT_NO_IATA
+    AND TM.A_OR_D = TD.A_OR_D
+    AND to_char(TM.OPERATIONAL_DATE,'YYYY-MM-DD') =  to_char(TD.OPERATIONAL_DATE,'YYYY-MM-DD')
+    AND TM.FLIGHT_REPEAT_COUNT = TD.FLIGHT_REPEAT_COUNT
+    WHERE
+    to_char( TT.PAX_CHECKINTIME, 'YYYY-MM-DD HH24:MI:SS' ) &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' 00:00:00' )
+    AND TT.PAX_BOARDINGTIME IS NOT NULL
+    AND to_char( TT.PAX_BOARDINGTIME, 'YYYY-MM-DD HH24:MI:SS' ) &lt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    AND (
+    to_char(TM.ATOT,'YYYY-MM-DD HH24:MI:SS') &gt; ( to_char( SYSDATE, 'YYYY-MM-DD' ) || ' ' || to_char( SYSDATE, 'HH24' ) || ':00:00' )
+    OR TM.ATOT IS NULL
+    )
+    AND TD.AIRCRAFT_TERMINAL_CODE = 2
+    AND NOT EXISTS (
+    SELECT
+    1
+    FROM
+    DAILY_PASSENGER_MASTER
+    WHERE
+    PAX_TANSFERYN = 1
+    AND PAX_FLIGHTNOBEFORETSF = TT.PAX_FLIGHTNO
+    AND to_char(PAX_DATEBEFORETSF,'YYYY-MM-DD') =to_char(TT.DPERATION_DATE,'YYYY-MM-DD')
+    AND PAX_NAME_ENGLISH = TT.PAX_NAME_ENGLISH
+    )
+    )
+    WHERE
+    to_number(PAX_COUNT_HOUR24H)  = trunc(to_number(to_char( SYSDATE, 'HH24' )))
+    AND to_char( PAX_COUNT_DATE, 'YYYY-MM-DD' ) = to_char( SYSDATE, 'YYYY-MM-DD' )
+    AND TERMINAL = 2
+  </update>
+<insert id="initialHourlyPassengerCount" parameterType="java.util.List" useGeneratedKeys="false">
+  insert ALL
+  <foreach item="item" index="index" collection="list">
+    INTO HOURLY_PASSENGER_COUNT
+
+    VALUES (
+    #{item.countHour24h},
+    SYSDATE,
+    #{item.countCheckedIn},
+    #{item.countInSecurityZone},
+    #{item.onFlights},
+    #{item.terminal}
+    )
+  </foreach>
+  SELECT 1 FROM DUAL
+</insert>
+  <select id="queryHourlyPassengerCount" resultType="map">
+    select COUNT (*) as countnumber from HOURLY_PASSENGER_COUNT
+    where to_char(PAX_COUNT_DATE,'YYYY-MM-DD') = to_char(SYSDATE,'YYYY-MM-DD')
+  </select>
+</mapper>

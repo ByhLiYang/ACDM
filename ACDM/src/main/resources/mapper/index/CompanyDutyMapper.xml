@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.index.CompanyDutyMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.index.CompanyDuty" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="DUTY_DATE" property="dutyDate" jdbcType="TIMESTAMP" />
+    <result column="HQ_COMPANY_DUTY" property="hqCompanyDuty" jdbcType="VARCHAR" />
+    <result column="AOC_MANAGER" property="aocManager" jdbcType="VARCHAR" />
+    <result column="AOC_EXTERNAL_MANAGER" property="aocExternalManager" jdbcType="VARCHAR" />
+    <result column="AOC_INTERNAL_MANAGER" property="aocInternalManager" jdbcType="VARCHAR" />
+    <result column="FLIGHT_AREA_DUTY" property="flightAreaDuty" jdbcType="VARCHAR" />
+    <result column="OPERATOR" property="operator" jdbcType="VARCHAR" />
+    <result column="OPERATE_TIME" property="operateTime" jdbcType="TIMESTAMP" />
+    <result column="OPERATE_IP" property="operateIp" jdbcType="VARCHAR" />
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, DUTY_DATE, HQ_COMPANY_DUTY, AOC_MANAGER, AOC_EXTERNAL_MANAGER, AOC_INTERNAL_MANAGER, 
+    FLIGHT_AREA_DUTY, OPERATOR, OPERATE_TIME, OPERATE_IP, REMARKS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from COMPANY_DUTY
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from COMPANY_DUTY
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.hq.acdm.model.index.CompanyDuty" >
+    insert into COMPANY_DUTY (ID, DUTY_DATE, HQ_COMPANY_DUTY, 
+      AOC_MANAGER, AOC_EXTERNAL_MANAGER, AOC_INTERNAL_MANAGER, 
+      FLIGHT_AREA_DUTY, OPERATOR, OPERATE_TIME, 
+      OPERATE_IP, REMARKS)
+    values (COMPANY_DUTY_SEQUENCE.NEXTVAL, #{dutyDate,jdbcType=TIMESTAMP}, #{hqCompanyDuty,jdbcType=VARCHAR},
+      #{aocManager,jdbcType=VARCHAR}, #{aocExternalManager,jdbcType=VARCHAR}, #{aocInternalManager,jdbcType=VARCHAR}, 
+      #{flightAreaDuty,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, 
+      #{operateIp,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hq.acdm.model.index.CompanyDuty" >
+    update COMPANY_DUTY
+    <set >
+      <if test="dutyDate != null" >
+        DUTY_DATE = #{dutyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hqCompanyDuty != null" >
+        HQ_COMPANY_DUTY = #{hqCompanyDuty,jdbcType=VARCHAR},
+      </if>
+      <if test="aocManager != null" >
+        AOC_MANAGER = #{aocManager,jdbcType=VARCHAR},
+      </if>
+      <if test="aocExternalManager != null" >
+        AOC_EXTERNAL_MANAGER = #{aocExternalManager,jdbcType=VARCHAR},
+      </if>
+      <if test="aocInternalManager != null" >
+        AOC_INTERNAL_MANAGER = #{aocInternalManager,jdbcType=VARCHAR},
+      </if>
+      <if test="flightAreaDuty != null" >
+        FLIGHT_AREA_DUTY = #{flightAreaDuty,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        OPERATOR = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null" >
+        OPERATE_TIME = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateIp != null" >
+        OPERATE_IP = #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        REMARKS = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hq.acdm.model.index.CompanyDuty" >
+    update COMPANY_DUTY
+    set DUTY_DATE = #{dutyDate,jdbcType=TIMESTAMP},
+      HQ_COMPANY_DUTY = #{hqCompanyDuty,jdbcType=VARCHAR},
+      AOC_MANAGER = #{aocManager,jdbcType=VARCHAR},
+      AOC_EXTERNAL_MANAGER = #{aocExternalManager,jdbcType=VARCHAR},
+      AOC_INTERNAL_MANAGER = #{aocInternalManager,jdbcType=VARCHAR},
+      FLIGHT_AREA_DUTY = #{flightAreaDuty,jdbcType=VARCHAR},
+      OPERATOR = #{operator,jdbcType=VARCHAR},
+      OPERATE_TIME = #{operateTime,jdbcType=TIMESTAMP},
+      OPERATE_IP = #{operateIp,jdbcType=VARCHAR},
+      REMARKS = #{remarks,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+  <select id="getTodayRecord" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from COMPANY_DUTY
+    where to_char(DUTY_DATE,'YYYY-MM-DD') = to_char(current_date,'YYYY-MM-DD')
+  </select>
+  <select id="getRecordByDate" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from COMPANY_DUTY
+    where to_char(DUTY_DATE,'YYYY-MM-DD') = #{dutyDate}
+  </select>
+  <select id="getAllRecord" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from COMPANY_DUTY
+  </select>
+  <select id="selectOrderByDate" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    from
+    COMPANY_DUTY
+    where id = (SELECT MAX(ID) from COMPANY_DUTY) -2
+  </select>
+  <select id="maxId" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    from
+    COMPANY_DUTY
+    WHERE ID = (SELECT MAX(ID) from COMPANY_DUTY)
+  </select>
+</mapper>

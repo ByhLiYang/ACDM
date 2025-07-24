@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.parameter.MinimumConnectionTimeMapper" >
+  <resultMap id="BaseResultMap" type="com.hq.acdm.model.parameter.VMinimumConnectionTime" >
+    <result column="NAME" property="name" jdbcType="DECIMAL" />
+    <result column="AIRLINE" property="airline" jdbcType="DECIMAL" />
+    <result column="AIRCRAFTTYPE" property="aircrafttype" jdbcType="DECIMAL" />
+    <result column="DURATION" property="duration" jdbcType="VARCHAR" />
+    <result column="UPDATETIME" property="updatetime" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insertMinimumConnectionTime" parameterType="com.hq.acdm.model.parameter.VMinimumConnectionTime" >
+    INSERT INTO MTTT VALUES(#{airline},#{aircrafttype},#{duration},1,#{updatetime})
+  </insert>
+  <update id="updateMinimumConnectionTime" parameterType="com.hq.acdm.model.parameter.VMinimumConnectionTime" >
+    UPDATE MTTT SET DURATION=#{duration},UPDATETIME=#{updatetime} WHERE STATUS=1 AND AIRLINE=#{airline} AND AIRCRAFTTYPE=#{aircrafttype}
+  </update>
+  <update id="updateForDelete" parameterType="com.hq.acdm.model.parameter.VMinimumConnectionTime" >
+    UPDATE MTTT SET DURATION=#{duration},STATUS=0,UPDATETIME=#{updatetime} WHERE STATUS=1 AND AIRLINE=#{airline} AND AIRCRAFTTYPE=#{aircrafttype}
+  </update>
+  <update id="updateForRecover" parameterType="com.hq.acdm.model.parameter.VMinimumConnectionTime" >
+    UPDATE MTTT SET DURATION=#{duration},STATUS=1,UPDATETIME=#{updatetime} WHERE STATUS=0 AND AIRLINE=#{airline} AND AIRCRAFTTYPE=#{aircrafttype}
+  </update>
+  <select id="findMinimumConnectionTime" resultMap="BaseResultMap">
+    SELECT TA.NAME,TB.AIRLINE,TB.AIRCRAFTTYPE,TB.DURATION FROM AIRLINE TA, MTTT TB WHERE TB.STATUS=1 AND TA.IATA_CODE=TB.AIRLINE
+    UNION SELECT 'ALL','ALL',AIRCRAFTTYPE,DURATION FROM MTTT WHERE STATUS=1 AND AIRLINE='ALL' ORDER BY 2,3
+  </select>
+</mapper>

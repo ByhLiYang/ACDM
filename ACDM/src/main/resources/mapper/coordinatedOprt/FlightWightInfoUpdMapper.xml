@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.coordinatedOprt.FlightWightInfoUpdMapper" >
+
+  <resultMap id="FligthResultMap" type="com.hq.acdm.vo.coordinatedOprt.FlightWightInfoUpdVo" >
+    <result column="FLIGHT_ID_A" property="flightIdA" jdbcType="VARCHAR" />
+    <result column="FLIGHT_ID_D" property="flightIdD" jdbcType="VARCHAR" />
+    <result column="FLNO_A" property="flnoA" jdbcType="VARCHAR" />
+    <result column="FLNO_D" property="flnoD" jdbcType="VARCHAR" />
+    <result column="ADEP_ADES_A" property="adepAdesA" jdbcType="VARCHAR" />
+    <result column="ADEP_ADES_D" property="adepAdesD" jdbcType="VARCHAR" />
+    <result column="SIBT" property="sibt" jdbcType="VARCHAR" />
+    <result column="SOBT" property="sobt" jdbcType="VARCHAR" />
+    <result column="CARGO_WEIGHT_A" property="cargoWeightA" jdbcType="VARCHAR" />
+    <result column="CARGO_WEIGHT_D" property="cargoWeightD" jdbcType="VARCHAR" />
+    <result column="MAIL_WEIGHT_A" property="mailWeightA" jdbcType="VARCHAR" />
+    <result column="MAIL_WEIGHT_D" property="mailWeightD" jdbcType="VARCHAR" />
+    <result column="BAG_WEIGHT_A" property="bagWeightA" jdbcType="VARCHAR" />
+    <result column="BAG_WEIGHT_D" property="bagWeightD" jdbcType="VARCHAR" />
+    <result column="RESERVATIONS_A" property="reservationsA" jdbcType="VARCHAR" />
+    <result column="RESERVATIONS_D" property="reservationsD" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+
+  <select id="findFligthInfo" resultMap="FligthResultMap" parameterType="map">
+    SELECT T.FLIGHT_ID_D, -- 离港航班唯一ID
+    T.FLIGHT_ID_A, -- 进港航班唯一ID
+    T.FLNO_D,-- 出港航班号
+    T.FLNO_A,-- 进港航班号
+    CONCAT(T.ADEP_A,IF(IFNULL(T.ADEP_A,'')='','','>'),T.ADES_A) AS ADEP_ADES_A, -- 进港起落机场
+    CONCAT(T.ADEP_D,IF(IFNULL(T.ADEP_D,'')='','','>'),T.ADES_D) AS ADEP_ADES_D, -- 出港起落机场
+    T.SOBT,-- 计划起飞时间
+    T.SIBT,-- 计划落地时间
+    T.CARGO_WEIGHT_A,
+    T.MAIL_WEIGHT_A,
+    T.BAG_WEIGHT_A,
+    T.RESERVATIONS_A,
+    T.CARGO_WEIGHT_D,
+    T.MAIL_WEIGHT_D,
+    T.BAG_WEIGHT_D,
+    T.RESERVATIONS_D
+    FROM (
+    SELECT
+    V.FLIGHT_ID_D,
+    V.FLIGHT_ID_A,
+    V.FLNO_D,
+    V.FLNO_A,
+    V.SOBT,
+    V.SIBT,
+    V.ADEP_A,
+    V.ADES_A,
+    V.ADEP_D,
+    V.ADES_D,
+    V.CARGO_WEIGHT_A,
+    V.MAIL_WEIGHT_A,
+    V.BAG_WEIGHT_A,
+    V.RESERVATIONS_A,
+    V.CARGO_WEIGHT_D,
+    V.MAIL_WEIGHT_D,
+    V.BAG_WEIGHT_D,
+    V.RESERVATIONS_D
+    FROM
+    (
+    SELECT
+    AA.FLIGHT_ID AS FLIGHT_ID_D,
+    A.FLIGHT_ID AS FLIGHT_ID_A,
+    AA.FLNO AS FLNO_D,
+    A.FLNO AS FLNO_A,
+    date_format(AA.SOBT, '%Y-%m-%d %H:%i') AS SOBT,
+    date_format(A.SIBT, '%Y-%m-%d %H:%i') AS SIBT,
+    A.ADEP AS ADEP_A,
+    A.ADES AS ADES_A,
+    AA.ADEP AS ADEP_D,
+    AA.ADES AS ADES_D,
+    A.CARGO_WEIGHT AS CARGO_WEIGHT_A,
+    A.MAIL_WEIGHT AS MAIL_WEIGHT_A,
+    A.BAG_WEIGHT AS BAG_WEIGHT_A,
+    A.RESERVATIONS AS RESERVATIONS_A,
+    AA.CARGO_WEIGHT AS CARGO_WEIGHT_D,
+    AA.MAIL_WEIGHT AS MAIL_WEIGHT_D,
+    AA.BAG_WEIGHT AS BAG_WEIGHT_D,
+    AA.RESERVATIONS AS RESERVATIONS_D
+    FROM
+    ((SELECT * FROM T_LOCAL_FLIGHT_INFO
+    WHERE ABNORMAL_FLIGHT_STAT_CD  <![CDATA[<>]]> 'CAN'
+    AND ISDEL <![CDATA[<>]]> '1'
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR}
+    UNION
+    SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY
+    WHERE ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND ISDEL <![CDATA[<>]]> '1'
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR}) AA
+    LEFT JOIN (SELECT * FROM T_LOCAL_FLIGHT_INFO
+    WHERE ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND ISDEL <![CDATA[<>]]> '1'
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR}
+    UNION
+    SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY
+    WHERE ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND ISDEL <![CDATA[<>]]> '1'
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR}) A
+    ON((AA.ASSOCIATED_FLIGHT_ID = A.FLIGHT_ID)))
+    WHERE
+    ((AA.D_OR_A = 'D') AND(AA.ISDEL <![CDATA[<>]]> '1') AND(AA.ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'))
+    UNION
+    SELECT
+    AA.FLIGHT_ID AS FLIGHT_ID_D,
+    A.FLIGHT_ID AS FLIGHT_ID_A,
+    AA.FLNO AS FLNO_D,
+    A.FLNO AS FLNO_A,
+    date_format(AA.SOBT, '%Y-%m-%d %H:%i') AS SOBT,
+    date_format(A.SIBT, '%Y-%m-%d %H:%i') AS SIBT,
+    A.ADEP AS ADEP_A,
+    A.ADES AS ADES_A,
+    AA.ADEP AS ADEP_D,
+    AA.ADES AS ADES_D,
+    A.CARGO_WEIGHT AS CARGO_WEIGHT_A,
+    A.MAIL_WEIGHT AS MAIL_WEIGHT_A,
+    A.BAG_WEIGHT AS BAG_WEIGHT_A,
+    A.RESERVATIONS AS RESERVATIONS_A,
+    AA.CARGO_WEIGHT AS CARGO_WEIGHT_D,
+    AA.MAIL_WEIGHT AS MAIL_WEIGHT_D,
+    AA.BAG_WEIGHT AS BAG_WEIGHT_D,
+    AA.RESERVATIONS AS RESERVATIONS_D
+    FROM
+    ((SELECT * FROM T_LOCAL_FLIGHT_INFO
+    WHERE ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND ISDEL <![CDATA[<>]]> '1'
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR}
+    UNION
+    SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY
+    WHERE ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND ISDEL <![CDATA[<>]]> '1'
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR}) A
+    LEFT JOIN (SELECT * FROM T_LOCAL_FLIGHT_INFO
+    WHERE ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND ISDEL <![CDATA[<>]]> '1'
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR}
+    UNION
+    SELECT * FROM T_LOCAL_FLIGHT_INFO_HISTORY
+    WHERE ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'
+    AND ISDEL <![CDATA[<>]]> '1'
+    AND EXEC_DATE BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR}) AA ON((AA.ASSOCIATED_FLIGHT_ID = A.FLIGHT_ID)))
+    WHERE
+    ((A.D_OR_A = 'A') AND isnull(AA.FLIGHT_ID) AND(A.ISDEL <![CDATA[<>]]> '1') AND(A.ABNORMAL_FLIGHT_STAT_CD <![CDATA[<>]]> 'CAN'))
+    ) V
+    ) T
+    WHERE (DATE_FORMAT(T.SOBT, '%Y-%m-%d') BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR}
+    OR DATE_FORMAT(T.SIBT, '%Y-%m-%d') BETWEEN #{params.startDate,jdbcType=VARCHAR} AND #{params.endDate,jdbcType=VARCHAR})
+    <if test="params.flno !=null and params.flno != ''">
+      AND (T.FLNO_D LIKE CONCAT('%',#{params.flno,jdbcType=VARCHAR},'%') OR T.FLNO_A LIKE CONCAT('%',#{params.flno,jdbcType=VARCHAR},'%'))
+    </if>
+    ORDER BY T.FLIGHT_ID_D DESC,T.FLIGHT_ID_A DESC
+  </select>
+
+  <update id="updateFltGoodsMailBagBookingWight" parameterType="map">
+    UPDATE T_LOCAL_FLIGHT_INFO
+    SET
+    <if test="params.cargoWeight != null" >
+      CARGO_WEIGHT = #{params.cargoWeight,jdbcType=VARCHAR},
+   </if>
+    <if test="params.mailWeight != null" >
+      MAIL_WEIGHT = #{params.mailWeight,jdbcType=VARCHAR},
+    </if>
+    <if test="params.bagWeight != null" >
+      BAG_WEIGHT = #{params.bagWeight,jdbcType=VARCHAR},
+    </if>
+    <if test="params.reservations != null" >
+      RESERVATIONS = #{params.reservations,jdbcType=VARCHAR},
+    </if>
+    FLIGHT_ID = #{params.flightId,jdbcType=VARCHAR}
+    WHERE FLIGHT_ID = #{params.flightId,jdbcType=VARCHAR}
+  </update>
+
+
+  <update id="updateFltHisGoodsMailBagBookingWight" parameterType="map">
+    UPDATE T_LOCAL_FLIGHT_INFO_HISTORY
+    SET
+    <if test="params.cargoWeight != null" >
+    CARGO_WEIGHT = #{params.cargoWeight,jdbcType=VARCHAR},
+    </if>
+    <if test="params.mailWeight != null" >
+      MAIL_WEIGHT = #{params.mailWeight,jdbcType=VARCHAR},
+    </if>
+    <if test="params.bagWeight != null" >
+      BAG_WEIGHT = #{params.bagWeight,jdbcType=VARCHAR},
+    </if>
+    <if test="params.reservations != null" >
+      RESERVATIONS = #{params.reservations,jdbcType=VARCHAR},
+    </if>
+
+    FLIGHT_ID = #{params.flightId,jdbcType=VARCHAR}
+    WHERE FLIGHT_ID = #{params.flightId,jdbcType=VARCHAR}
+  </update>
+
+  <resultMap id="InterFaceResultMap" type="com.hq.acdm.vo.coordinatedOprt.InterFaceVo" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="FNAME" property="fname" jdbcType="VARCHAR" />
+    <result column="SENDER" property="sender" jdbcType="VARCHAR" />
+    <result column="RECEIVER" property="receiver" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="AMOUNT" property="amount" jdbcType="VARCHAR" />
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR" />
+
+  </resultMap>
+
+  <select id="findInterfaceInfo" resultMap="InterFaceResultMap" parameterType="map">
+
+    SELECT ID,FNAME,SENDER,RECEIVER,`STATUS`,AMOUNT,REMARKS from T_INTERFACE WHERE 1=1
+
+    <if test="params.fname !=null and params.fname != ''">
+      AND (FNAME LIKE CONCAT('%',#{params.fname,jdbcType=VARCHAR},'%') )
+    </if>
+  </select>
+
+  <resultMap id="DateManagerResultMap" type="com.hq.acdm.vo.coordinatedOprt.DateManagerVo" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="DNAME" property="dname" jdbcType="VARCHAR" />
+    <result column="UNAME" property="uname" jdbcType="VARCHAR" />
+    <result column="SENDER" property="sender" jdbcType="VARCHAR" />
+    <result column="RECEIVER" property="receiver" jdbcType="VARCHAR" />
+    <result column="HBJHSTATUS" property="hbjhstatus" jdbcType="VARCHAR" />
+    <result column="HBDTSTATUS" property="hbdtstatus" jdbcType="VARCHAR" />
+    <result column="ZYJCSTATUS" property="zyjcstatus" jdbcType="VARCHAR" />
+
+    <result column="ZYDTSTATUS" property="zydtstatus" jdbcType="VARCHAR" />
+    <result column="XTXXSTATUS" property="xtxxstatus" jdbcType="VARCHAR" />
+    <result column="LKXXSTATUS" property="lkxxstatus" jdbcType="VARCHAR" />
+    <result column="DWXXSTATUS" property="dwxxstatus" jdbcType="VARCHAR" />
+    <result column="GZBZSTATUS" property="gzbzstatus" jdbcType="VARCHAR" />
+
+  </resultMap>
+
+  <select id="findDateManagerInfo" resultMap="DateManagerResultMap" parameterType="map">
+
+    SELECT ID,DNAME,UNAME,SENDER,RECEIVER,`HBJHSTATUS`,HBDTSTATUS,ZYJCSTATUS,ZYDTSTATUS,`XTXXSTATUS`,LKXXSTATUS,DWXXSTATUS,GZBZSTATUS from T_DATA_MANAGEMENT WHERE 1=1
+
+    <if test="params.dname !=null and params.dname != ''">
+      AND (DNAME LIKE CONCAT('%',#{params.dname,jdbcType=VARCHAR},'%') )
+    </if>
+  </select>
+
+  <update id="updDateManagerInfo" parameterType="com.hq.acdm.vo.coordinatedOprt.DateManagerVo" >
+    update T_DATA_MANAGEMENT
+    set
+    <if test="dname!= null" >
+      DNAME = #{dname,jdbcType=VARCHAR},
+    </if>
+    <if test="uname!= null" >
+      UNAME = #{uname,jdbcType=VARCHAR},
+    </if>
+    <if test="sender!= null" >
+      SENDER = #{sender,jdbcType=VARCHAR},
+    </if>
+    <if test="receiver!= null" >
+      RECEIVER = #{receiver,jdbcType=VARCHAR},
+    </if>
+      HBJHSTATUS = #{hbjhstatus,jdbcType=VARCHAR},
+      HBDTSTATUS = #{hbdtstatus,jdbcType=VARCHAR},
+      ZYJCSTATUS = #{zyjcstatus,jdbcType=VARCHAR},
+      ZYDTSTATUS = #{zydtstatus,jdbcType=VARCHAR},
+      XTXXSTATUS = #{xtxxstatus,jdbcType=VARCHAR},
+      LKXXSTATUS = #{lkxxstatus,jdbcType=VARCHAR},
+      DWXXSTATUS = #{dwxxstatus,jdbcType=VARCHAR},
+      GZBZSTATUS = #{gzbzstatus,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <insert id="insDateManagerInfo" parameterType="com.hq.acdm.vo.coordinatedOprt.DateManagerVo" >
+    insert into T_DATA_MANAGEMENT (ID,DNAME,UNAME,SENDER,RECEIVER,`HBJHSTATUS`,HBDTSTATUS,ZYJCSTATUS,ZYDTSTATUS,`XTXXSTATUS`,LKXXSTATUS,DWXXSTATUS,GZBZSTATUS,CREATE_TM
+      )
+    values (REPLACE(UUID(),'-',''), #{dname,jdbcType=VARCHAR}, #{uname,jdbcType=VARCHAR},
+      #{sender,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, #{hbjhstatus,jdbcType=VARCHAR},
+      #{hbdtstatus,jdbcType=VARCHAR}, #{zyjcstatus,jdbcType=VARCHAR}, #{zydtstatus,jdbcType=VARCHAR},
+      #{xtxxstatus,jdbcType=VARCHAR}, #{lkxxstatus,jdbcType=VARCHAR}, #{dwxxstatus,jdbcType=VARCHAR}, #{gzbzstatus,jdbcType=VARCHAR},CURRENT_TIMESTAMP()
+      )
+  </insert>
+  <delete id="delDateManagerInfo" parameterType="map" >
+    delete from T_DATA_MANAGEMENT
+    where ID = #{params.id,jdbcType=VARCHAR}
+  </delete>
+
+
+  <resultMap id="AirLineIResultMap" type="com.hq.acdm.vo.coordinatedOprt.AirLineVo" >
+
+    <result column="TWO_CHAR_CD" property="twoCharCd" jdbcType="VARCHAR" />
+    <result column="THREE_CHAR_CD" property="threeCharCd" jdbcType="VARCHAR" />
+    <result column="ATTRIBUTE" property="attribute" jdbcType="VARCHAR" />
+    <result column="CHINESE_NAME" property="chineseName" jdbcType="VARCHAR" />
+    <result column="ENGLISH_NAME" property="englishName" jdbcType="VARCHAR" />
+    <result column="CREATE_USR" property="createUsr" jdbcType="VARCHAR" />
+    <result column="UPDATE_USR" property="updateUsr" jdbcType="VARCHAR" />
+
+    <result column="IS_DELETE" property="isDelete" jdbcType="VARCHAR" />
+
+
+  </resultMap>
+
+  <select id="findAirLineInfo" resultMap="AirLineIResultMap" parameterType="map">
+
+    SELECT TWO_CHAR_CD,THREE_CHAR_CD,ATTRIBUTE,CHINESE_NAME,ENGLISH_NAME,UPDATE_USR,IS_DELETE from T_AIRLINE WHERE 1=1
+    <if test="params.isDelete !=null and params.isDelete != ''">
+      AND IS_DELETE = #{params.isDelete,jdbcType=VARCHAR}
+    </if>
+    <if test="params.twoCharCd !=null and params.twoCharCd != ''">
+      AND TWO_CHAR_CD = #{params.twoCharCd,jdbcType=VARCHAR}
+    </if>
+    <if test="params.qy !=null and params.qy != ''">
+      AND ATTRIBUTE = #{params.qy,jdbcType=VARCHAR}
+    </if>
+    <if test="params.gjz !=null and params.gjz != ''">
+      AND (TWO_CHAR_CD LIKE CONCAT('%',#{params.gjz,jdbcType=VARCHAR},'%') or
+           THREE_CHAR_CD LIKE CONCAT('%',#{params.gjz,jdbcType=VARCHAR},'%') or
+           CHINESE_NAME LIKE CONCAT('%',#{params.gjz,jdbcType=VARCHAR},'%') or
+           ENGLISH_NAME LIKE CONCAT('%',#{params.gjz,jdbcType=VARCHAR},'%')
+          )
+    </if>
+    ORDER BY TWO_CHAR_CD
+  </select>
+
+  <insert id="insAirLineInfo" parameterType="com.hq.acdm.vo.coordinatedOprt.AirLineVo" >
+    insert into T_AIRLINE (ID,TWO_CHAR_CD,THREE_CHAR_CD,ATTRIBUTE,CHINESE_NAME,`ENGLISH_NAME`,IS_DELETE,CREATE_TIME,UPDATE_TIME,CREATE_USR,UPDATE_USR
+      )
+    values (REPLACE(UUID(),'-',''), #{twoCharCd,jdbcType=VARCHAR}, #{threeCharCd,jdbcType=VARCHAR},
+      #{attribute,jdbcType=VARCHAR}, #{chineseName,jdbcType=VARCHAR}, #{englishName,jdbcType=VARCHAR},
+      #{isDelete,jdbcType=VARCHAR},CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),#{createUsr,jdbcType=VARCHAR}, #{updateUsr,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <update id="updAirLineInfo" parameterType="com.hq.acdm.vo.coordinatedOprt.AirLineVo" >
+    update T_AIRLINE
+    set
+    <if test="threeCharCd !=null">
+      THREE_CHAR_CD = #{threeCharCd,jdbcType=VARCHAR},
+    </if>
+    <if test="attribute !=null">
+      ATTRIBUTE = #{attribute,jdbcType=VARCHAR},
+    </if>
+    <if test="chineseName !=null">
+      CHINESE_NAME = #{chineseName,jdbcType=VARCHAR},
+    </if>
+    <if test="englishName !=null">
+      ENGLISH_NAME = #{englishName,jdbcType=VARCHAR},
+    </if>
+    IS_DELETE = #{isDelete,jdbcType=VARCHAR},
+    UPDATE_TIME=CURRENT_TIMESTAMP(),UPDATE_USR = #{updateUsr,jdbcType=VARCHAR}
+    where TWO_CHAR_CD = #{twoCharCd,jdbcType=VARCHAR}
+  </update>
+</mapper>
