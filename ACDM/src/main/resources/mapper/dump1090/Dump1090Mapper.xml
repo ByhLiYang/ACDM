@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hq.acdm.dao.dump1090.Dump1090Mapper" >
+    <update id="updateByHex">
+        update dump1090_air_craft
+        set update_tm = now()
+        <if test="aircraftSaveReq.flight != null and aircraftSaveReq.flight != ''">
+            ,flight = #{aircraftSaveReq.flight}
+        </if>
+        <if test="aircraftSaveReq.lat != null">
+            ,lat = #{aircraftSaveReq.lat}
+        </if>
+        <if test="aircraftSaveReq.lon != null">
+            ,lon = #{aircraftSaveReq.lon}
+        </if>
+        <if test="aircraftSaveReq.speed != null">
+            ,speed = #{aircraftSaveReq.speed}
+        </if>
+        <if test="aircraftSaveReq.altitude != null">
+            ,altitude = #{aircraftSaveReq.altitude}
+        </if>
+        <if test="aircraftSaveReq.track != null">
+            ,track = #{aircraftSaveReq.track}
+        </if>
+        where hex=#{aircraftSaveReq.hex}
+    </update>
+
+
+    <select id="checkAircraftExists" resultType="java.lang.Boolean">
+        SELECT EXISTS(SELECT 1 FROM dump1090_air_craft WHERE hex=#{hex})
+    </select>
+
+    <insert id="save">
+        insert into dump1090_air_craft (ID,hex,flight,lat,lon,altitude,track,speed,create_tm,update_tm)
+        values (#{aircraft.id},#{aircraft.hex},#{aircraft.flight},#{aircraft.lat},#{aircraft.lon},#{aircraft.altitude},#{aircraft.track},#{aircraft.speed},now(),now());
+    </insert>
+</mapper>
